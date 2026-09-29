@@ -1,229 +1,241 @@
-# StreamDecisionBench
+# StreamDecisionBench (SDB)
 
-StreamDecisionBench evaluates the decision an application actually uses while
-public evidence changes: an answer takes effect when it arrives, so both its
-correctness and its timing count.
+**Evaluating decisions in force on evolving language streams.**
 
-## Current benchmark
+Language models increasingly run inside applications as decision components: the application
+sends the current state, composes the answers into one decision, and keeps applying that decision
+until a newer one arrives. While the model is thinking, the world keeps changing, so an answer that
+is correct for the state it saw can take effect late and stay in force after the right decision has
+changed. Untimed (offline) accuracy counts that answer as correct; the application does not.
 
-The paper and citations call the current benchmark SDB. In paths, module names and
-run names it goes by its internal name `lite` (`data/lite/v1`, `streamdecisionbench.lite`,
-`runs/lite-v1-*`); that name marks the current version, not a reduced subset.
+SDB evaluates the **decision in force** at every instant. It streams evidence in four application
+families, computes reference decisions from public rules with executable code, and attributes every
+erroneous instant to **judgment** (wrong for the current state), **latency** (a *stale* decision,
+right for an outdated state) or both. The primary score is **normalized log-AUC**: in-force accuracy
+averaged over time-step intervals from 1 to 5 s on a logarithmic axis.
 
-Four families (IDE debugging, assembly, support workflows, presenter voice
-control with streaming ASR), two independently authored scenarios each, 60
-evidence releases at a two-second recording cadence per scenario. The paper summarizes in-force accuracy over 1–5 s by normalized log-AUC, averaging scenarios within each family and then families equally; see [current results](docs/lite/results/four-family/README.md). Each release asks six or
-seven choice questions; a declared
-composition turns the answers into the decision the application consumes, so
-unused branch answers do not count. See [the protocol](docs/lite/PROTOCOL.md)
-for data, execution and scoring, and [the results index](docs/lite/results/README.md)
-for current runs.
+## Results
+
+One recorded pass per setting over all 480 states (8 scenarios in 4 families), recorded at a 2 s
+time step and evaluated at every interval from 1 to 5 s with the recorded answers and latencies.
+
+| Setting | Model | Log-AUC, 1–5 s (%) | Untimed accuracy (%) | Median latency (s) |
+|---|---|---:|---:|---:|
+| Jev | `jev-latest` (TypeSafe) | 60.7 | 63.8 | 0.25 |
+| Terra none | `gpt-5.6-terra`, reasoning effort none | 60.1 | 82.1 | 1.49 |
+| Terra low | `gpt-5.6-terra`, reasoning effort low | 52.6 | 95.4 | 2.44 |
+| Luna low | `gpt-5.6-luna`, reasoning effort low | 50.0 | 88.8 | 2.41 |
+| Astra low | `gpt-6-astra`, reasoning effort low | 49.3 | 99.8 | 2.67 |
+| Luna none | `gpt-5.6-luna`, reasoning effort none | 33.4 | 43.8 | 1.32 |
+
+Astra low answers 479 of 480 states correctly when latency is ignored, yet ends near the bottom in
+force: almost all of its error time is stale. Per-family scores and reports are in
+[docs/lite/results/four-family](docs/lite/results/four-family/README.md). Each setting has a single
+pass, so differences of a few points may not be stable.
+
+## Quick start
+
+You need Python 3.12 or 3.13 and [uv](https://docs.astral.sh/uv/).
 
 ```bash
-# a new pass (paid requests) needs a fresh output folder; runs/my-* stays local
-uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
-  --out runs/my-luna-low --model gpt-5.6-luna --effort low
-uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
-  --out runs/my-jev --provider typesafe --model jev-latest
-# rescore and report a recorded pass without model calls (the report goes to a scratch folder)
-uv run python -m streamdecisionbench.lite score --run runs/lite-v1-gpt-5.6-luna-low-four-family-retry-v1
-uv run python scripts/lite/lite_report.py --run runs/lite-v1-gpt-5.6-luna-low-four-family-retry-v1 \
-  --out /tmp/sdb-luna-low-report
+git clone https://github.com/JacobLinCool/StreamDecisionBench
+cd StreamDecisionBench
+uv sync
+uv run pytest -q
 ```
 
-A new pass needs `OPENAI_API_KEY` (GPT settings, the default provider) or `TYPESAFE_API_KEY`
-(Jev, `--provider typesafe`): run `cp .env.example .env` and fill it in, or export the variable.
-The recorded passes cover six settings: GPT-5.6-Luna and GPT-5.6-Terra at reasoning effort low and
-none, GPT-6-Astra at low (the model does not accept none), and Jev (`jev-latest`); see
-[runs](runs/README.md). Run the tests with `uv run pytest`. The paper builds with `latexmk` in
-`paper/` (see [paper/README.md](paper/README.md)). Cite SDB with [CITATION.cff](CITATION.cff);
-code and data are released under the [MIT license](LICENSE).
+Evaluate a recorded pass (no API calls):
 
-The per-run reports under `docs/lite/results/` and some design notes are mostly in Traditional
-Chinese; [the protocol](docs/lite/PROTOCOL.md) and the paper are the English references.
+```bash
+# fixed-interval diagnostics at the 2 s recording step
+uv run python -m streamdecisionbench.lite score --run runs/lite-v1-gpt-5.6-terra-none-four-family-retry-v1
 
-## Repository map
+# the primary log-AUC, per family and overall, as in the table above
+uv run python paper/analysis/lite_reports.py \
+  --run runs/lite-v1-gpt-5.6-terra-none-four-family-retry-v1 \
+  --out runs/terra-none-report --label "Terra none"
+```
 
-| Status | Paths |
-|---|---|
-| **Current** | `data/lite/v1/`, `src/streamdecisionbench/lite/`, `scripts/lite/`, `docs/lite/`, `paper/` (SDB paper), `tests/test_lite_*.py`, `runs/lite-v1-*` |
-| Shared | `src/streamdecisionbench/{jev.py,adapters/,mock_server.py,schema.py,authoring/}`, `docs/LITERATURE.md`, `docs/MINIMAL_DESIGN.md` |
-| Legacy data, runs, docs and draft (not in active use; local only, not versioned) | `data/legacy/`, `runs/legacy/`, `docs/legacy/`, `docs/lite/results/legacy/`, `paper/legacy/` (earlier draft) |
-| Legacy code (not in active use; versioned) | the `sdb` CLI and its modules (see [package map](src/streamdecisionbench/README.md)) and their tests |
+## Evaluate your model
 
-Indexes: [data](data/README.md), [package](src/streamdecisionbench/README.md),
-[tests](tests/README.md), [runs](runs/README.md), [paper](paper/README.md). Git versions the current recorded passes
-(`runs/lite-v1-*-retry-v1/`) with their index; ad-hoc runs, logs and every `legacy/` folder
-(`data/`, `docs/`, `docs/lite/results/`, `paper/`, `runs/`) stay local and are not versioned.
+### 1. Set credentials
 
-## Legacy: `sdb` CLI pipeline (v0 and `sdb/0.2`)
+```bash
+cp .env.example .env   # then fill in OPENAI_API_KEY and/or TYPESAFE_API_KEY
+```
 
-> **Not in active use.** This section documents the earlier ten-family dataset and replay pipeline, kept so the `sdb` CLI, its tests and the earlier paper draft (`paper/legacy/`) still run. Its data and runs are in `data/legacy/v0` and `runs/legacy/v0`, which are local only and not versioned. In a fresh clone the tests that read `data/legacy/v0` skip until `uv run sdb build` regenerates it (about 2 s). The `docs/legacy/` files named below are local only as well. Its all-question correctness and one-to-three-question limit do not describe the current benchmark.
+`.env` is git-ignored and loaded automatically; exported variables take precedence.
 
-StreamDecisionBench measures whether a model can make **fast, correct and temporally
-stable decisions over a live stream, within the time a real-time system allows**.
-Each episode is a 50-500 s window of one continuous situation (a talk, an interview,
-a support call, a bedside monitor...) observed as 100 ticks of 0.5, 1, 2, 3 or 5 s.
-At every tick the model receives the state a deployed system would have at that
-moment (prepared material, bookkeeping, and raw live signals such as timestamped
-speech recognition, telemetry and logs, under one fixed JSON Schema per family) and
-a fixed set of typed questions, and decides what should be in force *now*: change
-course when the situation calls for it, and hold steady when only the wording
-changes. The response budget is one tick: in the real-time replay an answer that
-arrives late leaves the previous decision in force for the ticks it missed.
+### 2. Record a pass
 
-The target is **100 episodes x 100 ticks = 10,000 decisions** over ten application
-families, built as twenty base scenarios with five contrast variants each.
+A pass sends one request per state: 480 requests, published every 2 s whether or not earlier
+requests are still pending (up to 32 in flight). The eight scenarios run back to back, so a full
+pass takes about 16–20 minutes. Every pass needs a new output folder.
 
-**Status.** The dataset is being rebuilt family by family for this real-time design,
-presentation_navigation first (`docs/legacy/REALTIME_FAMILIES.md`, local only).
-The other nine families are still v0 pilot episodes (`sdb/0.1`, ticks of 12 s to 1 h),
-kept only so the repository builds and runs end to end. The v0 pilot numbers in
-`docs/legacy/VALIDATION.md` (local only) are superseded.
+```bash
+# OpenAI models (Responses API with strict structured outputs)
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-model --model <model-id> --effort low
 
-The interface is TypeSafe's **System One** format, so System One models such as
-[Jev](https://docs.typesafe.ai/introduction) run natively, and any other model can
-take part through an adapter:
+# a model without a reasoning-effort setting: omit --effort
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-model --model <model-id>
+
+# Jev and other System One models (TypeSafe)
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-jev --provider typesafe --model jev-latest
+```
+
+Try one scenario first (60 requests) with `--episodes lite_assembly_a`, or one family with
+`--families support_call_assist`. Scenario ids are the file names in `data/lite/v1/`; family ids
+are `live_debugging`, `procedural_coaching`, `support_call_assist` and
+`presenter_voice_control`.
+
+**Other endpoints.** Set `OPENAI_BASE_URL` (and `OPENAI_API_KEY`) to run any server that implements
+the OpenAI Responses API with strict JSON-schema structured outputs. For a different API, write an
+adapter (below).
+
+**Cost.** A full pass sends about 1.48M input tokens (about 3.1K per request with the GPT-5.6
+tokenizer), no cached input, plus the model's output: 22K output tokens for GPT-6-Astra at low
+effort, 58K–80K for the GPT-5.6 models at low effort. The six recorded passes cost $23.53 at list
+prices (see `paper/notes/pricing.md`).
+
+**Latency counts.** The score includes the service's response time as measured from your machine,
+so network location and service tier affect it. Report where and how you ran.
+
+### 3. Score it
+
+```bash
+uv run python -m streamdecisionbench.lite score --run runs/my-model
+uv run python paper/analysis/lite_reports.py --run runs/my-model \
+  --out runs/my-model-report --label "My model"
+```
+
+The second command prints a row comparable to the results table and writes `REPORT.md` (log-AUC by
+family, the judgment/latency error partition, fixed-interval diagnostics) and `analysis.json`.
+Folders under `runs/` that do not match `runs/lite-v1-*-retry-v1/` stay out of git.
+
+### Adding another API
+
+An adapter receives exactly what the model may see, a request `{"state": ..., "questions": ...}`,
+and returns one answer per question. To keep prompts comparable, reuse the system prompt, input
+serialization and answer schema of the OpenAI adapter
+([`adapters/llm.py`](src/streamdecisionbench/adapters/llm.py)):
+
+```python
+import json
+from streamdecisionbench.adapters.base import StatelessAdapter
+from streamdecisionbench.adapters.llm import SYSTEM, answer_schema, to_answers
+
+class MyAdapter(StatelessAdapter):
+    def __init__(self, model: str):
+        self.model, self.name = model, f"my-api:{model}"
+
+    def system_one(self, request):
+        prompt = json.dumps({"questions": request["questions"], "state": request["state"]}, ensure_ascii=False)
+        reply = call_my_api(self.model, system=SYSTEM, user=prompt,
+                            schema=answer_schema(request))   # -> {"route": "K04", ...}
+        return {"model": self.model, "answers": to_answers(request, reply),
+                "usage": {"input_tokens": ..., "cached_tokens": 0, "output_tokens": ..., "reasoning_tokens": 0}}
+```
+
+Then add a `--provider` choice for it in the `run` command
+([`lite/__main__.py`](src/streamdecisionbench/lite/__main__.py)), next to the OpenAI and TypeSafe
+branches. Create the client with SDK retries disabled: the runner retries transport errors itself
+(`--max-attempts`) and keeps failed attempts out of the latency it scores. Raise
+`FatalAdapterError` for errors that would repeat on every request, such as a bad key.
+
+## How the benchmark works
+
+- **Families.** IDE debugging (an action card and status badges), an assembly station (the next
+  work instruction), a support call (workflow route, guidance and the call recorder) and presenter
+  voice control (slide, captions and cues from streaming ASR). Each has two independently authored
+  scenarios of 60 states.
+- **States and time.** State *t* is published at time step *t*. All times the model sees are written
+  in time steps, so a recording at a 2 s step can be evaluated at any other interval.
+- **Questions and decisions.** Each state asks six or seven multiple-choice questions with opaque
+  option labels. A declared composition turns the answers into the decision the application uses
+  (a route plus the fields of that route), so answers the application ignores do not count.
+- **References.** Each family's rules are written into every state. An executable reference
+  applies them to the public state alone and reproduces all 480 stored reference decisions.
+- **Scoring.** A response takes effect when it arrives, if it is newer than the decision in force.
+  In-force accuracy is the fraction of time the decision in force matches the reference. Every
+  erroneous instant is judgment, stale, compound or no decision.
+
+A request, abridged (assembly station A, time step 31):
 
 ```json
 {
-  "state": {"talk": {...}, "script": [...], "clock": {"now": "09:22.0", "to_hard_out": "02:38.0"},
-            "slides": {...}, "channels": [...],
-            "voice": [{"channel": "lapel", "state": "silent", "since": "09:16.8"}, ...],
-            "mic_log": [...],
-            "segments": [..., {"start": "09:13.0", "end": "09:16.8", "channel": "lapel", "text": "Okay, thanks. So, where... where was I, the, um"}],
-            "partials": [], "media": {...}},
+  "state": {
+    "station": "ST-A",
+    "clock": {"tick": 31},
+    "order": {"serial": "GB-4471", "housing_code": "GH-R", "cover_code": "GC-R", "destination": "outbound_lane"},
+    "work_instruction": {"stage_order": ["intake", "seal", "cover", "fasten", "inspection"],
+                         "rules": ["...", "Apply route precedence: any open quality ticket -> hold; ...", "..."]},
+    "station_log": ["...",
+      {"tick": 29, "kind": "rundown", "target": "J2", "value": 26.0},
+      {"tick": 31, "kind": "badge", "direction": "out"}]
+  },
   "questions": {
-    "q1": {"type": "choice", "instructions": {"role": "...", "conventions": ["..."], "rules": ["1. ...", "2. ..."]},
-           "criteria": {"K4": "...", "M2": "...", "...": "..."}},
-    "q2": {"type": "choice", "instructions": {...}, "criteria": {"K8": "Bridge-back line into the section in progress", "...": "..."}}
+    "route": {"type": "choice",
+              "instructions": "Apply the work_instruction precedence to select the application's route. ...",
+              "criteria": {"K07": "hold: Suspend work under an open quality ticket.",
+                           "K04": "advance: Show the next required operation.", "...": "..."}},
+    "next_step": {"type": "choice", "instructions": "...", "criteria": {"K06": "inspection: Advance to inspection.", "...": "..."}}
   }
 }
 ```
 
-A decision combines one to three questions (choice with 2-10 options, or score with
-3-5 levels); a tick is correct only when every answer is.
+The full protocol is in [docs/lite/PROTOCOL.md](docs/lite/PROTOCOL.md); the task rules are in
+[debugging](docs/lite/debugging.md), [assembly](docs/lite/assembly.md),
+[support](docs/lite/support.md) and [presenter](docs/lite/presenter.md).
 
-### Quick start
+## Reproduce the paper
+
+Every number, table and figure is regenerated from the recorded passes without model calls, and a
+second run leaves the repository unchanged.
 
 ```bash
-uv sync
-uv run sdb build                            # regenerate the local-only data/legacy/v0 (about 2 s)
-uv run sdb validate                         # structural checks over all 100 episodes
-uv run sdb eval --model random              # chance floor
-uv run sdb eval --model oracle              # metric ceiling (uses gold; harness test only)
-
-# Jev (TypeSafe): put the key in .env (git-ignored; see .env.example) or export it
-cp .env.example .env   # then fill in TYPESAFE_API_KEY
-uv run sdb eval --model jev:jev-latest --concurrency 8 --out runs/jev-latest
-
-# OpenAI models (Responses API): OPENAI_API_KEY in .env; optional @<reasoning effort>
-uv run sdb eval --model openai:gpt-5.6-luna --concurrency 16 --out runs/gpt-5.6-luna
-uv run sdb eval --model openai:gpt-5.6-luna@low --concurrency 16 --out runs/gpt-5.6-luna-low
-
-# Per-question accuracy of a run, per episode or per scenario
-uv run sdb questions --run runs/jev-latest --by scenario --prior
-
-# Any Jev-compatible endpoint, or the local mock server
-uv run sdb serve-mock --backend lexical --port 8787 --latency-ms 40 --jitter-ms 8 &
-TYPESAFE_API_KEY=local uv run sdb eval --model "jev:jev-latest@http://127.0.0.1:8787" --out runs/mock
+uv run python paper/analysis/lite_reports.py                     # published reports
+uv run python paper/analysis/lite_numbers.py                     # numbers and tables (runs its checks)
+uv run --group paper python paper/analysis/lite_figures.py      # figures (pinned matplotlib)
+cd paper && latexmk                                              # submission.pdf and preprint.pdf
 ```
 
-Other adapters: `http:<base_url>`, `anthropic:<model>` (Anthropic API; the
-`anthropic` package is not a project dependency, so run it as
-`uv run --with anthropic sdb eval --model anthropic:<model>`),
-`claude-cli:<model>` (local Claude Code CLI, small runs only), and local
-references `random`, `first`, `sticky`, `lexical`, `oracle-noisy:<p>`,
-`oracle-lag:<k>`, and the baselines that must miss most language-driven
-transitions: `lagged-sticky:<k>` (the previous gold, k ticks late) and
-`copy-human` (the decision the humans' own latest actions imply; families with
-a human-action map only, e.g. `--family presentation_navigation`).
-Generative models (OpenAI, Anthropic, Claude CLI) answer with one committed
-answer per question, which the adapter wraps as a one-hot System One answer,
-so calibration metrics do not apply to them. The OpenAI adapter uses Structured
-Outputs, so its replies are always one of the request's own labels or levels. It
-stores no responses, and a rejected key or unknown model stops the run (finished
-episodes stay saved, so rerunning the command resumes).
+See [paper/README.md](paper/README.md) for details.
 
-### Metrics
+## Repository layout
 
-No single overall score. Every metric is reported for the **untimed** run (every
-tick answered in order, timing ignored) and for a **real-time replay** built from
-the same answers and their measured latencies: tick t's state is released at
-t x tick, the model has one request in flight and gets the newest state when idle,
-a request older than max(3 ticks, the deadline) is abandoned, the decision in
-force when each tick ends is scored, and ticks with none are wrong. The gap
-between the two is the cost of latency (when no response fails: the untimed run
-scores a failure wrong, the replay keeps the previous decision). A pipelined
-replay (overlapping requests allowed) is reported as a secondary view, and each
-replay also gives mean ± sd over 20 redraws of the run's own latencies. The
-leaderboard reports:
-
-| Metric | Meaning |
+| Path | Contents |
 |---|---|
-| **SBA** | Segment-balanced accuracy: accuracy inside each constant gold segment, averaged, so long stable regions do not dominate |
-| **Transition F1@2** | Did the model switch to the right new decision within 2 ticks (a tolerance relative to the tick) and hold it for 2? |
-| **RD** (median, p90) | Reaction delay for detected transitions, in seconds (wall-clock in the replays) and ticks |
-| **ESR** | Excess (unmatched, held) switches per tick: the stability measure |
-| **DSR** | Share of transitions settled within the scenario's deadline, set in seconds; early switches (before the evidence) are not on time, and the early-switch rate is shown beside it |
-| **p95 latency** | Wall-clock per sent request, failed ones included (p50/p99 also reported) |
-| **CSA** | Contrast-set accuracy: a scenario counts only if every counterfactual probe is solved across its variants |
+| `data/lite/v1/` | The benchmark: eight scenarios and a manifest with their hashes |
+| `src/streamdecisionbench/lite/` | Scenario generators, executable references, runner, scorer, merge |
+| `src/streamdecisionbench/adapters/` | Model adapters (OpenAI, TypeSafe, and legacy ones) |
+| `runs/lite-v1-*-retry-v1/` | The recorded passes, with raw event logs ([index](runs/README.md)) |
+| `docs/lite/` | Protocol, task rules and published results |
+| `paper/` | Paper sources and the analysis scripts behind every number and figure |
+| `scripts/lite/` | Report, comparison and network-estimate scripts |
+| `tests/` | Tests (`uv run pytest`) |
 
-Secondary: time-weighted accuracy, per-question accuracy beside the majority share,
-Transition F1@0 (no tolerance), raw switch rate, CSA-probe, failed-request rate,
-late rate (requests that take a full tick or more), stale and timeout rates in
-the replays, calibration (NLL / Brier / ECE) for probabilistic models, and
-breakdowns by family, variant, tier, event tag and decision structure. See
-`docs/legacy/SPEC.md` (local only) for exact definitions.
+`lite` is the internal name of the current benchmark in paths and module names; it is not a reduced
+version. The package also keeps the earlier `sdb` CLI pipeline, described in
+[docs/LEGACY_SDB_CLI.md](docs/LEGACY_SDB_CLI.md); it is not needed to run SDB. The per-run reports
+under `docs/lite/results/` are mostly in Traditional Chinese; the protocol and the paper are the
+English references.
 
-### How the data is built
+## Citation
 
-Each base scenario is a small latent state machine written in Python
-(`src/streamdecisionbench/families/`): a timed, open-loop script (utterances with
-start and end times, device and log events, human clicks), a deterministic policy
-that implements the natural-language rules rule for rule, and a renderer that
-produces, at each read time, exactly what the deployed system would see:
-finalized speech segments after the declared recognition lag, current partials,
-voice activity, rolling windows of events, prepared context. The system's own
-outputs never appear in the state, and nothing in it interprets the situation
-("stuck", "finished"); the model infers events from the signals. The five
-variants of a scenario share the state schema:
-
-| Variant | What changes |
-|---|---|
-| canonical | the scenario as designed |
-| paraphrase | every free-text value (speech, prose, log wording, rules, options), same timings, latent states and gold |
-| lexical_decoy | irrelevant content in existing carriers that borrows the vocabulary of wrong options, same gold |
-| minimal_cf | two to four small factual edits that flip the decision |
-| structural_cf | a changed history, plan or constraint with the same surface story |
-
-Quality control: every timeline is simulated from its design before it is coded;
-`sdb validate` checks schema conformance, the temporal budget, evidence timing,
-threshold margins, renderer guarantees and variant consistency; blind solvers
-follow each stream in order without gold; shortcut audits (`sdb audit`, with
-family heuristics such as presentation's "latest content phrase -> nearest
-unit", reported per question) and reference baselines (including copy-human and
-lagged-sticky) check that surface cues do not give the answer away.
-
-### Layout of the legacy pipeline
-
+```bibtex
+@misc{lin2026streamdecisionbench,
+  title  = {StreamDecisionBench: Evaluating Decisions in Force on Evolving Language Streams},
+  author = {Lin, Jhen-Ke and Wang, Chung Chun},
+  year   = {2026},
+  url    = {https://github.com/JacobLinCool/StreamDecisionBench}
+}
 ```
-docs/legacy/DESIGN.md          original benchmark design
-docs/legacy/SPEC.md            specification, sdb/0.2 (format, protocol, metrics, authoring contract)
-docs/legacy/REALTIME_FAMILIES.md  per-family real-time designs and the author's decision record
-docs/legacy/realtime-design/   design simulators and example states
-docs/legacy/VALIDATION.md      v0 pilot validation (superseded)
-docs/legacy/families/*.md      v0 pilot design notes per task family
-src/streamdecisionbench/
-  jev.py                       System One wire format and response contract
-  schema.py                    episode format, request construction
-  authoring/                   latent -> policy -> renderer framework; stream.py: clocks, speech, windows
-  families/                    the ten task families (two scenarios each)
-  evaluator.py, metrics.py     evaluation loop and leaderboard metrics
-  adapters/                    Jev / HTTP / LLM / local reference models
-  mock_server.py               local Jev-compatible server
-  validate.py, blind.py        structural and blind semantic validation
-  audit/                       shortcut audits; heuristics.py: family heuristics and human-action maps
-data/legacy/v0/episodes/       the built episodes (public requests + hidden gold)
-data/legacy/v0/manifest.json   episode hashes
-```
+
+See also [CITATION.cff](CITATION.cff).
+
+## License
+
+Code and data are released under the [MIT License](LICENSE).

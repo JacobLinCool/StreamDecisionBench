@@ -1,4 +1,9 @@
-"""Regenerate primary log-AUC reports and recorded-cadence diagnostics; no API calls."""
+"""Primary log-AUC reports and recorded-cadence diagnostics; no API calls.
+
+Without arguments, regenerate the published reports of the paper's settings. With --run, evaluate any
+recorded pass (for example a new model) the same way and write its report to --out.
+"""
+import argparse
 from pathlib import Path
 import shlex
 import sys
@@ -21,13 +26,15 @@ HEADER = [
 ]
 
 
-def write_setting(label: str, folder: str, run: str) -> tuple[str, dict, int]:
+def write_setting(label: str, folder: str, run: str, *, run_dir: Path | None = None, out: Path | None = None,
+                  reproduce: str = "uv run python paper/analysis/lite_reports.py") -> tuple[str, dict, int]:
     """Analyze one recorded pass, write its report and analysis, and return its table row, its retry
     reliability and the number of recording sessions it combines."""
-    data = analyze(ROOT / "runs" / run)
+    run_dir = run_dir or ROOT / "runs" / run
+    data = analyze(run_dir)
     data["evaluation_policy"] = POLICY
-    data["auc"] = compute_auc(rescore_run(ROOT / "runs" / run))
-    out = ROOT / "docs/lite/results" / folder
+    data["auc"] = compute_auc(rescore_run(run_dir))
+    out = out or ROOT / "docs/lite/results" / folder
     report(data, out)
     auc = data["auc"]["primary"]
     values = [auc["by_family"][f]["accuracy"] for _, f in FAMILIES] + [
@@ -74,7 +81,7 @@ def write_setting(label: str, folder: str, run: str) -> tuple[str, dict, int]:
     (out / "REPORT.md").write_text(
         "\n".join(intro)
         + diagnostics.replace("# SDB 錄製間距診斷", "## SDB 錄製間距診斷", 1)
-        .replace(single, "uv run python paper/analysis/lite_reports.py", 1)
+        .replace(single, reproduce, 1)
     )
     print(f"Reproduced {folder}: {values[-2]*100:.4f}%", flush=True)
     return row, data["retry_reliability"], len(data.get("combined_from") or [data])
@@ -84,7 +91,30 @@ def _join(labels: list[str]) -> str:
     return labels[0] if len(labels) == 1 else ", ".join(labels[:-1]) + " and " + labels[-1]
 
 
+def evaluate_one(run: Path, out: Path, label: str | None) -> None:
+    """Evaluate one recorded pass with the paper's primary score and print a Table 1 style row."""
+    label = label or run.resolve().name
+    reproduce = shlex.join(["uv", "run", "python", "paper/analysis/lite_reports.py", "--run", command_path(run),
+                            "--out", command_path(out), "--label", label])
+    row, reliability, _ = write_setting(label, out.name, run.name, run_dir=run, out=out, reproduce=reproduce)
+    print("\n".join(["", *HEADER, row, ""]))
+    print(f"{reliability['successful_logical_requests']} logical requests with valid responses, "
+          f"{reliability['failed_attempts']} failed attempts. Report: {command_path(out)}/REPORT.md")
+
+
 def main():
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--run", type=Path, help="evaluate this recorded pass instead of regenerating the published reports")
+    parser.add_argument("--out", type=Path, help="report folder for --run (created if missing)")
+    parser.add_argument("--label", help="setting name for --run (default: the run folder name)")
+    args = parser.parse_args()
+    if args.run:
+        if args.out is None:
+            parser.error("--out is required with --run")
+        evaluate_one(args.run, args.out, args.label)
+        return
+    if args.out or args.label:
+        parser.error("--out and --label need --run")
     lines = [
         "# Four-family log-AUC results",
         "",

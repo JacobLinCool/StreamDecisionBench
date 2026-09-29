@@ -150,7 +150,7 @@ def main() -> None:
     run.add_argument("--out", type=Path, required=True)
     run.add_argument("--provider", choices=("openai", "typesafe"), default="openai")
     run.add_argument("--model", required=True)
-    run.add_argument("--effort", help="reasoning effort; required for openai, not accepted for typesafe")
+    run.add_argument("--effort", help="reasoning effort for openai (e.g. none, low); omit it for a model or compatible endpoint without reasoning effort; not accepted for typesafe")
     run.add_argument("--timeout", type=float, default=20.0)
     run.add_argument("--max-attempts", type=int, default=5)
     run.add_argument("--retry-delay", type=float, default=0.5)
@@ -178,8 +178,8 @@ def main() -> None:
         key, endpoint = ("OPENAI_API_KEY", "OPENAI_BASE_URL") if openai else ("TYPESAFE_API_KEY", "TYPESAFE_BASE_URL")
         if not os.environ.get(key):
             parser.error(f"{key} is required")
-        if openai != (args.effort is not None):
-            parser.error("--effort is required for openai and not accepted for typesafe")
+        if not openai and args.effort is not None:
+            parser.error("--effort is not accepted for typesafe")
         if not math.isfinite(args.timeout) or args.timeout <= 0:
             parser.error("timeout must be positive and finite")
         if args.max_attempts < 1:

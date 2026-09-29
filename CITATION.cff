@@ -3,6 +3,8 @@ message: "If you use StreamDecisionBench (SDB), please cite it as below."
 type: software
 title: "StreamDecisionBench: Evaluating Decisions in Force on Evolving Language Streams"
 version: 0.1.0
+repository-code: "https://github.com/JacobLinCool/StreamDecisionBench"
+url: "https://github.com/JacobLinCool/StreamDecisionBench"
 date-released: 2026-09-30
 abstract: >-
   StreamDecisionBench (SDB) evaluates a language model used as a decision
@@ -39,3 +41,4 @@ preferred-citation:
       family-names: Wang
       affiliation: National Yang Ming Chiao Tung University
   year: 2026
+  url: "https://github.com/JacobLinCool/StreamDecisionBench"

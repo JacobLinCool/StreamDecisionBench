@@ -192,14 +192,17 @@ class OpenAIAdapter:
             raise RuntimeError(f"response {response.status}: {reason}")
         answers = to_answers(request, json.loads(response.output_text))
         usage = response.usage
+        # Compatible endpoints may omit the token details; record zero rather than failing the request.
+        details_in = getattr(usage, "input_tokens_details", None)
+        details_out = getattr(usage, "output_tokens_details", None)
         return {
             "model": response.model,
             "answers": answers,
             "usage": {
                 "input_tokens": usage.input_tokens,
-                "cached_tokens": usage.input_tokens_details.cached_tokens,
+                "cached_tokens": getattr(details_in, "cached_tokens", None) or 0,
                 "output_tokens": usage.output_tokens,
-                "reasoning_tokens": usage.output_tokens_details.reasoning_tokens,
+                "reasoning_tokens": getattr(details_out, "reasoning_tokens", None) or 0,
             }
             if usage
             else None,
