@@ -1,0 +1,44 @@
+{
+ "2602.11964": {
+  "title": "Title: Gaia2: Benchmarking LLM Agents on Dynamic and Asynchronous Environments",
+  "authors": "Authors: Romain Froger , Pierre Andrews , Matteo Bettini , Amar Budhiraja , Ricardo Silveira Cabral , Virginie Do , Emilien Garreau , Jean-Baptiste Gaya , Hugo Laurençon , Maxime Lecanu , Kunal Malkan , Dheeraj Mekala , Pierre Ménard , Gerard Moreno-Torres Bertran , Ulyana Piterbarg , Mikhail Plekhanov , Mathieu Rita , Andrey Rusakov , Vladislav Vorotilov , Mengjue Wang , Ian Yu , Amine Benhalloum , Grégoire Mialon , Thomas Scialom",
+  "comments": "Accepted as Oral at ICLR 2026",
+  "history": "Submission history From: Romain Froger [ view email ] [v1] Thu, 12 Feb 2026 13:58:27 UTC (4,525 KB)"
+ },
+ "2603.09337": {
+  "title": "Title: Beyond Scaling: Assessing Strategic Reasoning and Rapid Decision-Making Capability of LLMs in Zero-sum Environments",
+  "authors": "Authors: Yang Li , Xing Chen , Yutao Liu , Gege Qi , Yanxian BI , Zizhe Wang , Yunjian Zhang , Yao Zhu",
+  "comments": "Code available",
+  "history": "Submission history From: Yang Li [ view email ] [v1] Tue, 10 Mar 2026 08:14:13 UTC (849 KB)"
+ },
+ "2609.17416": {
+  "title": "Title: Never Stop Thinking: Continuous-Time Language Agents",
+  "authors": "Authors: Bojie Li , Noah Shi",
+  "comments": null,
+  "history": "Submission history From: Bojie Li [ view email ] [v1] Sat, 11 Jul 2026 14:42:13 UTC (359 KB)"
+ },
+ "2411.03628": {
+  "title": "Title: StreamingBench: Assessing the Gap for MLLMs to Achieve Streaming Video Understanding",
+  "authors": "Authors: Junming Lin , Zheng Fang , Chi Chen , Zihao Wan , Fuwen Luo , Peng Li , Yang Liu , Maosong Sun",
+  "comments": null,
+  "history": "Submission history From: Junming Lin [ view email ] [v1] Wed, 6 Nov 2024 02:50:30 UTC (45,225 KB)"
+ },
+ "2606.14571": {
+  "title": "Title: StreamMemBench: Streaming Evaluation of Agent Memory for Future-Oriented Assistance",
+  "authors": "Authors: Guanming Liu , Yuqi Ren , Hansu Gu , Peng Zhang , Weihang Wang , Jiahao Liu , Ning Gu , Tun Lu",
+  "comments": "Accepted to Findings of EMNLP 2026",
+  "history": "Submission history From: Guanming Liu [ view email ] [v1] Fri, 12 Jun 2026 15:48:43 UTC (773 KB) [v2] Wed, 26 Aug 2026 13:12:16 UTC (776 KB)"
+ },
+ "2604.02733": {
+  "title": "Title: DeltaLogic: Minimal Premise Edits Reveal Belief-Revision Failures in Logical Reasoning Models",
+  "authors": "Authors: Amit Dhanda",
+  "comments": "ICLR 2026 Workshop on Logical Reasoning of Large Language Models",
+  "history": "Submission history From: Amit Dhanda [ view email ] [v1] Fri, 3 Apr 2026 05:05:43 UTC (14 KB)"
+ },
+ "2512.18027": {
+  "title": "Title: CoPE: A Small Language Model for Steerable and Scalable Content Labeling",
+  "authors": "Authors: Samidh Chakrabarti , David Willner , Kevin Klyman , Tiffany Saade , Emily Capstick , Sabina Nong",
+  "comments": "21 pages, 2 figures, 7 tables",
+  "history": "Submission history From: Samidh Chakrabarti [ view email ] [v1] Fri, 19 Dec 2025 19:47:33 UTC (1,542 KB)"
+ }
+}

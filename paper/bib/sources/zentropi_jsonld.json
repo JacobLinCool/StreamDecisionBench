@@ -1,0 +1,35 @@
+[
+ {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "publisher": {
+   "@type": "Organization",
+   "name": "zentropi blog",
+   "url": "https://blog.zentropi.ai/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://blog.zentropi.ai/favicon.ico",
+    "width": 48,
+    "height": 48
+   }
+  },
+  "author": {
+   "@type": "Person",
+   "name": "Zentropi Team",
+   "url": "https://blog.zentropi.ai/author/zentropi/",
+   "sameAs": []
+  },
+  "headline": "Enabling Streaming Classification",
+  "url": "https://blog.zentropi.ai/enabling-streaming-classification/",
+  "datePublished": "2026-03-10T18:37:19.000Z",
+  "dateModified": "2026-03-10T21:37:45.000Z",
+  "image": {
+   "@type": "ImageObject",
+   "url": "https://storage.ghost.io/c/dd/cc/ddcc63d9-21e6-4bf7-8417-e0ebc566f68e/content/images/size/w1200/2026/03/cope_stream_probe_blog_image.png",
+   "width": 1200,
+   "height": 670
+  },
+  "description": "CoPE now enables streaming classification using a linear probe. This is an experimental methodology we developed to help ensure the safety of real-time generative AI systems.",
+  "mainEntityOfPage": "https://blog.zentropi.ai/enabling-streaming-classification/"
+ }
+]

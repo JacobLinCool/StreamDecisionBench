@@ -42,7 +42,6 @@ htmlcov/
 .nox/
 .coverage
 .coverage.*
-.cache
 nosetests.xml
 coverage.xml
 *.cover
@@ -179,3 +178,40 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+# StreamDecisionBench
+# Recorded runs: the current passes and their index are versioned; ad-hoc runs, logs and
+# runs/legacy stay local.
+/runs/*
+!/runs/README.md
+!/runs/lite-v1-*-retry-v1/
+# Archived earlier versions stay local and are not versioned.
+/data/legacy/
+/docs/legacy/
+/docs/lite/results/legacy/
+/paper/legacy/
+# Session evidence copied out of temporary scratch folders (derivations, downloaded papers): local only.
+/paper/notes/scratch-archive/
+# Internal working records kept local: a meeting record and a study of third-party abstracts.
+/docs/discussions/2026-09-28-framing-ground-truth-and-task-selection.md
+/paper/notes/abstract_study.md
+# Local caches, editing notes and tool leftovers.
+.cache/
+*.shadow.md
+.chart-data-*/
+# Secrets: only the template is versioned.
+.env.*
+!.env.example
+.envrc
+# Agent-local state.
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+CLAUDE.local.md
+# OS and editor files.
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+.vscode/
+.idea/
+*.swp
+*~

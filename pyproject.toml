@@ -1,0 +1,44 @@
+[project]
+name = "streamdecisionbench"
+version = "0.1.0"
+description = "StreamDecisionBench (SDB): evaluating language-model decision components by the decision in force on evolving language streams."
+authors = [
+    { name = "Jhen-Ke Lin", email = "jacob.cs14@nycu.edu.tw" },
+    { name = "Chung Chun Wang", email = "takalawang.cs14@nycu.edu.tw" },
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = { text = "MIT" }
+dependencies = [
+    "numpy>=1.26",
+    "typesafe-sdk>=0.7",
+    "httpx>=0.27",
+    "openai>=2",
+    "jsonschema>=4.26.0",
+]
+
+[project.optional-dependencies]
+audit = [
+    "scikit-learn>=1.4",
+    "sentence-transformers>=3.0",
+]
+# Legacy `sdb eval --model anthropic:<model>` adapter only; the current benchmark does not use it.
+anthropic = ["anthropic>=0.40"]
+
+[project.scripts]
+sdb = "streamdecisionbench.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+# Paper figures (paper/analysis/lite_figures.py); pinned to the version that built paper/figures/.
+paper = ["matplotlib==3.11.2"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/streamdecisionbench"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

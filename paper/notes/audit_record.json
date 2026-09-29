@@ -1,0 +1,2059 @@
+{
+ "description": "Extract of the LLM-agent validity audit of SDB Lite (run on 2026-09-28 over the build that preceded the two rule clarifications, dataset hash b03d8c9d...; the clarifications changed no event, question or reference answer; a later build, dataset hash 60f6a877..., writes every model-visible time in time steps instead of seconds and likewise changes no event, question or reference answer). Taken from the audit adjudication record (result.json): every check with its role and its reported agreement, and every grouped finding with its adjudication votes. Long reasoning texts are omitted. paper/analysis/lite_numbers.py derives the audit counts stated in the paper from this file.",
+ "agents": "LLM agents; no human annotator",
+ "checks": [
+  {
+   "id": "blind:debugging_a",
+   "role": "blind",
+   "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+   "scenario": "lite_debugging_a",
+   "agreement": "Consumed-decision agreement is 60/60 on the first run, before any fixes. All-question agreement (active and inactive branches) is 420/420. The gold value of every inactive field is \"none\", which matches the policy clause \"Return none for those fields\". No reasonable alternative reading of the public text changes a consumed answer at any tick.",
+   "issues_reported": 0
+  },
+  {
+   "id": "walk:debugging_a",
+   "role": "walk",
+   "description": "blind re-derivation: release-by-release derivation by hand",
+   "scenario": "lite_debugging_a",
+   "agreement": "Consumed-decision agreement 60/60, and all-question agreement (including the diagnostic 'none' fields) 60/60, in both the hand walk and the independent evaluator. I found no gold error. Boundary ticks the gold handles correctly: the relevant write is exactly 4 s old at t9, t29, t45 and t58, and 'less than 4 seconds' is correctly false there. Under the alternative readings: a strict glob where '*' does not cross '/' gives 56/60 (t3, t4, t14, t15 have no owner match); 'newly failing requires the test to be present in the previous run' gives 58/60 (t14, t15 would be inspect grace.ts instead of fees.ts); 'final teammate message = latest message' gives 60/60 (no divergence). State consistency: no timestamp exceeds the clock, no history is rewritten, and every summary matches its result list. The only oddities are narrative ones and do not affect any decision (see issues).",
+   "issues_reported": 6
+  },
+  {
+   "id": "blind:debugging_b",
+   "role": "blind",
+   "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+   "scenario": "lite_debugging_b",
+   "agreement": "Consumed-decision agreement 60/60 and all-question agreement 60/60, including inactive branch fields, all \"none\". This was the evaluator's first run, so no fixes were needed.\n\nSensitivity to the alternative readings:\n- \"final message\" = only the last final message: still 60/60.\n- no previous run = no test is newly failing: still 60/60.\n- strict single-segment glob: 54/60 consumed. The differences are at t=39–40 and t=44–47; see the single low-confidence issue.",
+   "issues_reported": 1
+  },
+  {
+   "id": "walk:debugging_b",
+   "role": "walk",
+   "description": "blind re-derivation: release-by-release derivation by hand",
+   "scenario": "lite_debugging_b",
+   "agreement": "Consumed decision: 60/60, and all questions: 420/420, if '*' matches across '/'. That reading is the only one that makes the rule ordering meaningful and keeps the t=44 answer inside the offered options. If '*' does not cross '/', consumed agreement is 54/60; the 6 differing ticks are t=39, 40, 44, 45, 46 and 47. The consistency script found no problems.",
+   "issues_reported": 6
+  },
+  {
+   "id": "blind:assembly_a",
+   "role": "blind",
+   "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+   "scenario": "lite_assembly_a",
+   "agreement": "Under my default readings, consumed-decision agreement is 60/60 and all-question agreement is 60/60 (inactive fields included; gold's \"none\" fills also match). My first evaluator pass matched with no fixes needed. Alternative readings would change consumed answers: (a) treating a stale PASS as a defect even when inspection is a future stage gives 52/60 (t31-32, 39-40, 47-50 differ); (b) letting a NO_READ scan invalidate inspection freshness gives 55/60 (t55-59 differ). Treating known defects at future stages as non-defects changes nothing (60/60). I found no confirmed gold errors.",
+   "issues_reported": 2
+  },
+  {
+   "id": "walk:assembly_a",
+   "role": "walk",
+   "description": "blind re-derivation: release-by-release derivation by hand",
+   "scenario": "lite_assembly_a",
+   "agreement": "Under my main literal reading, consumed decisions agree 60/60 and all questions agree 360/360 (inactive-branch \"none\" included). I found no clear gold errors. Two medium-confidence ambiguities could make a careful reader choose a different consumed route on 11 ticks: stale PASS at t31, t32, t39, t40, t49, t50, and NO_READ at t55-59. Two low-confidence wording concerns could change the route or stage on a few more ticks.",
+   "issues_reported": 5
+  },
+  {
+   "id": "blind:assembly_b",
+   "role": "blind",
+   "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+   "scenario": "lite_assembly_b",
+   "agreement": "Default reading: all-question agreement 360/360 and consumed-decision agreement 60/60, with no evaluator bugs to fix. Flags (b) and (c) change nothing (360/360, 60/60). Flag (a), the literal reading where a NO_READ counts as a connector scan in R9, gives consumed agreement 55/60 and all-question agreement 340/360. The 5 differing ticks are t54-57 and t59, reported below as ambiguous_policy. I also checked other alternative readings without finding a second reasonable reading that changes a consumed answer: within-stage 'skipped earlier requirement' at the wait ticks t6-7, t32-33, t42-43 and t48-49; 'newest meter reading' meaning the newest valid reading at t40; label freshness also needing to be later than crimps at t38-41; mechanical_lead versus electrical_lead as the escalate destination at t10-11 (the destination instruction explicitly says the work instruction's specialist); and including the CM-OTHER insulation reading of 0.0 at t52 (excluded by R1 and R2).",
+   "issues_reported": 1
+  },
+  {
+   "id": "walk:assembly_b",
+   "role": "walk",
+   "description": "blind re-derivation: release-by-release derivation by hand",
+   "scenario": "lite_assembly_b",
+   "agreement": "Under the most natural literal reading of the public rules, all consumed decisions agree with gold: 190/190 consumed answers (route 60/60, stage 60/60, next_step 12/12 on advance ticks, target+method 32/32 on 16 repair ticks, target+destination 4/4 on escalate ticks, destination 22/22 on hold, handoff and release ticks). Every gold value is also correct across all questions: 360/360, with inactive-branch answers all \"none\". Route distribution: advance 12, repair 16, escalate 2, hold 5, handoff 6, release 11, wait 8. No gold error was found. The issues below are ambiguities where a defensible alternative literal reading changes a consumed answer: t54-57 and t59 (NO_READ freshness, medium confidence), and t42-43 and t48-49 (obsolete evidence at the current stage, low confidence). There are also low-severity wording and witness notes that do not change gold.",
+   "issues_reported": 5
+  },
+  {
+   "id": "blind:support_a",
+   "role": "blind",
+   "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+   "scenario": "lite_support_a",
+   "agreement": "Consumed-decision agreement is 60/60 on the first run, with no fixes needed. All-question agreement is 60/60 ticks (420/420 answers, 60/60 for each of the 7 questions, inactive-branch \"none\" values included). I found no gold errors. There is one low-confidence reading ambiguity (the capture-close utterance at t=22) and one harmless wording mismatch (the rules say \"completed\" where the state says \"complete\").",
+   "issues_reported": 2
+  },
+  {
+   "id": "walk:support_a",
+   "role": "walk",
+   "description": "blind re-derivation: release-by-release derivation by hand",
+   "scenario": "lite_support_a",
+   "agreement": "The consumed decision matches gold on all 60/60 ticks: 231/231 consumed answers (payment 40 ticks x 4, service 13 x 4, hold 5 x 3, wrap 2 x 2). All questions, inactive-branch 'none' included, match gold 420/420. I found no gold error. Two consumed-decision items are only low-confidence ambiguities, where another reading is possible but the literal rule supports gold: t=48-49 payment_stage, and t=22-41 recorder. The other items are wording mismatches or observations that do not affect the decision.",
+   "issues_reported": 5
+  },
+  {
+   "id": "blind:support_b",
+   "role": "blind",
+   "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+   "scenario": "lite_support_b",
+   "agreement": "Composed decision agreement: 60/60. All-question agreement: 420/420 (each of route, contact_channel, delivery_target, delivery_action, repair_target, repair_action and cancellation_action matches 60/60). This was on the first run, with no evaluator fixes needed. The alternative reading of u102 as a check-base request also gives 60/60 and 420/420. I found no gold errors and no ambiguity that changes a consumed answer at any tick.",
+   "issues_reported": 0
+  },
+  {
+   "id": "walk:support_b",
+   "role": "walk",
+   "description": "blind re-derivation: release-by-release derivation by hand",
+   "scenario": "lite_support_b",
+   "agreement": "Consumed-decision agreement is 60/60 and all-question agreement is 60/60 (the inactive fields are 'none' everywhere). My manual walk and the independent evaluator (eval.py) agree with gold on every tick. I found no gold errors. Every consumed answer follows from the public rules plus the question text, with a unique reading. The issues below are all low-confidence wording or cue concerns, and none of them changes a consumed gold value.",
+   "issues_reported": 6
+  },
+  {
+   "id": "audit:debugging",
+   "role": "audit",
+   "description": "code-versus-text audit of one family's reference implementation",
+   "family": "live_debugging",
+   "agreement": "Regeneration matches the frozen data exactly for both episodes, and reference(state) == gold at 120/120 ticks. A literal text re-implementation that reads patterns with fnmatch agrees with gold on 120/120 consumed decisions. The alternatives diverge as follows:\n- CODEOWNERS or shell glob reading (* does not match /): 6 ticks differ, debugging_b t=39,40,44,45,46,47. At 4 of them (t=44-47) the alternative answer would need an inspect_file option that does not exist.\n- \"Newly failing = passed in the previous run\" reading: 2 ticks differ, debugging_a t=14,15.\n- The three readings of \"final teammate message\", the broader commitment grammar, comparing against the previous run that has results, the \"no previous run\" reading, the any-debugger-event pause timer and the owner default: 0 ticks differ.\n- Utterances: all 15 call rows classify the same way under the code and under a careful literal reading of the rules.",
+   "issues_reported": 10
+  },
+  {
+   "id": "audit:assembly",
+   "role": "audit",
+   "description": "code-versus-text audit of one family's reference implementation",
+   "family": "procedural_coaching",
+   "agreement": "Regeneration: encode_scenario(scenarios()) equals the frozen JSON exactly for both episodes (states, gold, evidence, questions, option_semantics, decision_spec, schema_version). Manifest episode hashes and the generator_sources hashes for assembly.py and core.py match, so there is no drift. reference(steps[t].state) == gold for 120/120 steps. The independent text-faithful evaluator, under the most natural reading, matches gold 120/120 on consumed decisions and on all six fields. reference() reads only public state keys: station, order.*, work_instruction.{workflow, stage_order, target_order, torque_nm or crimp_height_mm, continuity_max_ohm, insulation_min_mohm, specialist}, and station_log[].{kind, tick, station, serial, target, code, value, confidence, observation, direction, status, ticket, key_position}. It never reads clock, event_id, evidence, scenario_id or step index, and it does not close over the schedule; scrubbing clock, event_id and rules leaves the output unchanged at all ticks. assembly.py has no keyword or regex classifier. Only 3 distinct free-text strings exist: the heartbeat message 'Station link active; no new device record.' (29 times in each episode), the speech 'The lead is on the way; we can call it finished.' (a:t18) and the speech 'My connector is north-facing; send mine to the outbound lane.' (b:t56). All three are kept by _events, have no stage in _stage, and change nothing, which agrees with the public text 'Speech, status heartbeats ... do not change any decision'. Replacing them with adversarial texts or deleting them never changes the reference, so there are 0 classification mismatches. Alternative readings that change consumed gold: NO_READ counted for freshness (a:55-59, b:54-57,59), a stale PASS treated as a complete_missing defect (a:31,32,39,40,47-50), a skipped target within the stage (a:47,48), and a mount target of connector (b:2,3). Readings that contradict explicit text also change gold, so they are not treated as issues: low-confidence records moving the stage (a:35,36 stage) and 'any in-range reading' (a:45,46). Readings with 0 diffs: the literal escalation window and ignoring defects at future stages.",
+   "issues_reported": 9
+  },
+  {
+   "id": "audit:support",
+   "role": "audit",
+   "description": "code-versus-text audit of one family's reference implementation",
+   "family": "support_call_assist",
+   "agreement": "Consumed decisions agree at 120/120 ticks (60 per episode) and all 7 questions agree at 840/840 answers. This holds for the executable reference and for every text-faithful variant (4 for support_a, 8 for support_b), so no gold value is wrong or ambiguous. Regenerated data equals the frozen data exactly, and reference(state) == gold at 120/120 steps. Every divergence I found between code and text is latent: none changes any gold value at any tick.",
+   "issues_reported": 11
+  },
+  {
+   "id": "structural",
+   "role": "structural",
+   "description": "structural and deterministic-regeneration check",
+   "agreement": "validate_episode output == manifest entry for 6/6 episodes (questions, steps, duration_s, decision_transitions 20/21/21/23/22/24, routes_seen/unseen, public_hash). Episode digests and dataset_hash match. The rebuild is byte-identical for all 6 episode files; the rebuilt manifest differs only in generator_sources, and dataset_hash is equal. Executable reference == frozen gold on 360/360 steps (every question). Every gold value is a declared option, and the criteria prefixes match option_semantics for every label. All inactive-branch gold is 'none'. No active consumed field has a placeholder gold (the flagged unknown/none values are legitimate semantics). Clocks equal 2*t and no timestamp is in the future across all 360 states. No gold or evidence leak was found. pytest tests/test_lite_*.py: 90 passed, 0 failed. Manual composed-gold walkthrough against the rules text: 360/360 consumed decisions agree under the generator's fnmatch reading. Under a path-segment/CODEOWNERS glob reading, 6 debugging_b ticks would differ (see the first issue).",
+   "issues_reported": 10
+  }
+ ],
+ "lenses": {
+  "reference_answer_findings": [
+   "literal",
+   "code-trace",
+   "reader"
+  ],
+  "other_findings": [
+   "reproduce",
+   "impact",
+   "counter"
+  ]
+ },
+ "grouped_findings": [
+  {
+   "id": "g1",
+   "status": "rejected",
+   "scenario": "lite_debugging_a",
+   "scope": "debugging_a",
+   "ticks": [
+    51,
+    52,
+    53
+   ],
+   "questions": [
+    "route",
+    "owner"
+   ],
+   "title": "[walk:debugging_a] 'A final teammate message' can mean final=true or the latest message; no divergence in this episode",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g2",
+   "status": "confirmed",
+   "scenario": "lite_debugging_a",
+   "scope": "debugging_a",
+   "ticks": [
+    7,
+    14,
+    18,
+    20,
+    23,
+    27
+   ],
+   "questions": [],
+   "title": "[walk:debugging_a] Narrative inconsistency: withinGrace is already used and compiles in R18/R19, yet later 'Cannot find name withinGrace'",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "reader",
+     "verdict": "real_but_no_decision_impact"
+    }
+   ],
+   "majority_verdict": "real_but_no_decision_impact",
+   "kinds": [
+    "data_integrity"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g3",
+   "status": "rejected",
+   "scenario": "lite_debugging_a",
+   "scope": "debugging_a",
+   "ticks": [
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59
+   ],
+   "questions": [],
+   "title": "[walk:debugging_a] 'Full' rerun R23 lists fewer tests than the preceding module run R22",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g4",
+   "status": "rejected",
+   "scenario": "lite_debugging_a",
+   "scope": "debugging_a",
+   "ticks": [],
+   "questions": [
+    "process",
+    "route",
+    "control_action"
+   ],
+   "title": "[walk:debugging_a] Coverage note: several hard clauses are never exercised in this episode",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g5",
+   "status": "confirmed",
+   "scenario": "lite_debugging_b",
+   "scope": "debugging_b",
+   "ticks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+   ],
+   "questions": [
+    "target_result"
+   ],
+   "title": "[walk:debugging_b] The not_run description ('did not execute the target') conflicts with D8's terminal showing the target started",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "doc_mismatch"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g6",
+   "status": "rejected",
+   "scenario": "lite_debugging_b",
+   "scope": "debugging_b",
+   "ticks": [
+    58,
+    59
+   ],
+   "questions": [
+    "route"
+   ],
+   "title": "[walk:debugging_b] The 'untracked' status of notes.md is only in the evidence, but the gold does not depend on it",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g7",
+   "status": "rejected",
+   "scenario": "lite_debugging_b",
+   "scope": "debugging_b",
+   "ticks": [
+    0,
+    31
+   ],
+   "questions": [
+    "route"
+   ],
+   "title": "[walk:debugging_b] 'Newly failing compared with the previous finished run' is undefined when there is no previous run or it has no results; no effect here",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g8",
+   "status": "rejected",
+   "scenario": "lite_assembly_a",
+   "scope": "assembly_a",
+   "ticks": [
+    35,
+    36,
+    43,
+    44,
+    55,
+    56,
+    57,
+    58
+   ],
+   "questions": [
+    "stage"
+   ],
+   "title": "[walk:assembly_a] The stage question says 'newest productive record' and leaves out the rules' 'recognized'",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g9",
+   "status": "rejected",
+   "scenario": "lite_assembly_a",
+   "scope": "assembly_a",
+   "ticks": [
+    35,
+    36
+   ],
+   "questions": [
+    "route",
+    "target",
+    "method"
+   ],
+   "title": "[walk:assembly_a] The gasket record never says it comes from a camera, but the 0.8 cutoff applies only to 'camera observations'",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g10",
+   "status": "rejected",
+   "scenario": "lite_assembly_b",
+   "scope": "assembly_b",
+   "ticks": [
+    42,
+    43,
+    48,
+    49
+   ],
+   "questions": [
+    "route",
+    "target",
+    "method"
+   ],
+   "title": "[walk:assembly_b] An obsolete reading inside the current stage: 'wait' or 'repair complete_missing'?",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g11",
+   "status": "rejected",
+   "scenario": "lite_assembly_b",
+   "scope": "assembly_b",
+   "ticks": [
+    52,
+    53,
+    54,
+    55,
+    56,
+    57
+   ],
+   "questions": [
+    "stage"
+   ],
+   "title": "[walk:assembly_b] The stage question says 'newest productive record', but the rules say 'latest recognized productive record' for this unit",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g12",
+   "status": "confirmed",
+   "scenario": "lite_assembly_b",
+   "scope": "assembly_b",
+   "ticks": [],
+   "questions": [
+    "target",
+    "route",
+    "destination"
+   ],
+   "title": "[walk:assembly_b] Terms used in routing are left undefined: 'tool target', the target-to-stage mapping, and badge identity",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "real_but_no_decision_impact",
+   "kinds": [
+    "other"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g13",
+   "status": "rejected",
+   "scenario": "lite_assembly_b",
+   "scope": "assembly_b",
+   "ticks": [
+    1,
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19,
+    21,
+    23,
+    25,
+    27,
+    29,
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "questions": [],
+   "title": "[walk:assembly_b] On odd ticks, the evidence witness cites only the heartbeat record, which by rule cannot affect any decision",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g14",
+   "status": "rejected",
+   "scenario": "lite_support_a",
+   "scope": "support_a",
+   "ticks": [
+    48,
+    49
+   ],
+   "questions": [
+    "payment_stage"
+   ],
+   "title": "[walk:support_a] Credit-card fields show complete with no credit-card details spoken; 'switching cards' clause could suggest collect",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g15",
+   "status": "confirmed",
+   "scenario": "lite_support_a",
+   "scope": "support_a",
+   "ticks": [
+    25,
+    26,
+    27,
+    28
+   ],
+   "questions": [
+    "service_action"
+   ],
+   "title": "[blind:support_a] Rules say \"completed\" but the state uses line_test = \"complete\"",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "reader",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "doc_mismatch"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g16",
+   "status": "confirmed",
+   "scenario": "lite_support_a",
+   "scope": "support_a",
+   "ticks": [
+    10,
+    11,
+    14,
+    16,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    51,
+    52
+   ],
+   "questions": [
+    "recorder",
+    "instrument"
+   ],
+   "title": "[blind:support_a] Capture-close utterance is worded like an Agent promise (\"We will stop...\"), and R0 says Agent promises change nothing",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "reader",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "ambiguous_policy",
+    "other"
+   ],
+   "affected_t": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41
+   ]
+  },
+  {
+   "id": "g17",
+   "status": "rejected",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [
+    12,
+    13,
+    14,
+    15
+   ],
+   "questions": [
+    "cancellation_action"
+   ],
+   "title": "[walk:support_b] cancellation_action option descriptions use 'dispatched' wording that does not cover address_mismatch",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g18",
+   "status": "rejected",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [
+    54,
+    55
+   ],
+   "questions": [
+    "repair_action"
+   ],
+   "title": "[walk:support_b] Base diagnostic goes back from complete/network_fault to running/unknown without explanation, right after remote_check",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g19",
+   "status": "rejected",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [
+    46,
+    47
+   ],
+   "questions": [
+    "route"
+   ],
+   "title": "[walk:support_b] No rule clause explicitly says the Agent's hold-duration claim is ignored; only the question text points to telephony state",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g20",
+   "status": "confirmed",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [
+    10,
+    11,
+    12,
+    26,
+    27,
+    28
+   ],
+   "questions": [
+    "route",
+    "repair_target",
+    "delivery_target"
+   ],
+   "title": "[walk:support_b] The two revisable utterances have semantic ids ('cancel', 'device') instead of the u<at>-<Speaker> convention",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "data_integrity"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g21",
+   "status": "rejected",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [
+    16,
+    17,
+    20,
+    21
+   ],
+   "questions": [
+    "cancellation_action",
+    "delivery_action"
+   ],
+   "title": "[walk:support_b] The rules refer to a 'carrier callback', but the state has only desktop.shipments.<parcel>.status",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g22",
+   "status": "rejected",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [
+    49
+   ],
+   "questions": [
+    "route"
+   ],
+   "title": "[walk:support_b] The name 'hold_return' could be misread as 'just returned from hold' on the first connected tick after a long hold",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g23",
+   "status": "rejected",
+   "scenario": "lite_debugging_a",
+   "scope": "debugging_a",
+   "ticks": [
+    3,
+    4,
+    14,
+    15
+   ],
+   "questions": [
+    "route",
+    "inspect_file",
+    "owner"
+   ],
+   "title": "[walk:debugging_a] Glob '*' semantics are undefined; owners catch-all '*' only matches nested paths if '*' crosses '/'",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g24",
+   "status": "rejected",
+   "scenario": null,
+   "scope": "all",
+   "ticks": [],
+   "questions": [
+    "route",
+    "owner"
+   ],
+   "title": "[audit:debugging] Handoff detection uses a closed regex grammar and a per-row final flag; the text states a semantic rule. No gold impact",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g25",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "all",
+   "ticks": [],
+   "questions": [
+    "route",
+    "control_action",
+    "rerun_scope",
+    "inspect_file",
+    "owner"
+   ],
+   "title": "[audit:debugging] Minor code-only defaults and edge behaviour the text does not state; none is triggered in the data",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "real_but_no_decision_impact",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g26",
+   "status": "confirmed",
+   "scenario": "lite_debugging_b",
+   "scope": "debugging_b",
+   "ticks": [
+    9,
+    24
+   ],
+   "questions": [],
+   "title": "[audit:debugging] Dirty buffers become clean without any save",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "reader",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "data_integrity"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g27",
+   "status": "rejected",
+   "scenario": null,
+   "scope": "all",
+   "ticks": [],
+   "questions": [],
+   "title": "[audit:debugging] 'Full-suite' runs list fewer tests than the earlier module run",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g28",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "all",
+   "ticks": [],
+   "questions": [],
+   "title": "[audit:debugging] Docs call session.policy 'the complete executable policy', but the glob semantics, owner default and handoff grammar are only in code",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "doc_mismatch"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g29",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "all",
+   "ticks": [],
+   "questions": [],
+   "title": "[audit:debugging] Session narratives are accurate but leave out several decision segments and use loose wording",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "doc_mismatch"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g30",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "all",
+   "ticks": [],
+   "questions": [],
+   "title": "[audit:debugging] Regeneration is exact; reference() is public-only; the manifest source hashes have drifted for other files",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "other"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g31",
+   "status": "confirmed",
+   "scenario": "lite_assembly_a",
+   "scope": "assembly_a",
+   "ticks": [
+    55,
+    56,
+    57,
+    58,
+    59
+   ],
+   "questions": [
+    "route",
+    "target",
+    "method",
+    "destination"
+   ],
+   "title": "[blind:assembly_a] Whether a NO_READ housing scan counts as a 'housing scan' for the inspection freshness rule",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "ambiguous_text"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "ambiguous_text"
+    },
+    {
+     "lens": "reader",
+     "verdict": "ambiguous_text"
+    }
+   ],
+   "majority_verdict": "ambiguous_text",
+   "kinds": [
+    "ambiguous_policy"
+   ],
+   "affected_t": [
+    55,
+    56,
+    57,
+    58,
+    59
+   ]
+  },
+  {
+   "id": "g32",
+   "status": "confirmed",
+   "scenario": "lite_assembly_b",
+   "scope": "assembly_b",
+   "ticks": [
+    54,
+    55,
+    56,
+    57,
+    59
+   ],
+   "questions": [
+    "route",
+    "target",
+    "method",
+    "destination"
+   ],
+   "title": "[blind:assembly_b] Whether a NO_READ connector scan makes the electrical readings outdated (R9 'strictly later than all connector scans')",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "ambiguous_text"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "ambiguous_text"
+    },
+    {
+     "lens": "reader",
+     "verdict": "ambiguous_text"
+    }
+   ],
+   "majority_verdict": "ambiguous_text",
+   "kinds": [
+    "ambiguous_policy"
+   ],
+   "affected_t": [
+    54,
+    55,
+    56,
+    57,
+    59
+   ]
+  },
+  {
+   "id": "g33",
+   "status": "rejected",
+   "scenario": "lite_assembly_b",
+   "scope": "assembly_b",
+   "ticks": [
+    2,
+    3
+   ],
+   "questions": [
+    "target"
+   ],
+   "title": "[audit:assembly] Stage-to-target membership is implicit: the mount (reseat) repair target could be read as 'connector' instead of 'orientation'",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g34",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "assembly",
+   "ticks": [],
+   "questions": [
+    "route",
+    "target",
+    "destination"
+   ],
+   "title": "[audit:assembly] Escalation window: the code also resets at the latest cover scan or fixture record, but the text says only 'since its latest replacement' (latent, no gold change)",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g35",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "assembly",
+   "ticks": [],
+   "questions": [
+    "route",
+    "target",
+    "method",
+    "stage"
+   ],
+   "title": "[audit:assembly] Other latent code/text differences that the frozen data never reaches",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_but_no_decision_impact"
+    }
+   ],
+   "majority_verdict": "real_but_no_decision_impact",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g36",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "assembly",
+   "ticks": [],
+   "questions": [
+    "next_step",
+    "route"
+   ],
+   "title": "[audit:assembly] docs/lite/assembly.md tables have minor wording mismatches ('packaging' stage, 'Hold prior decision')",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "doc_mismatch"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g37",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "assembly",
+   "ticks": [],
+   "questions": [
+    "route"
+   ],
+   "title": "[audit:assembly] The rule 'A later successful measurement withdraws escalation even if older failures remain' is never exercised in the frozen streams",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "other"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g38",
+   "status": "confirmed",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [],
+   "questions": [
+    "route",
+    "repair_target"
+   ],
+   "title": "[audit:support] Code treats the permission utterance u102 as a repair route request and a base-unit target request",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_but_no_decision_impact"
+    }
+   ],
+   "majority_verdict": "real_but_no_decision_impact",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g39",
+   "status": "confirmed",
+   "scenario": "lite_support_a",
+   "scope": "support_a",
+   "ticks": [],
+   "questions": [
+    "route",
+    "service_target"
+   ],
+   "title": "[audit:support] Route and service-target regexes are narrower than the rule text and resolve within-utterance conflicts by pattern order",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g40",
+   "status": "confirmed",
+   "scenario": "lite_support_a",
+   "scope": "support_a",
+   "ticks": [],
+   "questions": [
+    "instrument"
+   ],
+   "title": "[audit:support] The card-choice negation filter only catches a negator immediately before the match, and pattern order overrides 'latest'",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_but_no_decision_impact"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g41",
+   "status": "confirmed",
+   "scenario": "lite_support_a",
+   "scope": "support_a",
+   "ticks": [],
+   "questions": [
+    "recorder"
+   ],
+   "title": "[audit:support] The live card-data detector depends on keywords, while the rule is about the digits actually spoken",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g42",
+   "status": "confirmed",
+   "scenario": "lite_support_a",
+   "scope": "support_a",
+   "ticks": [],
+   "questions": [
+    "payment_stage",
+    "recorder"
+   ],
+   "title": "[audit:support] Time windows use >= in the code where the text says 'after' (consent and capture)",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g43",
+   "status": "confirmed",
+   "scenario": "lite_support_a",
+   "scope": "support_a",
+   "ticks": [],
+   "questions": [
+    "service_action"
+   ],
+   "title": "[audit:support] The service_action else-branch returns explain_restored for any completed result that is not 'down'; the text defines only completed/up",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g44",
+   "status": "confirmed",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [],
+   "questions": [
+    "route",
+    "delivery_target"
+   ],
+   "title": "[audit:support] Parcel route and target regexes are narrower than the text; the negation filter depends on adjacency; single-quoted mentions are not stripped",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g45",
+   "status": "confirmed",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [],
+   "questions": [
+    "contact_channel"
+   ],
+   "title": "[audit:support] The contact-channel classifier misses 'email me' and its greedy withdraw pattern over-matches",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g46",
+   "status": "confirmed",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [],
+   "questions": [
+    "delivery_action",
+    "cancellation_action",
+    "repair_action"
+   ],
+   "title": "[audit:support] Catch-all else-branches assign actions to statuses the text never defines",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "code_text_divergence"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g47",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "all",
+   "ticks": [],
+   "questions": [],
+   "title": "[audit:support] The manifest's generator_sources hashes are out of date for runtime files that do not generate data",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "data_integrity"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g48",
+   "status": "confirmed",
+   "scenario": "lite_debugging_b",
+   "scope": "debugging_b",
+   "ticks": [
+    33,
+    34,
+    35,
+    36,
+    39,
+    40,
+    44,
+    45,
+    46,
+    47
+   ],
+   "questions": [
+    "route",
+    "rerun_scope",
+    "owner",
+    "inspect_file"
+   ],
+   "title": "[blind:debugging_b] Glob syntax for scope_rules/owners is never defined; the gold needs '*' to cross '/'",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "ambiguous_text"
+    },
+    {
+     "lens": "reader",
+     "verdict": "ambiguous_text"
+    }
+   ],
+   "majority_verdict": "ambiguous_text",
+   "kinds": [
+    "ambiguous_policy"
+   ],
+   "affected_t": [
+    39,
+    40,
+    44,
+    45,
+    46,
+    47
+   ]
+  },
+  {
+   "id": "g49",
+   "status": "confirmed",
+   "scenario": "lite_debugging_a",
+   "scope": "debugging_a",
+   "ticks": [],
+   "questions": [
+    "inspect_file",
+    "owner"
+   ],
+   "title": "[structural] Debugging inspect_file/owner option lists equal exactly the set of gold values realized in the episode",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "option_or_question_defect"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g50",
+   "status": "rejected",
+   "scenario": "lite_assembly_a",
+   "scope": "assembly_a",
+   "ticks": [
+    31,
+    32,
+    39,
+    40,
+    47,
+    48,
+    49,
+    50
+   ],
+   "questions": [
+    "route",
+    "target",
+    "method",
+    "next_step"
+   ],
+   "title": "[blind:assembly_a] A stale inspection PASS while the current stage is earlier: 'incomplete future stage' (advance/wait) vs 'older PASS needs complete_missing' (repair)",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g51",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "all",
+   "ticks": [],
+   "questions": [],
+   "title": "[structural] manifest.generator_sources is stale: runtime.py and __main__.py hashes changed and retry_scoring.py is missing",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "data_integrity"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g52",
+   "status": "confirmed",
+   "scenario": "lite_support_a",
+   "scope": "support_a",
+   "ticks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "questions": [
+    "instrument",
+    "payment_stage"
+   ],
+   "title": "[audit:support] support.md claims a debit selection 'remains' when the Background speaker recommends credit, but debit is selected only afterwards",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "reader",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "doc_mismatch",
+    "other"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g53",
+   "status": "rejected",
+   "scenario": "lite_support_b",
+   "scope": "support_b",
+   "ticks": [
+    0,
+    1,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59
+   ],
+   "questions": [
+    "contact_channel"
+   ],
+   "title": "[structural] Always-consumed contact_channel legitimately takes 'none', the same spelling as the inactive-branch sentinel (informational)",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "gold_correct"
+    },
+    {
+     "lens": "reader",
+     "verdict": "gold_correct"
+    }
+   ],
+   "majority_verdict": "gold_correct"
+  },
+  {
+   "id": "g54",
+   "status": "confirmed",
+   "scenario": "lite_debugging_b",
+   "scope": "debugging_b",
+   "ticks": [
+    9,
+    24
+   ],
+   "questions": [
+    "route"
+   ],
+   "title": "[walk:debugging_b] Dirty buffer disappears without a matching save (t=9), and a different file is saved when it clears (t=24)",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "reader",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_but_no_decision_impact",
+   "kinds": [
+    "data_integrity",
+    "other"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g55",
+   "status": "confirmed",
+   "scenario": "lite_debugging_a",
+   "scope": "debugging_a",
+   "ticks": [],
+   "questions": [
+    "control_action",
+    "process"
+   ],
+   "title": "[structural] Coverage gaps and unreachable options (informational)",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_but_no_decision_impact"
+    }
+   ],
+   "majority_verdict": "real_but_no_decision_impact",
+   "kinds": [
+    "other"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g56",
+   "status": "confirmed",
+   "scenario": "lite_assembly_b",
+   "scope": "assembly_b",
+   "ticks": [
+    46
+   ],
+   "questions": [
+    "next_step"
+   ],
+   "title": "[structural] docs/lite/assembly.md says 'advance to packaging' but the stage/option is 'label'",
+   "votes": [
+    {
+     "lens": "literal",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "code-trace",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "reader",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "doc_mismatch"
+   ],
+   "affected_t": []
+  },
+  {
+   "id": "g57",
+   "status": "confirmed",
+   "scenario": null,
+   "scope": "all",
+   "ticks": [],
+   "questions": [],
+   "title": "[structural] Leak scan: no gold or evidence leakage; only authoring vocabulary and semantic utterance IDs in public text",
+   "votes": [
+    {
+     "lens": "reproduce",
+     "verdict": "real_non_gold_issue"
+    },
+    {
+     "lens": "impact",
+     "verdict": "real_but_no_decision_impact"
+    },
+    {
+     "lens": "counter",
+     "verdict": "real_non_gold_issue"
+    }
+   ],
+   "majority_verdict": "real_non_gold_issue",
+   "kinds": [
+    "other"
+   ],
+   "affected_t": []
+  }
+ ],
+ "confirmed_ambiguity_rule": "a confirmed grouped finding whose majority adjudication verdict is ambiguous_text",
+ "confirmed_wrong_rule": "a grouped finding whose majority adjudication verdict is gold_wrong"
+}

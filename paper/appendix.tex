@@ -1,0 +1,652 @@
+% Appendices for main.tex (input after \appendix). Measured numbers are macros
+% from generated/numbers.tex; table bodies come from generated/tables.tex.
+
+\section{Task Details}
+\label{app:tasks}
+
+\begin{table}[tp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4.5pt}
+  \begin{tabular}{llrrrr}
+    \toprule
+    Family & Sc. & Qs & Routes & Options & Trans. \\
+    \midrule
+    \TabBenchmarkBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Every scenario changes its composed reference decision at least \TransitionsMin{} times.}
+  Sc.: scenario; Qs: questions per time step; Routes: route options; Options: options per question; Trans.: reference changes.}
+  \label{tab:benchmark}
+\end{table}
+
+\begin{table*}[tp]
+  \centering
+  \small
+  \begin{tabular}{>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{5.1cm}}
+    \toprule
+    Scenarios & Route options & Used in every branch & Branch questions \\
+    \midrule
+    \DebugLabel{} \mbox{(A, B)} & wait, rerun, inspect, control, delegate, ready & process state, target result & rerun: scope; inspect: file; control: continue or stop; delegate: owning team; wait, ready: none \\ \addlinespace
+    \AssemblyLabel{} \mbox{(A, B)} & wait, advance, repair, escalate, handoff, hold, release & stage & advance: next step; repair: target, method; escalate: target, destination; handoff, hold, release: destination; wait: none \\ \addlinespace
+    \SupportLabel{} A & payment, service, hold, wrap-up & recorder command & payment: payment stage, card; service: target, action; hold: hold action; wrap-up: none \\ \addlinespace
+    \PresenterLabel{} \mbox{(A, B)} & talk, questions, clip, closed & slide, captions & talk: chair cue; questions: question card, chair cue; clip: clip state; closed: none \\ \addlinespace
+    \SupportLabel{} B & delivery, cancel, repair, hold (wait), hold (return), closed & follow-up contact channel & delivery: parcel, delivery action; cancel: parcel, cancellation action; repair: device, repair action; hold and closed: none \\
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Every composed decision is a route, the questions used in every branch and the questions of the selected branch.} It uses \ConsumedAnswersMin--\ConsumedAnswersMax{} answers per time step; answers to the other branches' questions are ignored.}
+  \label{tab:specs}
+\end{table*}
+
+\paragraph{Decision specifications.}
+Table~\ref{tab:specs} lists the decision specification of every scenario.
+Each question is used by at least one branch, and a branch never reads another question's generated answer: every question receives the same public state, and the application composes the answers after they arrive.
+The reference fills questions of inactive branches with \emph{none}; the composition ignores them for both the model and the reference, so a model never needs to reproduce those placeholder answers.
+
+\paragraph{Scenarios.}
+The two scenarios of each family were authored separately and differ in their decisions, branch structure and tool observations.
+\emph{\DebugATitle{}} (debugging A) follows a TypeScript refund calculation through a new regression that outranks a still-failing pinned test, unsaved edits and a save grace period, a compiler error, a focused green run that skipped too many tests, a configuration change that requires the full suite, and handoff messages about the wrong run or with a tentative commitment before the final one.
+\emph{\DebugBTitle{}} (debugging B) contains a paused integration test whose pause timer resets on variable evaluation but not on saves, a result that predates an edit, a silent run that becomes stalled and then requires stopping despite unrelated terminal output, and failures owned by two different teams.
+\emph{\AssemblyATitle{}} (assembly A) contains a wrong cover, a joint first under- and then over-tightened, escalation and specialist handoff, two overlapping quality tickets that must both close, and a missing-gasket observation reported first with low and then with high confidence.
+\emph{\AssemblyBTitle{}} (assembly B) contains a mis-oriented connector, repeated crimp failures and a quality hold, and a later rework that makes earlier electrical tests obsolete, so the label and accessory checks must be refreshed as well.
+\emph{\SupportATitle{}} (support A, the payment call) moves between a balance payment, with authorisation, card choice and card capture, and connection and router support, with a hold whose threshold of \SupportAHoldThresholdSteps{} time steps includes equality.
+\emph{\SupportBTitle{}} (support B, the intercom call) covers two parcels and two intercom components, with partial and final corrections, a cancellation that counts only after a carrier callback, a delivery deadline and a follow-up contact preference whose permission can be withdrawn independently.
+
+\emph{\PresenterATitle{}} (presenter A) follows a conference talk with a demo clip, a slide-number correction, provisional pause commands that are revised, a chair handback and a floor question.
+\emph{\PresenterBTitle{}} (presenter B) follows a flood-barrier briefing with an animation, a chair-opened question and a relayed slide request that the presenter declines.
+The transcript exposes speaker, onset, current hypothesis and finalization time; captions follow onsets, reversible pause and stand-by cues follow current text, and slide and mode commands require finals.
+
+\paragraph{Example state and question.}
+Figure~\ref{fig:example} shows the state published at time step \ExampleStateStep{} (\ExampleStateSec\,s at the 2\,s recording cadence) in the payment call, abridged, together with one of its \SupportAQuestions{} questions.
+The customer has been on hold since time step \ExampleHoldSinceStep, and the published threshold is \SupportAHoldThresholdSteps{} time steps including equality, so the reference hold action changes from \emph{wait} to \emph{return to the customer} at this time step.
+The composed reference decision is (route: hold; recorder: record; hold action: return to the customer), and the payment and service questions are inactive.
+At time step \ExampleHoldSinceStep{} the agent claims that the customer ``has waited long enough already'', which the rules do not treat as a fact.
+Jev answered \emph{return} from that time step onward, while Luna, Terra and Astra at low effort answered \emph{wait} until the threshold was reached.
+
+\begin{figure}[tp]
+\scriptsize
+\begin{verbatim}
+state (abridged):
+ "prepared": {"hold_check_ticks": 4,
+  "rules": [ ...six rules...,
+   "During hold, now minus telephony.since >=
+    hold_check_ticks -> return_customer,
+    otherwise wait. Payment and service details
+    are inactive during hold. The recorder
+    remains applicable in every branch. ..."]},
+ "clock": {"now": 33},
+ "telephony": {"status": "hold", "since": 29},
+ "transcript": [
+  {"utterance_id": "u0-Customer", "at": 0,
+   "speaker": "Customer", "final": true,
+   "text": "I'd like to pay the balance, please."},
+  ...11 further utterances...,
+  {"utterance_id": "u27-Customer", "at": 27,
+   "speaker": "Customer", "final": true,
+   "text": "Check my router first; we can come
+            back to the line fault."},
+  {"utterance_id": "u29-Agent", "at": 29,
+   "speaker": "Agent", "final": true,
+   "text": "The customer has waited long enough
+            already."}],
+ "desktop": {
+  "payment": {"status": "draft",
+   "fields_for_card": "debit",
+   "fields": {"number": true, "expiry": true,
+              "code": false}, ...},
+  "service": {"router": "offline",
+   "line_test": "complete",
+   "line_result": "down"}}
+
+question "hold_action" (choice):
+ "instructions": "During hold, return to the
+   customer when elapsed hold time reaches the
+   published threshold, including equality.
+   Otherwise wait; none outside hold.",
+ "criteria": {
+  "K03": "return_customer: Return to the customer",
+  "K02": "none: Hold branch inactive",
+  "K01": "wait: Wait while under threshold"}
+\end{verbatim}
+\caption{\textbf{A published state and question.} The payment call (support~A) at time step \ExampleStateStep, abridged; the full state repeats all rules and utterances. Option labels are opaque and fixed per scenario.}
+\label{fig:example}
+\end{figure}
+
+% ---------------------------------------------------------------------------
+\FloatBarrier
+\section{Protocol Details}
+\label{app:protocol}
+
+\paragraph{Runner and timestamps.}
+The runner publishes state $i$ at its scheduled time $i\Delta$ on a monotonic clock and logs the scheduled and actual publication times, the start of every attempt, the receipt of the response, validated completion and the acceptance check.
+Scenarios run serially with up to \MaxWorkers{} concurrent requests within a scenario.
+A complete valid response is decoded from its opaque labels, composed and accepted atomically if its source index is newer than the active decision and it arrives before the horizon; at an exactly equal arrival time the newer source wins.
+Before the first accepted response there is no decision, which counts as wrong; responses after the horizon are kept for untimed accuracy.
+
+\begin{table*}[tp]
+  \centering
+  \small
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    & \LunaRowLabel & \LunaNoneRowLabel & \TerraRowLabel & \TerraNoneRowLabel & \AstraRowLabel & \JevRowLabel \\
+    \midrule
+    Valid responses & \LunaValidResponses & \LunaNoneValidResponses & \TerraValidResponses & \TerraNoneValidResponses & \AstraValidResponses & \JevValidResponses \\
+    Attempts & \LunaAttempts & \LunaNoneAttempts & \TerraAttempts & \TerraNoneAttempts & \AstraAttempts & \JevAttempts \\
+    Failed attempts & \LunaFailedAttempts & \LunaNoneFailedAttempts & \TerraFailedAttempts & \TerraNoneFailedAttempts & \AstraFailedAttempts & \JevFailedAttempts \\
+    Retried requests & \LunaRetriedRequests & \LunaNoneRetriedRequests & \TerraRetriedRequests & \TerraNoneRetriedRequests & \AstraRetriedRequests & \JevRetriedRequests \\
+    Accepted updates & \LunaAcceptedUpdates & \LunaNoneAcceptedUpdates & \TerraAcceptedUpdates & \TerraNoneAcceptedUpdates & \AstraAcceptedUpdates & \JevAcceptedUpdates \\
+    Discarded: after horizon & \LunaDiscardedAfterHorizon & \LunaNoneDiscardedAfterHorizon & \TerraDiscardedAfterHorizon & \TerraNoneDiscardedAfterHorizon & \AstraDiscardedAfterHorizon & \JevDiscardedAfterHorizon \\
+    Discarded: superseded & \LunaDiscardedOlder & \LunaNoneDiscardedOlder & \TerraDiscardedOlder & \TerraNoneDiscardedOlder & \AstraDiscardedOlder & \JevDiscardedOlder \\
+    Dispatch wait, total (s) & \LunaExcludedDispatchSec & \LunaNoneExcludedDispatchSec & \TerraExcludedDispatchSec & \TerraNoneExcludedDispatchSec & \AstraExcludedDispatchSec & \JevExcludedDispatchSec \\
+    In force: recorded replay & \LunaInForceRecorded & \LunaNoneInForceRecorded & \TerraInForceRecorded & \TerraNoneInForceRecorded & \AstraInForceRecorded & \JevInForceRecorded \\
+    In force: physical & \LunaInForcePhysical & \LunaNoneInForcePhysical & \TerraInForcePhysical & \TerraNoneInForcePhysical & \AstraInForcePhysical & \JevInForcePhysical \\
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Every request succeeded on its first attempt, and the replay matches the physical trace.} Counts over the \NumStates{} time steps of each pass; acceptances, discards and in-force accuracy (\%) use the 2\,s recording cadence.}
+  \label{tab:reliability}
+\end{table*}
+
+\paragraph{Step-anchored replay.}
+Let $s_i$ and $c_i$ be the start and completion of the successful attempt for time step $i$ and $g_i$ the measured lag between completion and the acceptance check.
+The replay places the response at $u_i=r_i+(c_i-s_i)+g_i$ and recomputes arrival order, acceptance and the horizon rule on this timeline.
+Dispatch queueing, failed attempts and retry waits are excluded, and the reliability report lists them with explicit denominators (failed attempts over all attempts; retried requests over all requests).
+Table~\ref{tab:reliability} sums this dispatch wait, from publication to first dispatch, over each pass.
+The physical wall-clock trace is kept alongside, and Table~\ref{tab:reliability} gives its in-force accuracy.
+
+\paragraph{Retries.}
+Only connection errors and network timeouts are retried, with exactly the same input, model and settings.
+The first retry is immediate and later ones wait \RetryLaterDelaysSec\,s, up to \MaxAttempts{} attempts per request; the client library's own retries are set to \SdkRetries{} so every attempt is logged, and the network timeout is \RequestTimeoutSec\,s.
+A valid response ends the retries even if its decision is wrong, and authentication, rejection or schema errors stop the run.
+
+\paragraph{GPT requests.}
+The GPT models receive the fixed instruction below, followed by the request as JSON with the questions before the state so that the repeated policy text forms a cacheable prefix.
+No GPT pass reported cached input tokens (\LunaCachedTokTotal, \LunaNoneCachedTokTotal, \TerraCachedTokTotal, \TerraNoneCachedTokTotal{} and \AstraCachedTokTotal); with fitted prefill slopes of at most \LunaPrefillMsPerKTok\,ms per thousand tokens (Appendix~\ref{app:network}), caching would be expected to change little of the latency.
+Strict structured outputs restrict each answer to the question's option labels, sorted so that the schema reveals no display order, and responses are not stored.
+{\scriptsize
+\begin{verbatim}
+You are a real-time decision model. You receive
+one moment of a live task as JSON: `state` is
+everything observable now, `questions` are typed
+questions whose instructions hold the decision
+policy. Answer every question. Choice -> the
+option label (a key of its criteria). [...]
+Reply with ONLY a JSON object mapping question
+ids to answers [...]. No prose.
+\end{verbatim}}
+
+\paragraph{Jev requests.}
+Jev receives the same state and questions through its native interface and returns, for every question, a choice, a confidence and a probability distribution over the options.
+A response is valid if it answers every question exactly once with a distribution over the defined options that sums to one within rounding, and if the probability of the reported choice is within one reporting step (\JevReportStep) of the highest reported probability, since probabilities are reported to two decimals.
+This check only decides whether a response counts as valid: the evaluated answer is always the choice Jev reported, and every other validity and retry rule is the same for all models.
+
+\paragraph{Reliability.}
+Table~\ref{tab:reliability} lists the \NumSettingsWord{} settings' reliability counts. The original six scenarios and the two presenter scenarios were recorded in separate sessions on \RecordingDatesUTC{} (UTC), with settings sequential within each session, except for Astra low, recorded last in one session. The merged artifacts retain each part's start and end times, source hashes, requested and served model identifiers and event digest.
+All requests succeeded on their first attempt.
+Discarded responses were valid but arrived after the horizon or were superseded, arriving after a response to a newer time step had been accepted.
+Only complete passes are evaluated, and each setting's evaluated pass is its only complete pass.
+All recordings used the same runtime and provider adapters and the same execution/retry configuration. Source manifests also retain changes to dataset support and offline analysis between sessions; all responses are evaluated by the same scorer.
+A partial Luna pass on an earlier build of the data, stopped when the wording of some rules was clarified, is not evaluated.
+
+% ---------------------------------------------------------------------------
+\FloatBarrier
+\section{Network-Removed Estimate}
+\label{app:network}
+
+\begin{table}[b]
+  \centering
+  \small
+  \setlength{\tabcolsep}{2.5pt}
+  \begin{tabular}{lrlrrrr}
+    \toprule
+    Model & Net. & Range & Pre. & Dec. & p50 & p95 \\
+    \scriptsize & \scriptsize (s) & \scriptsize (s) & \scriptsize (ms/1k tok) & \scriptsize (ms/tok) & \scriptsize (s) & \scriptsize (s) \\
+    \midrule
+    \TabLatencyBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{The estimated non-token remainder is most of the latency without reasoning and close to Jev's latency floor.} Net.: remainder and its \NetRangeLevel\% range; Pre., Dec.: prefill and decode slopes; p50, p95: latency.}
+  \label{tab:latency}
+\end{table}
+
+\begin{table*}[tp]
+  \centering
+  \small
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    & \LunaRowLabel & \LunaNoneRowLabel & \TerraRowLabel & \TerraNoneRowLabel & \AstraRowLabel & \JevRowLabel \\
+    \midrule
+    \multicolumn{7}{l}{\textit{Tokens per request (median)}} \\
+    Input & \LunaInputTokMedian & \LunaNoneInputTokMedian & \TerraInputTokMedian & \TerraNoneInputTokMedian & \AstraInputTokMedian & \JevInputTokMedian \\
+    Output & \LunaOutputTokMedian & \LunaNoneOutputTokMedian & \TerraOutputTokMedian & \TerraNoneOutputTokMedian & \AstraOutputTokMedian & \JevOutputTokMedian \\
+    Reasoning & \LunaReasoningTokMedian & \LunaNoneReasoningTokMedian & \TerraReasoningTokMedian & \TerraNoneReasoningTokMedian & \AstraReasoningTokMedian & \JevReasoningTokMedian \\
+    \multicolumn{7}{l}{\textit{Tokens per pass (total)}} \\
+    Input & \LunaInputTokTotal & \LunaNoneInputTokTotal & \TerraInputTokTotal & \TerraNoneInputTokTotal & \AstraInputTokTotal & \JevInputTokTotal \\
+    Output & \LunaOutputTokTotal & \LunaNoneOutputTokTotal & \TerraOutputTokTotal & \TerraNoneOutputTokTotal & \AstraOutputTokTotal & \JevOutputTokTotal \\
+    \multicolumn{7}{l}{\textit{Latency per request (s)}} \\
+    Mean & \LunaLatencyMean & \LunaNoneLatencyMean & \TerraLatencyMean & \TerraNoneLatencyMean & \AstraLatencyMean & \JevLatencyMean \\
+    Max & \LunaLatencyMax & \LunaNoneLatencyMax & \TerraLatencyMax & \TerraNoneLatencyMax & \AstraLatencyMax & \JevLatencyMax \\
+    \multicolumn{7}{l}{\textit{List price (USD per million tokens)}} \\
+    Input & \LunaPriceInput & \LunaNonePriceInput & \TerraPriceInput & \TerraNonePriceInput & \AstraPriceInput & \JevPriceInput \\
+    Output & \LunaPriceOutput & \LunaNonePriceOutput & \TerraPriceOutput & \TerraNonePriceOutput & \AstraPriceOutput & \JevPriceOutput \\
+    \multicolumn{7}{l}{\textit{Cost per pass at list prices (USD)}} \\
+    Input & \LunaCostInputUSD & \LunaNoneCostInputUSD & \TerraCostInputUSD & \TerraNoneCostInputUSD & \AstraCostInputUSD & \JevCostInputUSD \\
+    Output & \LunaCostOutputUSD & \LunaNoneCostOutputUSD & \TerraCostOutputUSD & \TerraNoneCostOutputUSD & \AstraCostOutputUSD & \JevCostOutputUSD \\
+    Total & \LunaCostUSD & \LunaNoneCostUSD & \TerraCostUSD & \TerraNoneCostUSD & \AstraCostUSD & \JevCostUSD \\
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Input tokens account for most of every pass's cost at list prices.} Token counts as reported by each service over the \NumStates{} requests of a pass; list prices read on \PricesRetrieved{} \citep{openai2026pricing,typesafe2026models}.}
+  \label{tab:tokens}
+\end{table*}
+
+\paragraph{Model.}
+\label{sec:network}
+Network transfer is part of every response's latency, so in-force accuracy depends on where the client runs, and we evaluate a secondary network-removal diagnostic at the 2\,s recording cadence. All adjusted scores in this appendix are fixed-interval diagnostics, not the primary log-AUC.
+It models the time before response $i$ is received as
+\begin{equation}
+  \tau_i=\nu+\pi\,x_i+\delta\,o_i+\varepsilon_i,\qquad \varepsilon_i\ge 0,
+  \label{eq:network}
+\end{equation}
+with $x_i$ uncached input tokens (prefill), $o_i$ output tokens including reasoning (decode, for text-generating models only) and $\varepsilon_i\ge0$ queueing and other waiting time.
+The remainder $\nu$ that does not scale with tokens is treated as network; because $\varepsilon_i$ only adds time, it is estimated from the fast envelope, as the intercept of a \NetQuantilePct{}th-percentile quantile regression with nonnegative slopes and a \NetRangeLevel\% block-bootstrap range.
+Every response is replayed with $\nu$, or either end of its range, removed from its time before receipt.
+The remainder can also contain fixed server time and the average cost of any term fitted as zero, so it bounds the fixed network delay from above.
+Figure~\ref{fig:map} places every setting at its median latency before and after removal; the nearly coincident Luna low, Terra low and Astra low are shifted by $-2$, $+2$ and $+4$\,pt for legibility, and Astra low's network-removed point, which nearly overlaps Terra low's, is drawn beneath it.
+
+\begin{figure}[tp]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig_map.pdf}
+  \caption{\textbf{Removing the non-token remainder, an upper bound on fixed network delay, can put Terra none above Jev at 2\,s.}
+  Arrows subtract each remainder; dashed: the oracle of Equation~\eqref{eq:delay}, valid up to 2\,s.}
+  \label{fig:map}
+\end{figure}
+
+\begin{figure}[tp]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig_latency.pdf}
+  \caption{\textbf{Decode dominates GPT latency at low effort, the non-token remainder without reasoning.}
+  Whiskers: the remainder's \NetRangeLevel\% range; dashed: fits extrapolated to zero tokens.}
+  \label{fig:latency}
+\end{figure}
+
+\paragraph{Estimator.}
+For every request the time before receipt $\tau_i$ runs from the start of the successful attempt to the receipt of the response.
+The regressors are uncached input tokens in thousands and, for the GPT models, output tokens including reasoning tokens (Eq.~\eqref{eq:network}).
+Jev's reported output tokens (at least \JevOutputTokMin{} per request) are not modelled as decode time, by assumption, because it returns no text.
+The \NetQuantilePct{}th-percentile regression is solved with the Frisch--Newton interior-point method; a slope estimated below zero is dropped and the model refitted, which keeps both slopes nonnegative.
+The prefill slope is dropped this way for Terra and Astra at low effort and Luna without reasoning, and both slopes for Terra without reasoning, whose output length is nearly constant (\TerraNoneOutputTokMedian{} tokens at the median), so their remainders absorb the corresponding average token-processing costs.
+The bootstrap resamples blocks of \NetBootstrapBlock{} consecutive time steps with replacement within each scenario (\NetBootstrapResamples{} resamples, seed \NetBootstrapSeed), refits the intercept and takes its 2.5th and 97.5th percentiles.
+Each response is replayed with the estimate removed from its time before receipt, never by more than that time. At most \LunaNoneClampedRequests{} Luna none, \TerraNoneClampedRequests{} Terra none and \JevClampedRequests{} Jev requests are clamped, taking the maximum over the estimate and its two bounds. The estimate is fitted to the physical token/latency records and used on the 2\,s recording-cadence replay.
+
+\paragraph{Estimates.}
+Figure~\ref{fig:latency} and Table~\ref{tab:latency} give the fitted components and Table~\ref{tab:tokens} the token counts.
+At low effort the fastest responses took \LunaLatencyFloor\,s (Luna), \TerraLatencyFloor\,s (Terra) and \AstraLatencyFloor\,s (Astra) before receipt, well above their remainders, consistent with decode time for even the shortest outputs; the shortest outputs have \LunaOutputTokMin, \TerraOutputTokMin{} and \AstraOutputTokMin{} tokens, so the intercept extrapolates below the observed range.
+Without reasoning the fastest responses took \LunaNoneLatencyFloor\,s (Luna) and \TerraNoneLatencyFloor\,s (Terra), and Terra's fitted prefill slope is \TerraNonePrefillMsPerKTok\,ms per thousand input tokens.
+Astra low reasons in only \AstraReasoningResponses{} of \NumStates{} responses, so its outputs are as short as without reasoning; its latency comes from the highest decode slope and a remainder that absorbs its prefill.
+Jev's fastest response took \JevLatencyFloor\,s, close to its remainder, so for Jev the remainder is essentially its latency floor; its fitted prefill slope is \JevPrefillMsPerKTok\,ms per thousand input tokens.
+
+\begin{table}[tp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lrrrl}
+    \toprule
+    & & & \multicolumn{2}{c}{Network removed} \\
+    \cmidrule(lr){4-5}
+    Setting & Untimed & In force & Est. & Range \\
+    \midrule
+    \TabFamilyBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Removing the remainder leaves every low-effort GPT setting at least \NetRemovedLowEffortMinGap{} points below untimed accuracy in every family.} Family means at 2\,s (\%); Range: ends of the remainder's \NetRangeLevel\% range.}
+  \label{tab:family}
+\end{table}
+
+\paragraph{Sensitivity.}
+Table~\ref{tab:family} gives family scores with the remainder removed.
+Removing the non-token remainder moves segment-balanced scores in the same direction as time-weighted ones.
+Segment-balanced in-force accuracy with the remainder removed is \LunaNetRemovedSeg\% (\LunaNetRemovedSegLow--\LunaNetRemovedSegHigh) for Luna, \TerraNetRemovedSeg\% (\TerraNetRemovedSegLow--\TerraNetRemovedSegHigh) for Terra, \AstraNetRemovedSeg\% (\AstraNetRemovedSegLow--\AstraNetRemovedSegHigh) for Astra and \JevNetRemovedSeg\% (\JevNetRemovedSegLow--\JevNetRemovedSegHigh) for Jev, against observed values of \LunaInForceSeg\%, \TerraInForceSeg\%, \AstraInForceSeg\% and \JevInForceSeg\%; without reasoning it is \LunaNoneNetRemovedSeg\% (\LunaNoneNetRemovedSegLow--\LunaNoneNetRemovedSegHigh) for Luna and \TerraNoneNetRemovedSeg\% (\TerraNoneNetRemovedSegLow--\TerraNoneNetRemovedSegHigh) for Terra, against \LunaNoneInForceSeg\% and \TerraNoneInForceSeg\%.
+Each range describes estimator uncertainty in one recording and says nothing about other locations or times of day.
+
+% ---------------------------------------------------------------------------
+\section{Log-AUC Definition and Sensitivity}
+\label{app:intervals}
+
+\begin{table}[tp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    & \multicolumn{4}{c}{Normalized AUC} & \multicolumn{2}{c}{In force at} \\
+    \cmidrule(lr){2-5}\cmidrule(lr){6-7}
+    & Log & Linear & Log & Log & & \\
+    Setting & 1--5\,s & 1--5\,s & 1--3\,s & 0.5--5\,s & 2\,s & 5\,s \\
+    \midrule
+    \TabAucSensitivityBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Linear weighting puts Terra none above Jev, and at 5\,s \GPTAboveJevCommonFiveWord{} GPT settings exceed Jev; other log bounds widen Jev's lead.}
+  Family weights as in Equation~\eqref{eq:macro} (\%); Log 1--5\,s is primary.}
+  \label{tab:auc-sensitivity}
+\end{table}
+
+\begin{table}[tp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Setting & $O_{\log}$ & $U_{\mathrm{cur},\log}$ & $\lambda_{\log}$ & $P$ & $S$ \\
+    \midrule
+    \TabAucDecompositionBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{The timing--judgment decomposition carries through the log integral.}
+  Percentages over 1--5\,s; $O_{\log}U_{\mathrm{cur},\log}+\lambda_{\log}=S$ exactly, and $P$ is the scenario-wise approximation.}
+  \label{tab:auc-decomposition}
+\end{table}
+
+
+\paragraph{Why logarithmic weighting.}
+We evaluate robustness across multiplicative changes in environment speed.
+Let $W([a,b])$ be the weight of an interval range with positive endpoints. Equal multiplicative ranges should have equal weight, so $W([a,ra])=g(r)$ for every admissible $a$ and ratio $r>1$.
+Additivity on adjacent ranges implies $g(rs)=g(r)+g(s)$.
+With continuity and nonnegative weights, $g(r)=C\ln r$, and therefore $dW=C\,d\Delta/\Delta$.
+Restricting this measure to $[a,b]$ and normalizing gives $p(\Delta)=1/[\Delta\ln(b/a)]$, the weighting used in Equation~\eqref{eq:macro}.
+This is the multiplicative-invariance argument for scale measures \citep[Section~VII]{jaynes1968prior}, applied here as an evaluation principle.
+It does not assert a logarithmic human perceptual law or an empirical distribution of deployment conditions.
+Unit invariance alone would not justify this choice: normalized linear AUC is also unchanged by converting seconds to milliseconds.
+
+\paragraph{Domain and interpretation.}
+The interval $\Delta$ is spacing between evidence states; it is distinct from response latency, a user's delay budget, and a reference segment's dwell time, which can span several states.
+We use the same 1--5\,s domain for all families to compare performance across a declared seconds-scale range.
+Related interaction studies motivate investigating this scale but do not calibrate its endpoints: developer feedback in \citet[Section~7.2]{murali2024ai} discusses 300--500\,ms suggestions and an upper expectation of 1\,s; \citet{chen2017empirical} derive 0.6--2.7\,s bounds for LEGO guidance, and \citet{olguin2021impact} test injected delays up to 3\,s.
+These concern response delays, not the event rates of our synthetic streams. Five seconds is a declared relaxed condition, not a validated safe response budget.
+The same rule and bounds apply to all settings. The aggregation rule was adopted after inspecting the recorded passes; we therefore report the alternative weights and bounds in Table~\ref{tab:auc-sensitivity} and make no preregistration claim.
+The same table sets the primary score beside in-force accuracy at the 2\,s recording cadence and at the 5\,s integration endpoint.
+
+\paragraph{Replay and quadrature.}
+Each interval evaluation retains the recorded answers and latency in seconds while scaling releases, the horizon and tick-valued policies together.
+For example, support A's four-tick hold threshold represents 4\,s at an interval of 1\,s and 20\,s at 5\,s. These are controlled scenario variants, not new latency thresholds on an unchanged call.
+The inner integral over scenario time is exact. For the outer integral, we use nested trapezoidal grids in $\ln\Delta$ (or $\Delta$ for linear weighting), starting with 128 subintervals and doubling until every integrated scenario metric changes by at most $10^{-5}$, or 0.001 percentage point.
+Nonconvergence at 4096 subintervals is an error. The maximum final refinement change across all settings and sensitivity conditions is \AucMaxRefinementChange{} points; this is a numerical diagnostic, not a statistical uncertainty bound.
+Scenario fractions are normalized before integration, then averaged within each family and across families equally. With common bounds and weights, integrating the aggregate curve equals averaging the family integrals.
+
+
+\paragraph{Integrated decomposition.}
+\label{app:auc-decomposition}
+Let $\mathbb{E}_w$ denote the normalized log integral and the scenario and family averages in Equation~\eqref{eq:macro}.
+Define $O_{\log}=\mathbb{E}_w[O]$, $C_{\log}=\mathbb{E}_w[O U_{\mathrm{cur}}]$, and $\lambda_{\log}=\mathbb{E}_w[\lambda]$.
+Then $S=C_{\log}+\lambda_{\log}=O_{\log}U_{\mathrm{cur},\log}+\lambda_{\log}$, where $U_{\mathrm{cur},\log}=C_{\log}/O_{\log}$ when $O_{\log}>0$.
+This is a ratio of integrated current-correct and current-source shares, not the unweighted average of $U_{\mathrm{cur}}$.
+The approximation uses the scenario-wise product $P=\mathbb{E}_w[U_e O_e(\Delta)]$: each scenario's untimed accuracy is constant in $\Delta$.
+It must not be replaced by the product of the overall untimed accuracy and overall oracle score.
+Table~\ref{tab:auc-decomposition} reports these quantities; the fixed-interval decomposition is in Appendix~\ref{app:decomposition}.
+
+% ---------------------------------------------------------------------------
+\FloatBarrier
+\section{Per-Scenario Results and Time-Step Interval}
+\label{app:scenario}
+
+\begin{table}[!t]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3.5pt}
+  \begin{tabular}{lrrrrrrr}
+    \toprule
+    & & \multicolumn{2}{c}{Luna} & \multicolumn{2}{c}{Terra} & Astra & \\
+    \cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-7}
+    Scale & Interval (s) & low & none & low & none & low & Jev \\
+    \midrule
+    \TabPaceBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{The order of the settings depends on the time-step interval.} In-force accuracy (\%) with every recorded latency scaled, equivalent to the interval shown; $\times$1 is the recording.}
+  \label{tab:pace}
+\end{table}
+
+\begin{table}[t]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{lrrrr}
+    \toprule
+    \multicolumn{5}{l}{\textit{\TerraRowLabel{} vs.\ \LunaRowLabel}} \\
+    & Both & Luna only & Terra only & Neither \\
+    \midrule
+    \DebugLabel & \PairTerraLunaDebugBoth & \PairTerraLunaDebugLunaOnly & \PairTerraLunaDebugTerraOnly & \PairTerraLunaDebugNeither \\
+    \AssemblyLabel & \PairTerraLunaAssemblyBoth & \PairTerraLunaAssemblyLunaOnly & \PairTerraLunaAssemblyTerraOnly & \PairTerraLunaAssemblyNeither \\
+    \SupportLabel & \PairTerraLunaSupportBoth & \PairTerraLunaSupportLunaOnly & \PairTerraLunaSupportTerraOnly & \PairTerraLunaSupportNeither \\
+    \PresenterLabel & \PairTerraLunaPresenterBoth & \PairTerraLunaPresenterLunaOnly & \PairTerraLunaPresenterTerraOnly & \PairTerraLunaPresenterNeither \\
+    All & \PairTerraLunaBoth & \PairTerraLunaLunaOnly & \PairTerraLunaTerraOnly & \PairTerraLunaNeither \\
+    \midrule
+    \multicolumn{5}{l}{\textit{\AstraRowLabel{} vs.\ \TerraRowLabel}} \\
+    & Both & Terra only & Astra only & Neither \\
+    \midrule
+    \DebugLabel & \PairAstraTerraDebugBoth & \PairAstraTerraDebugTerraOnly & \PairAstraTerraDebugAstraOnly & \PairAstraTerraDebugNeither \\
+    \AssemblyLabel & \PairAstraTerraAssemblyBoth & \PairAstraTerraAssemblyTerraOnly & \PairAstraTerraAssemblyAstraOnly & \PairAstraTerraAssemblyNeither \\
+    \SupportLabel & \PairAstraTerraSupportBoth & \PairAstraTerraSupportTerraOnly & \PairAstraTerraSupportAstraOnly & \PairAstraTerraSupportNeither \\
+    \PresenterLabel & \PairAstraTerraPresenterBoth & \PairAstraTerraPresenterTerraOnly & \PairAstraTerraPresenterAstraOnly & \PairAstraTerraPresenterNeither \\
+    All & \PairAstraTerraBoth & \PairAstraTerraTerraOnly & \PairAstraTerraAstraOnly & \PairAstraTerraNeither \\
+    \midrule
+    \multicolumn{5}{l}{\textit{\JevRowLabel{} vs.\ \LunaRowLabel}} \\
+    & Both & Luna only & Jev only & Neither \\
+    \midrule
+    \DebugLabel & \PairJevLunaDebugBoth & \PairJevLunaDebugLunaOnly & \PairJevLunaDebugJevOnly & \PairJevLunaDebugNeither \\
+    \AssemblyLabel & \PairJevLunaAssemblyBoth & \PairJevLunaAssemblyLunaOnly & \PairJevLunaAssemblyJevOnly & \PairJevLunaAssemblyNeither \\
+    \SupportLabel & \PairJevLunaSupportBoth & \PairJevLunaSupportLunaOnly & \PairJevLunaSupportJevOnly & \PairJevLunaSupportNeither \\
+    \PresenterLabel & \PairJevLunaPresenterBoth & \PairJevLunaPresenterLunaOnly & \PairJevLunaPresenterJevOnly & \PairJevLunaPresenterNeither \\
+    All & \PairJevLunaBoth & \PairJevLunaLunaOnly & \PairJevLunaJevOnly & \PairJevLunaNeither \\
+    \midrule
+    \multicolumn{5}{l}{\textit{Luna: none vs.\ low}} \\
+    & Both & Low only & None only & Neither \\
+    \midrule
+    \DebugLabel & \PairLunaNoneLunaDebugBoth & \PairLunaNoneLunaDebugLunaOnly & \PairLunaNoneLunaDebugLunaNoneOnly & \PairLunaNoneLunaDebugNeither \\
+    \AssemblyLabel & \PairLunaNoneLunaAssemblyBoth & \PairLunaNoneLunaAssemblyLunaOnly & \PairLunaNoneLunaAssemblyLunaNoneOnly & \PairLunaNoneLunaAssemblyNeither \\
+    \SupportLabel & \PairLunaNoneLunaSupportBoth & \PairLunaNoneLunaSupportLunaOnly & \PairLunaNoneLunaSupportLunaNoneOnly & \PairLunaNoneLunaSupportNeither \\
+    \PresenterLabel & \PairLunaNoneLunaPresenterBoth & \PairLunaNoneLunaPresenterLunaOnly & \PairLunaNoneLunaPresenterLunaNoneOnly & \PairLunaNoneLunaPresenterNeither \\
+    All & \PairLunaNoneLunaBoth & \PairLunaNoneLunaLunaOnly & \PairLunaNoneLunaLunaNoneOnly & \PairLunaNoneLunaNeither \\
+    \midrule
+    \multicolumn{5}{l}{\textit{Terra: none vs.\ low}} \\
+    & Both & Low only & None only & Neither \\
+    \midrule
+    \DebugLabel & \PairTerraNoneTerraDebugBoth & \PairTerraNoneTerraDebugTerraOnly & \PairTerraNoneTerraDebugTerraNoneOnly & \PairTerraNoneTerraDebugNeither \\
+    \AssemblyLabel & \PairTerraNoneTerraAssemblyBoth & \PairTerraNoneTerraAssemblyTerraOnly & \PairTerraNoneTerraAssemblyTerraNoneOnly & \PairTerraNoneTerraAssemblyNeither \\
+    \SupportLabel & \PairTerraNoneTerraSupportBoth & \PairTerraNoneTerraSupportTerraOnly & \PairTerraNoneTerraSupportTerraNoneOnly & \PairTerraNoneTerraSupportNeither \\
+    \PresenterLabel & \PairTerraNoneTerraPresenterBoth & \PairTerraNoneTerraPresenterTerraOnly & \PairTerraNoneTerraPresenterTerraNoneOnly & \PairTerraNoneTerraPresenterNeither \\
+    All & \PairTerraNoneTerraBoth & \PairTerraNoneTerraTerraOnly & \PairTerraNoneTerraTerraNoneOnly & \PairTerraNoneTerraNeither \\
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{In every pair, the less accurate setting is rarely correct where the other is wrong.} States at which both, one or neither setting returned the correct composed decision, ignoring latency.}
+  \label{tab:paired}
+\end{table}
+
+\begin{table*}[tp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{llrrrrrrrrr}
+    \toprule
+    & & & & & & \multicolumn{4}{c}{Error time (s)} & \\
+    \cmidrule(lr){7-10}
+    Scenario & Model & Untimed & Log-AUC & In force & Seg.-bal. & None & Stale & Judg. & Comp. & p50 (s) \\
+    \midrule
+    \TabScenarioBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{In every scenario Luna low and Terra low lose at least \GPTMinScenarioGap{} points from untimed to in-force accuracy, and Jev at most \JevMaxScenarioGap.} Log-AUC over 1--5\,s; in-force and segment-balanced accuracy (\%) and error time (seconds of 120\,s) at 2\,s; p50: median latency.}
+  \label{tab:scenario}
+\end{table*}
+
+Unless labelled log-AUC, the diagnostics in this section use the 2\,s recording cadence.
+Table~\ref{tab:family} gives family scores at 2\,s, and Table~\ref{tab:scenario} reports every scenario and setting.
+In every scenario, untimed accuracy exceeds in-force accuracy by at least \GPTMinScenarioGap{} points for Luna low and Terra low (\AstraMinScenarioGap{} for Astra low) and by at most \JevMaxScenarioGap{} for Jev.
+In \emph{\SupportBTitle}, for example, Terra low's composed decision is correct at \TerraSupportBUntimed\% of states, yet its in-force accuracy there is \TerraSupportBInForce\%, and most of its error time is stale (\TerraSupportBErrStaleSec\,s stale against \TerraSupportBErrIncorrectSec\,s incorrect for its source).
+Jev's in-force accuracy follows its untimed accuracy closely in every scenario, and its time incorrect for its source is largest in the two debugging scenarios (\JevDebugAErrIncorrectSec\,s and \JevDebugBErrIncorrectSec\,s of 120\,s at the recording cadence).
+Table~\ref{tab:paired} gives the paired counts of untimed composed decisions by family; without reasoning, Luna is correct alone at only \PairLunaNoneLunaLunaNoneOnly{} states, against \PairLunaNoneLunaLunaOnly{} at low effort.
+Composition matters as well: Jev's all-question exact match is \JevExactMatch\%, below its untimed decision accuracy of \JevUntimed\%, because at \JevInactiveOnlyErrors{} states only answers the application ignores are wrong.
+
+\paragraph{Time-step interval.}
+Scaling every time in a scenario by the same factor leaves in-force accuracy unchanged, so multiplying every recorded latency by $c$ is equivalent to intervals of $2/c$ seconds with the same events.
+Table~\ref{tab:pace} evaluates the recorded runs this way with the benchmark's scorer; the answers are those of the recorded pass, and acceptance is recomputed on the scaled timeline.
+Because every time a state shows is written in time steps, the states at another interval are identical, so the model-visible input is unchanged. This evaluation fixes the observed answers and latencies; it does not predict another stochastic draw or measure the service-load effects of another request rate.
+The primary score integrates these evaluations over 1--5\,s; the fixed-interval values here retain a concrete timeline for diagnosis.
+
+% ---------------------------------------------------------------------------
+\FloatBarrier
+\section{Judgment and Latency}
+\label{app:decomposition}
+
+This section reports fixed-interval diagnostics at the 2\,s recording cadence.
+
+\begin{figure}[tp]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig_separability.pdf}
+  \caption{\textbf{In every scenario, in-force accuracy is within \ProductMaxDeviation{} points of untimed accuracy times the oracle in-force accuracy.}
+  One point per setting and scenario at 2\,s; dashed: equality.}
+  \label{fig:separability}
+\end{figure}
+
+\begin{table}[tp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    & Luna & Luna & Terra & Terra & Astra & \\
+    & low & none & low & none & low & Jev \\
+    \midrule
+    \multicolumn{7}{l}{\textit{Share of observed time (\%)}} \\
+    Judgment & \LunaErrJudgmentPct & \LunaNoneErrJudgmentPct & \TerraErrJudgmentPct & \TerraNoneErrJudgmentPct & \AstraErrJudgmentPct & \JevErrJudgmentPct \\
+    Stale & \LunaErrStalePct & \LunaNoneErrStalePct & \TerraErrStalePct & \TerraNoneErrStalePct & \AstraErrStalePct & \JevErrStalePct \\
+    Compound & \LunaErrCompoundPct & \LunaNoneErrCompoundPct & \TerraErrCompoundPct & \TerraNoneErrCompoundPct & \AstraErrCompoundPct & \JevErrCompoundPct \\
+    No decision & \LunaErrNoDecisionPct & \LunaNoneErrNoDecisionPct & \TerraErrNoDecisionPct & \TerraNoneErrNoDecisionPct & \AstraErrNoDecisionPct & \JevErrNoDecisionPct \\
+    Lucky & \LunaLuckyPct & \LunaNoneLuckyPct & \TerraLuckyPct & \TerraNoneLuckyPct & \AstraLuckyPct & \JevLuckyPct \\
+    \midrule
+    \multicolumn{7}{l}{\textit{Factors (\%)}} \\
+    Untimed $U$ & \LunaUntimed & \LunaNoneUntimed & \TerraUntimed & \TerraNoneUntimed & \AstraUntimed & \JevUntimed \\
+    Current $U_{\mathrm{cur}}$ & \LunaUCurrent & \LunaNoneUCurrent & \TerraUCurrent & \TerraNoneUCurrent & \AstraUCurrent & \JevUCurrent \\
+    Oracle $O$ & \LunaTimingCeiling & \LunaNoneTimingCeiling & \TerraTimingCeiling & \TerraNoneTimingCeiling & \AstraTimingCeiling & \JevTimingCeiling \\
+    $U\,O$ & \LunaProduct & \LunaNoneProduct & \TerraProduct & \TerraNoneProduct & \AstraProduct & \JevProduct \\
+    In force $A$ & \LunaInForce & \LunaNoneInForce & \TerraInForce & \TerraNoneInForce & \AstraInForce & \JevInForce \\
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Error shares and factors at 2\,s: $O\,U_{\mathrm{cur}}+\lambda$ reproduces $A$, and $U\,O$ approximates it.} Equal-family means (\%); $U\,O$ averages per-scenario products, so it differs from the product of the rows above.}
+  \label{tab:decomposition}
+\end{table}
+
+\begin{table*}[tp]
+  \centering
+  \small
+  \begin{tabular}{lrrrrrrr}
+    \toprule
+    Reference schedule & Changes & \LunaRowLabel & \LunaNoneRowLabel & \TerraRowLabel & \TerraNoneRowLabel & \AstraRowLabel & \JevRowLabel \\
+    \midrule
+    \TabRegimeBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{In projection, how often the reference changes matters more than how the changes are arranged.} Untimed accuracy times the mean oracle in-force accuracy over \RegimeDraws{} resamples of each setting's latencies (\%), on \RegimeSteps{} time steps of \ReleaseIntervalSec\,s; the first row uses \sdb's own schedules.}
+  \label{tab:regime}
+\end{table*}
+
+Table~\ref{tab:decomposition} gives the timing-by-judgment partition of \S\ref{sec:inforce} and the factors of Equation~\eqref{eq:factor} for every setting, and Figure~\ref{fig:separability} compares in-force accuracy with $U\,O$ scenario by scenario.
+At the family level, $U_{\mathrm{cur}}$ divides macro-weighted current-correct time by macro-weighted current-source time, so that $O\,U_{\mathrm{cur}}+\lambda$ reproduces $A$.
+The partition and the oracle come from the benchmark's scorer, which records for every instant whether the source is current and whether its answer was right for it; the share of time with a current source equals the oracle in-force accuracy of every run and scenario to machine precision, and the in-force accuracy at zero latency equals untimed accuracy up to the millisecond jitter of the recorded time steps.
+Table~\ref{tab:regime} projects the latency factor onto other reference schedules, assuming $A\approx U\,O$ and an unchanged $U$: the oracle share depends only on the schedule and the latencies, so it is computed exactly for resampled latencies and multiplied by untimed accuracy.
+Sparse, medium, uniform and dense schedules space their changes evenly; bursty packs \RegimeBurstyChanges{} changes into four bursts of one-step segments, long-tail dwell mixes one-step segments with a few long ones, and recurrent A-B-A alternates between two decisions.
+On \sdb's own schedules the projection is within \RegimeLiteMaxDiff{} points of the replayed accuracy at 2\,s.
+
+% ---------------------------------------------------------------------------
+\section{Validity Audit}
+\label{app:audit}
+
+\paragraph{Procedure.}
+The audit asked whether each stored reference answer follows from the public rules and evidence of its state.
+For the original six IDE, assembly and support scenarios, two LLM agents worked blind, reading only the public states and questions and never the generator or reference code: one reimplemented the stated rules as an independent program and compared its output with the stored references, and the other derived the answers state by state by hand.
+This gives \AuditRederivationsPerScenarioWord{} re-derivations per scenario and \AuditRederivations{} in total.
+Separate agents compared each family's reference code with its public rule text (\AuditCodeTextChecksWord{} audits) and checked the dataset's structure and deterministic regeneration (\AuditStructuralChecksWord{} check).
+Findings were grouped by rule, and each of the \AuditFindingGroups{} groups was judged by \AuditLensesWord{} agents.
+The \AuditReferenceFindingGroups{} groups about reference answers were judged by a literal reading of the rule text, a trace of the reference code on the state and a search for alternative readings a careful reader could adopt; the others, about documentation, narrative consistency or code paths, by reproduction, impact and counter-argument.
+The audit record in the accompanying materials lists every check with its reported agreement and every grouped finding with its three votes; it does not identify the model behind each agent.
+
+\paragraph{Outcome.}
+Under its default reading of the rules, each of the \AuditRederivations{} re-derivations agreed with the stored reference at all \ReleasesPerScenario{} consumed decisions of its scenario; disagreements arose only under alternative readings that the agents evaluated.
+Of the \AuditReferenceFindingGroups{} findings about reference answers, the adjudication rejected \AuditReferenceFindingsRejected{} and confirmed \AuditReferenceFindingsConfirmed, and none showed a wrong reference answer.
+Among the confirmed findings, \AuditAmbiguitiesWord{} are rule ambiguities that could change a consumed decision, at \AuditAffectedStates{} consumed states in total.
+In both assembly scenarios, the rules did not say whether an unreadable scan (a NO\_READ record) counts as a scan.
+In one debugging scenario, the rules did not say whether \texttt{*} in a scope or ownership pattern matches across \texttt{/}.
+The published rules state both readings, in \AuditClarifiedSentencesWord{} sentences, one per family, and both follow the reference: in debugging, \texttt{*} matches any characters including \texttt{/}; at the assembly station, a NO\_READ scan does not count as a scan in any rule.
+The audited rule text lacked these two sentences; adding them changed no event, question or reference answer.
+The audit also predates writing every time in time steps rather than seconds; that conversion divided every clock value, event time, threshold and deadline by the recorded interval and made the inclusive time boundaries of the support rules explicit, and all 360 reference answers in that audit are unchanged.
+
+\paragraph{Agreement of a model outside authoring.}
+Astra low was recorded after the benchmark was frozen and was not used to author or tune any scenario; ignoring latency, its composed decision matches the reference at \AstraUntimedStates{} of \AstraStates{} states.
+Its \AstraUntimedMissesWord{} miss is at time step \AstraMissStep{} of \emph{\AstraMissScenarioTitle} (\AstraMissScenarioLabel).
+The only inspection record there is a PASS at time step \AstraMissInspectionStep; the J2 screw was then replaced at time step \AstraMissScrewStep{} and run down to \AstraMissRundownNm\,N\,m at time step \AstraMissRundownStep, within its range of \AstraMissTorqueMinNm--\AstraMissTorqueMaxNm\,N\,m, endpoints included.
+That rundown is the latest productive record, so the current stage is fasten, now complete; the PASS predates it, so inspection is an incomplete later stage.
+The rules state that ``Incomplete future stages are not defects'' and that the advance target is the first incomplete stage, so the reference is route \emph{\AstraMissRefRoute} at stage \emph{\AstraMissRefStage} with next step \emph{\AstraMissRefNextStep}.
+Astra answered route \emph{\AstraMissRoute} with target \emph{\AstraMissTarget} and method \emph{\AstraMissMethod}, the rules' repair for a missing earlier stage, although inspection is now a future stage.
+At time step \AstraMissPrevStep{} the state differs only by the clock and one status heartbeat, which the rules say changes no decision, and there Astra returned the reference.
+The original audit had adjudicated this reading in one grouped finding of \AstraSituationStates{} states, time steps \AstraMissPrevStep{} and \AstraMissStep{} among them, and all \AuditLensesWord{} lenses upheld the reference; Astra returned the reference at the other \AstraSituationCorrect.
+
+\paragraph{Scope.}
+The audit tests agreement between public text, evidence and reference code; LLM agents performed every check, and one adjudication lens traces the reference itself, so zero confirmed errors bounds the error count only from below.
+The presenter scenarios were added after this audit; their reference tests and executable agreement checks do not constitute a blind audit.
+Astra's agreement, which also covers the presenter scenarios, is likewise LLM evidence: one model's answers agreeing with the reference on the same public states.
+It does not test whether the rules describe good practice in a real deployment, and no human annotator adjudicated the references.
+
+% ---------------------------------------------------------------------------
+\FloatBarrier
+\section{Figure 1 Window}
+\label{app:window}
+Figure~\ref{fig:trajectory} shows a \TrajWindowSec\,s window of presenter A at the 2\,s recording cadence, drawn from the recorded events of the three passes it shows (Luna low, Terra low and Jev).
+The candidates are presenter A's \NumWindows{} windows of \TrajWindowSec\,s that start at a time step and end within the horizon.
+The displayed window is the most representative one: it minimizes the largest difference between a model's correct share in the window and its overall in-force accuracy.
+That difference is \TrajWindowMaxDev{} points before rounding: the window shares are \LunaTrajShare\% for Luna (\LunaInForce\% overall), \TerraTrajShare\% for Terra (\TerraInForce\%) and \JevTrajShare\% for Jev (\JevInForce\%).
+The figure's right-hand column gives these correct shares; they describe the window, not the integrated scores of Table~\ref{tab:main}.
+Every transcript change in the window is marked on the time axis at the time step that publishes it, open for a partial hypothesis and filled for a final text, and the changes at which the composed reference decision changes are quoted.
+Only the reference fields that change in the window are drawn: the chair cue, the slide and the caption source.
+The complete transcript remains in the artifact, and Figure~\ref{fig:errortime} and Table~\ref{tab:scenario} account for all error time.
+The rule is implemented once and checked again whenever the figure is drawn.
+
+% ---------------------------------------------------------------------------
+\section{Reproducibility}
+\label{app:repro}
+
+\paragraph{Accompanying materials.}
+The accompanying materials, provided as supplementary material, contain the frozen dataset (\texttt{data/lite/v1}, dataset hash beginning \texttt{\DatasetHashShort}), the task generators and executable references, the runner and scorer, the recorded pass of every setting with its complete event log, the audit record, and the scripts that produce every number, table and figure in this paper.
+Code and data are released under the MIT license and are intended for evaluating decision components; the synthetic scenarios and their rules are not a policy for any real deployment.
+The event logs have SHA-256 digests beginning \texttt{\LunaEventsHash} and \texttt{\LunaNoneEventsHash} (Luna, low and none), \texttt{\TerraEventsHash} and \texttt{\TerraNoneEventsHash} (Terra), \texttt{\AstraEventsHash} (Astra) and \texttt{\JevEventsHash} (Jev).
+Every number, table and figure in the paper is regenerated from these logs without any model call; regeneration verifies that recomputed scores match the published analyses and that the executable reference reproduces all \NumStates{} stored answers. The independent audit remains limited to its original six-scenario scope.
+A new pass needs access to the evaluated models: an OpenAI API key for the GPT models and access to \JevProvider's service for Jev.
+At the list prices of Table~\ref{tab:tokens}, OpenAI bills reasoning tokens as output and \JevProvider{} bills input tokens only; the \NumSettingsWord{} reported passes cost \CostTotalUSD{} USD in total, the charges actually billed can differ, and passes not reported here are not included.
+Hosted models may change or be retired; the logs record the requested and served model identifiers.
+
+\paragraph{Commands.}
+A new pass makes paid model requests and requires a fresh output directory; the remaining commands make no network request.
+\begin{quote}
+\scriptsize
+\begin{verbatim}
+# one pass (--model gpt-5.6-luna|terra
+#   --effort low|none; --model gpt-6-astra
+#   --effort low)
+uv run python -m streamdecisionbench.lite run \
+  --data data/lite/v1 --out runs/<new-dir> \
+  --model gpt-5.6-terra --effort low \
+  --max-attempts 5 --retry-delay 0.5
+uv run python -m streamdecisionbench.lite run \
+  --data data/lite/v1 --out runs/<new-dir> \
+  --provider typesafe --model jev-latest \
+  --max-attempts 5 --retry-delay 0.5
+# re-evaluate and report from recorded events
+uv run python -m streamdecisionbench.lite score \
+  --run runs/<dir>
+uv run python scripts/lite/lite_report.py \
+  --run runs/<dir> --out docs/lite/results/<name>
+# all primary AUC reports, diagnostics, numbers and figures
+uv run python paper/analysis/lite_reports.py
+uv run python paper/analysis/lite_numbers.py
+uv run --group paper \
+  python paper/analysis/lite_figures.py
+\end{verbatim}
+\end{quote}

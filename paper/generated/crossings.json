@@ -1,0 +1,37 @@
+[
+  {
+    "a": "Jev",
+    "b": "Luna",
+    "interval_s": 3.1894768208265303
+  },
+  {
+    "a": "Jev",
+    "b": "Terra",
+    "interval_s": 2.766179683804512
+  },
+  {
+    "a": "Jev",
+    "b": "TerraNone",
+    "interval_s": 2.0953736692667007
+  },
+  {
+    "a": "TerraNone",
+    "b": "Terra",
+    "interval_s": 3.762406250834465
+  },
+  {
+    "a": "Jev",
+    "b": "Astra",
+    "interval_s": 2.9768022388219832
+  },
+  {
+    "a": "Luna",
+    "b": "Astra",
+    "interval_s": 2.456665202975273
+  },
+  {
+    "a": "Terra",
+    "b": "Astra",
+    "interval_s": 4.34853855073452
+  }
+]

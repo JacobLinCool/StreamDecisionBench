@@ -1,0 +1,17 @@
+build/
+__pycache__/
+# Built PDFs are not versioned: rebuild them with `latexmk` (see README.md).
+/submission.pdf
+/preprint.pdf
+/main.pdf
+# LaTeX outputs of a build that bypasses .latexmkrc (normally in build/), at any depth.
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc
+# SVG previews written next to the figure PDFs; the PDFs are the LaTeX inputs.
+/figures/fig_*.svg

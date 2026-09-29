@@ -1,0 +1,708 @@
+{
+  "baseline": {
+    "run": "runs/lite-v1-gpt-5.6-terra-low-retry-v1",
+    "config": {
+      "provider": "openai",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "low",
+      "protocol": "retry_excluded_successful_attempt_v1",
+      "workers": 32,
+      "episode_concurrency": 1,
+      "request_timeout_s": 20.0,
+      "max_attempts": 5,
+      "retry_delay_s": 0.5,
+      "sdk_retries": 0,
+      "custom_endpoint": false,
+      "untimed": "one final successful response per state; failed transport attempts excluded from model timing"
+    },
+    "run_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "ed19b1a75e35b27fcb42566eaf1808d50b3563fda33c548cdab591fe93044cc0",
+      "lite/core.py": "9760a5af17c9a1e28307b5fe684c3a9c7b4f17e5cfc23e6ee91d90ec26251544",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8"
+    },
+    "started_at_utc": "2026-09-28T17:08:35.987843+00:00",
+    "finished_at_utc": "2026-09-28T17:20:42.121731+00:00",
+    "models_returned": {
+      "gpt-5.6-terra": 360
+    },
+    "events_sha256": "bc5f3dbac6cd4d2243c3dc255513d3728c6bebd4fad4f981e7659ebce3e67bdc",
+    "total_failed": 0,
+    "accepted_updates": 346,
+    "discarded_updates": {
+      "older_than_active": 8,
+      "after_horizon": 6
+    },
+    "usage": {
+      "input_tokens": 1031609,
+      "cached_tokens": 0,
+      "output_tokens": 41523,
+      "reasoning_tokens": 24543
+    },
+    "analysis_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "ed19b1a75e35b27fcb42566eaf1808d50b3563fda33c548cdab591fe93044cc0",
+      "lite/core.py": "9760a5af17c9a1e28307b5fe684c3a9c7b4f17e5cfc23e6ee91d90ec26251544",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8",
+      "scripts/lite/lite_report.py": "7da7aa2681f304e595b86ca4dd211e1903adc0b3442da02dd55b9320fb4c01a7"
+    },
+    "retry_reliability": {
+      "logical_requests": 360,
+      "successful_logical_requests": 360,
+      "attempts": 360,
+      "failed_attempts": 0,
+      "retried_logical_requests": 0,
+      "failed_attempt_duration_s": 0,
+      "excluded_retry_s": 0.0,
+      "excluded_dispatch_s": 0.1828694036230445,
+      "attempt_error_rate": 0.0,
+      "attempt_error_rate_denominator": "all physical attempts, including final successes",
+      "retried_logical_rate": 0.0,
+      "retried_logical_rate_denominator": "all released logical requests",
+      "attempt_errors_by_type": {}
+    },
+    "raw_wallclock_latency_s": {
+      "p50": 2.394088708097115,
+      "p95": 3.7881521688541397,
+      "max": 10.713531999848783
+    },
+    "raw_wallclock_overall": {
+      "untimed_decision_accuracy": 0.95,
+      "untimed_segment_accuracy": 0.9355731225296443,
+      "all_questions_exact_accuracy": 0.95,
+      "time_accuracy": 0.5034828092962492,
+      "segment_time_accuracy": 0.4250147573604133
+    }
+  },
+  "candidate": {
+    "run": "runs/lite-v1-gpt-5.6-terra-none-retry-v1",
+    "config": {
+      "provider": "openai",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "protocol": "retry_excluded_successful_attempt_v1",
+      "workers": 32,
+      "episode_concurrency": 1,
+      "request_timeout_s": 20.0,
+      "max_attempts": 5,
+      "retry_delay_s": 0.5,
+      "sdk_retries": 0,
+      "custom_endpoint": false,
+      "untimed": "one final successful response per state; failed transport attempts excluded from model timing"
+    },
+    "run_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "ed19b1a75e35b27fcb42566eaf1808d50b3563fda33c548cdab591fe93044cc0",
+      "lite/core.py": "9760a5af17c9a1e28307b5fe684c3a9c7b4f17e5cfc23e6ee91d90ec26251544",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8"
+    },
+    "started_at_utc": "2026-09-28T17:20:42.321898+00:00",
+    "finished_at_utc": "2026-09-28T17:32:42.397386+00:00",
+    "models_returned": {
+      "gpt-5.6-terra": 360
+    },
+    "events_sha256": "edfc86168a023991b4488013b3c470f9b5534c950dfc97119216dcfcc452ae74",
+    "total_failed": 0,
+    "accepted_updates": 358,
+    "discarded_updates": {
+      "older_than_active": 2
+    },
+    "usage": {
+      "input_tokens": 1031609,
+      "cached_tokens": 0,
+      "output_tokens": 16320,
+      "reasoning_tokens": 0
+    },
+    "analysis_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "ed19b1a75e35b27fcb42566eaf1808d50b3563fda33c548cdab591fe93044cc0",
+      "lite/core.py": "9760a5af17c9a1e28307b5fe684c3a9c7b4f17e5cfc23e6ee91d90ec26251544",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8",
+      "scripts/lite/lite_report.py": "7da7aa2681f304e595b86ca4dd211e1903adc0b3442da02dd55b9320fb4c01a7"
+    },
+    "retry_reliability": {
+      "logical_requests": 360,
+      "successful_logical_requests": 360,
+      "attempts": 360,
+      "failed_attempts": 0,
+      "retried_logical_requests": 0,
+      "failed_attempt_duration_s": 0,
+      "excluded_retry_s": 0.0,
+      "excluded_dispatch_s": 0.16459403606131673,
+      "attempt_error_rate": 0.0,
+      "attempt_error_rate_denominator": "all physical attempts, including final successes",
+      "retried_logical_rate": 0.0,
+      "retried_logical_rate_denominator": "all released logical requests",
+      "attempt_errors_by_type": {}
+    },
+    "raw_wallclock_latency_s": {
+      "p50": 1.5241213541012257,
+      "p95": 2.145710977492854,
+      "max": 8.577599833253771
+    },
+    "raw_wallclock_overall": {
+      "untimed_decision_accuracy": 0.8027777777777778,
+      "untimed_segment_accuracy": 0.7653018016604973,
+      "all_questions_exact_accuracy": 0.8027777777777778,
+      "time_accuracy": 0.5741137916436807,
+      "segment_time_accuracy": 0.5029295836744365
+    }
+  },
+  "time_basis": "release_anchored_successful_attempt_replay",
+  "same_recording": false,
+  "dataset_hash": "60f6a877911f412d51f9615e42fda22a6dce436891b4334f8e712962553c6f6d",
+  "episode_hashes": {
+    "lite_debugging_a": "df7d0703f937a005f2c8530515b0491dc285110a5bd612d115c69b36fff786da",
+    "lite_debugging_b": "53fd9ce08a4de5cc618e9065123f4bfa2f7830cd4d8893fe73d3cdee314919ce",
+    "lite_assembly_a": "4b513874a06f59750dd447b2f23928e4f29e7a52b19b99a07cf26dbfe1b87973",
+    "lite_assembly_b": "8113c218bee0a52325182599a37f9313e3ac34d1e2f58d09816a4aa0cd77d870",
+    "lite_support_a": "427e0819efce15e5f88d4da06db6192e18ad3303f6fa5e26696f217bbf3f4cfe",
+    "lite_support_b": "85b70aa9f9351c0f4491c7e78b70fb1b39bb557c52022643f84a58833795ce0f"
+  },
+  "matched_config_excluding_model": {
+    "protocol": "retry_excluded_successful_attempt_v1",
+    "workers": 32,
+    "episode_concurrency": 1,
+    "request_timeout_s": 20.0,
+    "max_attempts": 5,
+    "retry_delay_s": 0.5,
+    "sdk_retries": 0,
+    "custom_endpoint": false,
+    "untimed": "one final successful response per state; failed transport attempts excluded from model timing"
+  },
+  "comparison_analysis_sources": {
+    "scripts/lite/lite_compare.py": "476d3fc07015107e8ae14ee93f9a520826d10a0f1ebf7a3df327e1196c87e5a9"
+  },
+  "verification": "Both complete runs re-scored from their own events with the current scorer; identical time basis, frozen episodes, and config except model identity (provider, model, reasoning effort). Each run's recorded source versions are kept in its identity.",
+  "overall": {
+    "episodes": 6,
+    "states": 360,
+    "paired_decision_counts": {
+      "both_correct": 285,
+      "baseline_only_correct": 57,
+      "candidate_only_correct": 4,
+      "both_wrong": 14
+    },
+    "baseline": {
+      "untimed_decision_accuracy": 0.95,
+      "untimed_segment_accuracy": 0.9355731225296443,
+      "time_accuracy": 0.5035668729097807,
+      "segment_time_accuracy": 0.4251038419347135,
+      "all_questions_exact_accuracy": 0.95,
+      "latency_s": {
+        "p50": 2.394088708097115,
+        "p95": 3.7881521688541397,
+        "max": 10.713531999848783
+      }
+    },
+    "candidate": {
+      "untimed_decision_accuracy": 0.8027777777777778,
+      "untimed_segment_accuracy": 0.7653018016604973,
+      "time_accuracy": 0.5741729925859035,
+      "segment_time_accuracy": 0.5029964252607236,
+      "all_questions_exact_accuracy": 0.8027777777777778,
+      "latency_s": {
+        "p50": 1.5241213541012257,
+        "p95": 2.145710977492854,
+        "max": 8.577599833253771
+      }
+    },
+    "candidate_minus_baseline": {
+      "untimed_decision_accuracy_pp": -14.722222222222214,
+      "untimed_segment_accuracy_pp": -17.027132086914698,
+      "time_accuracy_pp": 7.060611967612274,
+      "segment_time_accuracy_pp": 7.789258332601012,
+      "all_questions_exact_accuracy_pp": -14.722222222222214,
+      "latency_p50_s": -0.8699673539958894,
+      "latency_p95_s": -1.6424411913612857
+    }
+  },
+  "by_family": {
+    "live_debugging": {
+      "episodes": 2,
+      "paired_decision_counts": {
+        "both_correct": 87,
+        "baseline_only_correct": 32,
+        "candidate_only_correct": 0,
+        "both_wrong": 1
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.9916666666666667,
+        "untimed_segment_accuracy": 0.9886363636363636,
+        "time_accuracy": 0.4817776266360318,
+        "segment_time_accuracy": 0.4234560734763047,
+        "all_questions_exact_accuracy": 0.9916666666666667,
+        "latency_s": {
+          "p50": 2.5020239586010575,
+          "p95": 4.451140799629502,
+          "max": 10.713531999848783
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.7250000000000001,
+        "untimed_segment_accuracy": 0.6827561327561327,
+        "time_accuracy": 0.5557567480437657,
+        "segment_time_accuracy": 0.5076666500155917,
+        "all_questions_exact_accuracy": 0.7250000000000001,
+        "latency_s": {
+          "p50": 1.537884582998231,
+          "p95": 2.0783654920291155,
+          "max": 8.577599833253771
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -26.66666666666666,
+        "untimed_segment_accuracy_pp": -30.588023088023096,
+        "time_accuracy_pp": 7.397912140773394,
+        "segment_time_accuracy_pp": 8.421057653928704,
+        "all_questions_exact_accuracy_pp": -26.66666666666666,
+        "latency_p50_s": -0.9641393756028265,
+        "latency_p95_s": -2.3727753076003864
+      }
+    },
+    "procedural_coaching": {
+      "episodes": 2,
+      "paired_decision_counts": {
+        "both_correct": 92,
+        "baseline_only_correct": 19,
+        "candidate_only_correct": 0,
+        "both_wrong": 9
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.925,
+        "untimed_segment_accuracy": 0.9034090909090908,
+        "time_accuracy": 0.47968983423145123,
+        "segment_time_accuracy": 0.377992240819633,
+        "all_questions_exact_accuracy": 0.925,
+        "latency_s": {
+          "p50": 2.6178766249213368,
+          "p95": 3.717578833480365,
+          "max": 9.216394958086312
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.7666666666666667,
+        "untimed_segment_accuracy": 0.7110840548340548,
+        "time_accuracy": 0.5455468611629897,
+        "segment_time_accuracy": 0.4558157078158824,
+        "all_questions_exact_accuracy": 0.7666666666666667,
+        "latency_s": {
+          "p50": 1.5548872083891183,
+          "p95": 2.33659174144268,
+          "max": 4.587452375330031
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -15.833333333333332,
+        "untimed_segment_accuracy_pp": -19.232503607503602,
+        "time_accuracy_pp": 6.585702693153844,
+        "segment_time_accuracy_pp": 7.782346699624937,
+        "all_questions_exact_accuracy_pp": -15.833333333333332,
+        "latency_p50_s": -1.0629894165322185,
+        "latency_p95_s": -1.3809870920376852
+      }
+    },
+    "support_call_assist": {
+      "episodes": 2,
+      "paired_decision_counts": {
+        "both_correct": 106,
+        "baseline_only_correct": 6,
+        "candidate_only_correct": 4,
+        "both_wrong": 4
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.9333333333333333,
+        "untimed_segment_accuracy": 0.9146739130434782,
+        "time_accuracy": 0.5492331578618593,
+        "segment_time_accuracy": 0.47386321150820276,
+        "all_questions_exact_accuracy": 0.9333333333333333,
+        "latency_s": {
+          "p50": 2.171091499971226,
+          "p95": 2.932770112971775,
+          "max": 4.376387291587889
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.9166666666666666,
+        "untimed_segment_accuracy": 0.9020652173913043,
+        "time_accuracy": 0.621215368550955,
+        "segment_time_accuracy": 0.5455069179506967,
+        "all_questions_exact_accuracy": 0.9166666666666666,
+        "latency_s": {
+          "p50": 1.4757046874146909,
+          "p95": 2.1466683732811362,
+          "max": 3.9727713749744
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -1.6666666666666718,
+        "untimed_segment_accuracy_pp": -1.260869565217393,
+        "time_accuracy_pp": 7.198221068909572,
+        "segment_time_accuracy_pp": 7.164370644249396,
+        "all_questions_exact_accuracy_pp": -1.6666666666666718,
+        "latency_p50_s": -0.695386812556535,
+        "latency_p95_s": -0.7861017396906389
+      }
+    }
+  },
+  "per_episode": [
+    {
+      "episode_id": "lite_debugging_a",
+      "task_family": "live_debugging",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 46,
+        "baseline_only_correct": 14,
+        "candidate_only_correct": 0,
+        "both_wrong": 0
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 1,
+        "untimed_segment_accuracy": 1,
+        "time_accuracy": 0.4810745095089482,
+        "segment_time_accuracy": 0.4366356366588429,
+        "all_questions_exact_accuracy": 1,
+        "latency_s": {
+          "p50": 2.5020239586010575,
+          "p95": 3.95102186216972
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.7666666666666667,
+        "untimed_segment_accuracy": 0.7246031746031746,
+        "time_accuracy": 0.5909208022687492,
+        "segment_time_accuracy": 0.5455089134454064,
+        "all_questions_exact_accuracy": 0.7666666666666667,
+        "latency_s": {
+          "p50": 1.5824581875931472,
+          "p95": 1.9395960360998283
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -23.33333333333333,
+        "untimed_segment_accuracy_pp": -27.53968253968254,
+        "time_accuracy_pp": 10.984629275980101,
+        "segment_time_accuracy_pp": 10.88732767865635,
+        "all_questions_exact_accuracy_pp": -23.33333333333333,
+        "latency_p50_s": -0.9195657710079104,
+        "latency_p95_s": -2.0114258260698916
+      }
+    },
+    {
+      "episode_id": "lite_debugging_b",
+      "task_family": "live_debugging",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 41,
+        "baseline_only_correct": 18,
+        "candidate_only_correct": 0,
+        "both_wrong": 1
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.9833333333333333,
+        "untimed_segment_accuracy": 0.9772727272727273,
+        "time_accuracy": 0.4824807437631154,
+        "segment_time_accuracy": 0.4102765102937665,
+        "all_questions_exact_accuracy": 0.9833333333333333,
+        "latency_s": {
+          "p50": 2.516170895891264,
+          "p95": 4.451140799629502
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.6833333333333333,
+        "untimed_segment_accuracy": 0.6409090909090909,
+        "time_accuracy": 0.5205926938187821,
+        "segment_time_accuracy": 0.469824386585777,
+        "all_questions_exact_accuracy": 0.6833333333333333,
+        "latency_s": {
+          "p50": 1.5083983754739165,
+          "p95": 2.1557086846092695
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -29.999999999999993,
+        "untimed_segment_accuracy_pp": -33.63636363636364,
+        "time_accuracy_pp": 3.8111950055666757,
+        "segment_time_accuracy_pp": 5.954787629201053,
+        "all_questions_exact_accuracy_pp": -29.999999999999993,
+        "latency_p50_s": -1.0077725204173476,
+        "latency_p95_s": -2.2954321150202324
+      }
+    },
+    {
+      "episode_id": "lite_assembly_a",
+      "task_family": "procedural_coaching",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 46,
+        "baseline_only_correct": 11,
+        "candidate_only_correct": 0,
+        "both_wrong": 3
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.95,
+        "untimed_segment_accuracy": 0.9318181818181818,
+        "time_accuracy": 0.5088568056259755,
+        "segment_time_accuracy": 0.4153944782679878,
+        "all_questions_exact_accuracy": 0.95,
+        "latency_s": {
+          "p50": 2.5396122708916664,
+          "p95": 3.4123068686807523
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.7666666666666667,
+        "untimed_segment_accuracy": 0.7207792207792207,
+        "time_accuracy": 0.5315262574063506,
+        "segment_time_accuracy": 0.4476124753802123,
+        "all_questions_exact_accuracy": 0.7666666666666667,
+        "latency_s": {
+          "p50": 1.603325937408954,
+          "p95": 2.33659174144268
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -18.333333333333325,
+        "untimed_segment_accuracy_pp": -21.1038961038961,
+        "time_accuracy_pp": 2.266945178037516,
+        "segment_time_accuracy_pp": 3.2217997112224506,
+        "all_questions_exact_accuracy_pp": -18.333333333333325,
+        "latency_p50_s": -0.9362863334827125,
+        "latency_p95_s": -1.0757151272380723
+      }
+    },
+    {
+      "episode_id": "lite_assembly_b",
+      "task_family": "procedural_coaching",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 46,
+        "baseline_only_correct": 8,
+        "candidate_only_correct": 0,
+        "both_wrong": 6
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.9,
+        "untimed_segment_accuracy": 0.875,
+        "time_accuracy": 0.450522862836927,
+        "segment_time_accuracy": 0.34059000337127826,
+        "all_questions_exact_accuracy": 0.9,
+        "latency_s": {
+          "p50": 2.8317196876741946,
+          "p95": 3.913694510352798
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.7666666666666667,
+        "untimed_segment_accuracy": 0.7013888888888888,
+        "time_accuracy": 0.5595674649196287,
+        "segment_time_accuracy": 0.46401894025155244,
+        "all_questions_exact_accuracy": 0.7666666666666667,
+        "latency_s": {
+          "p50": 1.4978442087303847,
+          "p95": 2.1694437140366056
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -13.33333333333333,
+        "untimed_segment_accuracy_pp": -17.361111111111114,
+        "time_accuracy_pp": 10.904460208270173,
+        "segment_time_accuracy_pp": 12.342893688027418,
+        "all_questions_exact_accuracy_pp": -13.33333333333333,
+        "latency_p50_s": -1.3338754789438099,
+        "latency_p95_s": -1.7442507963161922
+      }
+    },
+    {
+      "episode_id": "lite_support_a",
+      "task_family": "support_call_assist",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 52,
+        "baseline_only_correct": 5,
+        "candidate_only_correct": 1,
+        "both_wrong": 2
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.95,
+        "untimed_segment_accuracy": 0.9293478260869565,
+        "time_accuracy": 0.5431758790518383,
+        "segment_time_accuracy": 0.45800928526055895,
+        "all_questions_exact_accuracy": 0.95,
+        "latency_s": {
+          "p50": 2.258398187579587,
+          "p95": 2.9745246983831723
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.8833333333333333,
+        "untimed_segment_accuracy": 0.8641304347826086,
+        "time_accuracy": 0.6263790157803851,
+        "segment_time_accuracy": 0.5306257157257013,
+        "all_questions_exact_accuracy": 0.8833333333333333,
+        "latency_s": {
+          "p50": 1.473363917088136,
+          "p95": 2.1736784637207163
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -6.666666666666665,
+        "untimed_segment_accuracy_pp": -6.521739130434789,
+        "time_accuracy_pp": 8.320313672854684,
+        "segment_time_accuracy_pp": 7.261643046514232,
+        "all_questions_exact_accuracy_pp": -6.666666666666665,
+        "latency_p50_s": -0.785034270491451,
+        "latency_p95_s": -0.8008462346624561
+      }
+    },
+    {
+      "episode_id": "lite_support_b",
+      "task_family": "support_call_assist",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 54,
+        "baseline_only_correct": 1,
+        "candidate_only_correct": 3,
+        "both_wrong": 2
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.9166666666666666,
+        "untimed_segment_accuracy": 0.9,
+        "time_accuracy": 0.5552904366718804,
+        "segment_time_accuracy": 0.4897171377558466,
+        "all_questions_exact_accuracy": 0.9166666666666666,
+        "latency_s": {
+          "p50": 2.0404954373370856,
+          "p95": 2.893935260735452
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.95,
+        "untimed_segment_accuracy": 0.94,
+        "time_accuracy": 0.616051721321525,
+        "segment_time_accuracy": 0.5603881201756922,
+        "all_questions_exact_accuracy": 0.95,
+        "latency_s": {
+          "p50": 1.4829663126729429,
+          "p95": 2.021489308075979
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": 3.3333333333333326,
+        "untimed_segment_accuracy_pp": 3.9999999999999925,
+        "time_accuracy_pp": 6.076128464964459,
+        "segment_time_accuracy_pp": 7.06709824198456,
+        "all_questions_exact_accuracy_pp": 3.3333333333333326,
+        "latency_p50_s": -0.5575291246641427,
+        "latency_p95_s": -0.872445952659473
+      }
+    }
+  ],
+  "network_adjustment": {
+    "method": "lower_envelope_network_removed_v1",
+    "network_s": {
+      "baseline": {
+        "estimate": 0.5197958888754595,
+        "low": 0.4143296779666792,
+        "high": 0.6424160358525502
+      },
+      "candidate": {
+        "estimate": 1.2144627707618298,
+        "low": 0.9365591194203196,
+        "high": 1.3036064425626097
+      }
+    },
+    "overall": {
+      "baseline": {
+        "estimate": 0.5878610977962488,
+        "low": 0.5706778925816551,
+        "high": 0.6078768227526528
+      },
+      "candidate": {
+        "estimate": 0.7413723335866307,
+        "low": 0.7028022304817608,
+        "high": 0.753562470216156
+      },
+      "candidate_minus_baseline_pp": 15.351123579038184,
+      "ranges_overlap": false
+    },
+    "by_family": {
+      "live_debugging": {
+        "baseline": {
+          "estimate": 0.5678877565904175,
+          "low": 0.5503100524957625,
+          "high": 0.5885212063016825
+        },
+        "candidate": {
+          "estimate": 0.672142780312725,
+          "low": 0.6455103432291205,
+          "high": 0.6810243009482125
+        },
+        "candidate_minus_baseline_pp": 10.425502372230754,
+        "ranges_overlap": false
+      },
+      "procedural_coaching": {
+        "baseline": {
+          "estimate": 0.5611175577905279,
+          "low": 0.5444187393555526,
+          "high": 0.5805324163807482
+        },
+        "candidate": {
+          "estimate": 0.7157707295952018,
+          "low": 0.6775589703733249,
+          "high": 0.727891726906966
+        },
+        "candidate_minus_baseline_pp": 15.465317180467398,
+        "ranges_overlap": false
+      },
+      "support_call_assist": {
+        "baseline": {
+          "estimate": 0.6345779790078012,
+          "low": 0.6173048858936503,
+          "high": 0.6545768455755274
+        },
+        "candidate": {
+          "estimate": 0.8362034908519651,
+          "low": 0.785337377842837,
+          "high": 0.8517713827932895
+        },
+        "candidate_minus_baseline_pp": 20.162551184416387,
+        "ranges_overlap": false
+      }
+    }
+  },
+  "interpretation": "Descriptive single-recording comparison. Adjacent states are dependent. Score and latency differences do not establish statistical significance, stable rankings, or causal effects of speed or model changes."
+}

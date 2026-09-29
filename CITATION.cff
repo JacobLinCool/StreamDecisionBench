@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use StreamDecisionBench (SDB), please cite it as below."
+type: software
+title: "StreamDecisionBench: Evaluating Decisions in Force on Evolving Language Streams"
+version: 0.1.0
+date-released: 2026-09-30
+abstract: >-
+  StreamDecisionBench (SDB) evaluates a language model used as a decision
+  component inside an application by the decision in force at every instant,
+  and attributes every erroneous instant to judgment, latency or both. Its
+  scenarios stream evidence in four application families (IDE debugging, an
+  assembly station, a support call and presenter voice control), with
+  reference decisions computed from public rules by executable code.
+authors:
+  - given-names: Jhen-Ke
+    family-names: Lin
+    affiliation: National Yang Ming Chiao Tung University
+    email: jacob.cs14@nycu.edu.tw
+  - given-names: Chung Chun
+    family-names: Wang
+    affiliation: National Yang Ming Chiao Tung University
+    email: takalawang.cs14@nycu.edu.tw
+license: MIT
+keywords:
+  - benchmark
+  - language models
+  - decision components
+  - streaming evaluation
+  - latency
+  - in-force accuracy
+preferred-citation:
+  type: unpublished
+  title: "StreamDecisionBench: Evaluating Decisions in Force on Evolving Language Streams"
+  authors:
+    - given-names: Jhen-Ke
+      family-names: Lin
+      affiliation: National Yang Ming Chiao Tung University
+    - given-names: Chung Chun
+      family-names: Wang
+      affiliation: National Yang Ming Chiao Tung University
+  year: 2026

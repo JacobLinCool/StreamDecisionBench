@@ -1,0 +1,1905 @@
+{
+  "episode_id": "lite_debugging_b",
+  "task_family": "live_debugging",
+  "scenario_id": "debugging_b",
+  "states": 60,
+  "questions": 7,
+  "reference_transitions": 21,
+  "untimed_decision_accuracy": 0.2,
+  "untimed_segment_accuracy": 0.17727272727272728,
+  "all_questions_exact_accuracy": 0.16666666666666666,
+  "inactive_only_error_states": 2,
+  "time_accuracy": 0.18345226012956029,
+  "segment_time_accuracy": 0.14760771801854214,
+  "observed_duration_s": 119.99997066706419,
+  "error_seconds": {
+    "no_decision": 1.4318415839225054,
+    "source_correct": 2.5599285420030355,
+    "source_incorrect": 93.99393470678478
+  },
+  "time_partition_seconds": {
+    "current_correct": 20.689016375225037,
+    "judgment": 68.65179566340521,
+    "stale": 2.5599285420030355,
+    "compound": 25.342139043379575,
+    "outdated_correct": 1.3252494591288269,
+    "no_decision": 1.4318415839225054
+  },
+  "current_source_share": 0.7445069489767066,
+  "latency_s_p50": 1.3615838955156505,
+  "latency_s_p95": 1.9138224288588386,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.005105707794427872,
+  "max_dispatch_lag_s": 0.0014810836873948574,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 0.38333333333333336,
+      "active_states": 60,
+      "active_accuracy": 0.38333333333333336
+    },
+    "process": {
+      "all_states_accuracy": 0.9166666666666666,
+      "active_states": 60,
+      "active_accuracy": 0.9166666666666666
+    },
+    "target_result": {
+      "all_states_accuracy": 0.6333333333333333,
+      "active_states": 60,
+      "active_accuracy": 0.6333333333333333
+    },
+    "rerun_scope": {
+      "all_states_accuracy": 0.8333333333333334,
+      "active_states": 8,
+      "active_accuracy": 0
+    },
+    "inspect_file": {
+      "all_states_accuracy": 0.9333333333333333,
+      "active_states": 1,
+      "active_accuracy": 0
+    },
+    "control_action": {
+      "all_states_accuracy": 0.8166666666666667,
+      "active_states": 4,
+      "active_accuracy": 0.5
+    },
+    "owner": {
+      "all_states_accuracy": 0.8,
+      "active_states": 6,
+      "active_accuracy": 0
+    }
+  },
+  "mistakes": [
+    {
+      "t": 0,
+      "reference_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "original_error",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "inspect_file"
+      ],
+      "reference_evidence": [
+        "clock advanced to 0; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 2,
+      "reference_decision": {
+        "route": "wait",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "debugger: paused"
+      ]
+    },
+    {
+      "t": 4,
+      "reference_decision": {
+        "route": "wait",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "buffer edited: ledger/settlement/batch.py"
+      ]
+    },
+    {
+      "t": 6,
+      "reference_decision": {
+        "route": "wait",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "call: It has hung. We should kill the process."
+      ]
+    },
+    {
+      "t": 7,
+      "reference_decision": {
+        "route": "control",
+        "process": "paused",
+        "target_result": "original_error",
+        "control_action": "continue"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 7; cursor moved to line 37; no relevant event"
+      ]
+    },
+    {
+      "t": 8,
+      "reference_decision": {
+        "route": "control",
+        "process": "paused",
+        "target_result": "original_error",
+        "control_action": "continue"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "buffer edited: ledger/settlement/batch.py"
+      ]
+    },
+    {
+      "t": 9,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "control",
+        "process": "stalled",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process"
+      ],
+      "reference_evidence": [
+        "debugger: continued"
+      ]
+    },
+    {
+      "t": 10,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "control",
+        "process": "running",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 10; cursor moved to line 31; no relevant event"
+      ]
+    },
+    {
+      "t": 11,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "original_error",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "run finished: D7; 0 passed, 1 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 12,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "original_error",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "call: I saved the fix, so this old error cannot matter."
+      ]
+    },
+    {
+      "t": 18,
+      "reference_decision": {
+        "route": "wait",
+        "process": "stalled",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "control",
+        "process": "running",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process"
+      ],
+      "reference_evidence": [
+        "clock advanced to 18; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 19,
+      "reference_decision": {
+        "route": "wait",
+        "process": "stalled",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "process"
+      ],
+      "reference_evidence": [
+        "call: Give it more time; I think it is still fine."
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "route": "control",
+        "process": "stalled",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process",
+        "control_action"
+      ],
+      "reference_evidence": [
+        "clock advanced to 20; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "route": "control",
+        "process": "stalled",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process",
+        "control_action"
+      ],
+      "reference_evidence": [
+        "buffer edited: ledger/settlement/batch.py"
+      ]
+    },
+    {
+      "t": 22,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "run finished: D8; interrupted; no completed result"
+      ]
+    },
+    {
+      "t": 23,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 23; cursor moved to line 35; no relevant event"
+      ]
+    },
+    {
+      "t": 24,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "target"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "saved tests/settlement_helpers.py at 24"
+      ]
+    },
+    {
+      "t": 25,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 25; cursor moved to line 37; no relevant event"
+      ]
+    },
+    {
+      "t": 26,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "target"
+      },
+      "wrong_active_questions": [
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 26; cursor moved to line 38; no relevant event"
+      ]
+    },
+    {
+      "t": 27,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 27; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 29,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "running",
+        "target_result": "not_run",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 29; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 30,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 30; cursor moved to line 33; no relevant event"
+      ]
+    },
+    {
+      "t": 31,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result",
+        "owner"
+      ],
+      "reference_evidence": [
+        "run finished: D9; 1 passed, 1 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 32,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "target_result",
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @platform-core about D9."
+      ]
+    },
+    {
+      "t": 33,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result",
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @fx-platform about D9. [partial]"
+      ]
+    },
+    {
+      "t": 34,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "target_result",
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: Could you contact @fx-platform about D9?"
+      ]
+    },
+    {
+      "t": 35,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @fx-platform about D9."
+      ]
+    },
+    {
+      "t": 36,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 36; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 37,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "saved ledger/settlement/scheduler.py at 37"
+      ]
+    },
+    {
+      "t": 38,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 38; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 39,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 39; cursor moved to line 33; no relevant event"
+      ]
+    },
+    {
+      "t": 40,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 40; cursor moved to line 34; no relevant event"
+      ]
+    },
+    {
+      "t": 41,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "running",
+        "target_result": "different_error",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "run started: D10"
+      ]
+    },
+    {
+      "t": 42,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "control",
+        "process": "running",
+        "target_result": "passed",
+        "control_action": "stop"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 42; cursor moved to line 36; no relevant event"
+      ]
+    },
+    {
+      "t": 43,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "running",
+        "target_result": "not_run",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 43; cursor moved to line 37; no relevant event"
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route",
+        "owner"
+      ],
+      "reference_evidence": [
+        "run finished: D10; 1 passed, 1 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 45,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @platform-core about D9."
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "call: I have contacted @platform-core about D10."
+      ]
+    },
+    {
+      "t": 47,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 47; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "saved ledger/common/pool.py at 48"
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "original_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 49; cursor moved to line 34; no relevant event"
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "different_error",
+        "rerun_scope": "full"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 50; cursor moved to line 35; no relevant event"
+      ]
+    },
+    {
+      "t": 51,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "different_error",
+        "rerun_scope": "full"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 51; cursor moved to line 36; no relevant event"
+      ]
+    },
+    {
+      "t": 52,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "run started: D11"
+      ]
+    },
+    {
+      "t": 53,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 53; cursor moved to line 38; no relevant event"
+      ]
+    },
+    {
+      "t": 54,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 54; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 56,
+      "reference_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 56; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 59,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 59; cursor moved to line 35; no relevant event"
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.933293581008911e-05,
+      "end_s": 1.4318709168583155,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 1.4318709168583155,
+      "end_s": 2.0047168326564133,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 2.0047168326564133,
+      "end_s": 3.295054249931127,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 3.295054249931127,
+      "end_s": 4.005064707715064,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.005064707715064,
+      "end_s": 5.494004166685045,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 5.494004166685045,
+      "end_s": 6.005093707703054,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 6.005093707703054,
+      "end_s": 7.284272375050932,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 7.284272375050932,
+      "end_s": 8.00420937500894,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.00420937500894,
+      "end_s": 9.317847874946892,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 9.317847874946892,
+      "end_s": 10.004337332677096,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 10.004337332677096,
+      "end_s": 11.506075457669795,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 11.506075457669795,
+      "end_s": 12.001522166654468,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.001522166654468,
+      "end_s": 13.079326374921948,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 13.079326374921948,
+      "end_s": 14.001452208030969,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 14.001452208030969,
+      "end_s": 15.169947791844606,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 15.169947791844606,
+      "end_s": 16.004285332746804,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 16.004285332746804,
+      "end_s": 16.970316791906953,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 16.970316791906953,
+      "end_s": 18.001092207618058,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.001092207618058,
+      "end_s": 19.476358082611114,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 19.476358082611114,
+      "end_s": 20.00507824961096,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.00507824961096,
+      "end_s": 21.22022462496534,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 21.22022462496534,
+      "end_s": 22.005046041682363,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 22.005046041682363,
+      "end_s": 23.912010207772255,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 23.912010207772255,
+      "end_s": 24.00507479161024,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 24.00507479161024,
+      "end_s": 25.12111054174602,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 25.12111054174602,
+      "end_s": 26.00462520774454,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 26.00462520774454,
+      "end_s": 27.17628008266911,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 27.17628008266911,
+      "end_s": 28.001802749931812,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.001802749931812,
+      "end_s": 29.55430137505755,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 29.55430137505755,
+      "end_s": 30.00506441667676,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 30.00506441667676,
+      "end_s": 31.34732499998063,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 31.34732499998063,
+      "end_s": 32.00040154205635,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.00040154205635,
+      "end_s": 33.1006149998866,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 33.1006149998866,
+      "end_s": 34.00318924989551,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.00318924989551,
+      "end_s": 35.06923099979758,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 35.06923099979758,
+      "end_s": 36.0029388749972,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.0029388749972,
+      "end_s": 37.073927958030254,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 37.073927958030254,
+      "end_s": 38.00070962496102,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 38.00070962496102,
+      "end_s": 39.22664099978283,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 39.22664099978283,
+      "end_s": 40.00250449962914,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.00250449962914,
+      "end_s": 40.98113449988887,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.98113449988887,
+      "end_s": 42.00458874972537,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.00458874972537,
+      "end_s": 44.005045749712735,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.005045749712735,
+      "end_s": 44.079939416609704,
+      "reference_t": 22,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.079939416609704,
+      "end_s": 45.61054362496361,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 45.61054362496361,
+      "end_s": 46.00048116687685,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.00048116687685,
+      "end_s": 48.00434304168448,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.00434304168448,
+      "end_s": 48.0958793326281,
+      "reference_t": 24,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.0958793326281,
+      "end_s": 49.552213416900486,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 49.552213416900486,
+      "end_s": 50.00510570779443,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 50.00510570779443,
+      "end_s": 51.3429836248979,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 51.3429836248979,
+      "end_s": 52.00417816685513,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.00417816685513,
+      "end_s": 53.675474958028644,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 53.675474958028644,
+      "end_s": 54.00119458278641,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.00119458278641,
+      "end_s": 55.704337457660586,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 55.704337457660586,
+      "end_s": 56.00143770780414,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.00143770780414,
+      "end_s": 57.59440404176712,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 57.59440404176712,
+      "end_s": 58.00171808293089,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 58.00171808293089,
+      "end_s": 59.250759582966566,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 59.250759582966566,
+      "end_s": 60.00463891681284,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.00463891681284,
+      "end_s": 61.1078932499513,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 61.1078932499513,
+      "end_s": 62.00029666675255,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.00029666675255,
+      "end_s": 63.40281724976376,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 63.40281724976376,
+      "end_s": 64.00424862466753,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.00424862466753,
+      "end_s": 66.00388987502083,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.00388987502083,
+      "end_s": 66.05554408300668,
+      "reference_t": 33,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.05554408300668,
+      "end_s": 67.4301064577885,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 67.4301064577885,
+      "end_s": 68.00028683291748,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 68.00028683291748,
+      "end_s": 69.13895375002176,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 69.13895375002176,
+      "end_s": 70.00495883263648,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.00495883263648,
+      "end_s": 71.71384137496352,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 71.71384137496352,
+      "end_s": 72.0010574166663,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.0010574166663,
+      "end_s": 73.17197204194963,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 73.17197204194963,
+      "end_s": 74.0011301250197,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.0011301250197,
+      "end_s": 75.48171887500212,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 75.48171887500212,
+      "end_s": 76.00107524963096,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.00107524963096,
+      "end_s": 77.44112537475303,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 77.44112537475303,
+      "end_s": 78.00445458292961,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.00445458292961,
+      "end_s": 79.2763333749026,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 79.2763333749026,
+      "end_s": 80.00175233278424,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.00175233278424,
+      "end_s": 81.0746456249617,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 81.0746456249617,
+      "end_s": 82.00094233267009,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 82.00094233267009,
+      "end_s": 83.27844658261165,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 83.27844658261165,
+      "end_s": 84.00158787472174,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 84.00158787472174,
+      "end_s": 85.42267208267003,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 85.42267208267003,
+      "end_s": 86.00330195762217,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.00330195762217,
+      "end_s": 87.46483641676605,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 87.46483641676605,
+      "end_s": 88.0042300419882,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.0042300419882,
+      "end_s": 89.43545900005847,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 89.43545900005847,
+      "end_s": 90.00330062489957,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00330062489957,
+      "end_s": 91.7093109996058,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 91.7093109996058,
+      "end_s": 92.00484487460926,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.00484487460926,
+      "end_s": 93.58895720774308,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 93.58895720774308,
+      "end_s": 94.00436479179189,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.00436479179189,
+      "end_s": 95.35478799976408,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 95.35478799976408,
+      "end_s": 96.0033224998042,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.0033224998042,
+      "end_s": 97.40338258305565,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 97.40338258305565,
+      "end_s": 98.00445437477902,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.00445437477902,
+      "end_s": 99.64636795781553,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 99.64636795781553,
+      "end_s": 100.00505999987945,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.00505999987945,
+      "end_s": 101.08604516694322,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 101.08604516694322,
+      "end_s": 102.00318516697735,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00318516697735,
+      "end_s": 103.48816108284518,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 103.48816108284518,
+      "end_s": 104.00459499983117,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.00459499983117,
+      "end_s": 105.35915054194629,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 105.35915054194629,
+      "end_s": 106.00435024965554,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.00435024965554,
+      "end_s": 107.13714620796964,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 107.13714620796964,
+      "end_s": 108.00437174970284,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.00437174970284,
+      "end_s": 109.26524637499824,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 109.26524637499824,
+      "end_s": 110.00140099972486,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.00140099972486,
+      "end_s": 111.37076295772567,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 111.37076295772567,
+      "end_s": 112.00331041682512,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 112.00331041682512,
+      "end_s": 113.41137087484822,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 113.41137087484822,
+      "end_s": 114.0033764578402,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.0033764578402,
+      "end_s": 115.32862591696903,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "correct"
+    },
+    {
+      "start_s": 115.32862591696903,
+      "end_s": 116.00046354206279,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "correct"
+    },
+    {
+      "start_s": 116.00046354206279,
+      "end_s": 117.64440129185095,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "correct"
+    },
+    {
+      "start_s": 117.64440129185095,
+      "end_s": 118.0017791246064,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.0017791246064,
+      "end_s": 119.17718316661194,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 119.17718316661194,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "source_incorrect"
+    }
+  ]
+}

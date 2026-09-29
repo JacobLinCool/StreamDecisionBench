@@ -1,0 +1,287 @@
+# Verbatim lines supporting part_a_notes.md. Produced by pdftotext (poppler) on PDFs downloaded 2026-09-27,
+# then /usr/bin/grep -n. Line numbers refer to the non-layout pdftotext output (<name>.raw.txt).
+
+### Gaia2 arXiv v1 (2602.11964) :: pattern: Published as a conference paper at ICLR 2026
+1:Published as a conference paper at ICLR 2026
+
+### Gaia2 Sec.3 async time :: pattern: model generations directly|consume simulated time|external events may happen during
+215:Asynchronicity and time Because environments run asynchronously, model generations directly
+216:consume simulated time: if an agent takes longer to respond, the environment clock still advances,
+217:and external events may happen during its reasoning process. This design unlocks evaluations of
+
+### Gaia2 Sec.4.3 verifier dims :: pattern: Timing—enforced|Causality—actions|Completeness—success
+385:checks; (ii) Causality—actions must respect dependency DAGs (parents before children); (iii) Timing—enforced via tolerance windows; and (iv) Completeness—success requires matching all oracle
+
+### Gaia2 Sec.5 simulated generation time :: pattern: simulated generation|time—pausing|matching time offset
+406:We handle deployment issues like outages and rate limits using a simulated generation
+407:time—pausing during responses and resuming with a matching time offset—to preserve realistic
+
+### Gaia2 Sec.5.2 instant mode :: pattern: instant. mode|from 8.1% to 26.7%|0.0% to 34.4%|inverse$|scaling in the Time
+952:(“instant” mode) improves all models, with the largest gains for reasoning models: Sonnet rises
+953:from 8.1% to 26.7%, and GPT-5 (high) from 0.0% to 34.4%. Weaker models improve modestly
+955:latency and therefore best supports timing requirements. In the default mode, we observe inverse
+956:scaling in the Time capability: models trade Time performance for Execution performance due to
+
+### Gaia2 B.2.1 timing tolerance :: pattern: tolerance window
+385:checks; (ii) Causality—actions must respect dependency DAGs (parents before children); (iii) Timing—enforced via tolerance windows; and (iv) Completeness—success requires matching all oracle
+2074:within a specified tolerance window centered around the relative time of the oracle action.
+
+### WinFast Sec.3.2 1-second observations :: pattern: 1-second intervals|linearly decaying price|ranks$|agents by their response time|inference is only triggered
+335:at 1-second intervals and must decide whether to take action. To isolate the effect of decision latency,
+337:When an arbitrage opportunity is detected, agents initiate inference. The simulated exchange ranks
+338:agents by their response time and assigns execution prices accordingly: faster agents secure more
+339:favorable prices. We implement a linearly decaying price model of time and price, where trading
+343:LLM calls, inference is only triggered when the bid–ask margin exceeds a preset threshold b. Agents
+
+### WinFast Sec.3.3 ELO :: pattern: ELO rating|5 actions per second
+363:sets, recent action history, and a contextual prompt. We evaluate performance using the ELO rating
+539:and compute win rates to derive ElO ratings.
+740:fixed amount of in-game time to complete, with an effective frame rate of around 5 actions per second
+
+### WinFast first-study claim :: pattern: we are the first to systematically
+174:In this paper, we are the first to systematically formulate and investigate the latency–quality trade-off
+199:• Latency–Quality Trade-off. We are the first to systematically formulate and investigate the
+
+### STAR Sec.4.2 turn-based unlimited time :: pattern: unlimited deliberation
+563:In this setting, models are allowed unlimited deliberation
+765:that dominated under unlimited deliberation no longer retain
+
+### STAR App C.2 real-time loop :: pattern: does not await a discrete turn|Actions incur latency proportional
+1320:• Asynchronous Interaction Loop: The agent maintains a persistent execution loop that continuously retrieves environmental observations and queries the LLM. Unlike turn-based systems, it does not await a discrete turn signal, instead
+1327:implements a dynamic delay mechanism. Actions incur latency proportional to their complexity; for instance,
+
+### STAR PWER :: pattern: PWER, which integrates|time efficiency T
+447:levels of resource consumption or strategic efficiency. Therefore, we introduce PWER, which integrates unit preservation and temporal efficiency into SER. We define a Performance Multiplier (M ) that scales the reward for the victor
+543:resource efficiency, and time efficiency T = 1 −
+
+### TicToc dataset size :: pattern: 1864 high-quality|5592 samples|3016 retained|normalized alignment rate better than 65
+33:a normalized alignment rate better than 65%
+390:we obtained 1864 high-quality trajectories. An
+450:5592 samples. Human annotators were asked to
+464:results in 3016 retained samples, comprising 1112
+
+### TicToc labels are human preferences :: pattern: Human annotators were asked|at least five annotations
+184:at least five annotations, which were then aggregated to determine the final preference. Detailed
+450:5592 samples. Human annotators were asked to
+
+### ReactiveBench sizes :: pattern: 120 multi-turn scenarios|688 pre-registered|200 tasks from GSM8K
+129:C2: ReactiveBench, a benchmark with objective, verifiable criteria (§3). No existing benchmark evaluates interleaved thinking and speaking under interrupts. We introduce ReactiveBench, which pairs an interactive track (120 multi-turn scenarios with three interrupt
+130:sources, scored against 688 pre-registered binary requirements written blind to any model
+131:output) with a verifiable streaming track (200 tasks from GSM8K, SQuAD, and HotpotQA plus
+452:Track A contains 120 multi-turn scenarios: interviews, brainstorming, negotiations, and a
+
+### ReactiveBench Track A transcript-level interrupts :: pattern: simulated at the transcript level|realized at the transcript
+455:scripted, so all models and modes face identical inputs; interrupts are realized at the transcript
+1436:to match their token-level latency or speech naturalness; our latency contrasts are withinsystem, not cross-system. Track A’s interrupts are simulated at the transcript level, which
+
+### ReactiveBench Track B simulator + tool-lead :: pattern: discrete-event simulator|tool-lead\)
+530:(partial transcripts delivered at speech rate through a discrete-event simulator) and turn-based
+532:that make the two target behaviors measurable: whether and how many seconds before endof-utterance a tool fires (tool-lead), whether the agent speaks at all (speech coverage), and whether
+3050:stream named-entity lookups (keep the tool-lead) but answer late-intent tasks turn-based. Model: base
+3547:and driven through the same discrete-event simulator. Two conclusions recur: (i) the thinkwhile-listening signature (tools fired before the utterance ends) is an architecture-independent
+
+### Never Stop Thinking System 1/System 2 :: pattern: System 1 reply|System 2 continues
+255:which a fast, budget-capped System 1 reply is spoken immediately while an unconstrained
+256:System 2 continues reasoning behind it, and a TTS-paced cycle in which the orchestrator
+
+### ProActor hindsight annotator :: pattern: including future turns|not ground truth
+334:Given a dialogue and the generated tool catalog, we initialize an oracle LLM annotator (Appendix B.2) with access to the full conversation—including future turns—and instruct it to
+347:not ground truth. The oracle annotator identifies
+
+### ProActor turn-level metrics :: pattern: at each dialogue|turn t by comparing
+326:annotator with a global dialogue view produces highquality reference actions at each dialogue turn.
+335:identify proactive opportunities at each dialogue
+381:we evaluate agent behavior at each dialogue turn
+6714:catalog A (Section B.1), annotators identify proactive action opportunities at each dialogue turn and
+6737:2. Turn-Level Status Assignment. At each dialogue turn t, the annotator assigns one of
+
+### StreamingBench offline conversion + PO polling :: pattern: convert each streaming|queried every second|less than two seconds|interval \[-4,4\]
+332:currently cannot accept streaming video input2 , we convert each streaming task into an offline one
+530:Since current MLLMs lack the ability to accept streaming video input, we convert each streaming
+541:when the model is expected to output). During this interval, the model is queried every second with
+
+### StreamMemBench 5-minute segments + latency table :: pattern: chronological sequence of five|Latency is the time to ingest
+517:(z1 , . . . , zn ) is a chronological sequence of fiveminute EgoLife segments. Each segment preserves
+1159:Latency is the time to ingest one segment and answer T1 ,
+
+### StreamMemBench backbones (abstract vs contributions) :: pattern: across two backbones|across three backbones
+31:metrics diagnose evidence recall, initial evidence use, feedback incorporation, and followup reuse. Experiments with eight memory systems across two backbones show that current
+
+### Belief-R two steps + BREU :: pattern: two sequential reasoning steps|averaging BU-Acc and BM-Acc
+138:is done within two sequential reasoning steps. We
+743:Evaluation Understudy), to assess LMs’ belief revision ability, by averaging BU-Acc and BM-Acc
+
+### DeltaLogic edit types + subset sizes :: pattern: four edit types|contains 100 episodes|30-episode main|single-step revision
+89:We use four edit types: support insertion, defeating-fact insertion, support removal, and irrelevantfact addition. Together they test positive updating, belief retraction, and stability under no-change
+93:irrelevant-addition episodes using shallow examples with identified support facts. The full construction contains 100 episodes. For this paper we report completed generative-model evaluation subsets
+94:that preserve all edit types while remaining feasible on CPU-only hardware: a 30-episode main
+242:the benchmark targets single-step revision and label correctness, not longer revision chains or freeform justification quality.
+
+### CoPE binary single-token output + latency :: pattern: single token \(0 or 1\)|sub-200ms
+67:• Efficiency: The model operates with sub-200ms latency on an A100, ensuring fast response times.
+622:single token (0 or 1) to indicate if the content adheres to the given policy. The model is released under an open license
+
+### CoPE contradictory labels for identical content :: pattern: identical content receives different|identical content examples had
+522:but contradictory - where identical content receives different labels under different policies - the only path to accuracy
+607:creating additional contradictory labeled datasets where identical content receives different classification outcomes
+612:then merged to create our final training dataset. The result was a training corpus where identical content examples had
+
+### StreamingBench PO success criterion and polling window (lines 544-546, 1203-1204)
+as the actual output timestamp. A question in the PO task is considered accurately resolved only
+if the difference between the actual output timestamp and the ground truth timestamp is less than
+two seconds. The average accuracy across all queries is then computed and used as the performance
+and stability of the responses, the prompt for PO includes a query about whether an output is necessary. The polling timestamps encompass the query timestamp and every second within the interval
+[-4,4], using the ground truth timestamp as the origin, up to 10 timestamps.
+
+### StreamMemBench contributions bullet (backbone count)
+176:• We evaluate eight memory systems across
+177-three backbones and find that current systems
+
+# Verbatim lines supporting part_a_notes.md. Produced by pdftotext (poppler) on PDFs downloaded 2026-09-27,
+# then /usr/bin/grep -n. Line numbers refer to the non-layout pdftotext output (<name>.raw.txt).
+
+### Gaia2 arXiv v1 (2602.11964) :: pattern: Published as a conference paper at ICLR 2026
+1:Published as a conference paper at ICLR 2026
+
+### Gaia2 Sec.3 async time :: pattern: model generations directly|consume simulated time|external events may happen during
+215:Asynchronicity and time Because environments run asynchronously, model generations directly
+216:consume simulated time: if an agent takes longer to respond, the environment clock still advances,
+217:and external events may happen during its reasoning process. This design unlocks evaluations of
+
+### Gaia2 Sec.4.3 verifier dims :: pattern: Timing—enforced|Causality—actions|Completeness—success
+385:checks; (ii) Causality—actions must respect dependency DAGs (parents before children); (iii) Timing—enforced via tolerance windows; and (iv) Completeness—success requires matching all oracle
+
+### Gaia2 Sec.5 simulated generation time :: pattern: simulated generation|time—pausing|matching time offset
+406:We handle deployment issues like outages and rate limits using a simulated generation
+407:time—pausing during responses and resuming with a matching time offset—to preserve realistic
+
+### Gaia2 Sec.5.2 instant mode :: pattern: instant. mode|from 8.1% to 26.7%|0.0% to 34.4%|inverse$|scaling in the Time
+952:(“instant” mode) improves all models, with the largest gains for reasoning models: Sonnet rises
+953:from 8.1% to 26.7%, and GPT-5 (high) from 0.0% to 34.4%. Weaker models improve modestly
+955:latency and therefore best supports timing requirements. In the default mode, we observe inverse
+956:scaling in the Time capability: models trade Time performance for Execution performance due to
+
+### Gaia2 B.2.1 timing tolerance :: pattern: tolerance window
+385:checks; (ii) Causality—actions must respect dependency DAGs (parents before children); (iii) Timing—enforced via tolerance windows; and (iv) Completeness—success requires matching all oracle
+2074:within a specified tolerance window centered around the relative time of the oracle action.
+
+### WinFast Sec.3.2 1-second observations :: pattern: 1-second intervals|linearly decaying price|ranks$|agents by their response time|inference is only triggered
+335:at 1-second intervals and must decide whether to take action. To isolate the effect of decision latency,
+337:When an arbitrage opportunity is detected, agents initiate inference. The simulated exchange ranks
+338:agents by their response time and assigns execution prices accordingly: faster agents secure more
+339:favorable prices. We implement a linearly decaying price model of time and price, where trading
+343:LLM calls, inference is only triggered when the bid–ask margin exceeds a preset threshold b. Agents
+
+### WinFast Sec.3.3 ELO :: pattern: ELO rating|5 actions per second
+363:sets, recent action history, and a contextual prompt. We evaluate performance using the ELO rating
+539:and compute win rates to derive ElO ratings.
+740:fixed amount of in-game time to complete, with an effective frame rate of around 5 actions per second
+
+### WinFast first-study claim :: pattern: we are the first to systematically
+174:In this paper, we are the first to systematically formulate and investigate the latency–quality trade-off
+199:• Latency–Quality Trade-off. We are the first to systematically formulate and investigate the
+
+### STAR Sec.4.2 turn-based unlimited time :: pattern: unlimited deliberation
+563:In this setting, models are allowed unlimited deliberation
+765:that dominated under unlimited deliberation no longer retain
+
+### STAR App C.2 real-time loop :: pattern: does not await a discrete turn|Actions incur latency proportional
+1320:• Asynchronous Interaction Loop: The agent maintains a persistent execution loop that continuously retrieves environmental observations and queries the LLM. Unlike turn-based systems, it does not await a discrete turn signal, instead
+1327:implements a dynamic delay mechanism. Actions incur latency proportional to their complexity; for instance,
+
+### STAR PWER :: pattern: PWER, which integrates|time efficiency T
+447:levels of resource consumption or strategic efficiency. Therefore, we introduce PWER, which integrates unit preservation and temporal efficiency into SER. We define a Performance Multiplier (M ) that scales the reward for the victor
+543:resource efficiency, and time efficiency T = 1 −
+
+### TicToc dataset size :: pattern: 1864 high-quality|5592 samples|3016 retained|normalized alignment rate better than 65
+33:a normalized alignment rate better than 65%
+390:we obtained 1864 high-quality trajectories. An
+450:5592 samples. Human annotators were asked to
+464:results in 3016 retained samples, comprising 1112
+
+### TicToc labels are human preferences :: pattern: Human annotators were asked|at least five annotations
+184:at least five annotations, which were then aggregated to determine the final preference. Detailed
+450:5592 samples. Human annotators were asked to
+
+### ReactiveBench sizes :: pattern: 120 multi-turn scenarios|688 pre-registered|200 tasks from GSM8K
+129:C2: ReactiveBench, a benchmark with objective, verifiable criteria (§3). No existing benchmark evaluates interleaved thinking and speaking under interrupts. We introduce ReactiveBench, which pairs an interactive track (120 multi-turn scenarios with three interrupt
+130:sources, scored against 688 pre-registered binary requirements written blind to any model
+131:output) with a verifiable streaming track (200 tasks from GSM8K, SQuAD, and HotpotQA plus
+452:Track A contains 120 multi-turn scenarios: interviews, brainstorming, negotiations, and a
+
+### ReactiveBench Track A transcript-level interrupts :: pattern: simulated at the transcript level|realized at the transcript
+455:scripted, so all models and modes face identical inputs; interrupts are realized at the transcript
+1436:to match their token-level latency or speech naturalness; our latency contrasts are withinsystem, not cross-system. Track A’s interrupts are simulated at the transcript level, which
+
+### ReactiveBench Track B simulator + tool-lead :: pattern: discrete-event simulator|tool-lead\)
+530:(partial transcripts delivered at speech rate through a discrete-event simulator) and turn-based
+532:that make the two target behaviors measurable: whether and how many seconds before endof-utterance a tool fires (tool-lead), whether the agent speaks at all (speech coverage), and whether
+3050:stream named-entity lookups (keep the tool-lead) but answer late-intent tasks turn-based. Model: base
+3547:and driven through the same discrete-event simulator. Two conclusions recur: (i) the thinkwhile-listening signature (tools fired before the utterance ends) is an architecture-independent
+
+### Never Stop Thinking System 1/System 2 :: pattern: System 1 reply|System 2 continues
+255:which a fast, budget-capped System 1 reply is spoken immediately while an unconstrained
+256:System 2 continues reasoning behind it, and a TTS-paced cycle in which the orchestrator
+
+### ProActor hindsight annotator :: pattern: including future turns|not ground truth
+334:Given a dialogue and the generated tool catalog, we initialize an oracle LLM annotator (Appendix B.2) with access to the full conversation—including future turns—and instruct it to
+347:not ground truth. The oracle annotator identifies
+
+### ProActor turn-level metrics :: pattern: at each dialogue|turn t by comparing
+326:annotator with a global dialogue view produces highquality reference actions at each dialogue turn.
+335:identify proactive opportunities at each dialogue
+381:we evaluate agent behavior at each dialogue turn
+6714:catalog A (Section B.1), annotators identify proactive action opportunities at each dialogue turn and
+6737:2. Turn-Level Status Assignment. At each dialogue turn t, the annotator assigns one of
+
+### StreamingBench offline conversion + PO polling :: pattern: convert each streaming|queried every second|less than two seconds|interval \[-4,4\]
+332:currently cannot accept streaming video input2 , we convert each streaming task into an offline one
+530:Since current MLLMs lack the ability to accept streaming video input, we convert each streaming
+541:when the model is expected to output). During this interval, the model is queried every second with
+
+### StreamMemBench 5-minute segments + latency table :: pattern: chronological sequence of five|Latency is the time to ingest
+517:(z1 , . . . , zn ) is a chronological sequence of fiveminute EgoLife segments. Each segment preserves
+1159:Latency is the time to ingest one segment and answer T1 ,
+
+### StreamMemBench backbones (abstract vs contributions) :: pattern: across two backbones|across three backbones
+31:metrics diagnose evidence recall, initial evidence use, feedback incorporation, and followup reuse. Experiments with eight memory systems across two backbones show that current
+
+### Belief-R two steps + BREU :: pattern: two sequential reasoning steps|averaging BU-Acc and BM-Acc
+138:is done within two sequential reasoning steps. We
+743:Evaluation Understudy), to assess LMs’ belief revision ability, by averaging BU-Acc and BM-Acc
+
+### DeltaLogic edit types + subset sizes :: pattern: four edit types|contains 100 episodes|30-episode main|single-step revision
+89:We use four edit types: support insertion, defeating-fact insertion, support removal, and irrelevantfact addition. Together they test positive updating, belief retraction, and stability under no-change
+93:irrelevant-addition episodes using shallow examples with identified support facts. The full construction contains 100 episodes. For this paper we report completed generative-model evaluation subsets
+94:that preserve all edit types while remaining feasible on CPU-only hardware: a 30-episode main
+242:the benchmark targets single-step revision and label correctness, not longer revision chains or freeform justification quality.
+
+### CoPE binary single-token output + latency :: pattern: single token \(0 or 1\)|sub-200ms
+67:• Efficiency: The model operates with sub-200ms latency on an A100, ensuring fast response times.
+622:single token (0 or 1) to indicate if the content adheres to the given policy. The model is released under an open license
+
+### CoPE contradictory labels for identical content :: pattern: identical content receives different|identical content examples had
+522:but contradictory - where identical content receives different labels under different policies - the only path to accuracy
+607:creating additional contradictory labeled datasets where identical content receives different classification outcomes
+612:then merged to create our final training dataset. The result was a training corpus where identical content examples had
+
+### StreamingBench PO success criterion and polling window (lines 544-546, 1203-1204)
+as the actual output timestamp. A question in the PO task is considered accurately resolved only
+if the difference between the actual output timestamp and the ground truth timestamp is less than
+two seconds. The average accuracy across all queries is then computed and used as the performance
+and stability of the responses, the prompt for PO includes a query about whether an output is necessary. The polling timestamps encompass the query timestamp and every second within the interval
+[-4,4], using the ground truth timestamp as the origin, up to 10 timestamps.
+
+### StreamMemBench contributions bullet (backbone count)
+176:• We evaluate eight memory systems across
+177-three backbones and find that current systems
+
+### Zentropi blog (zentropi.html body): span labeling and EMA
+- By Zentropi Team — 10 Mar 2026 Enabl
+- Tokens before the onset are labeled 0; tokens from the onset onward are labeled 1. Negative examp
+- produces a score between 0 and 1 indicating the probability at that point in the sequence that a policy violation will occur by the end of the content sample. The
+- We recommend an exponential moving average (EMA) with a decay factor of ~0.3. The
+- The onset annotations were labeled across ~10,000 positive training examples, with an estimated 98.5% word-level matching accuracy.
+- we constructed a contrastive training set (as detailed in our CoPE paper) with two guarantees
+- Every piece of content appears in the dataset with both a positive and negative label (under different policie
+- At the ANSWER token position (where the full content has been processed), the probe achieves an F1 accuracy that essentially matches CoPE's F1. But at interme

@@ -1,0 +1,773 @@
+% references.bib: merged from bib/part_a.bib (direct related work) and bib/part_b.bib
+% (methodological foundations and benchmark-design references). Keys are unchanged.
+% Verification notes: bib/part_a_notes.md, bib/part_b_notes.md and bib/part_c_notes.md.
+
+% part_a.bib -- directly related work for the StreamDecisionBench ACL short paper.
+% Every field below was copied from a primary metadata source fetched on 2026-09-27
+% (ACL Anthology .bib export, NeurIPS proceedings .bib export, arXiv /bibtex and /abs
+% pages, OpenReview API, Crossref API for the IEEE DOI, and the blog page's own
+% metadata). Sources and caveats for each entry are listed in part_a_notes.md.
+% Convention: an archival venue version is cited when one exists; arXiv is cited
+% otherwise (with the arXiv DOI). Non-archival workshop acceptances are given in `note`.
+
+% ---------------------------------------------------------------------------
+% Real-time action, streaming, and continual updating
+% ---------------------------------------------------------------------------
+
+% Venue: ICLR 2026 (Oral), OpenReview 9gw03JpKK4. Two compound names are kept in the
+% source's given-name-first form because the sources do not mark where the surname starts.
+% Same PDF as arXiv:2602.11964v1
+% (DOI 10.48550/arXiv.2602.11964), whose header reads "Published as a conference paper at ICLR 2026".
+@inproceedings{froger2026gaia2,
+  title     = {{Gaia2}: Benchmarking {LLM} Agents on Dynamic and Asynchronous Environments},
+  author    = {Froger, Romain and Andrews, Pierre and Bettini, Matteo and Budhiraja, Amar and
+               Ricardo Silveira Cabral and Do, Virginie and Garreau, Emilien and Gaya, Jean-Baptiste and
+               Lauren{\c{c}}on, Hugo and Lecanu, Maxime and Malkan, Kunal and Mekala, Dheeraj and
+               M{\'e}nard, Pierre and Gerard Moreno-Torres Bertran and Piterbarg, Ulyana and
+               Plekhanov, Mikhail and Rita, Mathieu and Rusakov, Andrey and Vorotilov, Vladislav and
+               Wang, Mengjue and Yu, Ian and Benhalloum, Amine and Mialon, Gr{\'e}goire and Scialom, Thomas},
+  booktitle = {The Fourteenth International Conference on Learning Representations},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=9gw03JpKK4}
+}
+
+@inproceedings{kang2025win,
+  title     = {Win Fast or Lose Slow: Balancing Speed and Accuracy in Latency-Sensitive Decisions of {LLMs}},
+  author    = {Kang, Hao and Zhang, Qingru and Cai, Han and Xu, Weiyuan and Krishna, Tushar and
+               Du, Yilun and Weissman, Tsachy},
+  editor    = {Belgrave, D. and Zhang, C. and Lin, H. and Pascanu, R. and Koniusz, P. and
+               Ghassemi, M. and Chen, N.},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {38},
+  pages     = {150862--150884},
+  publisher = {Curran Associates, Inc.},
+  year      = {2025},
+  doi       = {10.52202/085713-5044},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/2025/hash/ddaec864ba433e8889ab08dcf5c26e55-Abstract-Conference.html}
+}
+
+% STAR benchmark. arXiv v1 only (10 Mar 2026); arXiv lists primary class cs.CV.
+% Author "Yanxian BI" is capitalized exactly as on arXiv and OpenReview.
+@misc{li2026beyond,
+  title         = {Beyond Scaling: Assessing Strategic Reasoning and Rapid Decision-Making Capability of {LLMs} in Zero-sum Environments},
+  author        = {Li, Yang and Chen, Xing and Liu, Yutao and Qi, Gege and BI, Yanxian and
+                   Wang, Zizhe and Zhang, Yunjian and Zhu, Yao},
+  year          = {2026},
+  eprint        = {2603.09337},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  doi           = {10.48550/arXiv.2603.09337},
+  url           = {https://arxiv.org/abs/2603.09337}
+}
+
+% TicToc. Fields copied from https://aclanthology.org/2026.findings-acl.1848.bib (key renamed).
+@inproceedings{cheng2026your,
+  title     = {Your {LLM} Agents are Temporally Blind: The Misalignment Between Tool Use Decisions and Human Time Perception},
+  author    = {Cheng, Yize and Moakhar, Arshia Soltani and Fan, Chenrui and Hosseini, Parsa and
+               Faghih, Kazem and Sodagar, Zahra and Wang, Wenxiao and Feizi, Soheil},
+  editor    = {Liakata, Maria and Moreira, Viviane P. and Zhang, Jiajun and Jurgens, David},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026},
+  month     = jul,
+  year      = {2026},
+  address   = {San Diego, California, United States},
+  publisher = {Association for Computational Linguistics},
+  pages     = {37082--37104},
+  isbn      = {979-8-89176-395-1},
+  doi       = {10.18653/v1/2026.findings-acl.1848},
+  url       = {https://aclanthology.org/2026.findings-acl.1848/}
+}
+
+% ReactiveBench. arXiv v1 only; v1 dated 11 Jul 2026 although the identifier is 2609.
+@misc{li2026never,
+  title         = {Never Stop Thinking: Continuous-Time Language Agents},
+  author        = {Li, Bojie and Shi, Noah},
+  year          = {2026},
+  eprint        = {2609.17416},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  doi           = {10.48550/arXiv.2609.17416},
+  url           = {https://arxiv.org/abs/2609.17416}
+}
+
+% Fields copied from https://aclanthology.org/2026.acl-long.832.bib (key renamed).
+@inproceedings{ding2026proactor,
+  title     = {{P}ro{A}ctor: Timing-Aware Reinforcement Learning for Proactive Task Scheduling Agents},
+  author    = {Ding, Lei and He, Bin and Wang, Chenguang and Liu, Yang},
+  editor    = {Liakata, Maria and Moreira, Viviane P. and Zhang, Jiajun and Jurgens, David},
+  booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  month     = jul,
+  year      = {2026},
+  address   = {San Diego, California, United States},
+  publisher = {Association for Computational Linguistics},
+  pages     = {18257--18303},
+  isbn      = {979-8-89176-390-6},
+  doi       = {10.18653/v1/2026.acl-long.832},
+  url       = {https://aclanthology.org/2026.acl-long.832/}
+}
+
+% StreamingBench, arXiv version (8 authors). The Proactive Output polling protocol
+% (Sec. 4.1, App. A.2) that the paper compares against is documented here.
+@misc{lin2024streamingbench,
+  title         = {{StreamingBench}: Assessing the Gap for {MLLMs} to Achieve Streaming Video Understanding},
+  author        = {Lin, Junming and Fang, Zheng and Chen, Chi and Wan, Zihao and Luo, Fuwen and
+                   Li, Peng and Liu, Yang and Sun, Maosong},
+  year          = {2024},
+  eprint        = {2411.03628},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  doi           = {10.48550/arXiv.2411.03628},
+  url           = {https://arxiv.org/abs/2411.03628}
+}
+
+% StreamingBench, ICASSP 2026 version (10 authors: adds Haoxuan Cheng and Ziyue Wang).
+% Metadata from Crossref for the DOI below; IEEE's record spells the title "Streamingbench".
+% Full text is behind the IEEE paywall and was NOT read (see notes).
+@inproceedings{lin2026streamingbench,
+  title     = {{StreamingBench}: Assessing the Gap for {MLLMs} to Achieve Streaming Video Understanding},
+  author    = {Lin, Junming and Fang, Zheng and Chen, Chi and Cheng, Haoxuan and Wan, Zihao and
+               Luo, Fuwen and Wang, Ziyue and Li, Peng and Liu, Yang and Sun, Maosong},
+  booktitle = {ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  month     = may,
+  year      = {2026},
+  address   = {Barcelona, Spain},
+  publisher = {IEEE},
+  pages     = {12147--12151},
+  doi       = {10.1109/ICASSP55912.2026.11463959},
+  url       = {https://ieeexplore.ieee.org/document/11463959/}
+}
+
+% arXiv v2 (26 Aug 2026) comment: "Accepted to Findings of EMNLP 2026". The EMNLP 2026
+% volumes were not yet in the ACL Anthology on 2026-09-27; replace with the Anthology
+% entry once it appears.
+@misc{liu2026streammembench,
+  title         = {{StreamMemBench}: Streaming Evaluation of Agent Memory for Future-Oriented Assistance},
+  author        = {Liu, Guanming and Ren, Yuqi and Gu, Hansu and Zhang, Peng and Wang, Weihang and
+                   Liu, Jiahao and Gu, Ning and Lu, Tun},
+  year          = {2026},
+  eprint        = {2606.14571},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  doi           = {10.48550/arXiv.2606.14571},
+  url           = {https://arxiv.org/abs/2606.14571}
+}
+
+% ---------------------------------------------------------------------------
+% Evidence updating and rule following
+% ---------------------------------------------------------------------------
+
+% Belief-R. Fields copied from https://aclanthology.org/2024.emnlp-main.586.bib (key renamed).
+@inproceedings{wilie2024belief,
+  title     = {Belief Revision: The Adaptability of Large Language Models Reasoning},
+  author    = {Wilie, Bryan and Cahyawijaya, Samuel and Ishii, Etsuko and He, Junxian and Fung, Pascale},
+  editor    = {Al-Onaizan, Yaser and Bansal, Mohit and Chen, Yun-Nung},
+  booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing},
+  month     = nov,
+  year      = {2024},
+  address   = {Miami, Florida, USA},
+  publisher = {Association for Computational Linguistics},
+  pages     = {10480--10496},
+  doi       = {10.18653/v1/2024.emnlp-main.586},
+  url       = {https://aclanthology.org/2024.emnlp-main.586/}
+}
+
+% Workshop paper (non-archival ICLR workshop, OpenReview 1QKsa7mKNd); cited via arXiv.
+@misc{dhanda2026deltalogic,
+  title         = {{DeltaLogic}: Minimal Premise Edits Reveal Belief-Revision Failures in Logical Reasoning Models},
+  author        = {Dhanda, Amit},
+  year          = {2026},
+  eprint        = {2604.02733},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  doi           = {10.48550/arXiv.2604.02733},
+  url           = {https://arxiv.org/abs/2604.02733},
+  note          = {ICLR 2026 Workshop on Logical Reasoning of Large Language Models}
+}
+
+@misc{chakrabarti2025cope,
+  title         = {{CoPE}: A Small Language Model for Steerable and Scalable Content Labeling},
+  author        = {Chakrabarti, Samidh and Willner, David and Klyman, Kevin and Saade, Tiffany and
+                   Capstick, Emily and Nong, Sabina},
+  year          = {2025},
+  eprint        = {2512.18027},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  doi           = {10.48550/arXiv.2512.18027},
+  url           = {https://arxiv.org/abs/2512.18027}
+}
+
+% ---------------------------------------------------------------------------
+% Technical article
+% ---------------------------------------------------------------------------
+
+% Byline on the page and in its JSON-LD metadata: "Zentropi Team"; published 2026-03-10.
+@misc{zentropi2026enabling,
+  title        = {Enabling Streaming Classification},
+  author       = {{Zentropi Team}},
+  howpublished = {Zentropi blog},
+  month        = mar,
+  year         = {2026},
+  url          = {https://blog.zentropi.ai/enabling-streaming-classification/},
+  note         = {Published 10 March 2026. Accessed 27 September 2026}
+}
+
+% part_b.bib -- methodological foundations and benchmark-design references
+% for the StreamDecisionBench (SDB) ACL short paper.
+%
+% Every field below was copied from a primary or registry source fetched on
+% 2026-09-27; see part_b_notes.md for the source of each entry.
+% Key convention: firstauthorlastname + YEAR + first title word, lowercased,
+% punctuation stripped, a leading article ("The") skipped.
+
+% ---------------------------------------------------------------------------
+% Incremental processing and simultaneous translation
+% ---------------------------------------------------------------------------
+
+% Source: https://aclanthology.org/2011.dnd-2.10.bib (verbatim except key);
+% number = 1 added from Crossref 10.5087/dad.2011.106 and the PDF header
+% "Dialogue and Discourse 2(1) (2011) 113-141".
+@article{baumann2011evaluation,
+    title = "Evaluation and Optimisation of Incremental Processors",
+    author = "Baumann, Timo  and
+      Bu{\ss}, Okko  and
+      Schlangen, David",
+    editor = "Schlangen, David  and
+      Rieser, Hannes  and
+      Crocker, Matthew W.",
+    journal = "Dialogue {\&} Discourse",
+    volume = "2",
+    number = "1",
+    month = may,
+    year = "2011",
+    address = "Bielefeld, Germany",
+    publisher = "University of Bielefeld",
+    url = "https://aclanthology.org/2011.dnd-2.10/",
+    doi = "10.5087/dad.2011.106",
+    pages = "113--141"
+}
+
+% Source: https://aclanthology.org/P19-1289.bib (verbatim except key)
+@inproceedings{ma2019stacl,
+    title = "{STACL}: Simultaneous Translation with Implicit Anticipation and Controllable Latency using Prefix-to-Prefix Framework",
+    author = "Ma, Mingbo  and
+      Huang, Liang  and
+      Xiong, Hao  and
+      Zheng, Renjie  and
+      Liu, Kaibo  and
+      Zheng, Baigong  and
+      Zhang, Chuanqiang  and
+      He, Zhongjun  and
+      Liu, Hairong  and
+      Li, Xing  and
+      Wu, Hua  and
+      Wang, Haifeng",
+    editor = "Korhonen, Anna  and
+      Traum, David  and
+      M{\`a}rquez, Llu{\'i}s",
+    booktitle = "Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics",
+    month = jul,
+    year = "2019",
+    address = "Florence, Italy",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/P19-1289/",
+    doi = "10.18653/v1/P19-1289",
+    pages = "3025--3036"
+}
+
+% Source: https://aclanthology.org/2020.aacl-main.58.bib (verbatim except key)
+@inproceedings{ma2020simulmt,
+    title = "{S}imul{MT} to {S}imul{ST}: Adapting Simultaneous Text Translation to End-to-End Simultaneous Speech Translation",
+    author = "Ma, Xutai  and
+      Pino, Juan  and
+      Koehn, Philipp",
+    editor = "Wong, Kam-Fai  and
+      Knight, Kevin  and
+      Wu, Hua",
+    booktitle = "Proceedings of the 1st Conference of the Asia-Pacific Chapter of the Association for Computational Linguistics and the 10th International Joint Conference on Natural Language Processing",
+    month = dec,
+    year = "2020",
+    address = "Suzhou, China",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.aacl-main.58/",
+    doi = "10.18653/v1/2020.aacl-main.58",
+    pages = "582--587"
+}
+
+% Source: https://aclanthology.org/2020.emnlp-demos.19.bib (verbatim except key).
+% The Anthology title is in capitals ("SIMULEVAL"); the paper typesets it in
+% small caps as SimulEval.
+@inproceedings{ma2020simuleval,
+    title = "{SIMULEVAL}: An Evaluation Toolkit for Simultaneous Translation",
+    author = "Ma, Xutai  and
+      Dousti, Mohammad Javad  and
+      Wang, Changhan  and
+      Gu, Jiatao  and
+      Pino, Juan",
+    editor = "Liu, Qun  and
+      Schlangen, David",
+    booktitle = "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: System Demonstrations",
+    month = oct,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.emnlp-demos.19/",
+    doi = "10.18653/v1/2020.emnlp-demos.19",
+    pages = "144--150"
+}
+
+% ---------------------------------------------------------------------------
+% Age of (Incorrect) Information
+% ---------------------------------------------------------------------------
+
+% Journal version of arXiv:1907.06604.
+% Source: Crossref https://api.crossref.org/works/10.1109/tnet.2020.3005549
+@article{maatouk2020age,
+    title = "The Age of Incorrect Information: A New Performance Metric for Status Updates",
+    author = "Maatouk, Ali  and
+      Kriouile, Saad  and
+      Assaad, Mohamad  and
+      Ephremides, Anthony",
+    journal = "IEEE/ACM Transactions on Networking",
+    volume = "28",
+    number = "5",
+    month = oct,
+    year = "2020",
+    pages = "2215--2228",
+    publisher = "Institute of Electrical and Electronics Engineers (IEEE)",
+    doi = "10.1109/TNET.2020.3005549"
+}
+
+% Journal version of arXiv:2012.13214.
+% Source: Crossref https://api.crossref.org/works/10.1109/twc.2022.3213227
+@article{maatouk2023age,
+    title = "The Age of Incorrect Information: An Enabler of Semantics-Empowered Communication",
+    author = "Maatouk, Ali  and
+      Assaad, Mohamad  and
+      Ephremides, Anthony",
+    journal = "IEEE Transactions on Wireless Communications",
+    volume = "22",
+    number = "4",
+    month = apr,
+    year = "2023",
+    pages = "2621--2635",
+    publisher = "Institute of Electrical and Electronics Engineers (IEEE)",
+    doi = "10.1109/TWC.2022.3213227"
+}
+
+% Published version of arXiv:2301.04298.
+% Source: Crossref https://api.crossref.org/works/10.1109/infocomwkshps57453.2023.10226176
+@inproceedings{sagduyu2023age,
+    title = "Age of Information in Deep Learning-Driven Task-Oriented Communications",
+    author = "Sagduyu, Yalin E.  and
+      Ulukus, Sennur  and
+      Yener, Aylin",
+    booktitle = "IEEE INFOCOM 2023 - IEEE Conference on Computer Communications Workshops (INFOCOM WKSHPS)",
+    month = may,
+    year = "2023",
+    address = "Hoboken, NJ, USA",
+    publisher = "IEEE",
+    pages = "1--6",
+    doi = "10.1109/INFOCOMWKSHPS57453.2023.10226176"
+}
+
+% ---------------------------------------------------------------------------
+% Online monitoring
+% ---------------------------------------------------------------------------
+
+% RV 2015 version, the one docs/LITERATURE.md links (ptolemy.berkeley.edu pubs/571).
+% Source: Springer citation export for 10.1007/978-3-319-23820-3_4 and Crossref;
+% series volume 9333 from the Open Library record of ISBN 9783319238197.
+@inproceedings{deshmukh2015robust,
+    title = "Robust Online Monitoring of Signal Temporal Logic",
+    author = "Deshmukh, Jyotirmoy V.  and
+      Donz{\'e}, Alexandre  and
+      Ghosh, Shromona  and
+      Jin, Xiaoqing  and
+      Juniwal, Garvit  and
+      Seshia, Sanjit A.",
+    editor = "Bartocci, Ezio  and
+      Majumdar, Rupak",
+    booktitle = "Runtime Verification",
+    series = "Lecture Notes in Computer Science",
+    volume = "9333",
+    year = "2015",
+    address = "Cham",
+    publisher = "Springer International Publishing",
+    pages = "55--70",
+    doi = "10.1007/978-3-319-23820-3_4"
+}
+
+% ---------------------------------------------------------------------------
+% Benchmark design
+% ---------------------------------------------------------------------------
+
+% Source: CVF open access BibTeX (authors, title, booktitle, month, year) and
+% Crossref 10.1109/cvpr.2017.215 (pages, DOI). Author name written as in
+% Crossref ("C. Lawrence Zitnick"); the CVF export has "Lawrence Zitnick, C.".
+@inproceedings{johnson2017clevr,
+    title = "{CLEVR}: A Diagnostic Dataset for Compositional Language and Elementary Visual Reasoning",
+    author = "Johnson, Justin  and
+      Hariharan, Bharath  and
+      van der Maaten, Laurens  and
+      Fei-Fei, Li  and
+      Zitnick, C. Lawrence  and
+      Girshick, Ross",
+    booktitle = "Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)",
+    month = jul,
+    year = "2017",
+    pages = "1988--1997",
+    doi = "10.1109/CVPR.2017.215"
+}
+
+% Source: https://aclanthology.org/2025.acl-long.736.bib (verbatim except key and
+% the brace group widened to {MMMU-Pro} so the style does not print "MMMU-pro")
+@inproceedings{yue2025mmmupro,
+    title = "{MMMU-Pro}: A More Robust Multi-discipline Multimodal Understanding Benchmark",
+    author = "Yue, Xiang  and
+      Zheng, Tianyu  and
+      Ni, Yuansheng  and
+      Wang, Yubo  and
+      Zhang, Kai  and
+      Tong, Shengbang  and
+      Sun, Yuxuan  and
+      Yu, Botao  and
+      Zhang, Ge  and
+      Sun, Huan  and
+      Su, Yu  and
+      Chen, Wenhu  and
+      Neubig, Graham",
+    editor = "Che, Wanxiang  and
+      Nabende, Joyce  and
+      Shutova, Ekaterina  and
+      Pilehvar, Mohammad Taher",
+    booktitle = "Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2025",
+    address = "Vienna, Austria",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.acl-long.736/",
+    doi = "10.18653/v1/2025.acl-long.736",
+    pages = "15134--15186",
+    ISBN = "979-8-89176-251-0"
+}
+
+% Source: https://proceedings.iclr.cc/paper_files/paper/2025/file/e4a46394ba5378b3f9a186a5b4c650d1-Bibtex-Conference.bib
+% Content as in the export; changes: key, case-protecting braces in the title,
+% editor names rewritten "Last, Initial", url points to the abstract page
+% (the export's url is the PDF), and the export's volume = {2025} dropped
+% (acl_natbib renders it as "volume 2025"). "Shubh-Agrawal" is a single-token author
+% name in both the proceedings page and the export. ICLR papers carry no DOI.
+@inproceedings{white2025livebench,
+    title = "{LiveBench}: A Challenging, Contamination-Limited {LLM} Benchmark",
+    author = "White, Colin  and
+      Dooley, Samuel  and
+      Roberts, Manley  and
+      Pal, Arka  and
+      Feuer, Benjamin  and
+      Jain, Siddhartha  and
+      Shwartz-Ziv, Ravid  and
+      Jain, Neel  and
+      Saifullah, Khalid  and
+      Dey, Sreemanti  and
+      {Shubh-Agrawal}  and
+      Sandha, Sandeep  and
+      Naidu, Siddartha  and
+      Hegde, Chinmay  and
+      LeCun, Yann  and
+      Goldstein, Tom  and
+      Neiswanger, Willie  and
+      Goldblum, Micah",
+    editor = "Yue, Y.  and
+      Garg, A.  and
+      Peng, N.  and
+      Sha, F.  and
+      Yu, R.",
+    booktitle = "International Conference on Learning Representations",
+    year = "2025",
+    pages = "91595--91631",
+    url = "https://proceedings.iclr.cc/paper_files/paper/2025/hash/e4a46394ba5378b3f9a186a5b4c650d1-Abstract-Conference.html"
+}
+
+% Source: https://proceedings.iclr.cc/paper_files/paper/2024/file/edac78c3e300629acfe6cbe9ca88fb84-Bibtex-Conference.bib
+% Content as in the export; changes: key, case-protecting braces in the title,
+% "Carlos E" given a period after the initial, editor names rewritten
+% "Last, Initial", url points to the abstract page, and the export's
+% volume = {2024} dropped (acl_natbib renders it as "volume 2024"). Title casing
+% "Real-world Github" is the proceedings' own; docs/LITERATURE.md writes
+% "Real-World GitHub".
+@inproceedings{jimenez2024swebench,
+    title = "{SWE}-bench: Can Language Models Resolve Real-world {GitHub} Issues?",
+    author = "Jimenez, Carlos E.  and
+      Yang, John  and
+      Wettig, Alexander  and
+      Yao, Shunyu  and
+      Pei, Kexin  and
+      Press, Ofir  and
+      Narasimhan, Karthik",
+    editor = "Kim, B.  and
+      Yue, Y.  and
+      Chaudhuri, S.  and
+      Fragkiadaki, K.  and
+      Khan, M.  and
+      Sun, Y.",
+    booktitle = "International Conference on Learning Representations",
+    year = "2024",
+    pages = "54107--54157",
+    url = "https://proceedings.iclr.cc/paper_files/paper/2024/hash/edac78c3e300629acfe6cbe9ca88fb84-Abstract-Conference.html"
+}
+
+% Source: page https://openai.com/index/introducing-swe-bench-verified/
+% (read via Wayback snapshot 20260915162530; openai.com returned HTTP 403)
+% and the openai.com/news/rss.xml item (title, date). Author list copied
+% from the page's "Authors" section.
+@misc{chowdhury2024introducing,
+    title = "Introducing {SWE}-bench {Verified}",
+    author = "Chowdhury, Neil  and
+      Aung, James  and
+      {Chan Jun Shern}  and
+      Jaffe, Oliver  and
+      Sherburn, Dane  and
+      Starace, Giulio  and
+      Mays, Evan  and
+      Dias, Rachel  and
+      Aljubeh, Marwan  and
+      Glaese, Mia  and
+      Jimenez, Carlos E.  and
+      Yang, John  and
+      Ho, Leyton  and
+      Patwardhan, Tejal  and
+      Liu, Kevin  and
+      Madry, Aleksander",
+    howpublished = "OpenAI blog",
+    month = aug,
+    year = "2024",
+    note = "Published August 13, 2024; updated February 24, 2025. Accessed September 27, 2026",
+    url = "https://openai.com/index/introducing-swe-bench-verified/"
+}
+
+% Source: page https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/
+% (read via Wayback snapshot 20260915162530; openai.com returned HTTP 403).
+% Title is the page headline / og:title; the RSS item is titled
+% "Why we no longer evaluate SWE-bench Verified". The page's author line is "OpenAI".
+@misc{openai2026why,
+    title = "Why {SWE}-bench {Verified} no longer measures frontier coding capabilities",
+    author = "{OpenAI}",
+    howpublished = "OpenAI blog",
+    month = feb,
+    year = "2026",
+    note = "Published February 23, 2026. Accessed September 27, 2026",
+    url = "https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/"
+}
+
+% ---------------------------------------------------------------------------
+% Terminology
+% ---------------------------------------------------------------------------
+
+% Source: Open Library edition record for ISBN 9780374275631
+% (title, publisher, place, year). Publisher page (us.macmillan.com) returned 403.
+@book{kahneman2011thinking,
+    title = "Thinking, Fast and Slow",
+    author = "Kahneman, Daniel",
+    year = "2011",
+    address = "New York",
+    publisher = "Farrar, Straus and Giroux",
+    isbn = "9780374275631"
+}
+
+@misc{achenchabe2021early,
+  title         = {Early and Revocable Time Series Classification},
+  author        = {Achenchabe, Youssef and Bondu, Alexis and Cornu{\'e}jols, Antoine and Lemaire, Vincent},
+  year          = {2021},
+  eprint        = {2109.10285},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  doi           = {10.48550/arXiv.2109.10285},
+  url           = {https://arxiv.org/abs/2109.10285}
+}
+
+% ---------------------------------------------------------------------------
+% Part C: added during revision; provenance in bib/part_c_notes.md
+% ---------------------------------------------------------------------------
+
+% Crossref 10.1007/978-3-030-58536-5_28 (chapter) and 10.1007/978-3-030-58536-5 (book:
+% "Computer Vision -- ECCV 2020 ... Proceedings, Part II", LNCS, editors below); arXiv:2005.10420.
+@inproceedings{li2020towards,
+  title     = {Towards Streaming Perception},
+  author    = {Li, Mengtian and Wang, Yu-Xiong and Ramanan, Deva},
+  editor    = {Vedaldi, Andrea and Bischof, Horst and Brox, Thomas and Frahm, Jan-Michael},
+  booktitle = {Computer Vision -- {ECCV} 2020, Part {II}},
+  series    = {Lecture Notes in Computer Science},
+  publisher = {Springer International Publishing},
+  year      = {2020},
+  pages     = {473--488},
+  doi       = {10.1007/978-3-030-58536-5_28}
+}
+
+% NeurIPS proceedings BibTeX export (papers.nips.cc, hash 54e36c5f...); arXiv:1911.04448.
+@inproceedings{ramstedt2019real,
+  title     = {Real-Time Reinforcement Learning},
+  author    = {Ramstedt, Simon and Pal, Chris},
+  editor    = {Wallach, H. and Larochelle, H. and Beygelzimer, A. and d'Alch{\'e}-Buc, F. and Fox, E. and Garnett, R.},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {32},
+  publisher = {Curran Associates, Inc.},
+  year      = {2019},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/2019/hash/54e36c5ff5f6a1802925ca009f3ebb68-Abstract.html}
+}
+
+% ---------------------------------------------------------------------------
+% Latency in real-time applications (sources opened and checked; see notes/latency_grounding.md).
+
+@inproceedings{miller1968response,
+  title     = {Response Time in Man-Computer Conversational Transactions},
+  author    = {Miller, Robert B.},
+  booktitle = {Proceedings of the December 9--11, 1968, Fall Joint Computer Conference, Part {I}},
+  series    = {AFIPS '68 (Fall, part I)},
+  volume    = {33},
+  pages     = {267--277},
+  year      = {1968},
+  doi       = {10.1145/1476589.1476628}
+}
+
+@inproceedings{mackenzie1993lag,
+  title     = {Lag as a Determinant of Human Performance in Interactive Systems},
+  author    = {MacKenzie, I. Scott and Ware, Colin},
+  booktitle = {Proceedings of the {INTERACT} '93 and {CHI} '93 Conference on Human Factors in Computing Systems},
+  pages     = {488--493},
+  year      = {1993},
+  doi       = {10.1145/169059.169431}
+}
+
+@inproceedings{gergle2006impact,
+  title     = {The Impact of Delayed Visual Feedback on Collaborative Performance},
+  author    = {Gergle, Darren and Kraut, Robert E. and Fussell, Susan R.},
+  booktitle = {Proceedings of the {SIGCHI} Conference on Human Factors in Computing Systems ({CHI} '06)},
+  pages     = {1303--1312},
+  year      = {2006},
+  doi       = {10.1145/1124772.1124968}
+}
+
+@article{stuart2002effect,
+  title   = {Effect of Delayed Auditory Feedback on Normal Speakers at Two Speech Rates},
+  author  = {Stuart, Andrew and Kalinowski, Joseph and Rastatter, Michael P. and Lynch, Kerry},
+  journal = {The Journal of the Acoustical Society of America},
+  volume  = {111},
+  number  = {5},
+  pages   = {2237--2241},
+  year    = {2002},
+  doi     = {10.1121/1.1466868}
+}
+
+@inproceedings{dunay2024multiline,
+  title     = {Multi-line {AI}-Assisted Code Authoring},
+  author    = {Dunay, Omer and Cheng, Daniel and Tait, Adam and Thakkar, Parth and Rigby, Peter C. and Chiu, Andy and Ahmad, Imad and Ganesan, Arun and Maddila, Chandra and Murali, Vijayaraghavan and Tayyebi, Ali and Nagappan, Nachiappan},
+  booktitle = {Companion Proceedings of the 32nd {ACM} International Conference on the Foundations of Software Engineering ({FSE} Companion '24)},
+  pages     = {150--160},
+  year      = {2024},
+  doi       = {10.1145/3663529.3663836}
+}
+
+@article{murali2024ai,
+  title   = {{AI}-Assisted Code Authoring at Scale: Fine-Tuning, Deploying, and Mixed Methods Evaluation},
+  author  = {Murali, Vijayaraghavan and Maddila, Chandra and Ahmad, Imad and Bolin, Michael and Cheng, Daniel and Ghorbani, Negar and Fernandez, Renuka and Nagappan, Nachiappan and Rigby, Peter C.},
+  journal = {Proceedings of the {ACM} on Software Engineering},
+  volume  = {1},
+  number  = {FSE},
+  pages   = {1066--1085},
+  year    = {2024},
+  doi     = {10.1145/3643774}
+}
+
+@inproceedings{chen2017empirical,
+  title     = {An Empirical Study of Latency in an Emerging Class of Edge Computing Applications for Wearable Cognitive Assistance},
+  author    = {Chen, Zhuo and Hu, Wenlu and Wang, Junjue and Zhao, Siyan and Amos, Brandon and Wu, Guanhang and Ha, Kiryong and Elgazzar, Khalid and Pillai, Padmanabhan and Klatzky, Roberta and Siewiorek, Daniel and Satyanarayanan, Mahadev},
+  booktitle = {Proceedings of the Second {ACM/IEEE} Symposium on Edge Computing ({SEC} '17)},
+  pages     = {14:1--14:14},
+  year      = {2017},
+  doi       = {10.1145/3132211.3134458}
+}
+
+@article{olguin2021impact,
+  title   = {Impact of Delayed Response on Wearable Cognitive Assistance},
+  author  = {Olgu{\'i}n Mu{\~n}oz, Manuel and Klatzky, Roberta and Wang, Junjue and Pillai, Padmanabhan and Satyanarayanan, Mahadev and Gross, James},
+  journal = {PLOS ONE},
+  volume  = {16},
+  number  = {3},
+  pages   = {e0248690},
+  year    = {2021},
+  doi     = {10.1371/journal.pone.0248690}
+}
+
+@inproceedings{li2025satori,
+  title     = {Satori: Towards Proactive {AR} Assistant with Belief-Desire-Intention User Modeling},
+  author    = {Li, Chenyi and Wu, Guande and Chan, Gromit Yeuk-Yin and Turakhia, Dishita G. and Castelo Quispe, Sonia and Li, Dong and Welch, Leslie and Silva, Cl{\'a}udio T. and Qian, Jing},
+  booktitle = {Proceedings of the 2025 {CHI} Conference on Human Factors in Computing Systems},
+  year      = {2025},
+  doi       = {10.1145/3706598.3714188}
+}
+
+@techreport{pcissc2018telephone,
+  title       = {Protecting Telephone-Based Payment Card Data},
+  type        = {Information Supplement, Version 3.0},
+  author      = {{PCI Security Standards Council}},
+  institution = {PCI Security Standards Council},
+  month       = nov,
+  year        = {2018},
+  url         = {https://listings.pcisecuritystandards.org/documents/Protecting_Telephone_Based_Payment_Card_Data_v3-0_nov_2018.pdf}
+}
+
+@article{brynjolfsson2025generative,
+  title   = {Generative {AI} at Work},
+  author  = {Brynjolfsson, Erik and Li, Danielle and Raymond, Lindsey},
+  journal = {The Quarterly Journal of Economics},
+  volume  = {140},
+  number  = {2},
+  pages   = {889--942},
+  year    = {2025},
+  doi     = {10.1093/qje/qjae044}
+}
+
+@article{roberts2013identifying,
+  title   = {Identifying a Temporal Threshold of Tolerance for Silent Gaps after Requests},
+  author  = {Roberts, Felicia and Francis, Alexander L.},
+  journal = {The Journal of the Acoustical Society of America},
+  volume  = {133},
+  number  = {6},
+  pages   = {EL471--EL477},
+  year    = {2013},
+  doi     = {10.1121/1.4802900}
+}
+
+@misc{openai2026pricing,
+  title        = {{API} Pricing},
+  author       = {{OpenAI}},
+  year         = {2026},
+  howpublished = {\url{https://developers.openai.com/api/docs/pricing}},
+  note         = {Standard tier, short context; accessed 2026-09-29 and 2026-09-30}
+}
+
+@misc{openai2026astra,
+  title        = {{GPT-6} {Astra} Model},
+  author       = {{OpenAI}},
+  year         = {2026},
+  howpublished = {\url{https://developers.openai.com/api/docs/models/gpt-6-astra}},
+  note         = {Supported reasoning efforts; accessed 2026-09-30}
+}
+
+@misc{typesafe2026models,
+  title        = {Models},
+  author       = {{TypeSafe}},
+  year         = {2026},
+  howpublished = {\url{https://docs.typesafe.ai/models}},
+  note         = {Jev pricing; accessed 2026-09-29}
+}
+
+@article{jaynes1968prior,
+  author = {Jaynes, Edwin T.},
+  title = {Prior Probabilities},
+  journal = {IEEE Transactions on Systems Science and Cybernetics},
+  year = {1968},
+  volume = {4},
+  number = {3},
+  pages = {227--241},
+  doi = {10.1109/TSSC.1968.300117}
+}

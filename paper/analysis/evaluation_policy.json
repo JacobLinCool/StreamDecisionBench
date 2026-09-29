@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "recording_interval_s": 2.0,
+  "primary": {"min_s": 1.0, "max_s": 5.0, "weighting": "log"},
+  "integration": {"initial_subintervals": 128, "max_subintervals": 4096, "tolerance": 0.00001},
+  "sensitivity": [
+    {"name": "Linear", "min_s": 1.0, "max_s": 5.0, "weighting": "linear"},
+    {"name": "Short", "min_s": 1.0, "max_s": 3.0, "weighting": "log"},
+    {"name": "Subsecond", "min_s": 0.5, "max_s": 5.0, "weighting": "log"}
+  ],
+  "aggregation": "equal scenarios within family, then equal families",
+  "interpretation": "Normalized area under in-force accuracy across environment intervals; equal multiplicative ranges have equal weight. This is a benchmark weighting rule, not an empirical deployment distribution.",
+  "selection": "The AUC aggregation rule was adopted after inspecting the recorded passes; no recording was repeated or excluded."
+}

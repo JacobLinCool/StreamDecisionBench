@@ -1,0 +1,1008 @@
+{
+  "episode_id": "lite_assembly_b",
+  "task_family": "procedural_coaching",
+  "scenario_id": "assembly_cable_module",
+  "states": 60,
+  "questions": 6,
+  "reference_transitions": 23,
+  "untimed_decision_accuracy": 0.9,
+  "untimed_segment_accuracy": 0.875,
+  "all_questions_exact_accuracy": 0.9,
+  "inactive_only_error_states": 0,
+  "time_accuracy": 0.45045998855167396,
+  "segment_time_accuracy": 0.3405295418711446,
+  "observed_duration_s": 119.99998566694558,
+  "error_seconds": {
+    "no_decision": 2.1158287497237325,
+    "source_correct": 55.28959937253967,
+    "source_incorrect": 8.53936537494883
+  },
+  "time_partition_seconds": {
+    "current_correct": 52.65654241992161,
+    "judgment": 1.514196041971445,
+    "stale": 55.28959937253967,
+    "compound": 7.025169332977384,
+    "outdated_correct": 1.3986497498117387,
+    "no_decision": 2.1158287497237325
+  },
+  "current_source_share": 0.45142287443468065,
+  "latency_s_p50": 2.8317196876741946,
+  "latency_s_p95": 3.913694510352798,
+  "failed_requests": 0,
+  "accepted_updates": 57,
+  "discarded_updates": {
+    "older_than_active": 2,
+    "after_horizon": 1
+  },
+  "max_release_lag_s": 0.010101832915097475,
+  "max_dispatch_lag_s": 0.0008016666397452354,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 0.9,
+      "active_states": 60,
+      "active_accuracy": 0.9
+    },
+    "stage": {
+      "all_states_accuracy": 1,
+      "active_states": 60,
+      "active_accuracy": 1
+    },
+    "target": {
+      "all_states_accuracy": 0.9,
+      "active_states": 18,
+      "active_accuracy": 1
+    },
+    "method": {
+      "all_states_accuracy": 0.9,
+      "active_states": 16,
+      "active_accuracy": 1
+    },
+    "next_step": {
+      "all_states_accuracy": 1,
+      "active_states": 12,
+      "active_accuracy": 1
+    },
+    "destination": {
+      "all_states_accuracy": 1,
+      "active_states": 24,
+      "active_accuracy": 1
+    }
+  },
+  "mistakes": [
+    {
+      "t": 32,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "label"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "label",
+        "target": "accessory",
+        "method": "complete_missing"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-32-0"
+      ]
+    },
+    {
+      "t": 33,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "label"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "label",
+        "target": "accessory",
+        "method": "adjust_kit"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-33-heartbeat"
+      ]
+    },
+    {
+      "t": 42,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "electrical"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "electrical",
+        "target": "insulation",
+        "method": "complete_missing"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-42-0"
+      ]
+    },
+    {
+      "t": 43,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "electrical"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "electrical",
+        "target": "insulation",
+        "method": "complete_missing"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-43-heartbeat"
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "label"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "label",
+        "target": "accessory",
+        "method": "complete_missing"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-48-0"
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "label"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "label",
+        "target": "accessory",
+        "method": "complete_missing"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-49-heartbeat"
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 1.4333054423332214e-05,
+      "end_s": 2.0049802497960627,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 2.0049802497960627,
+      "end_s": 2.115843082778156,
+      "reference_t": 1,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 2.115843082778156,
+      "end_s": 4.0100717497989535,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.0100717497989535,
+      "end_s": 4.122826540842652,
+      "reference_t": 2,
+      "source_t": 0,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 4.122826540842652,
+      "end_s": 6.00816833274439,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 6.00816833274439,
+      "end_s": 6.411509375087917,
+      "reference_t": 3,
+      "source_t": 1,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 6.411509375087917,
+      "end_s": 7.758764249738306,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 7.758764249738306,
+      "end_s": 8.00853949971497,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.00853949971497,
+      "end_s": 10.003046332858503,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 10.003046332858503,
+      "end_s": 10.457529707811773,
+      "reference_t": 5,
+      "source_t": 3,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 10.457529707811773,
+      "end_s": 12.00748375011608,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.00748375011608,
+      "end_s": 12.176813665777445,
+      "reference_t": 6,
+      "source_t": 4,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 12.176813665777445,
+      "end_s": 14.008073665667325,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 14.008073665667325,
+      "end_s": 15.093671333044767,
+      "reference_t": 7,
+      "source_t": 5,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 15.093671333044767,
+      "end_s": 16.00729962484911,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 16.00729962484911,
+      "end_s": 16.79321541590616,
+      "reference_t": 8,
+      "source_t": 6,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 16.79321541590616,
+      "end_s": 17.765844041015953,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 17.765844041015953,
+      "end_s": 18.01008266583085,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "correct"
+    },
+    {
+      "start_s": 18.01008266583085,
+      "end_s": 20.007627832703292,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "correct"
+    },
+    {
+      "start_s": 20.007627832703292,
+      "end_s": 20.145919166039675,
+      "reference_t": 10,
+      "source_t": 8,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 20.145919166039675,
+      "end_s": 22.00774758309126,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 22.00774758309126,
+      "end_s": 22.808037290815264,
+      "reference_t": 11,
+      "source_t": 9,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 22.808037290815264,
+      "end_s": 24.00524462480098,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 24.00524462480098,
+      "end_s": 24.533324957825243,
+      "reference_t": 12,
+      "source_t": 10,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 24.533324957825243,
+      "end_s": 25.967802290804684,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 25.967802290804684,
+      "end_s": 26.006535707972944,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.006535707972944,
+      "end_s": 27.74629420787096,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 27.74629420787096,
+      "end_s": 28.009105999954045,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.009105999954045,
+      "end_s": 29.198318040929735,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 29.198318040929735,
+      "end_s": 30.006882207933813,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 30.006882207933813,
+      "end_s": 31.296588165685534,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 31.296588165685534,
+      "end_s": 32.00526062492281,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.00526062492281,
+      "end_s": 33.39339395798743,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 33.39339395798743,
+      "end_s": 34.00341629097238,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.00341629097238,
+      "end_s": 36.005029040854424,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.005029040854424,
+      "end_s": 38.01009287498891,
+      "reference_t": 18,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.01009287498891,
+      "end_s": 38.064613999798894,
+      "reference_t": 19,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.064613999798894,
+      "end_s": 40.00676866574213,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 40.00676866574213,
+      "end_s": 40.42413316573948,
+      "reference_t": 20,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 40.42413316573948,
+      "end_s": 41.814661415759474,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "correct"
+    },
+    {
+      "start_s": 41.814661415759474,
+      "end_s": 42.00326974969357,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "correct"
+    },
+    {
+      "start_s": 42.00326974969357,
+      "end_s": 44.00902908295393,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "correct"
+    },
+    {
+      "start_s": 44.00902908295393,
+      "end_s": 45.00736124999821,
+      "reference_t": 22,
+      "source_t": 20,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 45.00736124999821,
+      "end_s": 46.00885079102591,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 46.00885079102591,
+      "end_s": 46.53126858267933,
+      "reference_t": 23,
+      "source_t": 21,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 46.53126858267933,
+      "end_s": 47.98819599999115,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "correct"
+    },
+    {
+      "start_s": 47.98819599999115,
+      "end_s": 48.00957666570321,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "correct"
+    },
+    {
+      "start_s": 48.00957666570321,
+      "end_s": 50.009202582761645,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 50.009202582761645,
+      "end_s": 50.55351979099214,
+      "reference_t": 25,
+      "source_t": 23,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 50.55351979099214,
+      "end_s": 52.0101018329151,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "correct"
+    },
+    {
+      "start_s": 52.0101018329151,
+      "end_s": 52.35707362508401,
+      "reference_t": 26,
+      "source_t": 24,
+      "kind": "correct"
+    },
+    {
+      "start_s": 52.35707362508401,
+      "end_s": 54.010082290973514,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 54.010082290973514,
+      "end_s": 54.21877266606316,
+      "reference_t": 27,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 54.21877266606316,
+      "end_s": 55.89039883296937,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "correct"
+    },
+    {
+      "start_s": 55.89039883296937,
+      "end_s": 56.009978000074625,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "correct"
+    },
+    {
+      "start_s": 56.009978000074625,
+      "end_s": 58.00569395767525,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 58.00569395767525,
+      "end_s": 59.010406291112304,
+      "reference_t": 29,
+      "source_t": 27,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 59.010406291112304,
+      "end_s": 60.00725745782256,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 60.00725745782256,
+      "end_s": 60.977820832747966,
+      "reference_t": 30,
+      "source_t": 28,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 60.977820832747966,
+      "end_s": 62.00114016607404,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 62.00114016607404,
+      "end_s": 62.80262449989095,
+      "reference_t": 31,
+      "source_t": 29,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 62.80262449989095,
+      "end_s": 64.00155170774087,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "correct"
+    },
+    {
+      "start_s": 64.00155170774087,
+      "end_s": 64.85450837481767,
+      "reference_t": 32,
+      "source_t": 30,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 64.85450837481767,
+      "end_s": 66.00141712510958,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 66.00141712510958,
+      "end_s": 68.001890250016,
+      "reference_t": 33,
+      "source_t": 31,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 68.001890250016,
+      "end_s": 69.61151816602796,
+      "reference_t": 34,
+      "source_t": 31,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 69.61151816602796,
+      "end_s": 70.00384091585875,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "correct"
+    },
+    {
+      "start_s": 70.00384091585875,
+      "end_s": 71.0101679158397,
+      "reference_t": 35,
+      "source_t": 33,
+      "kind": "correct"
+    },
+    {
+      "start_s": 71.0101679158397,
+      "end_s": 72.00281974999234,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "correct"
+    },
+    {
+      "start_s": 72.00281974999234,
+      "end_s": 73.91708954097703,
+      "reference_t": 36,
+      "source_t": 34,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 73.91708954097703,
+      "end_s": 74.01009695790708,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 74.01009695790708,
+      "end_s": 75.6595390830189,
+      "reference_t": 37,
+      "source_t": 35,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 75.6595390830189,
+      "end_s": 76.0008214158006,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 76.0008214158006,
+      "end_s": 76.8915326660499,
+      "reference_t": 38,
+      "source_t": 36,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 76.8915326660499,
+      "end_s": 78.00359491584823,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 78.00359491584823,
+      "end_s": 79.18163499981165,
+      "reference_t": 39,
+      "source_t": 37,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 79.18163499981165,
+      "end_s": 80.00256458297372,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "correct"
+    },
+    {
+      "start_s": 80.00256458297372,
+      "end_s": 81.93923254078254,
+      "reference_t": 40,
+      "source_t": 38,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 81.93923254078254,
+      "end_s": 82.00384916597977,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 82.00384916597977,
+      "end_s": 83.17693529091775,
+      "reference_t": 41,
+      "source_t": 39,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 83.17693529091775,
+      "end_s": 84.00908749969676,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.00908749969676,
+      "end_s": 85.32986433291808,
+      "reference_t": 42,
+      "source_t": 40,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 85.32986433291808,
+      "end_s": 86.00021862471476,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 86.00021862471476,
+      "end_s": 87.68573316605762,
+      "reference_t": 43,
+      "source_t": 41,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 87.68573316605762,
+      "end_s": 88.01007995801046,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.01007995801046,
+      "end_s": 88.67979987477884,
+      "reference_t": 44,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.67979987477884,
+      "end_s": 90.00786074995995,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00786074995995,
+      "end_s": 91.32001833291724,
+      "reference_t": 45,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 91.32001833291724,
+      "end_s": 91.74023758294061,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "correct"
+    },
+    {
+      "start_s": 91.74023758294061,
+      "end_s": 92.00826779101044,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "correct"
+    },
+    {
+      "start_s": 92.00826779101044,
+      "end_s": 94.00848183268681,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 94.00848183268681,
+      "end_s": 95.1598642077297,
+      "reference_t": 47,
+      "source_t": 45,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 95.1598642077297,
+      "end_s": 96.00885124970227,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "correct"
+    },
+    {
+      "start_s": 96.00885124970227,
+      "end_s": 97.1514272079803,
+      "reference_t": 48,
+      "source_t": 46,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 97.1514272079803,
+      "end_s": 98.0037865829654,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 98.0037865829654,
+      "end_s": 98.82011883286759,
+      "reference_t": 49,
+      "source_t": 47,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 98.82011883286759,
+      "end_s": 100.00996808288619,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.00996808288619,
+      "end_s": 100.98889383301139,
+      "reference_t": 50,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.98889383301139,
+      "end_s": 102.00717849982902,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00717849982902,
+      "end_s": 103.7251990409568,
+      "reference_t": 51,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 103.7251990409568,
+      "end_s": 104.00996650010347,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "correct"
+    },
+    {
+      "start_s": 104.00996650010347,
+      "end_s": 105.12367470795289,
+      "reference_t": 52,
+      "source_t": 50,
+      "kind": "correct"
+    },
+    {
+      "start_s": 105.12367470795289,
+      "end_s": 106.00594924995676,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "correct"
+    },
+    {
+      "start_s": 106.00594924995676,
+      "end_s": 107.50417766580358,
+      "reference_t": 53,
+      "source_t": 51,
+      "kind": "correct"
+    },
+    {
+      "start_s": 107.50417766580358,
+      "end_s": 108.00271341577172,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "correct"
+    },
+    {
+      "start_s": 108.00271341577172,
+      "end_s": 109.35805004090071,
+      "reference_t": 54,
+      "source_t": 52,
+      "kind": "correct"
+    },
+    {
+      "start_s": 109.35805004090071,
+      "end_s": 110.01009545801207,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "correct"
+    },
+    {
+      "start_s": 110.01009545801207,
+      "end_s": 111.6987087498419,
+      "reference_t": 55,
+      "source_t": 53,
+      "kind": "correct"
+    },
+    {
+      "start_s": 111.6987087498419,
+      "end_s": 112.0033137910068,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "correct"
+    },
+    {
+      "start_s": 112.0033137910068,
+      "end_s": 113.6624827911146,
+      "reference_t": 56,
+      "source_t": 54,
+      "kind": "correct"
+    },
+    {
+      "start_s": 113.6624827911146,
+      "end_s": 114.0022172499448,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 114.0022172499448,
+      "end_s": 115.16579762473702,
+      "reference_t": 57,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 115.16579762473702,
+      "end_s": 116.00878933304921,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "correct"
+    },
+    {
+      "start_s": 116.00878933304921,
+      "end_s": 117.16581437503919,
+      "reference_t": 58,
+      "source_t": 56,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 117.16581437503919,
+      "end_s": 118.00751220807433,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 118.00751220807433,
+      "end_s": 118.67874149978161,
+      "reference_t": 59,
+      "source_t": 57,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.67874149978161,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "source_correct"
+    }
+  ]
+}

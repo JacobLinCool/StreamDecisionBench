@@ -1,0 +1,2831 @@
+{
+  "episode_id": "lite_debugging_b",
+  "task_family": "live_debugging",
+  "scenario_id": "debugging_b",
+  "states": 60,
+  "questions": 7,
+  "reference_transitions": 21,
+  "untimed_decision_accuracy": 0.2,
+  "untimed_segment_accuracy": 0.17727272727272728,
+  "all_questions_exact_accuracy": 0.16666666666666666,
+  "inactive_only_error_states": 2,
+  "time_accuracy": 0.1834459479883746,
+  "segment_time_accuracy": 0.14760677643797804,
+  "observed_duration_s": 119.99997066706419,
+  "error_seconds": {
+    "no_decision": 1.4315450838766992,
+    "source_correct": 2.558984249830246,
+    "source_incorrect": 93.99593295576051
+  },
+  "time_partition_seconds": {
+    "current_correct": 20.68865596037358,
+    "judgment": 68.65998912462965,
+    "stale": 2.558984249830246,
+    "compound": 25.335943831130862,
+    "outdated_correct": 1.3248524172231555,
+    "no_decision": 1.4315450838766992
+  },
+  "current_source_share": 0.7445722243791041,
+  "latency_s_p50": 1.3615838955156505,
+  "latency_s_p95": 1.9138224288588386,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.005105707794427872,
+  "max_dispatch_lag_s": 0.0,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 0.38333333333333336,
+      "active_states": 60,
+      "active_accuracy": 0.38333333333333336
+    },
+    "process": {
+      "all_states_accuracy": 0.9166666666666666,
+      "active_states": 60,
+      "active_accuracy": 0.9166666666666666
+    },
+    "target_result": {
+      "all_states_accuracy": 0.6333333333333333,
+      "active_states": 60,
+      "active_accuracy": 0.6333333333333333
+    },
+    "rerun_scope": {
+      "all_states_accuracy": 0.8333333333333334,
+      "active_states": 8,
+      "active_accuracy": 0
+    },
+    "inspect_file": {
+      "all_states_accuracy": 0.9333333333333333,
+      "active_states": 1,
+      "active_accuracy": 0
+    },
+    "control_action": {
+      "all_states_accuracy": 0.8166666666666667,
+      "active_states": 4,
+      "active_accuracy": 0.5
+    },
+    "owner": {
+      "all_states_accuracy": 0.8,
+      "active_states": 6,
+      "active_accuracy": 0
+    }
+  },
+  "mistakes": [
+    {
+      "t": 0,
+      "reference_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "original_error",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "inspect_file"
+      ],
+      "reference_evidence": [
+        "clock advanced to 0; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 2,
+      "reference_decision": {
+        "route": "wait",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "debugger: paused"
+      ]
+    },
+    {
+      "t": 4,
+      "reference_decision": {
+        "route": "wait",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "buffer edited: ledger/settlement/batch.py"
+      ]
+    },
+    {
+      "t": 6,
+      "reference_decision": {
+        "route": "wait",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "call: It has hung. We should kill the process."
+      ]
+    },
+    {
+      "t": 7,
+      "reference_decision": {
+        "route": "control",
+        "process": "paused",
+        "target_result": "original_error",
+        "control_action": "continue"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 7; cursor moved to line 37; no relevant event"
+      ]
+    },
+    {
+      "t": 8,
+      "reference_decision": {
+        "route": "control",
+        "process": "paused",
+        "target_result": "original_error",
+        "control_action": "continue"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "buffer edited: ledger/settlement/batch.py"
+      ]
+    },
+    {
+      "t": 9,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "control",
+        "process": "stalled",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process"
+      ],
+      "reference_evidence": [
+        "debugger: continued"
+      ]
+    },
+    {
+      "t": 10,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "control",
+        "process": "running",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 10; cursor moved to line 31; no relevant event"
+      ]
+    },
+    {
+      "t": 11,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "original_error",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "run finished: D7; 0 passed, 1 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 12,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "original_error",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "call: I saved the fix, so this old error cannot matter."
+      ]
+    },
+    {
+      "t": 18,
+      "reference_decision": {
+        "route": "wait",
+        "process": "stalled",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "control",
+        "process": "running",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process"
+      ],
+      "reference_evidence": [
+        "clock advanced to 18; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 19,
+      "reference_decision": {
+        "route": "wait",
+        "process": "stalled",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "process"
+      ],
+      "reference_evidence": [
+        "call: Give it more time; I think it is still fine."
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "route": "control",
+        "process": "stalled",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process",
+        "control_action"
+      ],
+      "reference_evidence": [
+        "clock advanced to 20; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "route": "control",
+        "process": "stalled",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process",
+        "control_action"
+      ],
+      "reference_evidence": [
+        "buffer edited: ledger/settlement/batch.py"
+      ]
+    },
+    {
+      "t": 22,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "run finished: D8; interrupted; no completed result"
+      ]
+    },
+    {
+      "t": 23,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 23; cursor moved to line 35; no relevant event"
+      ]
+    },
+    {
+      "t": 24,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "target"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "saved tests/settlement_helpers.py at 24"
+      ]
+    },
+    {
+      "t": 25,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 25; cursor moved to line 37; no relevant event"
+      ]
+    },
+    {
+      "t": 26,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "target"
+      },
+      "wrong_active_questions": [
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 26; cursor moved to line 38; no relevant event"
+      ]
+    },
+    {
+      "t": 27,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 27; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 29,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "running",
+        "target_result": "not_run",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 29; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 30,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 30; cursor moved to line 33; no relevant event"
+      ]
+    },
+    {
+      "t": 31,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result",
+        "owner"
+      ],
+      "reference_evidence": [
+        "run finished: D9; 1 passed, 1 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 32,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "target_result",
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @platform-core about D9."
+      ]
+    },
+    {
+      "t": 33,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result",
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @fx-platform about D9. [partial]"
+      ]
+    },
+    {
+      "t": 34,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "target_result",
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: Could you contact @fx-platform about D9?"
+      ]
+    },
+    {
+      "t": 35,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @fx-platform about D9."
+      ]
+    },
+    {
+      "t": 36,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 36; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 37,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "saved ledger/settlement/scheduler.py at 37"
+      ]
+    },
+    {
+      "t": 38,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 38; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 39,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 39; cursor moved to line 33; no relevant event"
+      ]
+    },
+    {
+      "t": 40,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 40; cursor moved to line 34; no relevant event"
+      ]
+    },
+    {
+      "t": 41,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "running",
+        "target_result": "different_error",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "run started: D10"
+      ]
+    },
+    {
+      "t": 42,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "control",
+        "process": "running",
+        "target_result": "passed",
+        "control_action": "stop"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 42; cursor moved to line 36; no relevant event"
+      ]
+    },
+    {
+      "t": 43,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "running",
+        "target_result": "not_run",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 43; cursor moved to line 37; no relevant event"
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route",
+        "owner"
+      ],
+      "reference_evidence": [
+        "run finished: D10; 1 passed, 1 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 45,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @platform-core about D9."
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "call: I have contacted @platform-core about D10."
+      ]
+    },
+    {
+      "t": 47,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 47; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "saved ledger/common/pool.py at 48"
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "original_error",
+        "owner": "@platform-core"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 49; cursor moved to line 34; no relevant event"
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "different_error",
+        "rerun_scope": "full"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 50; cursor moved to line 35; no relevant event"
+      ]
+    },
+    {
+      "t": 51,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "different_error",
+        "rerun_scope": "full"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 51; cursor moved to line 36; no relevant event"
+      ]
+    },
+    {
+      "t": 52,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target_result"
+      ],
+      "reference_evidence": [
+        "run started: D11"
+      ]
+    },
+    {
+      "t": 53,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 53; cursor moved to line 38; no relevant event"
+      ]
+    },
+    {
+      "t": 54,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "target_result"
+      ],
+      "reference_evidence": [
+        "clock advanced to 54; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 56,
+      "reference_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 56; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 59,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 59; cursor moved to line 35; no relevant event"
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.933293581008911e-05,
+      "end_s": 1.4315744168125093,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 1.4315744168125093,
+      "end_s": 2.0047168326564133,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 2.0047168326564133,
+      "end_s": 3.2946577495895326,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 3.2946577495895326,
+      "end_s": 4.005064707715064,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.005064707715064,
+      "end_s": 5.493605041410774,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 5.493605041410774,
+      "end_s": 6.005093707703054,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 6.005093707703054,
+      "end_s": 7.283674125093967,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 7.283674125093967,
+      "end_s": 8.00420937500894,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.00420937500894,
+      "end_s": 9.31739483308047,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 9.31739483308047,
+      "end_s": 10.004337332677096,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 10.004337332677096,
+      "end_s": 11.50583520764485,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 11.50583520764485,
+      "end_s": 12.001522166654468,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.001522166654468,
+      "end_s": 13.07885816693306,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 13.07885816693306,
+      "end_s": 14.001452208030969,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 14.001452208030969,
+      "end_s": 15.169556958135217,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 15.169556958135217,
+      "end_s": 16.004285332746804,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 16.004285332746804,
+      "end_s": 16.969817250035703,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 16.969817250035703,
+      "end_s": 18.001092207618058,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.001092207618058,
+      "end_s": 19.47576612327248,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 19.47576612327248,
+      "end_s": 20.00507824961096,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.00507824961096,
+      "end_s": 21.21979458257556,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 21.21979458257556,
+      "end_s": 22.005046041682363,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 22.005046041682363,
+      "end_s": 23.9118313328363,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 23.9118313328363,
+      "end_s": 24.00507479161024,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 24.00507479161024,
+      "end_s": 25.12057200074196,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 25.12057200074196,
+      "end_s": 26.00462520774454,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 26.00462520774454,
+      "end_s": 27.17586795752868,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 27.17586795752868,
+      "end_s": 28.001802749931812,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.001802749931812,
+      "end_s": 29.553869208320975,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 29.553869208320975,
+      "end_s": 30.00506441667676,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 30.00506441667676,
+      "end_s": 31.347021666821092,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 31.347021666821092,
+      "end_s": 32.00040154205635,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.00040154205635,
+      "end_s": 33.10029354225844,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 33.10029354225844,
+      "end_s": 34.00318924989551,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.00318924989551,
+      "end_s": 35.06898733275011,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 35.06898733275011,
+      "end_s": 36.0029388749972,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.0029388749972,
+      "end_s": 37.073382791131735,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 37.073382791131735,
+      "end_s": 38.00070962496102,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 38.00070962496102,
+      "end_s": 39.22628645785153,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 39.22628645785153,
+      "end_s": 40.00250449962914,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.00250449962914,
+      "end_s": 40.9808982075192,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.9808982075192,
+      "end_s": 42.00458874972537,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.00458874972537,
+      "end_s": 44.005045749712735,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.005045749712735,
+      "end_s": 44.07952629169449,
+      "reference_t": 22,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.07952629169449,
+      "end_s": 45.61019279202446,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 45.61019279202446,
+      "end_s": 46.00048116687685,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.00048116687685,
+      "end_s": 48.00434304168448,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.00434304168448,
+      "end_s": 48.09564212476835,
+      "reference_t": 24,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.09564212476835,
+      "end_s": 49.55183858377859,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 49.55183858377859,
+      "end_s": 50.00510570779443,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 50.00510570779443,
+      "end_s": 51.3427490410395,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 51.3427490410395,
+      "end_s": 52.00417816685513,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.00417816685513,
+      "end_s": 53.675263499841094,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 53.675263499841094,
+      "end_s": 54.00119458278641,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.00119458278641,
+      "end_s": 55.70389966573566,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 55.70389966573566,
+      "end_s": 56.00143770780414,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.00143770780414,
+      "end_s": 57.59395408257842,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 57.59395408257842,
+      "end_s": 58.00171808293089,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 58.00171808293089,
+      "end_s": 59.24927849927917,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 59.24927849927917,
+      "end_s": 60.00463891681284,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.00463891681284,
+      "end_s": 61.10751074971631,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 61.10751074971631,
+      "end_s": 62.00029666675255,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.00029666675255,
+      "end_s": 63.40234970860183,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 63.40234970860183,
+      "end_s": 64.00424862466753,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.00424862466753,
+      "end_s": 66.00388987502083,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.00388987502083,
+      "end_s": 66.055304790847,
+      "reference_t": 33,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.055304790847,
+      "end_s": 67.42975487513468,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 67.42975487513468,
+      "end_s": 68.00028683291748,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 68.00028683291748,
+      "end_s": 69.13850295823067,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 69.13850295823067,
+      "end_s": 70.00495883263648,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.00495883263648,
+      "end_s": 71.71365391556174,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 71.71365391556174,
+      "end_s": 72.0010574166663,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.0010574166663,
+      "end_s": 73.17172800097615,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 73.17172800097615,
+      "end_s": 74.0011301250197,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.0011301250197,
+      "end_s": 75.48138416698202,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 75.48138416698202,
+      "end_s": 76.00107524963096,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.00107524963096,
+      "end_s": 77.44082204159349,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 77.44082204159349,
+      "end_s": 78.00445458292961,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.00445458292961,
+      "end_s": 79.2759232497774,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 79.2759232497774,
+      "end_s": 80.00175233278424,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.00175233278424,
+      "end_s": 81.07436183281243,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 81.07436183281243,
+      "end_s": 82.00094233267009,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 82.00094233267009,
+      "end_s": 83.27819920750335,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 83.27819920750335,
+      "end_s": 84.00158787472174,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 84.00158787472174,
+      "end_s": 85.4223074996844,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 85.4223074996844,
+      "end_s": 86.00330195762217,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.00330195762217,
+      "end_s": 87.46456204168499,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 87.46456204168499,
+      "end_s": 88.0042300419882,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.0042300419882,
+      "end_s": 89.4350142502226,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 89.4350142502226,
+      "end_s": 90.00330062489957,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00330062489957,
+      "end_s": 91.70888191647828,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 91.70888191647828,
+      "end_s": 92.00484487460926,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.00484487460926,
+      "end_s": 93.58852495765314,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 93.58852495765314,
+      "end_s": 94.00436479179189,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.00436479179189,
+      "end_s": 95.35440983390436,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 95.35440983390436,
+      "end_s": 96.0033224998042,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.0033224998042,
+      "end_s": 97.40307220816612,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 97.40307220816612,
+      "end_s": 98.00445437477902,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.00445437477902,
+      "end_s": 99.64608695777133,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 99.64608695777133,
+      "end_s": 100.00505999987945,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.00505999987945,
+      "end_s": 101.08569808397442,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 101.08569808397442,
+      "end_s": 102.00318516697735,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00318516697735,
+      "end_s": 103.48787312489003,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 103.48787312489003,
+      "end_s": 104.00459499983117,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.00459499983117,
+      "end_s": 105.35892612487078,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 105.35892612487078,
+      "end_s": 106.00435024965554,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.00435024965554,
+      "end_s": 107.13678604084998,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 107.13678604084998,
+      "end_s": 108.00437174970284,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.00437174970284,
+      "end_s": 109.26506524998695,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 109.26506524998695,
+      "end_s": 110.00140099972486,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.00140099972486,
+      "end_s": 111.37054758239537,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 111.37054758239537,
+      "end_s": 112.00331041682512,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 112.00331041682512,
+      "end_s": 113.41110045881942,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 113.41110045881942,
+      "end_s": 114.0033764578402,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.0033764578402,
+      "end_s": 115.32822887506336,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "correct"
+    },
+    {
+      "start_s": 115.32822887506336,
+      "end_s": 116.00046354206279,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "correct"
+    },
+    {
+      "start_s": 116.00046354206279,
+      "end_s": 117.6442284588702,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "correct"
+    },
+    {
+      "start_s": 117.6442284588702,
+      "end_s": 118.0017791246064,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.0017791246064,
+      "end_s": 119.17678599944338,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 119.17678599944338,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "source_incorrect"
+    }
+  ],
+  "time_basis": "release_anchored_successful_attempt_replay",
+  "retry_reliability": {
+    "logical_requests": 60,
+    "successful_logical_requests": 60,
+    "attempts": 60,
+    "failed_attempts": 0,
+    "attempt_error_rate": 0.0,
+    "attempt_error_rate_denominator": "all physical attempts, including final successes",
+    "retried_logical_requests": 0,
+    "retried_logical_rate": 0.0,
+    "retried_logical_rate_denominator": "all released logical requests",
+    "attempt_errors_by_type": {},
+    "failed_attempt_duration_s": 0,
+    "excluded_retry_s": 0.0,
+    "excluded_dispatch_s": 0.0221920027397573
+  },
+  "normalization": {
+    "definition": "actual evidence release + successful attempt duration + actual postprocess/commit-check lag",
+    "tie_break": "newest source index first at an exactly equal reconstructed arrival time",
+    "acceptance": "recomputed against source order and original horizon; physical acceptance ignored",
+    "latency_basis": "successful attempt completion minus its start; excludes dispatch queue, failed attempts and retry waits",
+    "arrival_order": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59
+    ],
+    "records": [
+      {
+        "t": 0,
+        "first_started_s": 0.0003258329816162586,
+        "first_dispatch_lag_s": 0.0002965000458061695,
+        "excluded_dispatch_s": 0.0002965000458061695,
+        "successful_attempt_s": 1.431411333847791,
+        "postprocess_commit_lag_s": 0.00013375002890825272,
+        "actual_recorded_s": 1.4318709168583155,
+        "normalized_ready_s": 1.4315744168125093,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 1,
+        "first_started_s": 2.0051133329980075,
+        "first_dispatch_lag_s": 0.0003965003415942192,
+        "excluded_dispatch_s": 0.0003965003415942192,
+        "successful_attempt_s": 1.289844708982855,
+        "postprocess_commit_lag_s": 9.620795026421547e-05,
+        "actual_recorded_s": 3.295054249931127,
+        "normalized_ready_s": 3.2946577495895326,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 2,
+        "first_started_s": 4.005463832989335,
+        "first_dispatch_lag_s": 0.00039912527427077293,
+        "excluded_dispatch_s": 0.00039912527427077293,
+        "successful_attempt_s": 1.4883618336170912,
+        "postprocess_commit_lag_s": 0.00017850007861852646,
+        "actual_recorded_s": 5.494004166685045,
+        "normalized_ready_s": 5.493605041410774,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 3,
+        "first_started_s": 6.005691957660019,
+        "first_dispatch_lag_s": 0.0005982499569654465,
+        "excluded_dispatch_s": 0.0005982499569654465,
+        "successful_attempt_s": 1.2784378342330456,
+        "postprocess_commit_lag_s": 0.00014258315786719322,
+        "actual_recorded_s": 7.284272375050932,
+        "normalized_ready_s": 7.283674125093967,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 4,
+        "first_started_s": 8.004662416875362,
+        "first_dispatch_lag_s": 0.0004530418664216995,
+        "excluded_dispatch_s": 0.0004530418664216995,
+        "successful_attempt_s": 1.3130190828815103,
+        "postprocess_commit_lag_s": 0.00016637519001960754,
+        "actual_recorded_s": 9.317847874946892,
+        "normalized_ready_s": 9.31739483308047,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 5,
+        "first_started_s": 10.00457758270204,
+        "first_dispatch_lag_s": 0.00024025002494454384,
+        "excluded_dispatch_s": 0.00024025002494454384,
+        "successful_attempt_s": 1.501358584035188,
+        "postprocess_commit_lag_s": 0.0001392909325659275,
+        "actual_recorded_s": 11.506075457669795,
+        "normalized_ready_s": 11.50583520764485,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 6,
+        "first_started_s": 12.001990374643356,
+        "first_dispatch_lag_s": 0.0004682079888880253,
+        "excluded_dispatch_s": 0.0004682079888880253,
+        "successful_attempt_s": 1.0771723333746195,
+        "postprocess_commit_lag_s": 0.00016366690397262573,
+        "actual_recorded_s": 13.079326374921948,
+        "normalized_ready_s": 13.07885816693306,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 7,
+        "first_started_s": 14.001843041740358,
+        "first_dispatch_lag_s": 0.00039083370938897133,
+        "excluded_dispatch_s": 0.00039083370938897133,
+        "successful_attempt_s": 1.1679465831257403,
+        "postprocess_commit_lag_s": 0.00015816697850823402,
+        "actual_recorded_s": 15.169947791844606,
+        "normalized_ready_s": 15.169556958135217,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 8,
+        "first_started_s": 16.004784874618053,
+        "first_dispatch_lag_s": 0.0004995418712496758,
+        "excluded_dispatch_s": 0.0004995418712496758,
+        "successful_attempt_s": 0.9653780832886696,
+        "postprocess_commit_lag_s": 0.0001538340002298355,
+        "actual_recorded_s": 16.970316791906953,
+        "normalized_ready_s": 16.969817250035703,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 9,
+        "first_started_s": 18.001684166956693,
+        "first_dispatch_lag_s": 0.0005919593386352062,
+        "excluded_dispatch_s": 0.0005919593386352062,
+        "successful_attempt_s": 1.4744897498749197,
+        "postprocess_commit_lag_s": 0.00018416577950119972,
+        "actual_recorded_s": 19.476358082611114,
+        "normalized_ready_s": 19.47576612327248,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 10,
+        "first_started_s": 20.00550829200074,
+        "first_dispatch_lag_s": 0.000430042389780283,
+        "excluded_dispatch_s": 0.000430042389780283,
+        "successful_attempt_s": 1.2145527079701424,
+        "postprocess_commit_lag_s": 0.00016362499445676804,
+        "actual_recorded_s": 21.22022462496534,
+        "normalized_ready_s": 21.21979458257556,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 11,
+        "first_started_s": 22.005224916618317,
+        "first_dispatch_lag_s": 0.0001788749359548092,
+        "excluded_dispatch_s": 0.0001788749359548092,
+        "successful_attempt_s": 1.9066051663830876,
+        "postprocess_commit_lag_s": 0.00018012477084994316,
+        "actual_recorded_s": 23.912010207772255,
+        "normalized_ready_s": 23.9118313328363,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 12,
+        "first_started_s": 24.005613332614303,
+        "first_dispatch_lag_s": 0.0005385410040616989,
+        "excluded_dispatch_s": 0.0005385410040616989,
+        "successful_attempt_s": 1.1152786673046649,
+        "postprocess_commit_lag_s": 0.00021854182705283165,
+        "actual_recorded_s": 25.12111054174602,
+        "normalized_ready_s": 25.12057200074196,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 13,
+        "first_started_s": 26.005037332884967,
+        "first_dispatch_lag_s": 0.0004121251404285431,
+        "excluded_dispatch_s": 0.0004121251404285431,
+        "successful_attempt_s": 1.1711971247568727,
+        "postprocess_commit_lag_s": 4.5625027269124985e-05,
+        "actual_recorded_s": 27.17628008266911,
+        "normalized_ready_s": 27.17586795752868,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 14,
+        "first_started_s": 28.002234916668385,
+        "first_dispatch_lag_s": 0.0004321667365729809,
+        "excluded_dispatch_s": 0.0004321667365729809,
+        "successful_attempt_s": 1.551992750260979,
+        "postprocess_commit_lag_s": 7.370812818408012e-05,
+        "actual_recorded_s": 29.55430137505755,
+        "normalized_ready_s": 29.553869208320975,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 15,
+        "first_started_s": 30.005367749836296,
+        "first_dispatch_lag_s": 0.0003033331595361233,
+        "excluded_dispatch_s": 0.0003033331595361233,
+        "successful_attempt_s": 1.3417744999751449,
+        "postprocess_commit_lag_s": 0.0001827501691877842,
+        "actual_recorded_s": 31.34732499998063,
+        "normalized_ready_s": 31.347021666821092,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 16,
+        "first_started_s": 32.00072299968451,
+        "first_dispatch_lag_s": 0.0003214576281607151,
+        "excluded_dispatch_s": 0.0003214576281607151,
+        "successful_attempt_s": 1.0997241251170635,
+        "postprocess_commit_lag_s": 0.00016787508502602577,
+        "actual_recorded_s": 33.1006149998866,
+        "normalized_ready_s": 33.10029354225844,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 17,
+        "first_started_s": 34.003432916942984,
+        "first_dispatch_lag_s": 0.00024366704747080803,
+        "excluded_dispatch_s": 0.00024366704747080803,
+        "successful_attempt_s": 1.0657532499171793,
+        "postprocess_commit_lag_s": 4.483293741941452e-05,
+        "actual_recorded_s": 35.06923099979758,
+        "normalized_ready_s": 35.06898733275011,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 18,
+        "first_started_s": 36.00348404189572,
+        "first_dispatch_lag_s": 0.0005451668985188007,
+        "excluded_dispatch_s": 0.0005451668985188007,
+        "successful_attempt_s": 1.070315333083272,
+        "postprocess_commit_lag_s": 0.00012858305126428604,
+        "actual_recorded_s": 37.073927958030254,
+        "normalized_ready_s": 37.073382791131735,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 19,
+        "first_started_s": 38.00106416689232,
+        "first_dispatch_lag_s": 0.00035454193130135536,
+        "excluded_dispatch_s": 0.00035454193130135536,
+        "successful_attempt_s": 1.2255273750051856,
+        "postprocess_commit_lag_s": 4.9457885324954987e-05,
+        "actual_recorded_s": 39.22664099978283,
+        "normalized_ready_s": 39.22628645785153,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 20,
+        "first_started_s": 40.002740791998804,
+        "first_dispatch_lag_s": 0.00023629236966371536,
+        "excluded_dispatch_s": 0.00023629236966371536,
+        "successful_attempt_s": 0.9782114578410983,
+        "postprocess_commit_lag_s": 0.00018225004896521568,
+        "actual_recorded_s": 40.98113449988887,
+        "normalized_ready_s": 40.9808982075192,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 21,
+        "first_started_s": 42.005001874640584,
+        "first_dispatch_lag_s": 0.0004131249152123928,
+        "excluded_dispatch_s": 0.0004131249152123928,
+        "successful_attempt_s": 2.074878375045955,
+        "postprocess_commit_lag_s": 5.916692316532135e-05,
+        "actual_recorded_s": 44.079939416609704,
+        "normalized_ready_s": 44.07952629169449,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 22,
+        "first_started_s": 44.00539658265188,
+        "first_dispatch_lag_s": 0.0003508329391479492,
+        "excluded_dispatch_s": 0.0003508329391479492,
+        "successful_attempt_s": 1.6049817502498627,
+        "postprocess_commit_lag_s": 0.00016529206186532974,
+        "actual_recorded_s": 45.61054362496361,
+        "normalized_ready_s": 45.61019279202446,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 23,
+        "first_started_s": 46.00071837473661,
+        "first_dispatch_lag_s": 0.00023720785975456238,
+        "excluded_dispatch_s": 0.00023720785975456238,
+        "successful_attempt_s": 2.0949778333306313,
+        "postprocess_commit_lag_s": 0.00018312456086277962,
+        "actual_recorded_s": 48.0958793326281,
+        "normalized_ready_s": 48.09564212476835,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 24,
+        "first_started_s": 48.004717874806374,
+        "first_dispatch_lag_s": 0.0003748331218957901,
+        "excluded_dispatch_s": 0.0003748331218957901,
+        "successful_attempt_s": 1.5474047921597958,
+        "postprocess_commit_lag_s": 9.074993431568146e-05,
+        "actual_recorded_s": 49.552213416900486,
+        "normalized_ready_s": 49.55183858377859,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 25,
+        "first_started_s": 50.00534029165283,
+        "first_dispatch_lag_s": 0.00023458385840058327,
+        "excluded_dispatch_s": 0.00023458385840058327,
+        "successful_attempt_s": 1.3374809580855072,
+        "postprocess_commit_lag_s": 0.00016237515956163406,
+        "actual_recorded_s": 51.3429836248979,
+        "normalized_ready_s": 51.3427490410395,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 26,
+        "first_started_s": 52.00438962504268,
+        "first_dispatch_lag_s": 0.00021145818755030632,
+        "excluded_dispatch_s": 0.00021145818755030632,
+        "successful_attempt_s": 1.6709033749066293,
+        "postprocess_commit_lag_s": 0.00018195807933807373,
+        "actual_recorded_s": 53.675474958028644,
+        "normalized_ready_s": 53.675263499841094,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 27,
+        "first_started_s": 54.001632374711335,
+        "first_dispatch_lag_s": 0.00043779192492365837,
+        "excluded_dispatch_s": 0.00043779192492365837,
+        "successful_attempt_s": 1.7025832920335233,
+        "postprocess_commit_lag_s": 0.00012179091572761536,
+        "actual_recorded_s": 55.704337457660586,
+        "normalized_ready_s": 55.70389966573566,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 28,
+        "first_started_s": 56.00188766699284,
+        "first_dispatch_lag_s": 0.0004499591886997223,
+        "excluded_dispatch_s": 0.0004499591886997223,
+        "successful_attempt_s": 1.5923339580185711,
+        "postprocess_commit_lag_s": 0.00018241675570607185,
+        "actual_recorded_s": 57.59440404176712,
+        "normalized_ready_s": 57.59395408257842,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 29,
+        "first_started_s": 58.00319916661829,
+        "first_dispatch_lag_s": 0.0014810836873948574,
+        "excluded_dispatch_s": 0.0014810836873948574,
+        "successful_attempt_s": 1.2474722503684461,
+        "postprocess_commit_lag_s": 8.816597983241081e-05,
+        "actual_recorded_s": 59.250759582966566,
+        "normalized_ready_s": 59.24927849927917,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 30,
+        "first_started_s": 60.00502141704783,
+        "first_dispatch_lag_s": 0.000382500234991312,
+        "excluded_dispatch_s": 0.000382500234991312,
+        "successful_attempt_s": 1.102775499690324,
+        "postprocess_commit_lag_s": 9.633321315050125e-05,
+        "actual_recorded_s": 61.1078932499513,
+        "normalized_ready_s": 61.10751074971631,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 31,
+        "first_started_s": 62.00076420791447,
+        "first_dispatch_lag_s": 0.0004675411619246006,
+        "excluded_dispatch_s": 0.0004675411619246006,
+        "successful_attempt_s": 1.4019615417346358,
+        "postprocess_commit_lag_s": 9.150011464953423e-05,
+        "actual_recorded_s": 63.40281724976376,
+        "normalized_ready_s": 63.40234970860183,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 32,
+        "first_started_s": 64.0044879168272,
+        "first_dispatch_lag_s": 0.00023929215967655182,
+        "excluded_dispatch_s": 0.00023929215967655182,
+        "successful_attempt_s": 2.0509504158981144,
+        "postprocess_commit_lag_s": 0.00010575028136372566,
+        "actual_recorded_s": 66.05554408300668,
+        "normalized_ready_s": 66.055304790847,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 33,
+        "first_started_s": 66.00424145767465,
+        "first_dispatch_lag_s": 0.0003515826538205147,
+        "excluded_dispatch_s": 0.0003515826538205147,
+        "successful_attempt_s": 1.425808667205274,
+        "postprocess_commit_lag_s": 5.633290857076645e-05,
+        "actual_recorded_s": 67.4301064577885,
+        "normalized_ready_s": 67.42975487513468,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 34,
+        "first_started_s": 68.00073762470856,
+        "first_dispatch_lag_s": 0.00045079179108142853,
+        "excluded_dispatch_s": 0.00045079179108142853,
+        "successful_attempt_s": 1.1380817499011755,
+        "postprocess_commit_lag_s": 0.000134375412017107,
+        "actual_recorded_s": 69.13895375002176,
+        "normalized_ready_s": 69.13850295823067,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 35,
+        "first_started_s": 70.00514629203826,
+        "first_dispatch_lag_s": 0.00018745940178632736,
+        "excluded_dispatch_s": 0.00018745940178632736,
+        "successful_attempt_s": 1.70854645781219,
+        "postprocess_commit_lag_s": 0.00014862511307001114,
+        "actual_recorded_s": 71.71384137496352,
+        "normalized_ready_s": 71.71365391556174,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 36,
+        "first_started_s": 72.00130145763978,
+        "first_dispatch_lag_s": 0.00024404097348451614,
+        "excluded_dispatch_s": 0.00024404097348451614,
+        "successful_attempt_s": 1.1706115840934217,
+        "postprocess_commit_lag_s": 5.900021642446518e-05,
+        "actual_recorded_s": 73.17197204194963,
+        "normalized_ready_s": 73.17172800097615,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 37,
+        "first_started_s": 74.00146483303979,
+        "first_dispatch_lag_s": 0.0003347080200910568,
+        "excluded_dispatch_s": 0.0003347080200910568,
+        "successful_attempt_s": 1.480138999875635,
+        "postprocess_commit_lag_s": 0.00011504208669066429,
+        "actual_recorded_s": 75.48171887500212,
+        "normalized_ready_s": 75.48138416698202,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 38,
+        "first_started_s": 76.0013785827905,
+        "first_dispatch_lag_s": 0.0003033331595361233,
+        "excluded_dispatch_s": 0.0003033331595361233,
+        "successful_attempt_s": 1.439691792242229,
+        "postprocess_commit_lag_s": 5.499972030520439e-05,
+        "actual_recorded_s": 77.44112537475303,
+        "normalized_ready_s": 77.44082204159349,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 39,
+        "first_started_s": 78.00486470805481,
+        "first_dispatch_lag_s": 0.00041012512519955635,
+        "excluded_dispatch_s": 0.00041012512519955635,
+        "successful_attempt_s": 1.2712847087532282,
+        "postprocess_commit_lag_s": 0.00018395809456706047,
+        "actual_recorded_s": 79.2763333749026,
+        "normalized_ready_s": 79.2759232497774,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 40,
+        "first_started_s": 80.00203612493351,
+        "first_dispatch_lag_s": 0.0002837921492755413,
+        "excluded_dispatch_s": 0.0002837921492755413,
+        "successful_attempt_s": 1.0724434577859938,
+        "postprocess_commit_lag_s": 0.0001660422421991825,
+        "actual_recorded_s": 81.0746456249617,
+        "normalized_ready_s": 81.07436183281243,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 41,
+        "first_started_s": 82.0011897077784,
+        "first_dispatch_lag_s": 0.00024737510830163956,
+        "excluded_dispatch_s": 0.00024737510830163956,
+        "successful_attempt_s": 1.2772227092646062,
+        "postprocess_commit_lag_s": 3.416556864976883e-05,
+        "actual_recorded_s": 83.27844658261165,
+        "normalized_ready_s": 83.27819920750335,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 42,
+        "first_started_s": 84.00195245770738,
+        "first_dispatch_lag_s": 0.00036458298563957214,
+        "excluded_dispatch_s": 0.00036458298563957214,
+        "successful_attempt_s": 1.4206725000403821,
+        "postprocess_commit_lag_s": 4.712492227554321e-05,
+        "actual_recorded_s": 85.42267208267003,
+        "normalized_ready_s": 85.4223074996844,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 43,
+        "first_started_s": 86.00357633270323,
+        "first_dispatch_lag_s": 0.0002743750810623169,
+        "excluded_dispatch_s": 0.0002743750810623169,
+        "successful_attempt_s": 1.4610953340306878,
+        "postprocess_commit_lag_s": 0.00016475003212690353,
+        "actual_recorded_s": 87.46483641676605,
+        "normalized_ready_s": 87.46456204168499,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 44,
+        "first_started_s": 88.00467479182407,
+        "first_dispatch_lag_s": 0.0004447498358786106,
+        "excluded_dispatch_s": 0.0004447498358786106,
+        "successful_attempt_s": 1.430734165944159,
+        "postprocess_commit_lag_s": 5.00422902405262e-05,
+        "actual_recorded_s": 89.43545900005847,
+        "normalized_ready_s": 89.4350142502226,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 45,
+        "first_started_s": 90.0037297080271,
+        "first_dispatch_lag_s": 0.00042908312752842903,
+        "excluded_dispatch_s": 0.00042908312752842903,
+        "successful_attempt_s": 1.7054399587213993,
+        "postprocess_commit_lag_s": 0.00014133285731077194,
+        "actual_recorded_s": 91.7093109996058,
+        "normalized_ready_s": 91.70888191647828,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 46,
+        "first_started_s": 92.0052771246992,
+        "first_dispatch_lag_s": 0.00043225008994340897,
+        "excluded_dispatch_s": 0.00043225008994340897,
+        "successful_attempt_s": 1.5834972080774605,
+        "postprocess_commit_lag_s": 0.00018287496641278267,
+        "actual_recorded_s": 93.58895720774308,
+        "normalized_ready_s": 93.58852495765314,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 47,
+        "first_started_s": 94.00474295765162,
+        "first_dispatch_lag_s": 0.0003781658597290516,
+        "excluded_dispatch_s": 0.0003781658597290516,
+        "successful_attempt_s": 1.349883584305644,
+        "postprocess_commit_lag_s": 0.00016145780682563782,
+        "actual_recorded_s": 95.35478799976408,
+        "normalized_ready_s": 95.35440983390436,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 48,
+        "first_started_s": 96.00363287469372,
+        "first_dispatch_lag_s": 0.0003103748895227909,
+        "excluded_dispatch_s": 0.0003103748895227909,
+        "successful_attempt_s": 1.399566208012402,
+        "postprocess_commit_lag_s": 0.00018350034952163696,
+        "actual_recorded_s": 97.40338258305565,
+        "normalized_ready_s": 97.40307220816612,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 49,
+        "first_started_s": 98.00473537482321,
+        "first_dispatch_lag_s": 0.0002810000441968441,
+        "excluded_dispatch_s": 0.0002810000441968441,
+        "successful_attempt_s": 1.641489875037223,
+        "postprocess_commit_lag_s": 0.0001427079550921917,
+        "actual_recorded_s": 99.64636795781553,
+        "normalized_ready_s": 99.64608695777133,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 50,
+        "first_started_s": 100.00540708284825,
+        "first_dispatch_lag_s": 0.00034708296880126,
+        "excluded_dispatch_s": 0.00034708296880126,
+        "successful_attempt_s": 1.0805992088280618,
+        "postprocess_commit_lag_s": 3.8875266909599304e-05,
+        "actual_recorded_s": 101.08604516694322,
+        "normalized_ready_s": 101.08569808397442,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 51,
+        "first_started_s": 102.0034731249325,
+        "first_dispatch_lag_s": 0.00028795795515179634,
+        "excluded_dispatch_s": 0.00028795795515179634,
+        "successful_attempt_s": 1.484562166966498,
+        "postprocess_commit_lag_s": 0.00012579094618558884,
+        "actual_recorded_s": 103.48816108284518,
+        "normalized_ready_s": 103.48787312489003,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 52,
+        "first_started_s": 104.00481941690668,
+        "first_dispatch_lag_s": 0.0002244170755147934,
+        "excluded_dispatch_s": 0.0002244170755147934,
+        "successful_attempt_s": 1.3541367910802364,
+        "postprocess_commit_lag_s": 0.00019433395937085152,
+        "actual_recorded_s": 105.35915054194629,
+        "normalized_ready_s": 105.35892612487078,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 53,
+        "first_started_s": 106.0047104167752,
+        "first_dispatch_lag_s": 0.00036016711965203285,
+        "excluded_dispatch_s": 0.00036016711965203285,
+        "successful_attempt_s": 1.1322592082433403,
+        "postprocess_commit_lag_s": 0.0001765829510986805,
+        "actual_recorded_s": 107.13714620796964,
+        "normalized_ready_s": 107.13678604084998,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 54,
+        "first_started_s": 108.00455287471414,
+        "first_dispatch_lag_s": 0.00018112501129508018,
+        "excluded_dispatch_s": 0.00018112501129508018,
+        "successful_attempt_s": 1.2606477080844343,
+        "postprocess_commit_lag_s": 4.579219967126846e-05,
+        "actual_recorded_s": 109.26524637499824,
+        "normalized_ready_s": 109.26506524998695,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 55,
+        "first_started_s": 110.00161637505516,
+        "first_dispatch_lag_s": 0.00021537533029913902,
+        "excluded_dispatch_s": 0.00021537533029913902,
+        "successful_attempt_s": 1.3690309999510646,
+        "postprocess_commit_lag_s": 0.00011558271944522858,
+        "actual_recorded_s": 111.37076295772567,
+        "normalized_ready_s": 111.37054758239537,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 56,
+        "first_started_s": 112.00358083285391,
+        "first_dispatch_lag_s": 0.0002704160287976265,
+        "excluded_dispatch_s": 0.0002704160287976265,
+        "successful_attempt_s": 1.4076270419172943,
+        "postprocess_commit_lag_s": 0.00016300007700920105,
+        "actual_recorded_s": 113.41137087484822,
+        "normalized_ready_s": 113.41110045881942,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 57,
+        "first_started_s": 114.00377349974588,
+        "first_dispatch_lag_s": 0.0003970419056713581,
+        "excluded_dispatch_s": 0.0003970419056713581,
+        "successful_attempt_s": 1.3246693750843406,
+        "postprocess_commit_lag_s": 0.00018304213881492615,
+        "actual_recorded_s": 115.32862591696903,
+        "normalized_ready_s": 115.32822887506336,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 58,
+        "first_started_s": 116.00063637504354,
+        "first_dispatch_lag_s": 0.00017283298075199127,
+        "excluded_dispatch_s": 0.00017283298075199127,
+        "successful_attempt_s": 1.6436157077550888,
+        "postprocess_commit_lag_s": 0.00014920905232429504,
+        "actual_recorded_s": 117.64440129185095,
+        "normalized_ready_s": 117.6442284588702,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 59,
+        "first_started_s": 118.00217629177496,
+        "first_dispatch_lag_s": 0.0003971671685576439,
+        "excluded_dispatch_s": 0.0003971671685576439,
+        "successful_attempt_s": 1.174954832997173,
+        "postprocess_commit_lag_s": 5.204183980822563e-05,
+        "actual_recorded_s": 119.17718316661194,
+        "normalized_ready_s": 119.17678599944338,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      }
+    ]
+  }
+}

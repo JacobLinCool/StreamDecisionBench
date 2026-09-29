@@ -1,0 +1,706 @@
+{
+  "baseline": {
+    "run": "runs/lite-v1-gpt-5.6-luna-low-retry-v1",
+    "config": {
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "protocol": "retry_excluded_successful_attempt_v1",
+      "workers": 32,
+      "episode_concurrency": 1,
+      "request_timeout_s": 20.0,
+      "max_attempts": 5,
+      "retry_delay_s": 0.5,
+      "sdk_retries": 0,
+      "custom_endpoint": false,
+      "untimed": "one final successful response per state; failed transport attempts excluded from model timing"
+    },
+    "run_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "ed19b1a75e35b27fcb42566eaf1808d50b3563fda33c548cdab591fe93044cc0",
+      "lite/core.py": "9760a5af17c9a1e28307b5fe684c3a9c7b4f17e5cfc23e6ee91d90ec26251544",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8"
+    },
+    "started_at_utc": "2026-09-28T16:44:29.972040+00:00",
+    "finished_at_utc": "2026-09-28T16:56:35.415983+00:00",
+    "models_returned": {
+      "gpt-5.6-luna": 360
+    },
+    "events_sha256": "ef6993109569bdf2bbed6622031303a09c05c2a49ddf419a6b2e90298979e571",
+    "total_failed": 0,
+    "accepted_updates": 349,
+    "discarded_updates": {
+      "older_than_active": 5,
+      "after_horizon": 6
+    },
+    "usage": {
+      "input_tokens": 1031609,
+      "cached_tokens": 0,
+      "output_tokens": 55665,
+      "reasoning_tokens": 38625
+    },
+    "analysis_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "ed19b1a75e35b27fcb42566eaf1808d50b3563fda33c548cdab591fe93044cc0",
+      "lite/core.py": "9760a5af17c9a1e28307b5fe684c3a9c7b4f17e5cfc23e6ee91d90ec26251544",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8",
+      "scripts/lite/lite_report.py": "7da7aa2681f304e595b86ca4dd211e1903adc0b3442da02dd55b9320fb4c01a7"
+    },
+    "retry_reliability": {
+      "logical_requests": 360,
+      "successful_logical_requests": 360,
+      "attempts": 360,
+      "failed_attempts": 0,
+      "retried_logical_requests": 0,
+      "failed_attempt_duration_s": 0,
+      "excluded_retry_s": 0.0,
+      "excluded_dispatch_s": 0.16046917252242565,
+      "attempt_error_rate": 0.0,
+      "attempt_error_rate_denominator": "all physical attempts, including final successes",
+      "retried_logical_rate": 0.0,
+      "retried_logical_rate_denominator": "all released logical requests",
+      "attempt_errors_by_type": {}
+    },
+    "raw_wallclock_latency_s": {
+      "p50": 2.2915593332145363,
+      "p95": 4.071826542355121,
+      "max": 7.0372778326272964
+    },
+    "raw_wallclock_overall": {
+      "untimed_decision_accuracy": 0.8611111111111112,
+      "untimed_segment_accuracy": 0.8438918886065625,
+      "all_questions_exact_accuracy": 0.8361111111111111,
+      "time_accuracy": 0.48448504538979204,
+      "segment_time_accuracy": 0.40352802759951467
+    }
+  },
+  "candidate": {
+    "run": "runs/lite-v1-jev-latest-retry-v1",
+    "config": {
+      "provider": "typesafe",
+      "model": "jev-latest",
+      "reasoning_effort": null,
+      "protocol": "retry_excluded_successful_attempt_v1",
+      "workers": 32,
+      "episode_concurrency": 1,
+      "request_timeout_s": 20.0,
+      "max_attempts": 5,
+      "retry_delay_s": 0.5,
+      "sdk_retries": 0,
+      "custom_endpoint": false,
+      "untimed": "one final successful response per state; failed transport attempts excluded from model timing"
+    },
+    "run_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "ed19b1a75e35b27fcb42566eaf1808d50b3563fda33c548cdab591fe93044cc0",
+      "lite/core.py": "9760a5af17c9a1e28307b5fe684c3a9c7b4f17e5cfc23e6ee91d90ec26251544",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8"
+    },
+    "started_at_utc": "2026-09-28T17:32:42.615052+00:00",
+    "finished_at_utc": "2026-09-28T17:44:42.813399+00:00",
+    "models_returned": {
+      "jev-1.13.0": 360
+    },
+    "events_sha256": "2be6604427f5922be3a6c9f9d244b32e958c440f23401830470c66a303eb2755",
+    "total_failed": 0,
+    "accepted_updates": 360,
+    "discarded_updates": {},
+    "usage": {
+      "input_tokens": 1250145,
+      "cached_tokens": 0,
+      "output_tokens": 147480,
+      "reasoning_tokens": 0
+    },
+    "analysis_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "ed19b1a75e35b27fcb42566eaf1808d50b3563fda33c548cdab591fe93044cc0",
+      "lite/core.py": "9760a5af17c9a1e28307b5fe684c3a9c7b4f17e5cfc23e6ee91d90ec26251544",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8",
+      "scripts/lite/lite_report.py": "7da7aa2681f304e595b86ca4dd211e1903adc0b3442da02dd55b9320fb4c01a7"
+    },
+    "retry_reliability": {
+      "logical_requests": 360,
+      "successful_logical_requests": 360,
+      "attempts": 360,
+      "failed_attempts": 0,
+      "retried_logical_requests": 0,
+      "failed_attempt_duration_s": 0,
+      "excluded_retry_s": 0.0,
+      "excluded_dispatch_s": 0.13622247194871306,
+      "attempt_error_rate": 0.0,
+      "attempt_error_rate_denominator": "all physical attempts, including final successes",
+      "retried_logical_rate": 0.0,
+      "retried_logical_rate_denominator": "all released logical requests",
+      "attempt_errors_by_type": {}
+    },
+    "raw_wallclock_latency_s": {
+      "p50": 0.23646879196166992,
+      "p95": 0.3625957898329944,
+      "max": 0.735325041692704
+    },
+    "raw_wallclock_overall": {
+      "untimed_decision_accuracy": 0.6083333333333333,
+      "untimed_segment_accuracy": 0.5872027077190121,
+      "all_questions_exact_accuracy": 0.3416666666666667,
+      "time_accuracy": 0.5825418624047128,
+      "segment_time_accuracy": 0.5565862658085063
+    }
+  },
+  "time_basis": "release_anchored_successful_attempt_replay",
+  "same_recording": false,
+  "dataset_hash": "60f6a877911f412d51f9615e42fda22a6dce436891b4334f8e712962553c6f6d",
+  "episode_hashes": {
+    "lite_debugging_a": "df7d0703f937a005f2c8530515b0491dc285110a5bd612d115c69b36fff786da",
+    "lite_debugging_b": "53fd9ce08a4de5cc618e9065123f4bfa2f7830cd4d8893fe73d3cdee314919ce",
+    "lite_assembly_a": "4b513874a06f59750dd447b2f23928e4f29e7a52b19b99a07cf26dbfe1b87973",
+    "lite_assembly_b": "8113c218bee0a52325182599a37f9313e3ac34d1e2f58d09816a4aa0cd77d870",
+    "lite_support_a": "427e0819efce15e5f88d4da06db6192e18ad3303f6fa5e26696f217bbf3f4cfe",
+    "lite_support_b": "85b70aa9f9351c0f4491c7e78b70fb1b39bb557c52022643f84a58833795ce0f"
+  },
+  "matched_config_excluding_model": {
+    "protocol": "retry_excluded_successful_attempt_v1",
+    "workers": 32,
+    "episode_concurrency": 1,
+    "request_timeout_s": 20.0,
+    "max_attempts": 5,
+    "retry_delay_s": 0.5,
+    "sdk_retries": 0,
+    "custom_endpoint": false,
+    "untimed": "one final successful response per state; failed transport attempts excluded from model timing"
+  },
+  "comparison_analysis_sources": {
+    "scripts/lite/lite_compare.py": "476d3fc07015107e8ae14ee93f9a520826d10a0f1ebf7a3df327e1196c87e5a9"
+  },
+  "verification": "Both complete runs re-scored from their own events with the current scorer; identical time basis, frozen episodes, and config except model identity (provider, model, reasoning effort). Each run's recorded source versions are kept in its identity.",
+  "overall": {
+    "episodes": 6,
+    "states": 360,
+    "paired_decision_counts": {
+      "both_correct": 205,
+      "baseline_only_correct": 105,
+      "candidate_only_correct": 14,
+      "both_wrong": 36
+    },
+    "baseline": {
+      "untimed_decision_accuracy": 0.8611111111111112,
+      "untimed_segment_accuracy": 0.8438918886065625,
+      "time_accuracy": 0.48454489916863785,
+      "segment_time_accuracy": 0.4035921305279236,
+      "all_questions_exact_accuracy": 0.8361111111111111,
+      "latency_s": {
+        "p50": 2.2915593332145363,
+        "p95": 4.071826542355121,
+        "max": 7.0372778326272964
+      }
+    },
+    "candidate": {
+      "untimed_decision_accuracy": 0.6083333333333333,
+      "untimed_segment_accuracy": 0.5872027077190121,
+      "time_accuracy": 0.5825773921129885,
+      "segment_time_accuracy": 0.5566293063766613,
+      "all_questions_exact_accuracy": 0.3416666666666667,
+      "latency_s": {
+        "p50": 0.23646879196166992,
+        "p95": 0.3625957898329944,
+        "max": 0.735325041692704
+      }
+    },
+    "candidate_minus_baseline": {
+      "untimed_decision_accuracy_pp": -25.27777777777779,
+      "untimed_segment_accuracy_pp": -25.668918088755042,
+      "time_accuracy_pp": 9.803249294435068,
+      "segment_time_accuracy_pp": 15.303717584873771,
+      "all_questions_exact_accuracy_pp": -49.44444444444444,
+      "latency_p50_s": -2.0550905412528664,
+      "latency_p95_s": -3.709230752522127
+    }
+  },
+  "by_family": {
+    "live_debugging": {
+      "episodes": 2,
+      "paired_decision_counts": {
+        "both_correct": 50,
+        "baseline_only_correct": 51,
+        "candidate_only_correct": 3,
+        "both_wrong": 16
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.8416666666666667,
+        "untimed_segment_accuracy": 0.8349567099567099,
+        "time_accuracy": 0.5162981724910067,
+        "segment_time_accuracy": 0.45536859775976035,
+        "all_questions_exact_accuracy": 0.8416666666666667,
+        "latency_s": {
+          "p50": 2.270976312458515,
+          "p95": 3.7441719849361106,
+          "max": 7.0372778326272964
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.44166666666666665,
+        "untimed_segment_accuracy": 0.4453463203463203,
+        "time_accuracy": 0.42047110144782907,
+        "segment_time_accuracy": 0.4203147717190139,
+        "all_questions_exact_accuracy": 0.3583333333333333,
+        "latency_s": {
+          "p50": 0.2554630828090012,
+          "p95": 0.3806388985365629,
+          "max": 0.6806257078424096
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -40.0,
+        "untimed_segment_accuracy_pp": -38.96103896103896,
+        "time_accuracy_pp": -9.582707104317766,
+        "segment_time_accuracy_pp": -3.505382604074647,
+        "all_questions_exact_accuracy_pp": -48.33333333333334,
+        "latency_p50_s": -2.015513229649514,
+        "latency_p95_s": -3.363533086399548
+      }
+    },
+    "procedural_coaching": {
+      "episodes": 2,
+      "paired_decision_counts": {
+        "both_correct": 77,
+        "baseline_only_correct": 28,
+        "candidate_only_correct": 3,
+        "both_wrong": 12
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.875,
+        "untimed_segment_accuracy": 0.8468276515151515,
+        "time_accuracy": 0.4399694015889709,
+        "segment_time_accuracy": 0.3383190267775483,
+        "all_questions_exact_accuracy": 0.8583333333333334,
+        "latency_s": {
+          "p50": 2.6334876040928066,
+          "p95": 4.682827629381791,
+          "max": 6.7201939998194575
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.6666666666666666,
+        "untimed_segment_accuracy": 0.6191603535353536,
+        "time_accuracy": 0.6380506354895001,
+        "segment_time_accuracy": 0.5840853169286369,
+        "all_questions_exact_accuracy": 0.3416666666666667,
+        "latency_s": {
+          "p50": 0.24183860467746854,
+          "p95": 0.366921360604465,
+          "max": 0.735325041692704
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -20.833333333333336,
+        "untimed_segment_accuracy_pp": -22.76672979797979,
+        "time_accuracy_pp": 19.808123390052923,
+        "segment_time_accuracy_pp": 24.576629015108853,
+        "all_questions_exact_accuracy_pp": -51.66666666666667,
+        "latency_p50_s": -2.391648999415338,
+        "latency_p95_s": -4.315906268777326
+      }
+    },
+    "support_call_assist": {
+      "episodes": 2,
+      "paired_decision_counts": {
+        "both_correct": 78,
+        "baseline_only_correct": 26,
+        "candidate_only_correct": 8,
+        "both_wrong": 8
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.8666666666666667,
+        "untimed_segment_accuracy": 0.8498913043478261,
+        "time_accuracy": 0.4973671234259359,
+        "segment_time_accuracy": 0.41708876704646214,
+        "all_questions_exact_accuracy": 0.8083333333333333,
+        "latency_s": {
+          "p50": 2.016963749891147,
+          "p95": 2.9620498229051004,
+          "max": 4.239512084051967
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.7166666666666667,
+        "untimed_segment_accuracy": 0.6971014492753623,
+        "time_accuracy": 0.6892104394016365,
+        "segment_time_accuracy": 0.6654878304823331,
+        "all_questions_exact_accuracy": 0.325,
+        "latency_s": {
+          "p50": 0.22347099985927343,
+          "p95": 0.308147926395759,
+          "max": 0.6156809590756893
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -15.000000000000002,
+        "untimed_segment_accuracy_pp": -15.278985507246379,
+        "time_accuracy_pp": 19.184331597570058,
+        "segment_time_accuracy_pp": 24.839906343587092,
+        "all_questions_exact_accuracy_pp": -48.333333333333336,
+        "latency_p50_s": -1.7934927500318736,
+        "latency_p95_s": -2.6539018965093413
+      }
+    }
+  },
+  "per_episode": [
+    {
+      "episode_id": "lite_debugging_a",
+      "task_family": "live_debugging",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 25,
+        "baseline_only_correct": 25,
+        "candidate_only_correct": 1,
+        "both_wrong": 9
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.8333333333333334,
+        "untimed_segment_accuracy": 0.8214285714285714,
+        "time_accuracy": 0.5230801352528561,
+        "segment_time_accuracy": 0.47739627408965646,
+        "all_questions_exact_accuracy": 0.8333333333333334,
+        "latency_s": {
+          "p50": 2.1830777500290424,
+          "p95": 3.5507678971625856
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.43333333333333335,
+        "untimed_segment_accuracy": 0.42857142857142855,
+        "time_accuracy": 0.4109874228316343,
+        "segment_time_accuracy": 0.4052563496569485,
+        "all_questions_exact_accuracy": 0.35,
+        "latency_s": {
+          "p50": 0.2568514582235366,
+          "p95": 0.35634822307620184
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -40.0,
+        "untimed_segment_accuracy_pp": -39.285714285714285,
+        "time_accuracy_pp": -11.209271242122181,
+        "segment_time_accuracy_pp": -7.2139924432707945,
+        "all_questions_exact_accuracy_pp": -48.33333333333334,
+        "latency_p50_s": -1.9262262918055058,
+        "latency_p95_s": -3.194419674086384
+      }
+    },
+    {
+      "episode_id": "lite_debugging_b",
+      "task_family": "live_debugging",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 25,
+        "baseline_only_correct": 26,
+        "candidate_only_correct": 2,
+        "both_wrong": 7
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.85,
+        "untimed_segment_accuracy": 0.8484848484848485,
+        "time_accuracy": 0.5095162097291573,
+        "segment_time_accuracy": 0.43334092142986425,
+        "all_questions_exact_accuracy": 0.85,
+        "latency_s": {
+          "p50": 2.3072358747012913,
+          "p95": 3.7567259015748267
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.45,
+        "untimed_segment_accuracy": 0.4621212121212121,
+        "time_accuracy": 0.42995478006402377,
+        "segment_time_accuracy": 0.4353731937810793,
+        "all_questions_exact_accuracy": 0.36666666666666664,
+        "latency_s": {
+          "p50": 0.242553582880646,
+          "p95": 0.3806388985365629
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -40.0,
+        "untimed_segment_accuracy_pp": -38.63636363636364,
+        "time_accuracy_pp": -7.956142966513358,
+        "segment_time_accuracy_pp": 0.20322723512150587,
+        "all_questions_exact_accuracy_pp": -48.333333333333336,
+        "latency_p50_s": -2.0646822918206453,
+        "latency_p95_s": -3.376087003038264
+      }
+    },
+    {
+      "episode_id": "lite_assembly_a",
+      "task_family": "procedural_coaching",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 42,
+        "baseline_only_correct": 13,
+        "candidate_only_correct": 2,
+        "both_wrong": 3
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.9166666666666666,
+        "untimed_segment_accuracy": 0.8863636363636364,
+        "time_accuracy": 0.5054687380457933,
+        "segment_time_accuracy": 0.41092355498308075,
+        "all_questions_exact_accuracy": 0.8833333333333333,
+        "latency_s": {
+          "p50": 2.4374569789506495,
+          "p95": 3.590933654527179
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.7333333333333333,
+        "untimed_segment_accuracy": 0.6931818181818182,
+        "time_accuracy": 0.7014723306003169,
+        "segment_time_accuracy": 0.6570329458241139,
+        "all_questions_exact_accuracy": 0.35,
+        "latency_s": {
+          "p50": 0.24635506211780012,
+          "p95": 0.34714241609908636
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -18.333333333333336,
+        "untimed_segment_accuracy_pp": -19.318181818181813,
+        "time_accuracy_pp": 19.60035925545236,
+        "segment_time_accuracy_pp": 24.61093908410331,
+        "all_questions_exact_accuracy_pp": -53.333333333333336,
+        "latency_p50_s": -2.1911019168328494,
+        "latency_p95_s": -3.2437912384280922
+      }
+    },
+    {
+      "episode_id": "lite_assembly_b",
+      "task_family": "procedural_coaching",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 35,
+        "baseline_only_correct": 15,
+        "candidate_only_correct": 1,
+        "both_wrong": 9
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.8333333333333334,
+        "untimed_segment_accuracy": 0.8072916666666666,
+        "time_accuracy": 0.37447006513214853,
+        "segment_time_accuracy": 0.26571449857201584,
+        "all_questions_exact_accuracy": 0.8333333333333334,
+        "latency_s": {
+          "p50": 3.1722379997372627,
+          "p95": 5.020649205963126
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.6,
+        "untimed_segment_accuracy": 0.5451388888888888,
+        "time_accuracy": 0.5746289403786835,
+        "segment_time_accuracy": 0.5111376880331597,
+        "all_questions_exact_accuracy": 0.3333333333333333,
+        "latency_s": {
+          "p50": 0.23718341626226902,
+          "p95": 0.37429918504785714
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -23.33333333333334,
+        "untimed_segment_accuracy_pp": -26.21527777777778,
+        "time_accuracy_pp": 20.015887524653497,
+        "segment_time_accuracy_pp": 24.54231894611439,
+        "all_questions_exact_accuracy_pp": -50.0,
+        "latency_p50_s": -2.9350545834749937,
+        "latency_p95_s": -4.6463500209152695
+      }
+    },
+    {
+      "episode_id": "lite_support_a",
+      "task_family": "support_call_assist",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 36,
+        "baseline_only_correct": 13,
+        "candidate_only_correct": 4,
+        "both_wrong": 7
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.8166666666666667,
+        "untimed_segment_accuracy": 0.8097826086956522,
+        "time_accuracy": 0.4867043468780822,
+        "segment_time_accuracy": 0.3953851213586571,
+        "all_questions_exact_accuracy": 0.8166666666666667,
+        "latency_s": {
+          "p50": 1.9104644791223109,
+          "p95": 2.864624389540404
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.6666666666666666,
+        "untimed_segment_accuracy": 0.5942028985507246,
+        "time_accuracy": 0.6403899793537897,
+        "segment_time_accuracy": 0.567542337404412,
+        "all_questions_exact_accuracy": 0.4166666666666667,
+        "latency_s": {
+          "p50": 0.21822377084754407,
+          "p95": 0.2996067171450704
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -15.000000000000002,
+        "untimed_segment_accuracy_pp": -21.55797101449276,
+        "time_accuracy_pp": 15.368563247570755,
+        "segment_time_accuracy_pp": 17.215721604575485,
+        "all_questions_exact_accuracy_pp": -40.0,
+        "latency_p50_s": -1.6922407082747668,
+        "latency_p95_s": -2.5650176723953337
+      }
+    },
+    {
+      "episode_id": "lite_support_b",
+      "task_family": "support_call_assist",
+      "states": 60,
+      "paired_decision_counts": {
+        "both_correct": 42,
+        "baseline_only_correct": 13,
+        "candidate_only_correct": 4,
+        "both_wrong": 1
+      },
+      "baseline": {
+        "untimed_decision_accuracy": 0.9166666666666666,
+        "untimed_segment_accuracy": 0.89,
+        "time_accuracy": 0.5080298999737897,
+        "segment_time_accuracy": 0.43879241273426717,
+        "all_questions_exact_accuracy": 0.8,
+        "latency_s": {
+          "p50": 2.1839566668495536,
+          "p95": 3.3857967660995194
+        }
+      },
+      "candidate": {
+        "untimed_decision_accuracy": 0.7666666666666667,
+        "untimed_segment_accuracy": 0.8,
+        "time_accuracy": 0.7380308994494833,
+        "segment_time_accuracy": 0.7634333235602543,
+        "all_questions_exact_accuracy": 0.23333333333333334,
+        "latency_s": {
+          "p50": 0.2237335415557027,
+          "p95": 0.31033759962301694
+        }
+      },
+      "candidate_minus_baseline": {
+        "untimed_decision_accuracy_pp": -14.999999999999991,
+        "untimed_segment_accuracy_pp": -8.999999999999996,
+        "time_accuracy_pp": 23.000099947569364,
+        "segment_time_accuracy_pp": 32.46409108259871,
+        "all_questions_exact_accuracy_pp": -56.666666666666664,
+        "latency_p50_s": -1.960223125293851,
+        "latency_p95_s": -3.0754591664765023
+      }
+    }
+  ],
+  "network_adjustment": {
+    "method": "lower_envelope_network_removed_v1",
+    "network_s": {
+      "baseline": {
+        "estimate": 0.3778033092918192,
+        "low": 0.0048207942625046445,
+        "high": 0.5298746266173093
+      },
+      "candidate": {
+        "estimate": 0.1852030239010067,
+        "low": 0.17319161774108974,
+        "high": 0.19356872360184615
+      }
+    },
+    "overall": {
+      "baseline": {
+        "estimate": 0.5381444356907645,
+        "low": 0.4852211496397689,
+        "high": 0.5603322441071524
+      },
+      "candidate": {
+        "estimate": 0.6013549246167464,
+        "low": 0.6001371012527814,
+        "high": 0.6022023239437754
+      },
+      "candidate_minus_baseline_pp": 6.321048892598191,
+      "ranges_overlap": false
+    },
+    "by_family": {
+      "live_debugging": {
+        "baseline": {
+          "estimate": 0.5645798075735105,
+          "low": 0.5168806852302449,
+          "high": 0.5854896173062678
+        },
+        "candidate": {
+          "estimate": 0.4343613307435756,
+          "low": 0.43346047511923796,
+          "high": 0.43498875833420775
+        },
+        "candidate_minus_baseline_pp": -13.021847682993487,
+        "ranges_overlap": false
+      },
+      "procedural_coaching": {
+        "baseline": {
+          "estimate": 0.49288834695830475,
+          "low": 0.4406322609582679,
+          "high": 0.5157550134974558
+        },
+        "candidate": {
+          "estimate": 0.6581143000443873,
+          "low": 0.6568130641414907,
+          "high": 0.6590205843427164
+        },
+        "candidate_minus_baseline_pp": 16.522595308608256,
+        "ranges_overlap": false
+      },
+      "support_call_assist": {
+        "baseline": {
+          "estimate": 0.5569651525404786,
+          "low": 0.498150502730794,
+          "high": 0.5797521015177336
+        },
+        "candidate": {
+          "estimate": 0.7115891430622765,
+          "low": 0.7101377644976155,
+          "high": 0.7125976291544018
+        },
+        "candidate_minus_baseline_pp": 15.462399052179787,
+        "ranges_overlap": false
+      }
+    }
+  },
+  "interpretation": "Descriptive single-recording comparison. Adjacent states are dependent. Score and latency differences do not establish statistical significance, stable rankings, or causal effects of speed or model changes."
+}

@@ -1,0 +1,2603 @@
+{
+  "episodes": 2,
+  "states": 120,
+  "overall": {
+    "untimed_decision_accuracy": 0.725,
+    "untimed_segment_accuracy": 0.69675983436853,
+    "all_questions_exact_accuracy": 0.325,
+    "time_accuracy": 0.6802752039806226,
+    "segment_time_accuracy": 0.6415978667060634
+  },
+  "by_family": {
+    "presenter_voice_control": {
+      "episodes": 2,
+      "untimed_decision_accuracy": 0.725,
+      "untimed_segment_accuracy": 0.69675983436853,
+      "all_questions_exact_accuracy": 0.325,
+      "time_accuracy": 0.6802752039806226,
+      "segment_time_accuracy": 0.6415978667060634
+    }
+  },
+  "failed_requests": 0,
+  "inactive_only_error_states": 48,
+  "per_episode": [
+    {
+      "episode_id": "lite_presenter_a",
+      "task_family": "presenter_voice_control",
+      "scenario_id": "presenter_a",
+      "states": 60,
+      "questions": 6,
+      "reference_transitions": 24,
+      "untimed_decision_accuracy": 0.7333333333333333,
+      "untimed_segment_accuracy": 0.7066666666666667,
+      "all_questions_exact_accuracy": 0.4666666666666667,
+      "inactive_only_error_states": 16,
+      "time_accuracy": 0.6825169090586868,
+      "segment_time_accuracy": 0.6417195402882757,
+      "observed_duration_s": 119.99998570885509,
+      "error_seconds": {
+        "no_decision": 0.5882387086749077,
+        "source_correct": 5.811462334822863,
+        "source_incorrect": 31.698265332262963
+      },
+      "time_partition_seconds": {
+        "current_correct": 81.90201933309436,
+        "judgment": 30.23409320646897,
+        "stale": 5.811462334822863,
+        "compound": 1.4641721257939935,
+        "outdated_correct": 0.0,
+        "no_decision": 0.5882387086749077
+      },
+      "current_source_share": 0.9344677157848073,
+      "latency_s_p50": 0.29535408271476626,
+      "latency_s_p95": 0.3948128501186146,
+      "failed_requests": 0,
+      "accepted_updates": 60,
+      "discarded_updates": {},
+      "max_release_lag_s": 0.01010650023818016,
+      "max_dispatch_lag_s": 0.001195958349853754,
+      "per_question": {
+        "mode": {
+          "all_states_accuracy": 1,
+          "active_states": 60,
+          "active_accuracy": 1
+        },
+        "slide": {
+          "all_states_accuracy": 0.7333333333333333,
+          "active_states": 60,
+          "active_accuracy": 0.7333333333333333
+        },
+        "captions": {
+          "all_states_accuracy": 1,
+          "active_states": 60,
+          "active_accuracy": 1
+        },
+        "clip_state": {
+          "all_states_accuracy": 1,
+          "active_states": 16,
+          "active_accuracy": 1
+        },
+        "question_card": {
+          "all_states_accuracy": 0.9333333333333333,
+          "active_states": 11,
+          "active_accuracy": 1
+        },
+        "host_cue": {
+          "all_states_accuracy": 0.65,
+          "active_states": 41,
+          "active_accuracy": 0.9512195121951219
+        }
+      },
+      "mistakes": [
+        {
+          "t": 40,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s12",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s7",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p39 (final): Go to the thank you slide."
+          ]
+        },
+        {
+          "t": 43,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s12",
+            "captions": "presenter",
+            "host_cue": "stand_by"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s7",
+            "captions": "presenter",
+            "host_cue": "stand_by"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p42 (final): That's all from me. Back to you, Tomas."
+          ]
+        },
+        {
+          "t": 45,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s12",
+            "captions": "host",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s7",
+            "captions": "host",
+            "host_cue": "stand_by"
+          },
+          "wrong_active_questions": [
+            "slide",
+            "host_cue"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Host h45 (partial): thank you mira lets take questions"
+          ]
+        },
+        {
+          "t": 46,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s12",
+            "captions": "host",
+            "question_card": "waiting",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s7",
+            "captions": "host",
+            "question_card": "waiting",
+            "host_cue": "stand_by"
+          },
+          "wrong_active_questions": [
+            "slide",
+            "host_cue"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Host h45 (final): Thank you, Mira. Let's take questions."
+          ]
+        },
+        {
+          "t": 47,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s12",
+            "captions": "host",
+            "question_card": "waiting",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s7",
+            "captions": "host",
+            "question_card": "waiting",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Host h45 (final): Thank you, Mira. Let's take questions."
+          ]
+        },
+        {
+          "t": 48,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s12",
+            "captions": "audience",
+            "question_card": "listening",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s7",
+            "captions": "audience",
+            "question_card": "listening",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Audience a48 (partial): does the decoder"
+          ]
+        },
+        {
+          "t": 50,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s12",
+            "captions": "audience",
+            "question_card": "repeat",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s7",
+            "captions": "audience",
+            "question_card": "repeat",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Audience a48 (final): Does the decoder work offline?"
+          ]
+        },
+        {
+          "t": 51,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s12",
+            "captions": "audience",
+            "question_card": "repeat",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s7",
+            "captions": "audience",
+            "question_card": "repeat",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Audience a48 (final): Does the decoder work offline?"
+          ]
+        },
+        {
+          "t": 52,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s12",
+            "captions": "presenter",
+            "question_card": "repeat",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s7",
+            "captions": "presenter",
+            "question_card": "repeat",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p52 (partial): the question is whether"
+          ]
+        },
+        {
+          "t": 53,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s12",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s7",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p52 (final): The question is whether it works offline."
+          ]
+        },
+        {
+          "t": 54,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s12",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s7",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p54 (partial): yes everything stays on the"
+          ]
+        },
+        {
+          "t": 55,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s12",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s7",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p54 (final): Yes. Everything stays on the device, including the partials."
+          ]
+        },
+        {
+          "t": 56,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s12",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s7",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p54 (final): Yes. Everything stays on the device, including the partials."
+          ]
+        },
+        {
+          "t": 57,
+          "reference_decision": {
+            "mode": "closed",
+            "slide": "s12",
+            "captions": "host"
+          },
+          "predicted_decision": {
+            "mode": "closed",
+            "slide": "s7",
+            "captions": "host"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Host h57 (final): Let's thank Mira."
+          ]
+        },
+        {
+          "t": 58,
+          "reference_decision": {
+            "mode": "closed",
+            "slide": "s12",
+            "captions": "host"
+          },
+          "predicted_decision": {
+            "mode": "closed",
+            "slide": "s7",
+            "captions": "host"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Host h57 (final): Let's thank Mira."
+          ]
+        },
+        {
+          "t": 59,
+          "reference_decision": {
+            "mode": "closed",
+            "slide": "s12",
+            "captions": "host"
+          },
+          "predicted_decision": {
+            "mode": "closed",
+            "slide": "s7",
+            "captions": "host"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Host h57 (final): Let's thank Mira."
+          ]
+        }
+      ],
+      "intervals": [
+        {
+          "start_s": 1.4291144907474518e-05,
+          "end_s": 0.5882529998198152,
+          "reference_t": 0,
+          "source_t": null,
+          "kind": "no_decision"
+        },
+        {
+          "start_s": 0.5882529998198152,
+          "end_s": 2.0094535830430686,
+          "reference_t": 0,
+          "source_t": 0,
+          "kind": "correct"
+        },
+        {
+          "start_s": 2.0094535830430686,
+          "end_s": 2.3066572081297636,
+          "reference_t": 1,
+          "source_t": 0,
+          "kind": "correct"
+        },
+        {
+          "start_s": 2.3066572081297636,
+          "end_s": 4.002991291228682,
+          "reference_t": 1,
+          "source_t": 1,
+          "kind": "correct"
+        },
+        {
+          "start_s": 4.002991291228682,
+          "end_s": 4.30045404098928,
+          "reference_t": 2,
+          "source_t": 1,
+          "kind": "correct"
+        },
+        {
+          "start_s": 4.30045404098928,
+          "end_s": 6.009159041102976,
+          "reference_t": 2,
+          "source_t": 2,
+          "kind": "correct"
+        },
+        {
+          "start_s": 6.009159041102976,
+          "end_s": 6.259093999862671,
+          "reference_t": 3,
+          "source_t": 2,
+          "kind": "correct"
+        },
+        {
+          "start_s": 6.259093999862671,
+          "end_s": 8.00514058303088,
+          "reference_t": 3,
+          "source_t": 3,
+          "kind": "correct"
+        },
+        {
+          "start_s": 8.00514058303088,
+          "end_s": 8.263144915923476,
+          "reference_t": 4,
+          "source_t": 3,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 8.263144915923476,
+          "end_s": 10.009433624800295,
+          "reference_t": 4,
+          "source_t": 4,
+          "kind": "correct"
+        },
+        {
+          "start_s": 10.009433624800295,
+          "end_s": 10.316217875108123,
+          "reference_t": 5,
+          "source_t": 4,
+          "kind": "correct"
+        },
+        {
+          "start_s": 10.316217875108123,
+          "end_s": 12.009990207850933,
+          "reference_t": 5,
+          "source_t": 5,
+          "kind": "correct"
+        },
+        {
+          "start_s": 12.009990207850933,
+          "end_s": 12.263864166103303,
+          "reference_t": 6,
+          "source_t": 5,
+          "kind": "correct"
+        },
+        {
+          "start_s": 12.263864166103303,
+          "end_s": 14.009199040941894,
+          "reference_t": 6,
+          "source_t": 6,
+          "kind": "correct"
+        },
+        {
+          "start_s": 14.009199040941894,
+          "end_s": 14.263293833006173,
+          "reference_t": 7,
+          "source_t": 6,
+          "kind": "correct"
+        },
+        {
+          "start_s": 14.263293833006173,
+          "end_s": 16.01008941605687,
+          "reference_t": 7,
+          "source_t": 7,
+          "kind": "correct"
+        },
+        {
+          "start_s": 16.01008941605687,
+          "end_s": 16.29033562494442,
+          "reference_t": 8,
+          "source_t": 7,
+          "kind": "correct"
+        },
+        {
+          "start_s": 16.29033562494442,
+          "end_s": 18.002735207788646,
+          "reference_t": 8,
+          "source_t": 8,
+          "kind": "correct"
+        },
+        {
+          "start_s": 18.002735207788646,
+          "end_s": 18.293637707829475,
+          "reference_t": 9,
+          "source_t": 8,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 18.293637707829475,
+          "end_s": 20.00683704111725,
+          "reference_t": 9,
+          "source_t": 9,
+          "kind": "correct"
+        },
+        {
+          "start_s": 20.00683704111725,
+          "end_s": 20.313487582840025,
+          "reference_t": 10,
+          "source_t": 9,
+          "kind": "correct"
+        },
+        {
+          "start_s": 20.313487582840025,
+          "end_s": 22.0100803328678,
+          "reference_t": 10,
+          "source_t": 10,
+          "kind": "correct"
+        },
+        {
+          "start_s": 22.0100803328678,
+          "end_s": 22.30400616582483,
+          "reference_t": 11,
+          "source_t": 10,
+          "kind": "correct"
+        },
+        {
+          "start_s": 22.30400616582483,
+          "end_s": 24.002749333158135,
+          "reference_t": 11,
+          "source_t": 11,
+          "kind": "correct"
+        },
+        {
+          "start_s": 24.002749333158135,
+          "end_s": 24.251134499907494,
+          "reference_t": 12,
+          "source_t": 11,
+          "kind": "correct"
+        },
+        {
+          "start_s": 24.251134499907494,
+          "end_s": 26.01010650023818,
+          "reference_t": 12,
+          "source_t": 12,
+          "kind": "correct"
+        },
+        {
+          "start_s": 26.01010650023818,
+          "end_s": 26.310579374898225,
+          "reference_t": 13,
+          "source_t": 12,
+          "kind": "correct"
+        },
+        {
+          "start_s": 26.310579374898225,
+          "end_s": 28.009794999845326,
+          "reference_t": 13,
+          "source_t": 13,
+          "kind": "correct"
+        },
+        {
+          "start_s": 28.009794999845326,
+          "end_s": 28.282041000202298,
+          "reference_t": 14,
+          "source_t": 13,
+          "kind": "correct"
+        },
+        {
+          "start_s": 28.282041000202298,
+          "end_s": 30.005199333187193,
+          "reference_t": 14,
+          "source_t": 14,
+          "kind": "correct"
+        },
+        {
+          "start_s": 30.005199333187193,
+          "end_s": 30.30483412509784,
+          "reference_t": 15,
+          "source_t": 14,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 30.30483412509784,
+          "end_s": 32.00616483297199,
+          "reference_t": 15,
+          "source_t": 15,
+          "kind": "correct"
+        },
+        {
+          "start_s": 32.00616483297199,
+          "end_s": 32.30477620800957,
+          "reference_t": 16,
+          "source_t": 15,
+          "kind": "correct"
+        },
+        {
+          "start_s": 32.30477620800957,
+          "end_s": 34.00928624998778,
+          "reference_t": 16,
+          "source_t": 16,
+          "kind": "correct"
+        },
+        {
+          "start_s": 34.00928624998778,
+          "end_s": 34.30102483322844,
+          "reference_t": 17,
+          "source_t": 16,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 34.30102483322844,
+          "end_s": 36.00932295806706,
+          "reference_t": 17,
+          "source_t": 17,
+          "kind": "correct"
+        },
+        {
+          "start_s": 36.00932295806706,
+          "end_s": 36.316319125238806,
+          "reference_t": 18,
+          "source_t": 17,
+          "kind": "correct"
+        },
+        {
+          "start_s": 36.316319125238806,
+          "end_s": 38.00871583307162,
+          "reference_t": 18,
+          "source_t": 18,
+          "kind": "correct"
+        },
+        {
+          "start_s": 38.00871583307162,
+          "end_s": 38.30483845807612,
+          "reference_t": 19,
+          "source_t": 18,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 38.30483845807612,
+          "end_s": 40.00316662481055,
+          "reference_t": 19,
+          "source_t": 19,
+          "kind": "correct"
+        },
+        {
+          "start_s": 40.00316662481055,
+          "end_s": 40.31191883282736,
+          "reference_t": 20,
+          "source_t": 19,
+          "kind": "correct"
+        },
+        {
+          "start_s": 40.31191883282736,
+          "end_s": 42.00930687505752,
+          "reference_t": 20,
+          "source_t": 20,
+          "kind": "correct"
+        },
+        {
+          "start_s": 42.00930687505752,
+          "end_s": 42.31722820783034,
+          "reference_t": 21,
+          "source_t": 20,
+          "kind": "correct"
+        },
+        {
+          "start_s": 42.31722820783034,
+          "end_s": 44.00682158302516,
+          "reference_t": 21,
+          "source_t": 21,
+          "kind": "correct"
+        },
+        {
+          "start_s": 44.00682158302516,
+          "end_s": 44.324195666238666,
+          "reference_t": 22,
+          "source_t": 21,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 44.324195666238666,
+          "end_s": 46.006497874855995,
+          "reference_t": 22,
+          "source_t": 22,
+          "kind": "correct"
+        },
+        {
+          "start_s": 46.006497874855995,
+          "end_s": 46.33532412489876,
+          "reference_t": 23,
+          "source_t": 22,
+          "kind": "correct"
+        },
+        {
+          "start_s": 46.33532412489876,
+          "end_s": 48.00592704117298,
+          "reference_t": 23,
+          "source_t": 23,
+          "kind": "correct"
+        },
+        {
+          "start_s": 48.00592704117298,
+          "end_s": 48.43986841617152,
+          "reference_t": 24,
+          "source_t": 23,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 48.43986841617152,
+          "end_s": 50.010093790944666,
+          "reference_t": 24,
+          "source_t": 24,
+          "kind": "correct"
+        },
+        {
+          "start_s": 50.010093790944666,
+          "end_s": 50.25888858316466,
+          "reference_t": 25,
+          "source_t": 24,
+          "kind": "correct"
+        },
+        {
+          "start_s": 50.25888858316466,
+          "end_s": 52.006495708134025,
+          "reference_t": 25,
+          "source_t": 25,
+          "kind": "correct"
+        },
+        {
+          "start_s": 52.006495708134025,
+          "end_s": 52.260139666032046,
+          "reference_t": 26,
+          "source_t": 25,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 52.260139666032046,
+          "end_s": 54.00774704106152,
+          "reference_t": 26,
+          "source_t": 26,
+          "kind": "correct"
+        },
+        {
+          "start_s": 54.00774704106152,
+          "end_s": 54.27601004112512,
+          "reference_t": 27,
+          "source_t": 26,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 54.27601004112512,
+          "end_s": 56.00088533293456,
+          "reference_t": 27,
+          "source_t": 27,
+          "kind": "correct"
+        },
+        {
+          "start_s": 56.00088533293456,
+          "end_s": 56.29386587487534,
+          "reference_t": 28,
+          "source_t": 27,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 56.29386587487534,
+          "end_s": 58.002598457969725,
+          "reference_t": 28,
+          "source_t": 28,
+          "kind": "correct"
+        },
+        {
+          "start_s": 58.002598457969725,
+          "end_s": 58.28437549993396,
+          "reference_t": 29,
+          "source_t": 28,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 58.28437549993396,
+          "end_s": 60.00924195814878,
+          "reference_t": 29,
+          "source_t": 29,
+          "kind": "correct"
+        },
+        {
+          "start_s": 60.00924195814878,
+          "end_s": 60.313970250077546,
+          "reference_t": 30,
+          "source_t": 29,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 60.313970250077546,
+          "end_s": 62.008969999849796,
+          "reference_t": 30,
+          "source_t": 30,
+          "kind": "correct"
+        },
+        {
+          "start_s": 62.008969999849796,
+          "end_s": 62.386067875195295,
+          "reference_t": 31,
+          "source_t": 30,
+          "kind": "correct"
+        },
+        {
+          "start_s": 62.386067875195295,
+          "end_s": 64.0047569158487,
+          "reference_t": 31,
+          "source_t": 31,
+          "kind": "correct"
+        },
+        {
+          "start_s": 64.0047569158487,
+          "end_s": 64.36379774985835,
+          "reference_t": 32,
+          "source_t": 31,
+          "kind": "correct"
+        },
+        {
+          "start_s": 64.36379774985835,
+          "end_s": 66.0070175412111,
+          "reference_t": 32,
+          "source_t": 32,
+          "kind": "correct"
+        },
+        {
+          "start_s": 66.0070175412111,
+          "end_s": 66.30179445818067,
+          "reference_t": 33,
+          "source_t": 32,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 66.30179445818067,
+          "end_s": 68.0038066660054,
+          "reference_t": 33,
+          "source_t": 33,
+          "kind": "correct"
+        },
+        {
+          "start_s": 68.0038066660054,
+          "end_s": 68.36860883282498,
+          "reference_t": 34,
+          "source_t": 33,
+          "kind": "correct"
+        },
+        {
+          "start_s": 68.36860883282498,
+          "end_s": 70.00324716605246,
+          "reference_t": 34,
+          "source_t": 34,
+          "kind": "correct"
+        },
+        {
+          "start_s": 70.00324716605246,
+          "end_s": 70.29942904086784,
+          "reference_t": 35,
+          "source_t": 34,
+          "kind": "correct"
+        },
+        {
+          "start_s": 70.29942904086784,
+          "end_s": 72.00803266605362,
+          "reference_t": 35,
+          "source_t": 35,
+          "kind": "correct"
+        },
+        {
+          "start_s": 72.00803266605362,
+          "end_s": 72.45149379083887,
+          "reference_t": 36,
+          "source_t": 35,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 72.45149379083887,
+          "end_s": 74.00917850015685,
+          "reference_t": 36,
+          "source_t": 36,
+          "kind": "correct"
+        },
+        {
+          "start_s": 74.00917850015685,
+          "end_s": 74.28753445809707,
+          "reference_t": 37,
+          "source_t": 36,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 74.28753445809707,
+          "end_s": 76.004770624917,
+          "reference_t": 37,
+          "source_t": 37,
+          "kind": "correct"
+        },
+        {
+          "start_s": 76.004770624917,
+          "end_s": 76.36880379123613,
+          "reference_t": 38,
+          "source_t": 37,
+          "kind": "correct"
+        },
+        {
+          "start_s": 76.36880379123613,
+          "end_s": 78.00409899977967,
+          "reference_t": 38,
+          "source_t": 38,
+          "kind": "correct"
+        },
+        {
+          "start_s": 78.00409899977967,
+          "end_s": 78.28568433318287,
+          "reference_t": 39,
+          "source_t": 38,
+          "kind": "correct"
+        },
+        {
+          "start_s": 78.28568433318287,
+          "end_s": 80.0087385410443,
+          "reference_t": 39,
+          "source_t": 39,
+          "kind": "correct"
+        },
+        {
+          "start_s": 80.0087385410443,
+          "end_s": 80.25890462519601,
+          "reference_t": 40,
+          "source_t": 39,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 80.25890462519601,
+          "end_s": 82.01008820813149,
+          "reference_t": 40,
+          "source_t": 40,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 82.01008820813149,
+          "end_s": 82.28088341606781,
+          "reference_t": 41,
+          "source_t": 40,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 82.28088341606781,
+          "end_s": 84.00079712504521,
+          "reference_t": 41,
+          "source_t": 41,
+          "kind": "correct"
+        },
+        {
+          "start_s": 84.00079712504521,
+          "end_s": 84.28627200005576,
+          "reference_t": 42,
+          "source_t": 41,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 84.28627200005576,
+          "end_s": 86.00220225006342,
+          "reference_t": 42,
+          "source_t": 42,
+          "kind": "correct"
+        },
+        {
+          "start_s": 86.00220225006342,
+          "end_s": 86.30010508280247,
+          "reference_t": 43,
+          "source_t": 42,
+          "kind": "correct"
+        },
+        {
+          "start_s": 86.30010508280247,
+          "end_s": 88.0090776658617,
+          "reference_t": 43,
+          "source_t": 43,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 88.0090776658617,
+          "end_s": 88.35564304096624,
+          "reference_t": 44,
+          "source_t": 43,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 88.35564304096624,
+          "end_s": 90.0029238332063,
+          "reference_t": 44,
+          "source_t": 44,
+          "kind": "correct"
+        },
+        {
+          "start_s": 90.0029238332063,
+          "end_s": 90.39659000001848,
+          "reference_t": 45,
+          "source_t": 44,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 90.39659000001848,
+          "end_s": 92.00431195786223,
+          "reference_t": 45,
+          "source_t": 45,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 92.00431195786223,
+          "end_s": 92.26357458299026,
+          "reference_t": 46,
+          "source_t": 45,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 92.26357458299026,
+          "end_s": 94.01007554121315,
+          "reference_t": 46,
+          "source_t": 46,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 94.01007554121315,
+          "end_s": 94.32082600006834,
+          "reference_t": 47,
+          "source_t": 46,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 94.32082600006834,
+          "end_s": 96.00411783298478,
+          "reference_t": 47,
+          "source_t": 47,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 96.00411783298478,
+          "end_s": 96.33741962490603,
+          "reference_t": 48,
+          "source_t": 47,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 96.33741962490603,
+          "end_s": 98.00830762507394,
+          "reference_t": 48,
+          "source_t": 48,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 98.00830762507394,
+          "end_s": 98.29615158308297,
+          "reference_t": 49,
+          "source_t": 48,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 98.29615158308297,
+          "end_s": 100.0023629157804,
+          "reference_t": 49,
+          "source_t": 49,
+          "kind": "correct"
+        },
+        {
+          "start_s": 100.0023629157804,
+          "end_s": 100.2788129998371,
+          "reference_t": 50,
+          "source_t": 49,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 100.2788129998371,
+          "end_s": 102.00494833290577,
+          "reference_t": 50,
+          "source_t": 50,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 102.00494833290577,
+          "end_s": 102.2613654579036,
+          "reference_t": 51,
+          "source_t": 50,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 102.2613654579036,
+          "end_s": 104.00652175024152,
+          "reference_t": 51,
+          "source_t": 51,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 104.00652175024152,
+          "end_s": 104.31001837505028,
+          "reference_t": 52,
+          "source_t": 51,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 104.31001837505028,
+          "end_s": 106.00582912517712,
+          "reference_t": 52,
+          "source_t": 52,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 106.00582912517712,
+          "end_s": 106.28692275006324,
+          "reference_t": 53,
+          "source_t": 52,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 106.28692275006324,
+          "end_s": 108.00145316589624,
+          "reference_t": 53,
+          "source_t": 53,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 108.00145316589624,
+          "end_s": 108.31649304088205,
+          "reference_t": 54,
+          "source_t": 53,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 108.31649304088205,
+          "end_s": 110.00906737521291,
+          "reference_t": 54,
+          "source_t": 54,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 110.00906737521291,
+          "end_s": 110.35131954122335,
+          "reference_t": 55,
+          "source_t": 54,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 110.35131954122335,
+          "end_s": 112.00661720801145,
+          "reference_t": 55,
+          "source_t": 55,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 112.00661720801145,
+          "end_s": 112.29815012495965,
+          "reference_t": 56,
+          "source_t": 55,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 112.29815012495965,
+          "end_s": 114.00122579094023,
+          "reference_t": 56,
+          "source_t": 56,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 114.00122579094023,
+          "end_s": 114.28824324999005,
+          "reference_t": 57,
+          "source_t": 56,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 114.28824324999005,
+          "end_s": 116.00550645822659,
+          "reference_t": 57,
+          "source_t": 57,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 116.00550645822659,
+          "end_s": 116.2933615827933,
+          "reference_t": 58,
+          "source_t": 57,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 116.2933615827933,
+          "end_s": 118.009211583063,
+          "reference_t": 58,
+          "source_t": 58,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 118.009211583063,
+          "end_s": 118.31080158287659,
+          "reference_t": 59,
+          "source_t": 58,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 118.31080158287659,
+          "end_s": 120.0,
+          "reference_t": 59,
+          "source_t": 59,
+          "kind": "source_incorrect"
+        }
+      ]
+    },
+    {
+      "episode_id": "lite_presenter_b",
+      "task_family": "presenter_voice_control",
+      "scenario_id": "presenter_b",
+      "states": 60,
+      "questions": 6,
+      "reference_transitions": 22,
+      "untimed_decision_accuracy": 0.7166666666666667,
+      "untimed_segment_accuracy": 0.6868530020703933,
+      "all_questions_exact_accuracy": 0.18333333333333332,
+      "inactive_only_error_states": 32,
+      "time_accuracy": 0.6780334989025584,
+      "segment_time_accuracy": 0.6414761931238512,
+      "observed_duration_s": 119.99997383309528,
+      "error_seconds": {
+        "no_decision": 0.33771716710180044,
+        "source_correct": 4.506515498273075,
+        "source_incorrect": 33.791739041451365
+      },
+      "time_partition_seconds": {
+        "current_correct": 81.0708466260694,
+        "judgment": 31.93193449964747,
+        "stale": 4.506515498273075,
+        "compound": 1.8598045418038964,
+        "outdated_correct": 0.29315550019964576,
+        "no_decision": 0.33771716710180044
+      },
+      "current_source_share": 0.9416900480569219,
+      "latency_s_p50": 0.28344845841638744,
+      "latency_s_p95": 0.37943574159871785,
+      "failed_requests": 0,
+      "accepted_updates": 60,
+      "discarded_updates": {},
+      "max_release_lag_s": 0.010081334039568901,
+      "max_dispatch_lag_s": 0.0007477500475943089,
+      "per_question": {
+        "mode": {
+          "all_states_accuracy": 0.8666666666666667,
+          "active_states": 60,
+          "active_accuracy": 0.8666666666666667
+        },
+        "slide": {
+          "all_states_accuracy": 0.85,
+          "active_states": 60,
+          "active_accuracy": 0.85
+        },
+        "captions": {
+          "all_states_accuracy": 1,
+          "active_states": 60,
+          "active_accuracy": 1
+        },
+        "clip_state": {
+          "all_states_accuracy": 0.8166666666666667,
+          "active_states": 11,
+          "active_accuracy": 1
+        },
+        "question_card": {
+          "all_states_accuracy": 0.65,
+          "active_states": 18,
+          "active_accuracy": 0.8888888888888888
+        },
+        "host_cue": {
+          "all_states_accuracy": 0.7333333333333333,
+          "active_states": 45,
+          "active_accuracy": 0.9777777777777777
+        }
+      },
+      "mistakes": [
+        {
+          "t": 5,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s6",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "clip",
+            "slide": "s7",
+            "captions": "presenter",
+            "clip_state": "play"
+          },
+          "wrong_active_questions": [
+            "mode",
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p4 (final): Play the animation."
+          ]
+        },
+        {
+          "t": 6,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s6",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "clip",
+            "slide": "s7",
+            "captions": "presenter",
+            "clip_state": "play"
+          },
+          "wrong_active_questions": [
+            "mode",
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p6 (partial): oh its on the next one"
+          ]
+        },
+        {
+          "t": 7,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s7",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s8",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p6 (final): Oh, it's on the next one. Next slide, please."
+          ]
+        },
+        {
+          "t": 31,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s8",
+            "captions": "presenter",
+            "question_card": "repeat",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s8",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "question_card"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p30 (final): Yes, for about four hours during a closure."
+          ]
+        },
+        {
+          "t": 32,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s8",
+            "captions": "presenter",
+            "question_card": "repeat",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "questions",
+            "slide": "s8",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "question_card"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p32 (partial): sorry the question is"
+          ]
+        },
+        {
+          "t": 36,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s10",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s10",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "mode"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p34 (final): Go to the zone map."
+          ]
+        },
+        {
+          "t": 37,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s10",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s10",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "mode"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p34 (final): Go to the zone map."
+          ]
+        },
+        {
+          "t": 38,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s10",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "stand_by"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s10",
+            "captions": "presenter",
+            "host_cue": "stand_by"
+          },
+          "wrong_active_questions": [
+            "mode"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p38 (partial): the path back to you"
+          ]
+        },
+        {
+          "t": 39,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s10",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s10",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "mode"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p38 (partial): the path back to union street"
+          ]
+        },
+        {
+          "t": 40,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s10",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s10",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "mode"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p38 (final): The path back to Union Street closes only in zone B."
+          ]
+        },
+        {
+          "t": 41,
+          "reference_decision": {
+            "mode": "questions",
+            "slide": "s10",
+            "captions": "presenter",
+            "question_card": "answer",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s8",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "mode",
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p41 (partial): lets move on"
+          ]
+        },
+        {
+          "t": 42,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s10",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s7",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p41 (final): Let's move on."
+          ]
+        },
+        {
+          "t": 43,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s10",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s8",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p41 (final): Let's move on."
+          ]
+        },
+        {
+          "t": 48,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s9",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s7",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p48 (final): Previous slide."
+          ]
+        },
+        {
+          "t": 49,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s9",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s4",
+            "captions": "presenter",
+            "host_cue": "listen"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Presenter p48 (final): Previous slide."
+          ]
+        },
+        {
+          "t": 55,
+          "reference_decision": {
+            "mode": "talk",
+            "slide": "s9",
+            "captions": "host",
+            "host_cue": "listen"
+          },
+          "predicted_decision": {
+            "mode": "talk",
+            "slide": "s9",
+            "captions": "host",
+            "host_cue": "stand_by"
+          },
+          "wrong_active_questions": [
+            "host_cue"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Host h55 (partial): were out of time"
+          ]
+        },
+        {
+          "t": 58,
+          "reference_decision": {
+            "mode": "closed",
+            "slide": "s9",
+            "captions": "host"
+          },
+          "predicted_decision": {
+            "mode": "closed",
+            "slide": "s7",
+            "captions": "host"
+          },
+          "wrong_active_questions": [
+            "slide"
+          ],
+          "reference_evidence": [
+            "The complete public rules are in prepared.rules.",
+            "Host h55 (final): We're out of time. Let's thank Ines."
+          ]
+        }
+      ],
+      "intervals": [
+        {
+          "start_s": 2.6166904717683792e-05,
+          "end_s": 0.3377433340065181,
+          "reference_t": 0,
+          "source_t": null,
+          "kind": "no_decision"
+        },
+        {
+          "start_s": 0.3377433340065181,
+          "end_s": 2.0049277497455478,
+          "reference_t": 0,
+          "source_t": 0,
+          "kind": "correct"
+        },
+        {
+          "start_s": 2.0049277497455478,
+          "end_s": 2.275216208770871,
+          "reference_t": 1,
+          "source_t": 0,
+          "kind": "correct"
+        },
+        {
+          "start_s": 2.275216208770871,
+          "end_s": 4.009542041923851,
+          "reference_t": 1,
+          "source_t": 1,
+          "kind": "correct"
+        },
+        {
+          "start_s": 4.009542041923851,
+          "end_s": 4.290206084027886,
+          "reference_t": 2,
+          "source_t": 1,
+          "kind": "correct"
+        },
+        {
+          "start_s": 4.290206084027886,
+          "end_s": 6.007377666886896,
+          "reference_t": 2,
+          "source_t": 2,
+          "kind": "correct"
+        },
+        {
+          "start_s": 6.007377666886896,
+          "end_s": 6.32932462496683,
+          "reference_t": 3,
+          "source_t": 2,
+          "kind": "correct"
+        },
+        {
+          "start_s": 6.32932462496683,
+          "end_s": 8.010072208940983,
+          "reference_t": 3,
+          "source_t": 3,
+          "kind": "correct"
+        },
+        {
+          "start_s": 8.010072208940983,
+          "end_s": 8.264864041935652,
+          "reference_t": 4,
+          "source_t": 3,
+          "kind": "correct"
+        },
+        {
+          "start_s": 8.264864041935652,
+          "end_s": 10.00220337510109,
+          "reference_t": 4,
+          "source_t": 4,
+          "kind": "correct"
+        },
+        {
+          "start_s": 10.00220337510109,
+          "end_s": 10.262474792078137,
+          "reference_t": 5,
+          "source_t": 4,
+          "kind": "correct"
+        },
+        {
+          "start_s": 10.262474792078137,
+          "end_s": 12.00151445902884,
+          "reference_t": 5,
+          "source_t": 5,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 12.00151445902884,
+          "end_s": 12.330000542104244,
+          "reference_t": 6,
+          "source_t": 5,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 12.330000542104244,
+          "end_s": 14.00312229199335,
+          "reference_t": 6,
+          "source_t": 6,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 14.00312229199335,
+          "end_s": 14.290004333946854,
+          "reference_t": 7,
+          "source_t": 6,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 14.290004333946854,
+          "end_s": 16.004545249976218,
+          "reference_t": 7,
+          "source_t": 7,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 16.004545249976218,
+          "end_s": 16.352880833670497,
+          "reference_t": 8,
+          "source_t": 7,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 16.352880833670497,
+          "end_s": 18.00480212504044,
+          "reference_t": 8,
+          "source_t": 8,
+          "kind": "correct"
+        },
+        {
+          "start_s": 18.00480212504044,
+          "end_s": 18.284468166995794,
+          "reference_t": 9,
+          "source_t": 8,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 18.284468166995794,
+          "end_s": 20.008258749730885,
+          "reference_t": 9,
+          "source_t": 9,
+          "kind": "correct"
+        },
+        {
+          "start_s": 20.008258749730885,
+          "end_s": 20.307213000021875,
+          "reference_t": 10,
+          "source_t": 9,
+          "kind": "correct"
+        },
+        {
+          "start_s": 20.307213000021875,
+          "end_s": 22.007228499744087,
+          "reference_t": 10,
+          "source_t": 10,
+          "kind": "correct"
+        },
+        {
+          "start_s": 22.007228499744087,
+          "end_s": 22.284720750059932,
+          "reference_t": 11,
+          "source_t": 10,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 22.284720750059932,
+          "end_s": 24.010075834114105,
+          "reference_t": 11,
+          "source_t": 11,
+          "kind": "correct"
+        },
+        {
+          "start_s": 24.010075834114105,
+          "end_s": 24.413348708767444,
+          "reference_t": 12,
+          "source_t": 11,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 24.413348708767444,
+          "end_s": 26.008395500015467,
+          "reference_t": 12,
+          "source_t": 12,
+          "kind": "correct"
+        },
+        {
+          "start_s": 26.008395500015467,
+          "end_s": 26.284916708711535,
+          "reference_t": 13,
+          "source_t": 12,
+          "kind": "correct"
+        },
+        {
+          "start_s": 26.284916708711535,
+          "end_s": 28.0072330837138,
+          "reference_t": 13,
+          "source_t": 13,
+          "kind": "correct"
+        },
+        {
+          "start_s": 28.0072330837138,
+          "end_s": 28.335417499765754,
+          "reference_t": 14,
+          "source_t": 13,
+          "kind": "correct"
+        },
+        {
+          "start_s": 28.335417499765754,
+          "end_s": 30.006571708712727,
+          "reference_t": 14,
+          "source_t": 14,
+          "kind": "correct"
+        },
+        {
+          "start_s": 30.006571708712727,
+          "end_s": 30.284125291742384,
+          "reference_t": 15,
+          "source_t": 14,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 30.284125291742384,
+          "end_s": 32.004140874836594,
+          "reference_t": 15,
+          "source_t": 15,
+          "kind": "correct"
+        },
+        {
+          "start_s": 32.004140874836594,
+          "end_s": 32.27572995889932,
+          "reference_t": 16,
+          "source_t": 15,
+          "kind": "correct"
+        },
+        {
+          "start_s": 32.27572995889932,
+          "end_s": 34.00457883393392,
+          "reference_t": 16,
+          "source_t": 16,
+          "kind": "correct"
+        },
+        {
+          "start_s": 34.00457883393392,
+          "end_s": 34.27134470874444,
+          "reference_t": 17,
+          "source_t": 16,
+          "kind": "correct"
+        },
+        {
+          "start_s": 34.27134470874444,
+          "end_s": 36.006414958741516,
+          "reference_t": 17,
+          "source_t": 17,
+          "kind": "correct"
+        },
+        {
+          "start_s": 36.006414958741516,
+          "end_s": 36.30856633372605,
+          "reference_t": 18,
+          "source_t": 17,
+          "kind": "correct"
+        },
+        {
+          "start_s": 36.30856633372605,
+          "end_s": 38.003922666888684,
+          "reference_t": 18,
+          "source_t": 18,
+          "kind": "correct"
+        },
+        {
+          "start_s": 38.003922666888684,
+          "end_s": 38.276612875051796,
+          "reference_t": 19,
+          "source_t": 18,
+          "kind": "correct"
+        },
+        {
+          "start_s": 38.276612875051796,
+          "end_s": 40.00468049990013,
+          "reference_t": 19,
+          "source_t": 19,
+          "kind": "correct"
+        },
+        {
+          "start_s": 40.00468049990013,
+          "end_s": 40.25335991708562,
+          "reference_t": 20,
+          "source_t": 19,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 40.25335991708562,
+          "end_s": 42.00715412478894,
+          "reference_t": 20,
+          "source_t": 20,
+          "kind": "correct"
+        },
+        {
+          "start_s": 42.00715412478894,
+          "end_s": 42.28624549973756,
+          "reference_t": 21,
+          "source_t": 20,
+          "kind": "correct"
+        },
+        {
+          "start_s": 42.28624549973756,
+          "end_s": 44.004573666956276,
+          "reference_t": 21,
+          "source_t": 21,
+          "kind": "correct"
+        },
+        {
+          "start_s": 44.004573666956276,
+          "end_s": 44.25905800005421,
+          "reference_t": 22,
+          "source_t": 21,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 44.25905800005421,
+          "end_s": 46.004654000047594,
+          "reference_t": 22,
+          "source_t": 22,
+          "kind": "correct"
+        },
+        {
+          "start_s": 46.004654000047594,
+          "end_s": 46.278064583893865,
+          "reference_t": 23,
+          "source_t": 22,
+          "kind": "correct"
+        },
+        {
+          "start_s": 46.278064583893865,
+          "end_s": 48.01008133403957,
+          "reference_t": 23,
+          "source_t": 23,
+          "kind": "correct"
+        },
+        {
+          "start_s": 48.01008133403957,
+          "end_s": 48.316844624932855,
+          "reference_t": 24,
+          "source_t": 23,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 48.316844624932855,
+          "end_s": 50.0070734587498,
+          "reference_t": 24,
+          "source_t": 24,
+          "kind": "correct"
+        },
+        {
+          "start_s": 50.0070734587498,
+          "end_s": 50.34586612507701,
+          "reference_t": 25,
+          "source_t": 24,
+          "kind": "correct"
+        },
+        {
+          "start_s": 50.34586612507701,
+          "end_s": 52.00459633395076,
+          "reference_t": 25,
+          "source_t": 25,
+          "kind": "correct"
+        },
+        {
+          "start_s": 52.00459633395076,
+          "end_s": 52.38417779188603,
+          "reference_t": 26,
+          "source_t": 25,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 52.38417779188603,
+          "end_s": 54.00377345876768,
+          "reference_t": 26,
+          "source_t": 26,
+          "kind": "correct"
+        },
+        {
+          "start_s": 54.00377345876768,
+          "end_s": 54.328775874804705,
+          "reference_t": 27,
+          "source_t": 26,
+          "kind": "correct"
+        },
+        {
+          "start_s": 54.328775874804705,
+          "end_s": 56.001500624697655,
+          "reference_t": 27,
+          "source_t": 27,
+          "kind": "correct"
+        },
+        {
+          "start_s": 56.001500624697655,
+          "end_s": 56.34488174971193,
+          "reference_t": 28,
+          "source_t": 27,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 56.34488174971193,
+          "end_s": 58.0071334997192,
+          "reference_t": 28,
+          "source_t": 28,
+          "kind": "correct"
+        },
+        {
+          "start_s": 58.0071334997192,
+          "end_s": 58.284781584050506,
+          "reference_t": 29,
+          "source_t": 28,
+          "kind": "correct"
+        },
+        {
+          "start_s": 58.284781584050506,
+          "end_s": 60.0095061250031,
+          "reference_t": 29,
+          "source_t": 29,
+          "kind": "correct"
+        },
+        {
+          "start_s": 60.0095061250031,
+          "end_s": 60.3045717086643,
+          "reference_t": 30,
+          "source_t": 29,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 60.3045717086643,
+          "end_s": 62.00560166686773,
+          "reference_t": 30,
+          "source_t": 30,
+          "kind": "correct"
+        },
+        {
+          "start_s": 62.00560166686773,
+          "end_s": 62.27303383406252,
+          "reference_t": 31,
+          "source_t": 30,
+          "kind": "correct"
+        },
+        {
+          "start_s": 62.27303383406252,
+          "end_s": 64.0041362917982,
+          "reference_t": 31,
+          "source_t": 31,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 64.0041362917982,
+          "end_s": 64.27415654202923,
+          "reference_t": 32,
+          "source_t": 31,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 64.27415654202923,
+          "end_s": 66.00066204182804,
+          "reference_t": 32,
+          "source_t": 32,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 66.00066204182804,
+          "end_s": 66.29381754202768,
+          "reference_t": 33,
+          "source_t": 32,
+          "kind": "correct"
+        },
+        {
+          "start_s": 66.29381754202768,
+          "end_s": 68.00756833376363,
+          "reference_t": 33,
+          "source_t": 33,
+          "kind": "correct"
+        },
+        {
+          "start_s": 68.00756833376363,
+          "end_s": 68.34439191687852,
+          "reference_t": 34,
+          "source_t": 33,
+          "kind": "correct"
+        },
+        {
+          "start_s": 68.34439191687852,
+          "end_s": 70.00289504183456,
+          "reference_t": 34,
+          "source_t": 34,
+          "kind": "correct"
+        },
+        {
+          "start_s": 70.00289504183456,
+          "end_s": 70.39365687500685,
+          "reference_t": 35,
+          "source_t": 34,
+          "kind": "correct"
+        },
+        {
+          "start_s": 70.39365687500685,
+          "end_s": 72.00548820896074,
+          "reference_t": 35,
+          "source_t": 35,
+          "kind": "correct"
+        },
+        {
+          "start_s": 72.00548820896074,
+          "end_s": 72.33852829178795,
+          "reference_t": 36,
+          "source_t": 35,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 72.33852829178795,
+          "end_s": 74.00714675011113,
+          "reference_t": 36,
+          "source_t": 36,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 74.00714675011113,
+          "end_s": 74.26904054172337,
+          "reference_t": 37,
+          "source_t": 36,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 74.26904054172337,
+          "end_s": 76.00037374999374,
+          "reference_t": 37,
+          "source_t": 37,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 76.00037374999374,
+          "end_s": 76.26817391673103,
+          "reference_t": 38,
+          "source_t": 37,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 76.26817391673103,
+          "end_s": 78.00037766667083,
+          "reference_t": 38,
+          "source_t": 38,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 78.00037766667083,
+          "end_s": 78.26559408381581,
+          "reference_t": 39,
+          "source_t": 38,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 78.26559408381581,
+          "end_s": 80.00704324990511,
+          "reference_t": 39,
+          "source_t": 39,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 80.00704324990511,
+          "end_s": 80.34988320898265,
+          "reference_t": 40,
+          "source_t": 39,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 80.34988320898265,
+          "end_s": 82.0091373338364,
+          "reference_t": 40,
+          "source_t": 40,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 82.0091373338364,
+          "end_s": 82.31474154209718,
+          "reference_t": 41,
+          "source_t": 40,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 82.31474154209718,
+          "end_s": 84.00165504170582,
+          "reference_t": 41,
+          "source_t": 41,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 84.00165504170582,
+          "end_s": 84.4367733746767,
+          "reference_t": 42,
+          "source_t": 41,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 84.4367733746767,
+          "end_s": 86.00900458404794,
+          "reference_t": 42,
+          "source_t": 42,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 86.00900458404794,
+          "end_s": 86.38122812472284,
+          "reference_t": 43,
+          "source_t": 42,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 86.38122812472284,
+          "end_s": 88.00899554183707,
+          "reference_t": 43,
+          "source_t": 43,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 88.00899554183707,
+          "end_s": 88.31496991682798,
+          "reference_t": 44,
+          "source_t": 43,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 88.31496991682798,
+          "end_s": 90.01005362486467,
+          "reference_t": 44,
+          "source_t": 44,
+          "kind": "correct"
+        },
+        {
+          "start_s": 90.01005362486467,
+          "end_s": 90.27216208400205,
+          "reference_t": 45,
+          "source_t": 44,
+          "kind": "correct"
+        },
+        {
+          "start_s": 90.27216208400205,
+          "end_s": 92.00435245875269,
+          "reference_t": 45,
+          "source_t": 45,
+          "kind": "correct"
+        },
+        {
+          "start_s": 92.00435245875269,
+          "end_s": 92.25367649970576,
+          "reference_t": 46,
+          "source_t": 45,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 92.25367649970576,
+          "end_s": 94.0083560841158,
+          "reference_t": 46,
+          "source_t": 46,
+          "kind": "correct"
+        },
+        {
+          "start_s": 94.0083560841158,
+          "end_s": 94.31924537476152,
+          "reference_t": 47,
+          "source_t": 46,
+          "kind": "correct"
+        },
+        {
+          "start_s": 94.31924537476152,
+          "end_s": 96.00701587507501,
+          "reference_t": 47,
+          "source_t": 47,
+          "kind": "correct"
+        },
+        {
+          "start_s": 96.00701587507501,
+          "end_s": 96.29543549986556,
+          "reference_t": 48,
+          "source_t": 47,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 96.29543549986556,
+          "end_s": 98.00785745866597,
+          "reference_t": 48,
+          "source_t": 48,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 98.00785745866597,
+          "end_s": 98.2892248746939,
+          "reference_t": 49,
+          "source_t": 48,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 98.2892248746939,
+          "end_s": 100.0089301248081,
+          "reference_t": 49,
+          "source_t": 49,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 100.0089301248081,
+          "end_s": 100.27112391684204,
+          "reference_t": 50,
+          "source_t": 49,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 100.27112391684204,
+          "end_s": 102.00437387498096,
+          "reference_t": 50,
+          "source_t": 50,
+          "kind": "correct"
+        },
+        {
+          "start_s": 102.00437387498096,
+          "end_s": 102.25199929205701,
+          "reference_t": 51,
+          "source_t": 50,
+          "kind": "correct"
+        },
+        {
+          "start_s": 102.25199929205701,
+          "end_s": 104.00022675003856,
+          "reference_t": 51,
+          "source_t": 51,
+          "kind": "correct"
+        },
+        {
+          "start_s": 104.00022675003856,
+          "end_s": 104.31481337500736,
+          "reference_t": 52,
+          "source_t": 51,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 104.31481337500736,
+          "end_s": 106.00231133401394,
+          "reference_t": 52,
+          "source_t": 52,
+          "kind": "correct"
+        },
+        {
+          "start_s": 106.00231133401394,
+          "end_s": 106.28131316695362,
+          "reference_t": 53,
+          "source_t": 52,
+          "kind": "correct"
+        },
+        {
+          "start_s": 106.28131316695362,
+          "end_s": 108.00445308396593,
+          "reference_t": 53,
+          "source_t": 53,
+          "kind": "correct"
+        },
+        {
+          "start_s": 108.00445308396593,
+          "end_s": 108.32680083392188,
+          "reference_t": 54,
+          "source_t": 53,
+          "kind": "correct"
+        },
+        {
+          "start_s": 108.32680083392188,
+          "end_s": 110.0096444170922,
+          "reference_t": 54,
+          "source_t": 54,
+          "kind": "correct"
+        },
+        {
+          "start_s": 110.0096444170922,
+          "end_s": 110.264849584084,
+          "reference_t": 55,
+          "source_t": 54,
+          "kind": "source_correct"
+        },
+        {
+          "start_s": 110.264849584084,
+          "end_s": 112.01007633376867,
+          "reference_t": 55,
+          "source_t": 55,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 112.01007633376867,
+          "end_s": 112.30888954177499,
+          "reference_t": 56,
+          "source_t": 55,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 112.30888954177499,
+          "end_s": 114.00422724988312,
+          "reference_t": 56,
+          "source_t": 56,
+          "kind": "correct"
+        },
+        {
+          "start_s": 114.00422724988312,
+          "end_s": 114.33836441673338,
+          "reference_t": 57,
+          "source_t": 56,
+          "kind": "correct"
+        },
+        {
+          "start_s": 114.33836441673338,
+          "end_s": 116.00794533407316,
+          "reference_t": 57,
+          "source_t": 57,
+          "kind": "correct"
+        },
+        {
+          "start_s": 116.00794533407316,
+          "end_s": 116.28857554169372,
+          "reference_t": 58,
+          "source_t": 57,
+          "kind": "correct"
+        },
+        {
+          "start_s": 116.28857554169372,
+          "end_s": 118.00960729178041,
+          "reference_t": 58,
+          "source_t": 58,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 118.00960729178041,
+          "end_s": 118.26611033407971,
+          "reference_t": 59,
+          "source_t": 58,
+          "kind": "source_incorrect"
+        },
+        {
+          "start_s": 118.26611033407971,
+          "end_s": 120.0,
+          "reference_t": 59,
+          "source_t": 59,
+          "kind": "correct"
+        }
+      ]
+    }
+  ],
+  "interpretation": "One run per independent scenario; no repeated-run or population confidence claim. Untimed metrics use the same responses, disregarding delivery time."
+}

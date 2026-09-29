@@ -1,0 +1,2050 @@
+{
+ "description": "Validity audit of the SDB Lite presenter_voice_control family (lite_presenter_a, lite_presenter_b), run 2026-09-29 in three rounds by LLM agents, following the protocol of audit_record.json. Rounds 1 and 2: per scenario a blind program re-derivation and a blind hand walk (public states only, compared with the stored references only after deriving), a code-versus-text audit and a partial/final review; findings grouped and each group judged by three lenses. Round 3: the four blind re-derivations on the final text, which is the text of data/lite/v1 (dataset hash fdfdd55d...). Fixes between rounds are listed; they changed reference answers only where listed. Long reasoning texts are omitted.",
+ "agents": "LLM agents; no human annotator",
+ "lenses": {
+  "reference_answer_findings": [
+   "literal",
+   "code-trace",
+   "reader"
+  ],
+  "other_findings": [
+   "reproduce",
+   "impact",
+   "counter"
+  ]
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "checks": [
+    {
+     "id": "blind:presenter_a",
+     "role": "blind",
+     "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+     "scenario": "lite_presenter_a",
+     "agreement": "First-run agreement for lite_presenter_a is complete: consumed decisions 60/60 and all questions 360/360 (compare.py output: \"consumed-decision agreement 60/60; all-question agreement 360/360\"). I did not change the derivation after comparing, and nothing disagreed, so there was nothing to reconcile.\n\nMethod: I read only public/lite_presenter_a.json. prepared.rules, deck and session are identical in all 60 states. I wrote paper/notes/scratch-archive/presenter-audit/work/blind_lite_presenter_a/derive.py, which works each state out from that state alone, with no carry-over between ticks. It does five things:\n- A general command parser. It splits sentences at . ? !, rejects a sentence ending in '?' or containing quotation marks, lower-cases it, deletes commas, apostrophes and a closing . or !, then allows one optional lead-in word, exactly one command phrase and an optional 'please'. It covers the slide phrases, go-to by number or by NAME with an optional trailing 'slide', and the play, pause, close and session phrases.\n- A speaker-permission table (who may issue which command).\n- A replay of final commands ordered by (final_at, at, sentence order).\n- The early pause: in clip mode, a Presenter partial whose whole text is a pause command pauses the clip.\n- ONSET captions, the question card counted over Audience utterances with at greater than the opening's at, and a host cue that matches 'back to you' as whole words after deleting apostrophes and dropping quoted text.\nOutput: work/blind_lite_presenter_a/derivation.json.\n\nDerived timeline:\n- Mode: talk at t0-16, clip at t17-32, talk at t33-45, questions at t46-57, closed at t58-59.\n- Slide: s5 at t0-3, s6 at t4-9, s11 at t10-14, s7 at t15-39, s12 at t40-59.\n- Clip state: play at t17-21, pause at t22-26 (the early pause 'hold it' at t22, then the final at t23; the partial 'sure play it' at t26 does not resume the clip), play at t27-28, pause at t29 (early pause 'pause the demo'), play at t30-32 (the early pause lapses; the partial 'back to the slides' at t32 changes nothing).\n- Host cue: stand_by at t36 (the partial 'sends it back to you'), listen at t37-41, stand_by at t42-44, listen at t45 (the Host utterance h45 begins).\n- Question card: waiting at t46-47, listening at t48-49, repeat at t50-52 (the partial 'the question is whether' at t52 does not count), answer at t53-57.\n- Captions follow the newest at: clip at t19-21, audience at t24-25 and t48-51, host at t45-47 and t57-59.\n\nThe episode's traps are all resolved the same way by the rules and by the reference:\n- partial commands at t3, t5, t8-9, t13-14, t16, t32, t39, t45 and t57;\n- the non-command 'Next slide shows the demo, ...' at t7;\n- the Clip soundtrack saying 'Next slide.' at t21, which carries no permission;\n- the Audience request 'Can you play it again?' at t24-25;\n- the quoted \"next slide\" at t35;\n- the lexical 'back to you' at t36 that is then revised away;\n- 'Thank you, Mira.', which is not the 'lets thank' command, at t46.",
+     "consumed_agreement": "60/60",
+     "issues_reported": 6
+    },
+    {
+     "id": "walk:presenter_a",
+     "role": "walk",
+     "description": "blind re-derivation: release-by-release derivation by hand",
+     "scenario": "lite_presenter_a",
+     "agreement": "First run: consumed-decision agreement 60/60, all-question agreement 360/360. The derivation was written before compare.py was run and was not changed afterwards. It is at paper/notes/scratch-archive/presenter-audit/work/walk_lite_presenter_a.json.\n\nMethod: I read only public/lite_presenter_a.json. A small script printed each tick's transcript changes (new utterances and revisions), and I worked out every answer by hand from prepared.rules. I wrote the answers as literal tick ranges, not with a rule engine.\n\nTicks checked by hand:\n- **Slide and mode:**\n  - t3: partial 'next slide' does not move the slide.\n  - t4: final 'Next slide, please.' moves to s6.\n  - t5-7: partial 'next slide' becomes the final 'Next slide shows the demo, but...', which is talk, so the slide stays s6.\n  - t8-10: partial 'go to slide one', then 'eleven', then final 'Go to slide 11.' gives s11.\n  - t13-15: partial 'go back to the', then final 'Go back to the demo.' gives s7 by slide name, and the mode stays talk.\n  - t16-17: partial 'play the video' does nothing. Its final at t17 gives clip/play because s7 has a clip.\n  - t21: the Clip speaker's final 'Next slide.' commands nothing.\n  - t32-33: partial 'back to the slides' keeps clip; its final closes the clip, giving talk on s7.\n  - t34-35: 'Users mostly say \"next slide\"' contains a quote, so it is not a command.\n  - t39-40: 'Go to the thank you slide.' gives s12.\n  - t45: the Host partial leaves the mode at talk.\n  - t46: in 'Thank you, Mira. Let's take questions.', the first sentence is not 'lets thank' plus the first name, so it is not a command; the second opens questions.\n  - t57: the partial 'lets thank mira' leaves questions in place; its final at t58 gives closed, and the slide stays s12.\n- **Clip state:**\n  - t22: the partial 'hold it' is an early pause.\n  - t23: the final 'Hold it there.' gives pause.\n  - t24-25: the Audience's 'Can you play it again?' commands nothing.\n  - t26: the partial 'sure play it' still gives pause, because play waits for the final.\n  - t27: the final 'Sure, play it.' ('sure' is a lead-in word) gives play.\n  - t29: the partial 'pause the demo' is an early pause.\n  - t30: the revision 'because the demo runs on' ends the early pause, so it is play again.\n  - t32: 'back to the slides' as a partial is not a pause command, so it stays play.\n- **Host cue:**\n  - t36: the partial '...back to you' gives stand_by.\n  - t37: the revision to 'back to your phone' fails the whole-word match, so it is listen.\n  - t42-44: 'back to you' in the partial and then in the final 'Back to you, Tomas.' gives stand_by.\n  - t45: a Host utterance begins after p42, so it is listen.\n  - t46-57: the Presenter's newest utterances lack the phrase, and h45 came after p42, so it is listen.\n- **Question card:**\n  - t46-47: waiting. The a24 question began before the opening, so it is excluded.\n  - t48-49: listening.\n  - t50-51: repeat.\n  - t52: the Presenter partial 'the question is whether' does not count, so it stays repeat.\n  - t53: the final 'The question is whether it works offline.' gives answer, which holds through t57.\n- **Captions:** switch on the start of each new utterance at t19, 22, 24, 26, 45, 48, 52 and 57. There is a caption at t0 because p0 has at=0.\n\nState consistency (checked with a script):\n- Every snapshot's clock matches its index.\n- at values are unique and in increasing order, and each utterance_id matches its at.\n- final_at is never earlier than at and never later than the current tick, and it is set exactly when final is true.\n- Finals never change afterwards.\n- Partials use only lower-case letters and spaces ('thats', 'eleven').\n- Each speaker has at most one partial, and it is that speaker's newest utterance.\n- c21 appears already final, which the rules allow for short utterances.\n\nThe story holds together: she says 'first one more number', jumps to s11, then returns to the demo. No state inconsistencies were found.",
+     "consumed_agreement": "60/60",
+     "issues_reported": 4
+    },
+    {
+     "id": "blind:presenter_b",
+     "role": "blind",
+     "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+     "scenario": "lite_presenter_b",
+     "agreement": "First run: 60/60 on consumed decisions and 360/360 on all questions (compare.py output: \"consumed-decision agreement 60/60; all-question agreement 360/360\"). My derivation did not change after the comparison.\n\nMethod: I read only public/lite_presenter_b.json. I checked that prepared, session and deck are identical in all 60 states and that clock.now equals the index. The program is work/blind_lite_presenter_b/derive.py and its output is work/blind_lite_presenter_b/derivation.json. It works out each state from that state alone, with no carry-over between ticks. It:\n- splits final texts into sentences at . ? !\n- normalises commands as the Command form rule says, including the lead-in list, 'please', rejecting sentences that end in '?' or contain quotes, deck slide numbers and names, NOUNs, and the presenter's first name\n- replays final commands in order of (final_at, at, sentence index), with speaker permissions and mode effects\n- applies ONSET to captions, CURRENT TEXT to the early pause and host_cue (whole words, apostrophes removed, quoted words ignored), and FINAL TEXT to everything else.\n\nReplay log:\n- t5: p4 play ignored (slide 6 has no clip)\n- t7: p6 second sentence 'next slide please' moves to s7\n- t9: p8 play gives clip/play\n- t16: p15 pause\n- t20: p19 next closes the clip and moves to s8\n- t24: h23 'lets take one question from the floor' opens questions (the opening)\n- t36: p34 'go to the zone map' moves to s10 while still in questions\n- t42: p41 'lets move on' gives talk\n- t45: h44 relayed 'go back to slide 3 please' ignored (Host)\n- t47: p46 'Go back to slide 3?' not a command\n- t49: p48 previous moves to s9\n- t56: h55 'lets thank ines' gives closed\n\nCURRENT TEXT traps, all of which agree with the reference:\n- clip_state is pause at t11 (partial 'hold') and back to play at t12 when it is revised to 'hold on to your'.\n- clip_state is pause at t15 (partial 'pause it') and stays pause from t16 on the final.\n- host_cue is stand_by at t38 (partial 'the path back to you'), then listen at t39 and t40 ('youlton' is not the whole word 'you').\n- host_cue is stand_by from t52 to t54, then listen at t55 when the Host begins speaking.\n\nQuestion card: waiting t24-25, listening t26-27, repeat t28-32 (the partial 'sorry the question is' at t32 does not count), answer t33-41.\n\nThere were no disagreements to investigate. The points below are places where the rule text is ambiguous or underspecified, or where another reading would change a consumed decision, even though the stored answer follows the better reading.",
+     "consumed_agreement": "60/60",
+     "issues_reported": 6
+    },
+    {
+     "id": "walk:presenter_b",
+     "role": "walk",
+     "description": "blind re-derivation: release-by-release derivation by hand",
+     "scenario": "lite_presenter_b",
+     "agreement": "First run: consumed decisions agree on 60/60 ticks, and all questions agree on 360/360 (compare.py lite_presenter_b work/walk_lite_presenter_b.json). There were no disagreements to investigate.\n\nMethod: I read only public/lite_presenter_b.json, printed the transcript changes tick by tick, and wrote each tick's answers by hand into paper/notes/scratch-archive/presenter-audit/work/walk_lite_presenter_b.json before running compare. A file named work/b_diff.txt was already there; I did not open it, to stay blind.\n\nMy walk:\n- t0-6: talk, s6. At t5, 'Play the animation.' is on s6, which has no clip, so nothing happens.\n- t7: 'Next slide, please.' moves to s7.\n- t9: final play on s7 gives clip mode, playing.\n- t11: partial 'hold' is a whole-text pause command, so the early pause gives pause.\n- t12: the partial is revised to 'hold on to your', the early pause lapses, and the state goes back to play.\n- t15: partial 'pause it' gives pause; t16 is the final pause.\n- t19: partial 'next slide' does nothing (pause holds).\n- t20: final 'Next slide.' closes the clip: talk, s8.\n- t23: Host partial only moves the captions to host.\n- t24: final 'Let's take one question from the floor.' opens questions (card waiting).\n- t26-27: the card shows listening.\n- t28: repeat (final question ending in '?').\n- t30-32: still repeat. p30 does not start with 'the question is', and at t32 'the question is' is only in a partial.\n- t33: answer, because the second sentence 'The question is ...' comes after 'Sorry.'.\n- t36: 'Go to the zone map.' gives s10, still in questions mode.\n- t38: stand_by on partial 'the path back to you'; t39 is listen after the revision to 'youlton'.\n- t42: 'Let's move on.' gives talk.\n- t45: the Host's relayed 'Go back to slide 3, please.' is ignored.\n- t47: 'Go back to slide 3?' is a question, so it is not a command.\n- t49: 'Previous slide.' gives s9.\n- t52-54: stand_by.\n- t55: listen, because a Host utterance began after p52.\n- t56-59: 'Let's thank Ines.' closes the session, which stays on s9.\n\nBoundary ticks checked:\n- Partial revisions: 11→12, 26→27, 34→35, 38→39.\n- Every final tick: 1, 3, 5, 7, 9, 13, 16, 18, 20, 22, 24, 28, 31, 33, 36, 40, 42, 45, 47, 49, 51, 53, 56.\n- Quiet ticks after changes: 10, 14, 25, 29, 37, 43, 54, 57-59.\n\nState consistency, checked with a script that only prints and asserts:\n- Every at equals the tick where the utterance first appears, and every final_at equals the tick where its final first appears.\n- Finals never change, and no utterance goes back to partial.\n- Partials use only [a-z ] with numbers spelled out ('three'). Finals use digits.\n- Transcript order is by at, and no two utterances share one.\n- Each speaker has at most one partial, and it is that speaker's newest utterance.\n- Utterance ids follow speaker initial plus at.\n- No structural inconsistencies were found.\n\nAlternative readings I considered do not change the reference under the prepared rules:\n- Reading 'the question is' across the whole utterance instead of per sentence would keep repeat from t33 to t41. The rules say 'no sentence of', so this reading is weak.\n- Measuring the opening from final_at instead of at changes nothing here.\n- Treating Host onset versus Host final as what clears stand_by at t55: the rules use onset.\n- Reading the slide command at t36 in questions mode as a return to talk (see issues).",
+     "consumed_agreement": "60/60",
+     "issues_reported": 6
+    },
+    {
+     "id": "audit:presenter",
+     "role": "audit",
+     "description": "code-versus-text audit of the family's reference implementation",
+     "scenario": null,
+     "agreement": "No model run is part of this task, so the first-run agreement numbers don't apply and consumed_agreement is -1. What I checked: reference(state) reproduces all 120 stored golds (60 per scenario). tests/test_lite_presenter.py passes (20 tests). validate_episode gives 24 and 22 decision transitions, which match docs/lite/presenter.md. I read every rule sentence in RULES, all six question prompts and both deployment texts against _units, _command, FORMS, _replay, _words/_contains and reference(). I copied real states and ran each divergence through the reference with uv run python (scripts: scratchpad/cf_presenter.py and scratchpad/cf2.py). To test the stored answers, I wrote a second reference (scratchpad/alt_reading.py) that switches every divergence to its other reading. It splits a sentence at every terminator, treats a sentence that touches any single- or double-quoted span as quoted, allows a leading 'please', drops all punctuation except '?', and counts 'back to you' per sentence with single quotes ignored. It takes the opening at the Host final's final_at, lets a newer unrepeated Audience question count, and allows an open after closed, with and without resetting a second opening. It gives 0 differences on all 720 stored answers (2 scenarios x 60 ticks x 6 questions), so no divergence changes a stored answer in lite_presenter_a or lite_presenter_b. The data never uses single quotes as quotation marks, '!?', a leading 'please', a colon or dash in a command sentence, a second or post-closed opening, overlapping onsets, a trailing non-question Audience utterance, a Presenter-relayed request, or non-ASCII names. Some behaviours match the text but are easy to misread (not reported as issues): 'Go back to the slides.' is not a close (s7 clip keeps playing). 'Go to the next slide.' is not a command. 'OK,' is not a lead-in ('okay' is). 'Okay, so the question is ...' and 'Sorry, the question is ...' do not count as repetitions (two lead-ins, or a non-lead-in word). 'Go to slide 3.5.' goes to s3 because '.' ends a sentence. The Host's 'Thank you, Mira.' is not the closing thanks. A Presenter 'Play it.' on a clip slide during questions leaves questions for clip, and after 'Back to the slides.' it returns to talk, not questions. The rules say exactly this.",
+     "issues_reported": 14
+    },
+    {
+     "id": "asr:presenter",
+     "role": "asr",
+     "description": "partial/final review of the streaming-ASR conventions, revisions and evidence tiers",
+     "scenario": null,
+     "agreement": "Not a blind first run, so consumed_agreement is -1. After the dump I worked out all 120 composed decisions (60 per scenario) again by hand from R1-R9 and agree with the stored gold at every tick. Every tick has one defensible answer under R2, R4, R7 and R9, so there are no reference_answer issues.\n\nR1 compliance holds for every hypothesis (checked in Python):\n- partials match [a-z ]+ with numbers spelled out\n- at is unique\n- each speaker has at most one partial, and it is that speaker's newest utterance\n- replacement is in place under a fixed utterance_id and at\n- finals never change, and at <= final_at <= now\n- no utterance ever disappears\n\nRevision inventory:\n- Real word revisions: A p8 \"go to slide one\" -> \"eleven\"; A p29 \"pause the demo\" -> \"because the demo runs on\"; B h23, where the partial \"sorry ines one question\" drops \"lets take\" and the final restores it.\n- A p36 (\"back to you\" -> \"your\") and B p38 (\"you\" -> \"youlton\") are word-extension growth.\n- Everything else is prefix growth or final formatting (digits, punctuation, quotes).\n- The only utterance that appears already final is A c21 (Clip \"Next slide.\").\n\nTier checks:\n- Naive policies scored against the composed gold: ignoring partials gives 46/60 (A) and 48/60 (B); treating partials as finals gives 47/60 and 52/60. Both tiers are penalised in both scenarios.\n- Partial words, as opposed to onset alone, change the gold at only 8 ticks: A 22, 29, 36, 42 and B 11, 15, 38, 52.\n\nCounterfactual probes (scratchpad/pfreview/*.py and cf.py):\n- overlapping Clip speech under the early pause\n- a Host interruption while the Presenter's partial runs\n- an abandoned (empty) Audience final\n- an early pause that lapses at a final\n- an already-final Presenter command\n- a stand-by with a newer Audience utterance\n- the phrase \"get back to you\" in a final\n- finals arriving out of order\n\nThe proposed edits (issues 1, 3, 4 and 5) were rebuilt in scratch. They keep every R1 invariant, all 20 existing tests in tests/test_lite_presenter.py pass, and gold changes only where stated.\n\nFiles reviewed:\n- src/streamdecisionbench/lite/tasks/presenter.py\n- docs/lite/presenter.md\n- tests/test_lite_presenter.py",
+     "issues_reported": 11
+    }
+   ],
+   "grouped_findings": [
+    {
+     "id": "g1",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      37,
+      38,
+      39,
+      40
+     ],
+     "questions": [
+      "host_cue"
+     ],
+     "title": "[blind:presenter_a, walk:presenter_b] host_cue question instruction leaves out the whole-word qualifier that the 'back to your' and 'back to Youlton' traps depend on",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g2",
+     "status": "rejected",
+     "scenario": "both",
+     "ticks": [
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59
+     ],
+     "questions": [
+      "slide",
+      "mode",
+      "question_card",
+      "host_cue"
+     ],
+     "title": "[blind:presenter_b, walk:presenter_b, blind:presenter_a] Rules never say what slide (and play) commands do in questions or closed mode, and the slide instructions' word 'questions' collides with the mode name",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g3",
+     "status": "rejected",
+     "scenario": "lite_presenter_a",
+     "ticks": [
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57
+     ],
+     "questions": [
+      "mode",
+      "question_card",
+      "host_cue"
+     ],
+     "title": "[blind:presenter_a, walk:presenter_a] 'closes the session by thanking the presenter' reads looser than the thanks command, and 'Thank you, Mira.' sits on that gap",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g4",
+     "status": "rejected",
+     "scenario": "lite_presenter_b",
+     "ticks": [
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41
+     ],
+     "questions": [
+      "question_card"
+     ],
+     "title": "[blind:presenter_b] The 'the question is' test depends on sentence splitting, but 'sentence' is defined only under Command form",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g5",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      50,
+      51
+     ],
+     "questions": [
+      "question_card"
+     ],
+     "title": "[walk:presenter_a, walk:presenter_b, audit:presenter] question_card instruction is looser than rule 8 (newest Audience utterance, lead-in word, 'began after it')",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g6",
+     "status": "rejected",
+     "scenario": "both",
+     "ticks": [
+      43,
+      44,
+      53,
+      54
+     ],
+     "questions": [
+      "host_cue"
+     ],
+     "title": "[walk:presenter_a, walk:presenter_b] Host-cue whole-word match does not say how case and punctuation are handled",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g7",
+     "status": "rejected",
+     "scenario": "both",
+     "ticks": [
+      5,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      25,
+      26
+     ],
+     "questions": [
+      "clip_state"
+     ],
+     "title": "[blind:presenter_a, blind:presenter_b] clip_state 'latest final play or pause' is not tied to Presenter commands that took effect",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g8",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      36,
+      38,
+      42,
+      52
+     ],
+     "questions": [
+      "host_cue"
+     ],
+     "title": "[blind:presenter_a, asr:presenter] The lexical 'contains back to you' stand-by fires on phrases that are not handbacks, and the criteria gloss implies a real handoff",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g9",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      24,
+      26,
+      28,
+      30,
+      32,
+      33,
+      45,
+      48
+     ],
+     "questions": [
+      "question_card"
+     ],
+     "title": "[blind:presenter_b, audit:presenter] 'Began after the opening' and 'began after it' do not say whether they compare onsets (at) or finals (final_at)",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g10",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      59
+     ],
+     "questions": [
+      "mode"
+     ],
+     "title": "[audit:presenter] 'Open-questions gives questions from any mode' conflicts with 'after closed only slide commands apply'",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g11",
+     "status": "rejected",
+     "scenario": "lite_presenter_a",
+     "ticks": [
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+     ],
+     "questions": [
+      "slide",
+      "mode",
+      "clip_state"
+     ],
+     "title": "[blind:presenter_a] 'demo' is both a slide NAME and a clip NOUN; the answers rely on reading 'Go back to the demo.' as a slide command",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g12",
+     "status": "rejected",
+     "scenario": "lite_presenter_b",
+     "ticks": [
+      5,
+      6,
+      7,
+      8,
+      20,
+      21,
+      22,
+      33,
+      39,
+      40
+     ],
+     "questions": [
+      "mode",
+      "slide",
+      "question_card",
+      "host_cue"
+     ],
+     "title": "[blind:presenter_b] Other misreadings the rules rule out but a quick reader might take",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g13",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      12
+     ],
+     "questions": [
+      "slide",
+      "mode",
+      "clip_state"
+     ],
+     "title": "[audit:presenter] Quoted text spanning several sentences still issues commands (rule 3 vs rule 4)",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g14",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      12,
+      41
+     ],
+     "questions": [
+      "slide",
+      "host_cue"
+     ],
+     "title": "[audit:presenter] Only double quotes count as quotation marks, for both commands and the host cue",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g15",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      51
+     ],
+     "questions": [
+      "question_card"
+     ],
+     "title": "[audit:presenter] A second Host opening while already in questions mode resets the opening",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g16",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      12
+     ],
+     "questions": [
+      "slide",
+      "mode",
+      "clip_state"
+     ],
+     "title": "[audit:presenter] A run of terminators forms one sentence ('Next slide!?')",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g17",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      12
+     ],
+     "questions": [
+      "slide",
+      "mode",
+      "clip_state"
+     ],
+     "title": "[audit:presenter] 'please' is accepted only after the command phrase",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g18",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      12,
+      51
+     ],
+     "questions": [
+      "slide",
+      "mode",
+      "question_card",
+      "host_cue"
+     ],
+     "title": "[audit:presenter] The command parser keeps punctuation that the word matchers drop, so one transcript gets two normalisations",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g19",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      41
+     ],
+     "questions": [
+      "host_cue"
+     ],
+     "title": "[audit:presenter] 'back to you' matches across sentence breaks and hyphens",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g20",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      43
+     ],
+     "questions": [
+      "slide"
+     ],
+     "title": "[audit:presenter] The 'relayed words change nothing' clause has no code",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g21",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      12
+     ],
+     "questions": [
+      "slide"
+     ],
+     "title": "[audit:presenter] Number parsing: spelled-out and odd digits are accepted, and a superscript digit crashes the reference",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g22",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      55
+     ],
+     "questions": [
+      "mode"
+     ],
+     "title": "[audit:presenter] The thanks command accepts only [a-z] first names",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g23",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [],
+     "questions": [
+      "slide"
+     ],
+     "title": "[audit:presenter] Wording outside the rules: A's 'speakers ask for slides' and the docs' 'closing period'",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g24",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      21,
+      45,
+      55
+     ],
+     "questions": [
+      "host_cue",
+      "question_card",
+      "captions"
+     ],
+     "title": "[asr:presenter] Tier wording in R2 and in the question texts does not match R9 or the docs",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g25",
+     "status": "rejected",
+     "scenario": "both",
+     "ticks": [
+      29,
+      11,
+      52,
+      32
+     ],
+     "questions": [
+      "clip_state",
+      "question_card"
+     ],
+     "title": "[asr:presenter] R2's tier principle reads as a carve-out for the early pause, and it gives no reason why the repeat card waits for FINAL",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g26",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      0,
+      21,
+      22,
+      23,
+      24,
+      28,
+      29,
+      30,
+      31
+     ],
+     "questions": [
+      "captions",
+      "clip_state",
+      "host_cue",
+      "question_card",
+      "mode"
+     ],
+     "title": "[walk:presenter_b, asr:presenter] No overlapping speech, so the rule clauses for concurrent speakers and final_at ordering are never tested",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g27",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      47
+     ],
+     "questions": [
+      "question_card",
+      "captions"
+     ],
+     "title": "[asr:presenter] Abandoned or retracted hypotheses are undefined",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g28",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [],
+     "questions": [
+      "captions",
+      "clip_state"
+     ],
+     "title": "[asr:presenter] Tests do not check the transcript invariants that rule out abandoned partials, and do not cover overlap or an early-pause lapse at a final",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g29",
+     "status": "confirmed",
+     "scenario": "lite_presenter_b",
+     "ticks": [
+      11,
+      12,
+      13
+     ],
+     "questions": [
+      "clip_state"
+     ],
+     "title": "[asr:presenter] The early pause only ever lapses at a revised partial, never at a final",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g30",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      0
+     ],
+     "questions": [
+      "captions",
+      "mode",
+      "slide",
+      "clip_state",
+      "question_card"
+     ],
+     "title": "[walk:presenter_a, blind:presenter_b] Coverage gaps: several rule paths are never exercised in either episode",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g31",
+     "status": "confirmed",
+     "scenario": "lite_presenter_a",
+     "ticks": [
+      8,
+      9,
+      10
+     ],
+     "questions": [
+      "slide"
+     ],
+     "title": "[asr:presenter] The partial revision 'go to slide one' -> 'eleven' has no acoustic or biasing basis",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g32",
+     "status": "confirmed",
+     "scenario": "lite_presenter_b",
+     "ticks": [
+      38,
+      39,
+      40
+     ],
+     "questions": [
+      "host_cue"
+     ],
+     "title": "[asr:presenter] 'back to youlton' relies on an out-of-vocabulary place name coined to contain 'you'",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g33",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      1,
+      12,
+      22,
+      23,
+      24,
+      30,
+      34,
+      35,
+      36,
+      38,
+      46,
+      47
+     ],
+     "questions": [
+      "captions",
+      "mode",
+      "slide",
+      "host_cue"
+     ],
+     "title": "[walk:presenter_b, asr:presenter] Minor ASR and narrative realism oddities (h23 word deletion, uneven final growth, quotes, number format, story consistency)",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g34",
+     "status": "confirmed",
+     "scenario": "lite_presenter_b",
+     "ticks": [
+      11,
+      12,
+      13
+     ],
+     "questions": [
+      "clip_state"
+     ],
+     "title": "[asr:presenter] presenter.md says Ines 'holds' the animation in scenario B, but she never does",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    }
+   ],
+   "changes_after": "Rule and question texts aligned (host cue, question card, clip state, reopening, thanks, sentence and word normalisation); stand-by narrowed to a sentence ending in 'back to you' (optionally the Host's first name); quotation marks removed (finals carry none); utterances never dropped (declared); overlaps added at A t28-30 and B t22-24 (reference change: captions at A t28 and B t22); B early pause lapses at a final; 'go to slide one' -> 'seven'; 'youlton' -> 'union street'."
+  },
+  {
+   "round": 2,
+   "checks": [
+    {
+     "id": "blind:presenter_a",
+     "role": "blind",
+     "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+     "scenario": "lite_presenter_a",
+     "agreement": "First run, blind: consumed decisions 60/60, all questions 360/360. The derivation was written before compare.py was run and was not changed afterwards.\n\nMethod: I wrote paper/notes/scratch-archive/presenter-audit2/work/blind_lite_presenter_a/derive.py from the public prepared.rules and the question text only. It computes each tick from that state alone, with no memory carried between ticks. It rebuilds the mode, slide and clip history each time by replaying final commands in order of final_at, then at, then sentence order. The command parser splits finals into sentences, normalises them as the rules say (optional lead-in, one phrase, optional please) and enforces who is allowed to issue each command. On top of that it computes captions (by ONSET, largest at), the early pause (from the whole text of a Presenter partial, CURRENT TEXT), question_card (only Audience utterances with at greater than the opening's at, and 'the question is' only from a final Presenter utterance) and host_cue (CURRENT TEXT; stand-by ends at the ONSET of a Host utterance). The output is derivation.json in the same folder.\n\nReplay the program found: next slide at t4 (s5 to s6); go to slide 11 at t10; go back to the demo at t15 (s7, still talk); play the video at t17 (clip, playing); hold it there at t23 (paused); sure, play it at t27 (playing); back to the slides at t33 (talk); go to the thank you slide at t40 (s12); the Host's let's take questions at t46 (questions, opening h45 at 45); the Host's let's thank Mira at t58 (closed).\n\nCommands that correctly do nothing: the Clip's 'Next slide.' at t21 (Clip speech never commands); the Audience's 'Can you play it again?' at t25 (another speaker, and it ends in '?'); and every command-looking partial (t3, t5, t14, t16, t26, t32, t39, t57), since partials never move anything except the early pause.\n\nTrap ticks, all matched: early pause at t22 and t29, and its lapse at t30; clip_state stays pause at t26 even though the partial says 'sure play it'; stand_by on a partial at t36, undone at t37; stand_by at t42–44, ended by the Host's onset at t45; waiting at t46–47, which ignores a24 because it began before the opening; listening at t48–49; repeat at t50–52, since the partial 'the question is whether' at t52 does not count; answer from t53; captions at t29–31 go to the Presenter because p29 has the larger at, although c28 is still updating.\n\nI found no alternative reading a careful reader could defend that would change a consumed decision in this episode. The only readings that would change one contradict text the rules state outright; they are listed in the issues as non-defensible.",
+     "consumed_agreement": "60/60",
+     "issues_reported": 5
+    },
+    {
+     "id": "walk:presenter_a",
+     "role": "walk",
+     "description": "blind re-derivation: release-by-release derivation by hand",
+     "scenario": "lite_presenter_a",
+     "agreement": "First-run agreement on lite_presenter_a: 60/60 consumed decisions and 360/360 across all questions. I wrote the derivation before running compare.py and did not change it afterwards. Derivation: paper/notes/scratch-archive/presenter-audit2/work/walk_lite_presenter_a.json. The hand-walk table it was built from is walk_lite_presenter_a.src.txt in the same folder.\n\nMethod: I printed only the utterances that were new or revised at each tick, then applied the public rules by hand, one release at a time. Starting state was talk mode on slide s5.\n\nBoundary ticks I checked:\n- 3-4: partial \"next slide\", then final \"Next slide, please.\" moves to s6 at tick 4.\n- 5-7: partial \"next slide\" turns into \"Next slide shows the demo, but first...\", which is talk, not a command. Slide stays s6.\n- 8-10: partial seven, then eleven; the final \"Go to slide 11.\" gives s11 at tick 10.\n- 13-15: \"go back to the\" becomes \"Go back to the demo.\" This matches the slide phrase 'go back to the NAME', giving s7. It does not match a NOUN command.\n- 16-17: the play partial has no effect. The final \"Play the video.\" on s7, which has a clip, gives clip mode with the clip playing.\n- 19-21: captions switch to clip. The Clip channel's \"Next slide.\" at tick 21 arrives already final and has no effect, because Clip speech never commands.\n- 22-23: partial \"hold it\" is an early pause at tick 22. The final \"Hold it there.\" keeps it paused.\n- 24-25: the Audience's \"Can you play it again?\" has no effect; captions show audience.\n- 26: partial \"sure play it\" does not unpause, so the clip stays paused. At 27 the final \"Sure, play it.\" resumes play.\n- 28-30: Clip c28 and Presenter p29 are partial at the same time. Captions follow the largest at, so presenter at 29-30. The early pause from \"pause the demo\" at 29 lapses at 30 when the partial is revised to \"because the demo runs on\", and the state falls back to the play from p26.\n- 32-33: the partial close is ignored. The final \"Back to the slides.\" gives talk at s7.\n- 36-37: the partial \"...sends it back to you\" gives stand_by at 36. The revision to \"back to your phone\" gives listen at 37.\n- 39-40: \"Go to the thank you slide.\" gives s12.\n- 42-44: stand_by, first from the partial and then from the final sentence \"Back to you, Tomas.\"\n- 45: the Host's partial ends stand-by by ONSET (listen). Mode stays talk because the command is still partial.\n- 46: the final \"Let's take questions.\" gives questions mode with the waiting card. The earlier a24 \"?\" is excluded because its at is before the opening. The sentence \"Thank you, Mira.\" is not a command.\n- 48-50: listening, then repeat.\n- 52: the partial \"the question is whether\" does not count, so the card stays repeat. At 53 the final gives answer.\n- 57: the Host's partial thanks leaves mode as questions. At 58 the final \"Let's thank Mira.\" gives closed, and 59 stays closed.\n\nState consistency checks, all clean:\n- prepared, session and deck are the same in all 60 states, and clock.now equals the index.\n- Every at is unique, and utterances are listed in order of at.\n- final_at is never earlier than at and never after the current tick.\n- Partials are lower-case with no punctuation or digits.\n- Finals never change again, and no utterance is dropped.\n- Each speaker has at most one partial, and it is that speaker's newest utterance.\n- Every utterance is final by tick 59.\n- Number conventions hold: \"Go to slide 11\", \"40 cents\", and \"one\" left as a word.\n\nI found no reference answer that I would dispute.",
+     "consumed_agreement": "60/60",
+     "issues_reported": 3
+    },
+    {
+     "id": "blind:presenter_b",
+     "role": "blind",
+     "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+     "scenario": "lite_presenter_b",
+     "agreement": "On the first run, all 60 of 60 consumed decisions and all 360 of 360 question answers match (compare.py: \"consumed-decision agreement 60/60; all-question agreement 360/360\"). I did not change the derivation after comparing. I built it blind from public/lite_presenter_b.json only (prepared.rules, the question instructions, decision_spec, the deck and session data, and the 60 transcript states). The program is paper/notes/scratch-archive/presenter-audit2/work/blind_lite_presenter_b/derive.py and its output is paper/notes/scratch-archive/presenter-audit2/work/blind_lite_presenter_b/derivation.json. The program implements the rules as written. It splits sentences on runs of . ? !, normalises commands (lower-case, remove commas and apostrophes, strip the closing . and ! run, collapse spaces) and matches the full grammar: optional lead-in word, then one command phrase, then optional 'please', with anything else rejected. Final commands are replayed ordered by (final_at, at, sentence index), and each command type is limited to the speakers allowed to give it. Clip_state uses the early-pause and latest-effective-final logic. Captions use the utterance with the largest at. The question card is computed over Audience utterances whose at is greater than the opening's at. Host_cue uses CURRENT TEXT, with the end of a stand-by triggered by ONSET. I also checked per sentence that every command was parsed as intended. The only final commands are: Play the animation at t5 (ignored, slide 6 has no clip); Next slide, please at t7 (to s7); Play the animation at t9 (clip, play); Pause it at t16; Next slide at t20 (to s8, closes the clip, mode talk); the Host's Let's take one question from the floor at t24 (questions, opening h22 with at 22); Go to the zone map at t36 (to s10, mode stays questions); Let's move on at t42 (talk); the Host's Go back to slide 3, please at t45 (ignored, wrong speaker); Previous slide at t49 (to s9); and Let's thank Ines at t56 (closed). The CURRENT-TEXT answers are: early pause at t11 (partial 'hold') and t15, lapsing at t12; stand_by at t38 (partial 'the path back to you'), revised away at t39; stand_by at t52 to t54, ended by the Host's utterance starting at t55. The question card is: waiting t24 to t25, listening t26 to t27, repeat t28 to t32, and answer from t33 (the 'The question is ...' sentence in the p32 final). I found no disagreements to investigate. None of the gaps in the rule text listed below changes a stored answer under a reading I consider defensible.",
+     "consumed_agreement": "60/60",
+     "issues_reported": 6
+    },
+    {
+     "id": "walk:presenter_b",
+     "role": "walk",
+     "description": "blind re-derivation: release-by-release derivation by hand",
+     "scenario": "lite_presenter_b",
+     "agreement": "On the first run, all 60 of 60 consumed decisions and all 360 of 360 answers agreed with the stored reference, so there were no disagreements to investigate. I derived the answers by hand from prepared.rules and the per-tick transcript changes (I only printed the states with small scripts) and wrote them to paper/notes/scratch-archive/presenter-audit2/work/walk_lite_presenter_b.json before running compare.py. Walk: t0-6 talk/s6. The final at t5, 'Play the animation.', is ignored because slide 6 has no clip. t7 'Next slide, please.' (second sentence of p6) moves to s7. t9 'Play the animation.' gives clip/play. t11 partial 'hold' is an early pause. t12 final 'Hold on to your seats.' ends it, so play again. t15 partial 'pause it' is an early pause and the t16 final makes it a real pause, which holds through the t19 partial 'next slide'. t20 'Next slide.' closes the clip: talk/s8. t22 Host onset gives host captions while p21 is still partial. t24 the Host's 'Let's take one question from the floor.' opens questions (opening at=22), card waiting. t26-27 listening (Audience partial). t28 repeat. t30-32 still repeat: p30 is not a 'the question is' sentence and the t32 partial does not count. t33 'Sorry. The question is ...' splits into two sentences, so answer. t36 'Go to the zone map.' gives s10 and questions mode stays. t38 partial 'the path back to you' gives stand_by. t39 the revision gives listen. t42 the Presenter's 'Let's move on.' gives talk. t45 the Host relays 'Go back to slide 3, please.', which is ignored. t47 'Go back to slide 3?' is ignored because of the '?'. t49 'Previous slide.' gives s9. t52 partial and t53 final 'Back to you, Paulo.' give stand_by through t54. t55 Host onset gives listen. t56 'Let's thank Ines.' gives closed/s9 through t59. Boundary ticks I checked: - partial traps: t11, t19, t32, t38, t46 - finals: t5, t7, t9, t12, t16, t20, t24, t28, t33, t36, t42, t45, t47, t49, t53, t56 - first ticks after a change: t9, t20, t24, t26, t42, t55, t56. State consistency checks all passed: - clock.now equals the index, and prepared/deck/session are the same in every state. - at values are unique and increasing, and final_at is at least at and no later than now. - Each speaker has at most one partial, and it is that speaker's newest utterance. - Partials are lower case with no punctuation, and numbers are spelled out ('forty one million' becomes '41 million'; 'slide three' becomes 'slide 3'; 'four hours' stays spelled out because it is under 10). - Finals have no quotation marks, and all 23 utterances are final by t59. I found no timestamp or convention inconsistencies.",
+     "consumed_agreement": "60/60",
+     "issues_reported": 4
+    },
+    {
+     "id": "audit:presenter",
+     "role": "audit",
+     "description": "code-versus-text audit of the family's reference implementation",
+     "scenario": null,
+     "agreement": "This was a code-versus-text audit, not a blind derivation, so the consumed-decision count is -1. What I checked:\n\n- **Stored answers match the code.** Current reference(state) equals the stored gold on 60/60 ticks for lite_presenter_a and 60/60 for lite_presenter_b. It also equals steps[t].gold, so all-question agreement is 360/360 per scenario. The public states in the audit copy are identical to the current build, and prepared.rules equals RULES. tests/test_lite_presenter.py passes (24 tests). The composed-decision change counts are 25 (A) and 22 (B), which match docs/lite/presenter.md.\n\n- **Round-1 changes, checked against the code and with counterfactuals:**\n  - Host cue now tests whether a sentence ends in 'back to you' plus an optional Host first name. The Host's onset ends it. 'We never went back. To you, ...' gives listen.\n  - Rule 8 and the question-card question now use the newest Audience utterance with a '?' sentence and compare by at.\n  - Open-questions works only from talk or clip. A repeated opening is ignored: at A t51, 'Let's take one question.' keeps opened=45 and the card on repeat. Opening from clip at A t21 gives questions/waiting.\n  - Thanks is ignored in closed, and slide commands still apply in closed.\n  - Quote handling is gone and finals contain no '\"'.\n  - Runs of terminators, the position of 'please', other characters and collapsed spaces all behave as R3 states.\n  - Slide numbers are parsed with [0-9]+ and the superscript-digit crash is gone.\n  - Thanks names are compared after normalisation (the Inés and Jean-Luc presenter names work).\n  - The overlaps at A t28-30 and B t22-24 behave as described: captions follow the newest onset, and the early pause holds, then lapses.\n  - B's early pause now lapses at the final at t12.\n  - The docs (tiers, the 'hold on to your seats' wording, the tables) match the code.\n\n- **Invariants hold in both episodes.** Every utterance is final by t59. Partials contain only [a-z ]. Finals write numbers of 10 and up as digits and contain no non-ASCII characters. Deck names use only [a-z ], and none ends in 'slide'.\n\n- **Remaining divergences.** The four items below are gaps where the code is narrower than the text, or where the text is looser than the code. All four are latent: no stored answer in either scenario changes under any of them. Two are what is left of round-1 fixes: g22 was fixed for the thanks name but not for the stand-by name, and the hyphen part of g19 is still open.",
+     "issues_reported": 4
+    },
+    {
+     "id": "asr:presenter",
+     "role": "asr",
+     "description": "partial/final review of the streaming-ASR conventions, revisions and evidence tiers",
+     "scenario": null,
+     "agreement": "This was a rule walk, not a blind first run, so consumed_agreement is -1. Walking every tick of both scenarios against R1-R9, I agree with the stored reference at all 120 ticks, on the consumed decision and on every question. The scratchpad public and sealed files match the current presenter.py exactly. tests/test_lite_presenter.py passes (24 tests). The docs' counts of 25 (A) and 22 (B) changes to the composed decision are correct.\n\nThe round-1 changes all check out:\n(1) A t28-30. At t28 the Clip is partial. At t29 the Clip partial and the Presenter partial 'pause the demo' coexist, so there are two partials from different speakers, which R1 allows. At t30 the Clip final arrives while the Presenter's newer partial is revised to 'because the demo runs on'. Captions go clip, presenter, presenter by largest at. clip_state goes play, pause (early pause), play (the lapse, back to the final 'Sure, play it.'). The pause-to-because revision is plausible under the stated command-phrase biasing.\n(2) B t22-24. The Host's onset at t22 moves captions to host while P21 is still partial. The P21 final arrives at t23 under the Host's newer partial. The Host final at t24 opens questions with the opening at 22, giving waiting. host_cue stays listen. Every tick is unambiguous.\n(3) B t11-12. The partial 'hold' is a whole pause command under R5, so t11 is pause. The final 'Hold on to your seats.' is not a command, so the early pause lapses at the final and t12 is play (last command: 'Play the animation.' at t9). This is growth, not a revision.\n(4) Revised stand-by. The code matches the new rule wording (sentence-final 'back to you', optional Host first name, whole text for a partial, ended by a Host onset) at A t36/37 and t42-45 and at B t38/39 and t52-55. The test counterfactuals ('get back to you by email', the sentence split 'went back. To you', a newer Audience partial, a Host saying it, a new Presenter partial) give the right answers. 'union street' is a better-grounded revision than the old 'youlton'.\n\nOther checks:\n- R1 holds everywhere: lower-case partials with no digits, one partial per speaker and it is that speaker's newest, ids stable, finals frozen.\n- Only four word revisions occur (A t9, t30, t37; B t39), all between partials.\n- Replaying by at instead of final_at changes no reference at any tick.\n- Tier assignments are used the same way across all six question texts and the rules.",
+     "issues_reported": 8
+    }
+   ],
+   "grouped_findings": [
+    {
+     "id": "g1",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      33,
+      36,
+      38,
+      42,
+      43,
+      44,
+      52,
+      53
+     ],
+     "questions": [
+      "host_cue",
+      "question_card"
+     ],
+     "title": "[blind:presenter_a, audit:presenter] Word-test rule 'other punctuation ignored' does not say whether punctuation is deleted or is a word break; question_card question drops 'words'",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g2",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      32,
+      33,
+      53
+     ],
+     "questions": [
+      "question_card"
+     ],
+     "title": "[blind:presenter_a, blind:presenter_b] Lead-in word before 'the question is' is not tied to the command lead-in list",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g3",
+     "status": "rejected",
+     "scenario": "lite_presenter_b",
+     "ticks": [
+      32,
+      33
+     ],
+     "questions": [
+      "question_card"
+     ],
+     "title": "[walk:presenter_b] The t32 partial-vs-final trap for the answer card is guarded twice and actually tests sentence splitting",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g4",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [],
+     "questions": [
+      "mode",
+      "clip_state",
+      "question_card"
+     ],
+     "title": "[blind:presenter_a, blind:presenter_b, asr:presenter] Play in questions mode is unspecified; read literally it silently ends questions",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g5",
+     "status": "rejected",
+     "scenario": "lite_presenter_a",
+     "ticks": [],
+     "questions": [
+      "mode",
+      "clip_state"
+     ],
+     "title": "[blind:presenter_a] In clip mode, whether a slide command that leaves the slide unchanged closes the clip is unspecified",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g6",
+     "status": "rejected",
+     "scenario": "lite_presenter_a",
+     "ticks": [],
+     "questions": [
+      "clip_state"
+     ],
+     "title": "[blind:presenter_a] Early pause does not say whether the pause partial must have begun during clip mode",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g7",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      47
+     ],
+     "questions": [
+      "mode",
+      "slide"
+     ],
+     "title": "[blind:presenter_a, blind:presenter_b] Sentence splitting does not say how trailing text with no terminator is treated",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_but_no_decision_impact"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_but_no_decision_impact"
+    },
+    {
+     "id": "g8",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      56,
+      58
+     ],
+     "questions": [
+      "mode"
+     ],
+     "title": "[blind:presenter_b, audit:presenter] Thanks command: trailing 'please' is rejected by the code although R3 allows it, and full-name use is unspecified",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g9",
+     "status": "rejected",
+     "scenario": "lite_presenter_b",
+     "ticks": [],
+     "questions": [
+      "mode",
+      "host_cue"
+     ],
+     "title": "[blind:presenter_b] Where first names come from (session presenter and host strings) is implied but not stated",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g10",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      42,
+      43,
+      44,
+      52,
+      53,
+      54
+     ],
+     "questions": [
+      "host_cue"
+     ],
+     "title": "[audit:presenter, asr:presenter] Stand-by never matches an accented or hyphenated Host first name, unlike the thanks command",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g11",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      15,
+      36,
+      40
+     ],
+     "questions": [
+      "slide",
+      "mode"
+     ],
+     "title": "[audit:presenter] Go-to by NAME is narrower than 'NAME exactly one slide name in the deck' and ambiguous when a name plus ' slide' is another name",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g12",
+     "status": "rejected",
+     "scenario": "lite_presenter_b",
+     "ticks": [
+      36,
+      37,
+      38,
+      39,
+      40,
+      41
+     ],
+     "questions": [
+      "mode",
+      "question_card",
+      "host_cue"
+     ],
+     "title": "[blind:presenter_b] That a slide command in questions mode leaves the mode unchanged is only implied",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g13",
+     "status": "rejected",
+     "scenario": "lite_presenter_b",
+     "ticks": [
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41
+     ],
+     "questions": [
+      "mode"
+     ],
+     "title": "[blind:presenter_b] 'Let's take one question' never ends questions mode by itself",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g14",
+     "status": "rejected",
+     "scenario": "lite_presenter_a",
+     "ticks": [
+      15,
+      16
+     ],
+     "questions": [
+      "mode",
+      "slide"
+     ],
+     "title": "[blind:presenter_a] 'demo' is both a slide name and a clip noun",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g15",
+     "status": "rejected",
+     "scenario": "both",
+     "ticks": [
+      5,
+      11,
+      12,
+      19,
+      22,
+      23,
+      26,
+      29,
+      30,
+      31,
+      36,
+      38,
+      39,
+      42,
+      45,
+      46,
+      47,
+      52,
+      53,
+      55
+     ],
+     "questions": [
+      "mode",
+      "slide",
+      "clip_state",
+      "captions",
+      "host_cue",
+      "question_card"
+     ],
+     "title": "[blind:presenter_a, walk:presenter_a, blind:presenter_b, walk:presenter_b] Alternative readings at trap ticks are all ruled out by explicit rule text (no change needed)",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g16",
+     "status": "rejected",
+     "scenario": "lite_presenter_a",
+     "ticks": [
+      23,
+      27,
+      28,
+      29,
+      30
+     ],
+     "questions": [
+      "clip_state",
+      "captions"
+     ],
+     "title": "[walk:presenter_a] Clip soundtrack restarts after a resume-style play",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g17",
+     "status": "confirmed",
+     "scenario": "lite_presenter_a",
+     "ticks": [
+      19,
+      20,
+      28,
+      29,
+      30
+     ],
+     "questions": [
+      "captions"
+     ],
+     "title": "[asr:presenter] The looped soundtrack line is recognised at a different pace at A t28-30 than at t19-20",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_but_no_decision_impact"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g18",
+     "status": "rejected",
+     "scenario": "lite_presenter_a",
+     "ticks": [
+      29,
+      30
+     ],
+     "questions": [
+      "clip_state"
+     ],
+     "title": "[asr:presenter] The wrong early pause at A t29 cuts the clip's audible soundtrack mid-sentence",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g19",
+     "status": "confirmed",
+     "scenario": "lite_presenter_a",
+     "ticks": [],
+     "questions": [
+      "mode",
+      "slide",
+      "clip_state",
+      "question_card"
+     ],
+     "title": "[walk:presenter_a] Several command and branch paths never occur in lite_presenter_a",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g20",
+     "status": "rejected",
+     "scenario": "lite_presenter_b",
+     "ticks": [
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+     ],
+     "questions": [
+      "captions",
+      "clip_state"
+     ],
+     "title": "[walk:presenter_b] The clip caption option and the flood-footage clip are never used in lite_presenter_b",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g21",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      22,
+      23,
+      24,
+      28,
+      29,
+      30
+     ],
+     "questions": [
+      "mode",
+      "clip_state",
+      "host_cue"
+     ],
+     "title": "[asr:presenter] Some overlap and revision rule paths are exercised only by unit tests or not at all",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g22",
+     "status": "rejected",
+     "scenario": "lite_presenter_b",
+     "ticks": [
+      7,
+      45
+     ],
+     "questions": [
+      "slide"
+     ],
+     "title": "[walk:presenter_b] Some command sentences appear only in the final, never in a partial",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "impact",
+       "verdict": "gold_correct"
+      },
+      {
+       "lens": "counter",
+       "verdict": "gold_correct"
+      }
+     ],
+     "majority_verdict": "gold_correct"
+    },
+    {
+     "id": "g23",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      3,
+      15,
+      16,
+      19,
+      22,
+      26,
+      32,
+      41,
+      48,
+      57
+     ],
+     "questions": [
+      "slide",
+      "mode",
+      "clip_state"
+     ],
+     "title": "[asr:presenter] No Presenter or Host command utterance ever arrives already final",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g24",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      9,
+      10,
+      12,
+      30,
+      31,
+      37,
+      38,
+      39,
+      40
+     ],
+     "questions": [
+      "slide",
+      "clip_state",
+      "host_cue"
+     ],
+     "title": "[asr:presenter] No final changes a word of its last hypothesis",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    },
+    {
+     "id": "g25",
+     "status": "confirmed",
+     "scenario": "both",
+     "ticks": [
+      12,
+      30,
+      47
+     ],
+     "questions": [
+      "captions"
+     ],
+     "title": "[asr:presenter] Wording and realism nits (docs 'newest speaker' row, ASR-unlikely punctuation, R1 phrasing)",
+     "votes": [
+      {
+       "lens": "reproduce",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "impact",
+       "verdict": "real_non_gold_issue"
+      },
+      {
+       "lens": "counter",
+       "verdict": "real_non_gold_issue"
+      }
+     ],
+     "majority_verdict": "real_non_gold_issue"
+    }
+   ],
+   "changes_after": "Word tests use letters and digits of any script; the lead-in before 'the question is' is the command lead-in list; trailing text is a sentence; play only in talk or clip mode; thanks accepts a trailing 'please'; slide-name constraint stated; the final corrects a word ('go to slide seven' -> 'Go to slide 11.', reference change: slide at A t9); short commands already final (reference change: mode at A t57, slide at B t48); ':' and ';' removed from finals."
+  },
+  {
+   "round": 3,
+   "checks": [
+    {
+     "id": "blind:presenter_a",
+     "role": "blind",
+     "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+     "scenario": "lite_presenter_a",
+     "agreement": "First-run agreement for lite_presenter_a was complete: 60/60 consumed decisions and 360/360 answers across all questions. The derivation came from an independent program that applies prepared.rules to each public state. The program is paper/notes/scratch-archive/presenter-audit3/work/blind_lite_presenter_a/derive.py and its output is derivation.json in the same directory. It does the following: replays final commands in order of final_at, then at, then sentence order; normalises commands with a lead-in, one phrase and an optional 'please'; restricts commands by speaker; sets captions by ONSET from the largest at; handles the early pause from the whole text of a Presenter partial; and applies the question-card and host-cue rules as the text states them. I checked the output tick by tick against a hand trace before comparing. The key ticks are: slide s5->s6 at t4; s11 at t9 (the partial 'seven' is ignored); s7 at t15; clip play at t17; early pause from the partial 'hold it' at t22; play at t27; early pause from the partial 'pause the demo' at t29, which lapses at t30; talk at t33; stand_by from the partial 'back to you' at t36 and listen at t37 after the revision; s12 at t40; stand_by t42-44, ended by the Host's ONSET at t45; questions at t46 with waiting t46-47, listening t48-49, repeat t50-52 and answer from t53; closed at t57. I made no changes after comparing.",
+     "consumed_agreement": "60/60",
+     "issues_reported": 0
+    },
+    {
+     "id": "walk:presenter_a",
+     "role": "walk",
+     "description": "blind re-derivation: release-by-release derivation by hand",
+     "scenario": "lite_presenter_a",
+     "agreement": "On the first run my blind hand derivation for lite_presenter_a matched the stored reference on every tick and every question: 60/60 consumed decisions and 360/360 answers across all questions. There were no disagreements to investigate. Derivation file: paper/notes/scratch-archive/presenter-audit3/work/walk_lite_presenter_a.json. I read only the public episode file. Key points of the walk:\n- Mode: talk t0-16; clip t17-32 (from p16 'Play the video.' on slide 7, which has a clip); talk t33-45 (from p32 'Back to the slides.'); questions t46-56 (from Host h45 'Let's take questions.'); closed t57-59 (from Host h57 'Let's thank Mira.', which arrived already final).\n- Slide: s5 t0-3; s6 t4-8 ('Next slide, please.'); s11 t9-14 (final 'Go to slide 11.' overrides the partial 'seven'); s7 t15-39 ('Go back to the demo.'); s12 t40-59 ('Go to the thank you slide.').\n- Ignored as commands: 'Next slide shows the demo, but first...' (extra words make it talk) and the Clip speaker's 'Next slide.' at t21.\n- Clip state:\n  - play t17-21.\n  - Early pause from the partial 'hold it' at t22, then the final pause at t23; pause through t26, since the partial 'sure play it' does not take effect.\n  - play t27-28.\n  - Early pause from the partial 'pause the demo' at t29, which lapses at t30 when the hypothesis is revised; play t30-32.\n- Host cue:\n  - stand_by at t36 (partial 'and the watch sends it back to you', revised at t37).\n  - stand_by t42-44 ('...Back to you, Tomas.').\n  - listen at t45, because Host utterance h45 began then (by ONSET), and listen for the rest of questions mode.\n- Question card: waiting t46-47; listening t48-49; repeat t50-52 (the partial 'the question is whether' at t52 does not count); answer t53-56 after the final 'The question is whether it works offline.'",
+     "consumed_agreement": "60/60",
+     "issues_reported": 0
+    },
+    {
+     "id": "blind:presenter_b",
+     "role": "blind",
+     "description": "blind re-derivation: independent reimplementation of the public rules as a program",
+     "scenario": "lite_presenter_b",
+     "agreement": "First-run agreement on lite_presenter_b: consumed decisions matched on all 60 of 60 ticks, and all 360 of 360 question answers matched. The derivation was made blind, from the public states only, by an independent program at paper/notes/scratch-archive/presenter-audit3/work/blind_lite_presenter_b/derive.py, with output at .../work/blind_lite_presenter_b/derivation.json. Before running the program I traced the episode by hand, and the program's output matched that trace. I did not change anything after comparing. The key moments, all fixed by the public rules: the play command at tick 5 is ignored because slide 6 has no clip. 'Next slide, please.' is the second sentence of p6 and moves to s7 at tick 7. Play at tick 9 gives clip mode, playing. At tick 11 the partial 'hold' is an early pause; it lapses to play at tick 12 when the final reads 'Hold on to your seats.' 'Pause it.' pauses at 15 (early) and 16 (final), and the pause holds through 19. 'Next slide.' at tick 20 closes the clip and moves to s8. The Host's second sentence opens questions at tick 24 (waiting). The card shows listening at 26-27 while a26 is partial and repeat at 28-32 once it is final and ends in '?'. The partial at tick 32 does not count, so answer comes at 33, when a final Presenter sentence starts with 'The question is'. 'Go to the zone map.' in questions mode moves to s10 at tick 36 without changing the mode. The partial 'the path back to you' gives stand_by at tick 38, which drops back to listen at 39 when the hypothesis is revised. The Presenter's 'Let's move on.' gives talk at tick 42. The Host's 'Go back to slide 3, please.' at tick 45 is ignored because it is not the Presenter's command. The Presenter's 'Go back to slide 3?' at tick 47 ends in '?', so it is not a command. 'Previous slide.' moves to s9 at tick 48. 'Back to you, Paulo.' gives stand_by at 52-54, and the Host's utterance at tick 55 ends it. 'Let's thank Ines.' closes the session at tick 56.",
+     "consumed_agreement": "60/60",
+     "issues_reported": 0
+    },
+    {
+     "id": "walk:presenter_b",
+     "role": "walk",
+     "description": "blind re-derivation: release-by-release derivation by hand",
+     "scenario": "lite_presenter_b",
+     "agreement": "First-run blind hand derivation of lite_presenter_b (paper/notes/scratch-archive/presenter-audit3/work/walk_lite_presenter_b.json) agrees fully with the stored reference: consumed-decision agreement 60/60, all-question agreement 360/360. No disagreements to investigate. The key rulings, each derived from the public rules before comparing: t5 'Play the animation.' on s6 (no clip) has no effect; t7 'Next slide, please.' moves to s7 while 'Oh, it's on the next one.' stays talk; t9 play starts the clip on s7; t11 partial 'hold' is an early pause, which lapses at t12 when the final is 'Hold on to your seats.' (back to play); t15 partial and then t16 final 'Pause it.' pause the clip; t20 'Next slide.' goes to s8 and closes the clip (talk); t22-23 captions go to host because the Host partial has the larger at; t24 Host 'Let's take one question from the floor.' opens questions (waiting); t26-27 listening; t28-32 repeat (the partial 'sorry the question is' does not count); t33 the separate sentence 'The question is whether the river path closes.' gives answer; t36 'Go to the zone map.' gives s10 and stays in questions; t38 partial 'the path back to you' gives stand_by, and it reverts to listen at t39 when the hypothesis is revised; t42 Presenter 'Let's move on.' gives talk; t45 Host 'Go back to slide 3, please.' is ignored because it comes from a non-Presenter; t47 'Go back to slide 3?' is not a command because it ends in '?'; t48 the already-final 'Previous slide.' gives s9; t52-54 stand_by (partial, then 'Back to you, Paulo.'); t55 Host onset ends stand_by; t56 'Let's thank Ines.' gives closed.",
+     "consumed_agreement": "60/60",
+     "issues_reported": 0
+    }
+   ],
+   "grouped_findings": []
+  }
+ ]
+}

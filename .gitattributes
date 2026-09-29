@@ -1,2 +1,10 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Auto detect text files, store them with LF and check them out with LF on every platform,
+# so hashed data (dataset files, recorded runs) keeps the same bytes in every clone.
+* text=auto eol=lf
+# Recorded event logs are hashed byte for byte: never convert them.
+*.jsonl -text
+# Binary formats, stated explicitly rather than left to detection.
+*.pdf binary
+*.png binary
+*.zip binary
+*.pptx binary

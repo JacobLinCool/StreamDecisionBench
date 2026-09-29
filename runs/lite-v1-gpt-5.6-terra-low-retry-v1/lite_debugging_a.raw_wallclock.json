@@ -1,0 +1,891 @@
+{
+  "episode_id": "lite_debugging_a",
+  "task_family": "live_debugging",
+  "scenario_id": "debugging_a",
+  "states": 60,
+  "questions": 7,
+  "reference_transitions": 20,
+  "untimed_decision_accuracy": 1,
+  "untimed_segment_accuracy": 1,
+  "all_questions_exact_accuracy": 1,
+  "inactive_only_error_states": 0,
+  "time_accuracy": 0.48099917127382574,
+  "segment_time_accuracy": 0.4365541380836317,
+  "observed_duration_s": 119.99998541688547,
+  "error_seconds": {
+    "no_decision": 2.4140659170225263,
+    "source_correct": 59.86602596146986,
+    "source_incorrect": 0.0
+  },
+  "time_partition_seconds": {
+    "current_correct": 57.71989353839308,
+    "judgment": 0.0,
+    "stale": 59.86602596146986,
+    "compound": 0.0,
+    "outdated_correct": 0.0,
+    "no_decision": 2.4140659170225263
+  },
+  "current_source_share": 0.48099917127382574,
+  "latency_s_p50": 2.5020239586010575,
+  "latency_s_p95": 3.95102186216972,
+  "failed_requests": 0,
+  "accepted_updates": 56,
+  "discarded_updates": {
+    "older_than_active": 3,
+    "after_horizon": 1
+  },
+  "max_release_lag_s": 0.010122500360012054,
+  "max_dispatch_lag_s": 0.000844624824821949,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 1,
+      "active_states": 60,
+      "active_accuracy": 1
+    },
+    "process": {
+      "all_states_accuracy": 1,
+      "active_states": 60,
+      "active_accuracy": 1
+    },
+    "target_result": {
+      "all_states_accuracy": 1,
+      "active_states": 60,
+      "active_accuracy": 1
+    },
+    "rerun_scope": {
+      "all_states_accuracy": 1,
+      "active_states": 10,
+      "active_accuracy": 1
+    },
+    "inspect_file": {
+      "all_states_accuracy": 1,
+      "active_states": 6,
+      "active_accuracy": 1
+    },
+    "control_action": {
+      "all_states_accuracy": 1,
+      "active_states": 0,
+      "active_accuracy": null
+    },
+    "owner": {
+      "all_states_accuracy": 1,
+      "active_states": 3,
+      "active_accuracy": 1
+    }
+  },
+  "mistakes": [],
+  "intervals": [
+    {
+      "start_s": 1.458311453461647e-05,
+      "end_s": 2.010122500360012,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 2.010122500360012,
+      "end_s": 2.414080500137061,
+      "reference_t": 1,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 2.414080500137061,
+      "end_s": 4.005892250221223,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.005892250221223,
+      "end_s": 4.163509083446115,
+      "reference_t": 2,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.163509083446115,
+      "end_s": 6.003563833422959,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.003563833422959,
+      "end_s": 6.027090708259493,
+      "reference_t": 3,
+      "source_t": 1,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 6.027090708259493,
+      "end_s": 8.008527250029147,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 8.008527250029147,
+      "end_s": 9.130916208028793,
+      "reference_t": 4,
+      "source_t": 2,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 9.130916208028793,
+      "end_s": 10.00878791604191,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.00878791604191,
+      "end_s": 11.299490000121295,
+      "reference_t": 5,
+      "source_t": 3,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 11.299490000121295,
+      "end_s": 12.010067833121866,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 12.010067833121866,
+      "end_s": 12.229914500378072,
+      "reference_t": 6,
+      "source_t": 4,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 12.229914500378072,
+      "end_s": 13.947688708081841,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 13.947688708081841,
+      "end_s": 14.005970916245133,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.005970916245133,
+      "end_s": 15.585560666397214,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 15.585560666397214,
+      "end_s": 16.010102041065693,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 16.010102041065693,
+      "end_s": 18.009422291070223,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 18.009422291070223,
+      "end_s": 18.25445070816204,
+      "reference_t": 9,
+      "source_t": 7,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 18.25445070816204,
+      "end_s": 20.00429591629654,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 20.00429591629654,
+      "end_s": 21.11225066613406,
+      "reference_t": 10,
+      "source_t": 8,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 21.11225066613406,
+      "end_s": 22.00049400003627,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 22.00049400003627,
+      "end_s": 23.1828476251103,
+      "reference_t": 11,
+      "source_t": 9,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 23.1828476251103,
+      "end_s": 24.01007058331743,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 24.01007058331743,
+      "end_s": 24.816318958066404,
+      "reference_t": 12,
+      "source_t": 10,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 24.816318958066404,
+      "end_s": 26.009434541221708,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.009434541221708,
+      "end_s": 26.741351125296205,
+      "reference_t": 13,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.741351125296205,
+      "end_s": 28.000976666342467,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.000976666342467,
+      "end_s": 28.459460041020066,
+      "reference_t": 14,
+      "source_t": 12,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 28.459460041020066,
+      "end_s": 30.003341041039675,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 30.003341041039675,
+      "end_s": 31.682697458192706,
+      "reference_t": 15,
+      "source_t": 13,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 31.682697458192706,
+      "end_s": 32.0013915412128,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.0013915412128,
+      "end_s": 33.816190500278026,
+      "reference_t": 16,
+      "source_t": 14,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 33.816190500278026,
+      "end_s": 34.003689208067954,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 34.003689208067954,
+      "end_s": 34.483522083144635,
+      "reference_t": 17,
+      "source_t": 15,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 34.483522083144635,
+      "end_s": 36.00145612517372,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.00145612517372,
+      "end_s": 36.143414332997054,
+      "reference_t": 18,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.143414332997054,
+      "end_s": 38.00468737538904,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.00468737538904,
+      "end_s": 38.389796833042055,
+      "reference_t": 19,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.389796833042055,
+      "end_s": 40.00108070811257,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 40.00108070811257,
+      "end_s": 40.49111741641536,
+      "reference_t": 20,
+      "source_t": 18,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 40.49111741641536,
+      "end_s": 42.0094375833869,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 42.0094375833869,
+      "end_s": 42.35817487537861,
+      "reference_t": 21,
+      "source_t": 19,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 42.35817487537861,
+      "end_s": 43.36166220810264,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "correct"
+    },
+    {
+      "start_s": 43.36166220810264,
+      "end_s": 44.00550479115918,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "correct"
+    },
+    {
+      "start_s": 44.00550479115918,
+      "end_s": 46.00841833325103,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "correct"
+    },
+    {
+      "start_s": 46.00841833325103,
+      "end_s": 46.13767612539232,
+      "reference_t": 23,
+      "source_t": 21,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 46.13767612539232,
+      "end_s": 48.00717862509191,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 48.00717862509191,
+      "end_s": 48.90649062534794,
+      "reference_t": 24,
+      "source_t": 22,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 48.90649062534794,
+      "end_s": 50.01006729109213,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "correct"
+    },
+    {
+      "start_s": 50.01006729109213,
+      "end_s": 50.474667416419834,
+      "reference_t": 25,
+      "source_t": 23,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 50.474667416419834,
+      "end_s": 52.007053666282445,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 52.007053666282445,
+      "end_s": 52.38083558343351,
+      "reference_t": 26,
+      "source_t": 24,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 52.38083558343351,
+      "end_s": 54.010069833137095,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 54.010069833137095,
+      "end_s": 54.45305383345112,
+      "reference_t": 27,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 54.45305383345112,
+      "end_s": 56.00387250026688,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "correct"
+    },
+    {
+      "start_s": 56.00387250026688,
+      "end_s": 56.223273541312665,
+      "reference_t": 28,
+      "source_t": 26,
+      "kind": "correct"
+    },
+    {
+      "start_s": 56.223273541312665,
+      "end_s": 58.00700420839712,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "correct"
+    },
+    {
+      "start_s": 58.00700420839712,
+      "end_s": 58.50565291615203,
+      "reference_t": 29,
+      "source_t": 27,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 58.50565291615203,
+      "end_s": 60.009434833191335,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 60.009434833191335,
+      "end_s": 62.002975958399475,
+      "reference_t": 30,
+      "source_t": 28,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 62.002975958399475,
+      "end_s": 62.59857141645625,
+      "reference_t": 31,
+      "source_t": 28,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 62.59857141645625,
+      "end_s": 64.00943933334202,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 64.00943933334202,
+      "end_s": 64.7598937083967,
+      "reference_t": 32,
+      "source_t": 30,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 64.7598937083967,
+      "end_s": 66.00943245831877,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "correct"
+    },
+    {
+      "start_s": 66.00943245831877,
+      "end_s": 68.00997045822442,
+      "reference_t": 33,
+      "source_t": 31,
+      "kind": "correct"
+    },
+    {
+      "start_s": 68.00997045822442,
+      "end_s": 68.72732637543231,
+      "reference_t": 34,
+      "source_t": 31,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 68.72732637543231,
+      "end_s": 70.00566766643897,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 70.00566766643897,
+      "end_s": 70.96811800030991,
+      "reference_t": 35,
+      "source_t": 33,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 70.96811800030991,
+      "end_s": 72.0006594164297,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "correct"
+    },
+    {
+      "start_s": 72.0006594164297,
+      "end_s": 72.58911133324727,
+      "reference_t": 36,
+      "source_t": 34,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 72.58911133324727,
+      "end_s": 74.00643304130062,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 74.00643304130062,
+      "end_s": 74.50386000005528,
+      "reference_t": 37,
+      "source_t": 35,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 74.50386000005528,
+      "end_s": 76.00942625012249,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 76.00942625012249,
+      "end_s": 77.07773466641083,
+      "reference_t": 38,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 77.07773466641083,
+      "end_s": 78.00942995818332,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "correct"
+    },
+    {
+      "start_s": 78.00942995818332,
+      "end_s": 78.35548579134047,
+      "reference_t": 39,
+      "source_t": 37,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 78.35548579134047,
+      "end_s": 80.00669066607952,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 80.00669066607952,
+      "end_s": 81.79793833335862,
+      "reference_t": 40,
+      "source_t": 38,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 81.79793833335862,
+      "end_s": 82.00026858318597,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.00026858318597,
+      "end_s": 82.44699325039983,
+      "reference_t": 41,
+      "source_t": 39,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.44699325039983,
+      "end_s": 84.00295233307406,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.00295233307406,
+      "end_s": 84.41579716606066,
+      "reference_t": 42,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.41579716606066,
+      "end_s": 85.94910787511617,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "correct"
+    },
+    {
+      "start_s": 85.94910787511617,
+      "end_s": 86.00942291645333,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 86.00942291645333,
+      "end_s": 88.00789900030941,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 88.00789900030941,
+      "end_s": 88.18598383339122,
+      "reference_t": 44,
+      "source_t": 42,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 88.18598383339122,
+      "end_s": 90.00672079110518,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "correct"
+    },
+    {
+      "start_s": 90.00672079110518,
+      "end_s": 90.34030691627413,
+      "reference_t": 45,
+      "source_t": 43,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 90.34030691627413,
+      "end_s": 92.00318575045094,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 92.00318575045094,
+      "end_s": 92.28532433323562,
+      "reference_t": 46,
+      "source_t": 44,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 92.28532433323562,
+      "end_s": 94.00718875043094,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "correct"
+    },
+    {
+      "start_s": 94.00718875043094,
+      "end_s": 95.21437516622245,
+      "reference_t": 47,
+      "source_t": 45,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 95.21437516622245,
+      "end_s": 96.00052629131824,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 96.00052629131824,
+      "end_s": 96.47031908342615,
+      "reference_t": 48,
+      "source_t": 46,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 96.47031908342615,
+      "end_s": 98.00943291606382,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "correct"
+    },
+    {
+      "start_s": 98.00943291606382,
+      "end_s": 98.13325204141438,
+      "reference_t": 49,
+      "source_t": 47,
+      "kind": "correct"
+    },
+    {
+      "start_s": 98.13325204141438,
+      "end_s": 100.00387845840305,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "correct"
+    },
+    {
+      "start_s": 100.00387845840305,
+      "end_s": 100.55304579110816,
+      "reference_t": 50,
+      "source_t": 48,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 100.55304579110816,
+      "end_s": 102.01007120823488,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 102.01007120823488,
+      "end_s": 103.79900037543848,
+      "reference_t": 51,
+      "source_t": 49,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 103.79900037543848,
+      "end_s": 104.00475754123181,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "correct"
+    },
+    {
+      "start_s": 104.00475754123181,
+      "end_s": 104.97834045812488,
+      "reference_t": 52,
+      "source_t": 50,
+      "kind": "correct"
+    },
+    {
+      "start_s": 104.97834045812488,
+      "end_s": 106.0092008751817,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "correct"
+    },
+    {
+      "start_s": 106.0092008751817,
+      "end_s": 106.84940808312967,
+      "reference_t": 53,
+      "source_t": 51,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 106.84940808312967,
+      "end_s": 108.00411916617304,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 108.00411916617304,
+      "end_s": 110.00955300033092,
+      "reference_t": 54,
+      "source_t": 52,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 110.00955300033092,
+      "end_s": 111.27619879134,
+      "reference_t": 55,
+      "source_t": 52,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 111.27619879134,
+      "end_s": 112.002133208327,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "correct"
+    },
+    {
+      "start_s": 112.002133208327,
+      "end_s": 112.53998570842668,
+      "reference_t": 56,
+      "source_t": 54,
+      "kind": "correct"
+    },
+    {
+      "start_s": 112.53998570842668,
+      "end_s": 114.00912670837715,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 114.00912670837715,
+      "end_s": 114.6585426251404,
+      "reference_t": 57,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 114.6585426251404,
+      "end_s": 116.00490437541157,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "correct"
+    },
+    {
+      "start_s": 116.00490437541157,
+      "end_s": 116.12476179143414,
+      "reference_t": 58,
+      "source_t": 56,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 116.12476179143414,
+      "end_s": 118.00968733336776,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 118.00968733336776,
+      "end_s": 118.83085133321583,
+      "reference_t": 59,
+      "source_t": 57,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 118.83085133321583,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "correct"
+    }
+  ]
+}

@@ -1,0 +1,2298 @@
+{
+  "episode_id": "lite_support_a",
+  "task_family": "support_call_assist",
+  "scenario_id": "support_a",
+  "states": 60,
+  "questions": 7,
+  "reference_transitions": 22,
+  "untimed_decision_accuracy": 0.6666666666666666,
+  "untimed_segment_accuracy": 0.5942028985507246,
+  "all_questions_exact_accuracy": 0.4166666666666667,
+  "inactive_only_error_states": 15,
+  "time_accuracy": 0.6403899793537897,
+  "segment_time_accuracy": 0.567542337404412,
+  "observed_duration_s": 119.99997745780274,
+  "error_seconds": {
+    "no_decision": 0.6157977501861751,
+    "source_correct": 3.1529143317602575,
+    "source_incorrect": 39.384482289198786
+  },
+  "time_partition_seconds": {
+    "current_correct": 76.61290179472417,
+    "judgment": 37.82758449809626,
+    "stale": 3.1529143317602575,
+    "compound": 1.5568977911025286,
+    "outdated_correct": 0.23388129193335772,
+    "no_decision": 0.6157977501861751
+  },
+  "current_source_share": 0.9536708982554828,
+  "latency_s_p50": 0.21822377084754407,
+  "latency_s_p95": 0.2996067171450704,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.01033725030720234,
+  "max_dispatch_lag_s": 0.0,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 1,
+      "active_states": 60,
+      "active_accuracy": 1
+    },
+    "recorder": {
+      "all_states_accuracy": 0.8166666666666667,
+      "active_states": 60,
+      "active_accuracy": 0.8166666666666667
+    },
+    "payment_stage": {
+      "all_states_accuracy": 0.8166666666666667,
+      "active_states": 40,
+      "active_accuracy": 0.8
+    },
+    "instrument": {
+      "all_states_accuracy": 0.6666666666666666,
+      "active_states": 40,
+      "active_accuracy": 1
+    },
+    "service_target": {
+      "all_states_accuracy": 0.8,
+      "active_states": 13,
+      "active_accuracy": 1
+    },
+    "service_action": {
+      "all_states_accuracy": 0.9666666666666667,
+      "active_states": 13,
+      "active_accuracy": 1
+    },
+    "hold_action": {
+      "all_states_accuracy": 0.9333333333333333,
+      "active_states": 5,
+      "active_accuracy": 0.2
+    }
+  },
+  "mistakes": [
+    {
+      "t": 0,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "ask_consent",
+        "instrument": "unknown"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "choose_card",
+        "instrument": "unknown"
+      },
+      "wrong_active_questions": [
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u0-Customer: I'd like to pay the balance, please."
+      ]
+    },
+    {
+      "t": 1,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "ask_consent",
+        "instrument": "unknown"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "choose_card",
+        "instrument": "unknown"
+      },
+      "wrong_active_questions": [
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u0-Customer: I'd like to pay the balance, please."
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "route": "service",
+        "recorder": "pause",
+        "service_target": "connection",
+        "service_action": "run_test"
+      },
+      "predicted_decision": {
+        "route": "service",
+        "recorder": "record",
+        "service_target": "connection",
+        "service_action": "run_test"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u20-Customer: Leave the payment for a moment; help me get connected first."
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "route": "service",
+        "recorder": "pause",
+        "service_target": "connection",
+        "service_action": "run_test"
+      },
+      "predicted_decision": {
+        "route": "service",
+        "recorder": "record",
+        "service_target": "connection",
+        "service_action": "run_test"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u20-Customer: Leave the payment for a moment; help me get connected first."
+      ]
+    },
+    {
+      "t": 23,
+      "reference_decision": {
+        "route": "service",
+        "recorder": "record",
+        "service_target": "connection",
+        "service_action": "wait_test"
+      },
+      "predicted_decision": {
+        "route": "service",
+        "recorder": "stop",
+        "service_target": "connection",
+        "service_action": "wait_test"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u20-Customer: Leave the payment for a moment; help me get connected first."
+      ]
+    },
+    {
+      "t": 27,
+      "reference_decision": {
+        "route": "service",
+        "recorder": "record",
+        "service_target": "router",
+        "service_action": "check_power"
+      },
+      "predicted_decision": {
+        "route": "service",
+        "recorder": "stop",
+        "service_target": "router",
+        "service_action": "check_power"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u27-Customer: Check my router first; we can come back to the line fault."
+      ]
+    },
+    {
+      "t": 29,
+      "reference_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "return_customer"
+      },
+      "wrong_active_questions": [
+        "hold_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u27-Customer: Check my router first; we can come back to the line fault."
+      ]
+    },
+    {
+      "t": 30,
+      "reference_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "return_customer"
+      },
+      "wrong_active_questions": [
+        "hold_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u27-Customer: Check my router first; we can come back to the line fault."
+      ]
+    },
+    {
+      "t": 31,
+      "reference_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "return_customer"
+      },
+      "wrong_active_questions": [
+        "hold_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u27-Customer: Check my router first; we can come back to the line fault."
+      ]
+    },
+    {
+      "t": 32,
+      "reference_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "return_customer"
+      },
+      "wrong_active_questions": [
+        "hold_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u27-Customer: Check my router first; we can come back to the line fault."
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "ask_consent",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "ask_consent",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u44-Customer: I withdraw my authorisation until I've checked the amount."
+      ]
+    },
+    {
+      "t": 45,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "ask_consent",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "ask_consent",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u44-Customer: I withdraw my authorisation until I've checked the amount."
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 47,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "submit",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder",
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "submit",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder",
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "wait",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 51,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "wait",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder",
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 52,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "wait",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer late-expiry: Was my expiry zero nine twenty eight?"
+      ]
+    },
+    {
+      "t": 53,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "wait",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer late-expiry: Was my expiry zero nine twenty eight?"
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.254219725728035e-05,
+      "end_s": 0.6158202923834324,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 0.6158202923834324,
+      "end_s": 2.0050499169155955,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 2.0050499169155955,
+      "end_s": 2.2429801248945296,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 2.2429801248945296,
+      "end_s": 4.00228162528947,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 4.00228162528947,
+      "end_s": 4.3051277082413435,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 4.3051277082413435,
+      "end_s": 6.002715541981161,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.002715541981161,
+      "end_s": 6.269297416787595,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.269297416787595,
+      "end_s": 8.005049291998148,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.005049291998148,
+      "end_s": 8.23796566715464,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 8.23796566715464,
+      "end_s": 10.000620834063739,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.000620834063739,
+      "end_s": 10.185647542122751,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.185647542122751,
+      "end_s": 12.00458599999547,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.00458599999547,
+      "end_s": 12.209699667058885,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.209699667058885,
+      "end_s": 14.004603541921824,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.004603541921824,
+      "end_s": 14.318542625755072,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.318542625755072,
+      "end_s": 16.00194887490943,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 16.00194887490943,
+      "end_s": 16.20154616655782,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 16.20154616655782,
+      "end_s": 18.004587000235915,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "correct"
+    },
+    {
+      "start_s": 18.004587000235915,
+      "end_s": 18.211367333307862,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "correct"
+    },
+    {
+      "start_s": 18.211367333307862,
+      "end_s": 20.001587584149092,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 20.001587584149092,
+      "end_s": 20.205043126363307,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 20.205043126363307,
+      "end_s": 22.00454887514934,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 22.00454887514934,
+      "end_s": 22.238717417232692,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 22.238717417232692,
+      "end_s": 24.004566042218357,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 24.004566042218357,
+      "end_s": 24.212890167254955,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 24.212890167254955,
+      "end_s": 26.00454108417034,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.00454108417034,
+      "end_s": 26.21532400138676,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.21532400138676,
+      "end_s": 28.001902292016894,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.001902292016894,
+      "end_s": 28.191488625016063,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.191488625016063,
+      "end_s": 30.004546958953142,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 30.004546958953142,
+      "end_s": 30.22048099990934,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 30.22048099990934,
+      "end_s": 32.0050535001792,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.0050535001792,
+      "end_s": 32.201723750215024,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.201723750215024,
+      "end_s": 34.00207812525332,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.00207812525332,
+      "end_s": 34.19174487516284,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.19174487516284,
+      "end_s": 36.00505512487143,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.00505512487143,
+      "end_s": 36.20861679222435,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.20861679222435,
+      "end_s": 38.0018854169175,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.0018854169175,
+      "end_s": 38.21555991657078,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.21555991657078,
+      "end_s": 40.00416308408603,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "correct"
+    },
+    {
+      "start_s": 40.00416308408603,
+      "end_s": 40.202506749890745,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 40.202506749890745,
+      "end_s": 42.00221795914695,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.00221795914695,
+      "end_s": 42.229464875068516,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.229464875068516,
+      "end_s": 44.00279475003481,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.00279475003481,
+      "end_s": 44.19599516596645,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.19599516596645,
+      "end_s": 46.00468345917761,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "correct"
+    },
+    {
+      "start_s": 46.00468345917761,
+      "end_s": 46.22208133386448,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "correct"
+    },
+    {
+      "start_s": 46.22208133386448,
+      "end_s": 48.00446437532082,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.00446437532082,
+      "end_s": 48.24100375035778,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.24100375035778,
+      "end_s": 50.005051834043115,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "correct"
+    },
+    {
+      "start_s": 50.005051834043115,
+      "end_s": 50.24527362594381,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 50.24527362594381,
+      "end_s": 52.00505279190838,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 52.00505279190838,
+      "end_s": 52.20259308349341,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 52.20259308349341,
+      "end_s": 54.00232516694814,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "correct"
+    },
+    {
+      "start_s": 54.00232516694814,
+      "end_s": 54.247197582852095,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 54.247197582852095,
+      "end_s": 56.00438000028953,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.00438000028953,
+      "end_s": 56.20344070857391,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.20344070857391,
+      "end_s": 58.00504441699013,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 58.00504441699013,
+      "end_s": 58.290687459055334,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 58.290687459055334,
+      "end_s": 60.00349045917392,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.00349045917392,
+      "end_s": 60.2164915013127,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.2164915013127,
+      "end_s": 62.00504950014874,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.00504950014874,
+      "end_s": 62.217044583987445,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.217044583987445,
+      "end_s": 64.00189004233107,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.00189004233107,
+      "end_s": 64.20899633411318,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.20899633411318,
+      "end_s": 66.00504449987784,
+      "reference_t": 32,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.00504449987784,
+      "end_s": 66.2389257918112,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "correct"
+    },
+    {
+      "start_s": 66.2389257918112,
+      "end_s": 68.00506104202941,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "correct"
+    },
+    {
+      "start_s": 68.00506104202941,
+      "end_s": 68.24598124995828,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 68.24598124995828,
+      "end_s": 70.00482208421454,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "correct"
+    },
+    {
+      "start_s": 70.00482208421454,
+      "end_s": 70.23626891709864,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "correct"
+    },
+    {
+      "start_s": 70.23626891709864,
+      "end_s": 72.00504470895976,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "correct"
+    },
+    {
+      "start_s": 72.00504470895976,
+      "end_s": 72.2083397093229,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 72.2083397093229,
+      "end_s": 74.00505258422345,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 74.00505258422345,
+      "end_s": 74.26036195922643,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 74.26036195922643,
+      "end_s": 76.00436429213732,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "correct"
+    },
+    {
+      "start_s": 76.00436429213732,
+      "end_s": 76.2788822920993,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "correct"
+    },
+    {
+      "start_s": 76.2788822920993,
+      "end_s": 78.00015487521887,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "correct"
+    },
+    {
+      "start_s": 78.00015487521887,
+      "end_s": 78.20129862520844,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "correct"
+    },
+    {
+      "start_s": 78.20129862520844,
+      "end_s": 80.00436662510037,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "correct"
+    },
+    {
+      "start_s": 80.00436662510037,
+      "end_s": 80.24098562495783,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 80.24098562495783,
+      "end_s": 82.00434508407488,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.00434508407488,
+      "end_s": 82.22122541815042,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.22122541815042,
+      "end_s": 84.00505387503654,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.00505387503654,
+      "end_s": 84.23482079105452,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 84.23482079105452,
+      "end_s": 86.00304695917293,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 86.00304695917293,
+      "end_s": 86.24252350023016,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 86.24252350023016,
+      "end_s": 88.00279520917684,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "correct"
+    },
+    {
+      "start_s": 88.00279520917684,
+      "end_s": 88.21261320915073,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 88.21261320915073,
+      "end_s": 90.00203691702336,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00203691702336,
+      "end_s": 90.26323383394629,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.26323383394629,
+      "end_s": 92.0043115420267,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.0043115420267,
+      "end_s": 92.24212525133044,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.24212525133044,
+      "end_s": 94.00505141727626,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.00505141727626,
+      "end_s": 94.20800529234111,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.20800529234111,
+      "end_s": 96.00505337491632,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.00505337491632,
+      "end_s": 96.20250758295879,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.20250758295879,
+      "end_s": 98.00505249993876,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.00505249993876,
+      "end_s": 98.3046059589833,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.3046059589833,
+      "end_s": 100.00226929225028,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.00226929225028,
+      "end_s": 100.27350654220209,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.27350654220209,
+      "end_s": 102.0005080839619,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.0005080839619,
+      "end_s": 102.23483200091869,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.23483200091869,
+      "end_s": 104.0012867921032,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.0012867921032,
+      "end_s": 104.20363374985754,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.20363374985754,
+      "end_s": 106.0050486670807,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.0050486670807,
+      "end_s": 106.21026779199019,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.21026779199019,
+      "end_s": 108.00425575021654,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.00425575021654,
+      "end_s": 108.22477708337829,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.22477708337829,
+      "end_s": 110.00370045891032,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "correct"
+    },
+    {
+      "start_s": 110.00370045891032,
+      "end_s": 110.24586050072685,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "correct"
+    },
+    {
+      "start_s": 110.24586050072685,
+      "end_s": 112.00110200000927,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 112.00110200000927,
+      "end_s": 112.22041208297014,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 112.22041208297014,
+      "end_s": 114.0103372503072,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "correct"
+    },
+    {
+      "start_s": 114.0103372503072,
+      "end_s": 114.23951804125682,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "correct"
+    },
+    {
+      "start_s": 114.23951804125682,
+      "end_s": 116.0084177502431,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "correct"
+    },
+    {
+      "start_s": 116.0084177502431,
+      "end_s": 116.2116841673851,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 116.2116841673851,
+      "end_s": 118.00991400005296,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.00991400005296,
+      "end_s": 118.24219479085878,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.24219479085878,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "correct"
+    }
+  ],
+  "time_basis": "release_anchored_successful_attempt_replay",
+  "retry_reliability": {
+    "logical_requests": 60,
+    "successful_logical_requests": 60,
+    "attempts": 60,
+    "failed_attempts": 0,
+    "attempt_error_rate": 0.0,
+    "attempt_error_rate_denominator": "all physical attempts, including final successes",
+    "retried_logical_requests": 0,
+    "retried_logical_rate": 0.0,
+    "retried_logical_rate_denominator": "all released logical requests",
+    "attempt_errors_by_type": {},
+    "failed_attempt_duration_s": 0,
+    "excluded_retry_s": 0.0,
+    "excluded_dispatch_s": 0.022861084435135126
+  },
+  "normalization": {
+    "definition": "actual evidence release + successful attempt duration + actual postprocess/commit-check lag",
+    "tie_break": "newest source index first at an exactly equal reconstructed arrival time",
+    "acceptance": "recomputed against source order and original horizon; physical acceptance ignored",
+    "latency_basis": "successful attempt completion minus its start; excludes dispatch queue, failed attempts and retry waits",
+    "arrival_order": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59
+    ],
+    "records": [
+      {
+        "t": 0,
+        "first_started_s": 0.0003215000033378601,
+        "first_dispatch_lag_s": 0.00029895780608057976,
+        "excluded_dispatch_s": 0.00029895780608057976,
+        "successful_attempt_s": 0.6156809590756893,
+        "postprocess_commit_lag_s": 0.00011679111048579216,
+        "actual_recorded_s": 0.616119250189513,
+        "normalized_ready_s": 0.6158202923834324,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 1,
+        "first_started_s": 2.0053956671617925,
+        "first_dispatch_lag_s": 0.00034575024619698524,
+        "excluded_dispatch_s": 0.00034575024619698524,
+        "successful_attempt_s": 0.2377982079051435,
+        "postprocess_commit_lag_s": 0.00013200007379055023,
+        "actual_recorded_s": 2.2433258751407266,
+        "normalized_ready_s": 2.2429801248945296,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 2,
+        "first_started_s": 4.002670208923519,
+        "first_dispatch_lag_s": 0.00038858363404870033,
+        "excluded_dispatch_s": 0.00038858363404870033,
+        "successful_attempt_s": 0.3027854161337018,
+        "postprocess_commit_lag_s": 6.066681817173958e-05,
+        "actual_recorded_s": 4.305516291875392,
+        "normalized_ready_s": 4.3051277082413435,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 3,
+        "first_started_s": 6.0029780003242195,
+        "first_dispatch_lag_s": 0.00026245834305882454,
+        "excluded_dispatch_s": 0.00026245834305882454,
+        "successful_attempt_s": 0.26647954154759645,
+        "postprocess_commit_lag_s": 0.00010233325883746147,
+        "actual_recorded_s": 6.269559875130653,
+        "normalized_ready_s": 6.269297416787595,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 4,
+        "first_started_s": 8.005433000158519,
+        "first_dispatch_lag_s": 0.0003837081603705883,
+        "excluded_dispatch_s": 0.0003837081603705883,
+        "successful_attempt_s": 0.2328429170884192,
+        "postprocess_commit_lag_s": 7.345806807279587e-05,
+        "actual_recorded_s": 8.23834937531501,
+        "normalized_ready_s": 8.23796566715464,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 5,
+        "first_started_s": 10.001005709171295,
+        "first_dispatch_lag_s": 0.0003848751075565815,
+        "excluded_dispatch_s": 0.0003848751075565815,
+        "successful_attempt_s": 0.18494970770552754,
+        "postprocess_commit_lag_s": 7.700035348534584e-05,
+        "actual_recorded_s": 10.186032417230308,
+        "normalized_ready_s": 10.185647542122751,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 6,
+        "first_started_s": 12.00490462500602,
+        "first_dispatch_lag_s": 0.0003186250105500221,
+        "excluded_dispatch_s": 0.0003186250105500221,
+        "successful_attempt_s": 0.20500324992462993,
+        "postprocess_commit_lag_s": 0.00011041713878512383,
+        "actual_recorded_s": 12.210018292069435,
+        "normalized_ready_s": 12.209699667058885,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 7,
+        "first_started_s": 14.00497950008139,
+        "first_dispatch_lag_s": 0.0003759581595659256,
+        "excluded_dispatch_s": 0.0003759581595659256,
+        "successful_attempt_s": 0.313831458799541,
+        "postprocess_commit_lag_s": 0.00010762503370642662,
+        "actual_recorded_s": 14.318918583914638,
+        "normalized_ready_s": 14.318542625755072,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 8,
+        "first_started_s": 16.002327292226255,
+        "first_dispatch_lag_s": 0.00037841731682419777,
+        "excluded_dispatch_s": 0.00037841731682419777,
+        "successful_attempt_s": 0.19946541683748364,
+        "postprocess_commit_lag_s": 0.00013187481090426445,
+        "actual_recorded_s": 16.201924583874643,
+        "normalized_ready_s": 16.20154616655782,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 9,
+        "first_started_s": 18.004966834094375,
+        "first_dispatch_lag_s": 0.0003798338584601879,
+        "excluded_dispatch_s": 0.0003798338584601879,
+        "successful_attempt_s": 0.20666795782744884,
+        "postprocess_commit_lag_s": 0.00011237524449825287,
+        "actual_recorded_s": 18.211747167166322,
+        "normalized_ready_s": 18.211367333307862,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 10,
+        "first_started_s": 20.002003374975175,
+        "first_dispatch_lag_s": 0.0004157908260822296,
+        "excluded_dispatch_s": 0.0004157908260822296,
+        "successful_attempt_s": 0.2033760421909392,
+        "postprocess_commit_lag_s": 7.950002327561378e-05,
+        "actual_recorded_s": 20.20545891718939,
+        "normalized_ready_s": 20.205043126363307,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 11,
+        "first_started_s": 22.00489729223773,
+        "first_dispatch_lag_s": 0.00034841708838939667,
+        "excluded_dispatch_s": 0.00034841708838939667,
+        "successful_attempt_s": 0.2340605827048421,
+        "postprocess_commit_lag_s": 0.00010795937851071358,
+        "actual_recorded_s": 22.23906583432108,
+        "normalized_ready_s": 22.238717417232692,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 12,
+        "first_started_s": 24.00487449998036,
+        "first_dispatch_lag_s": 0.00030845776200294495,
+        "excluded_dispatch_s": 0.00030845776200294495,
+        "successful_attempt_s": 0.2082170839421451,
+        "postprocess_commit_lag_s": 0.00010704109445214272,
+        "actual_recorded_s": 24.213198625016958,
+        "normalized_ready_s": 24.212890167254955,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 13,
+        "first_started_s": 26.004895749967545,
+        "first_dispatch_lag_s": 0.0003546657972037792,
+        "excluded_dispatch_s": 0.0003546657972037792,
+        "successful_attempt_s": 0.21071700006723404,
+        "postprocess_commit_lag_s": 6.591714918613434e-05,
+        "actual_recorded_s": 26.215678667183965,
+        "normalized_ready_s": 26.21532400138676,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 14,
+        "first_started_s": 28.002286958973855,
+        "first_dispatch_lag_s": 0.00038466695696115494,
+        "excluded_dispatch_s": 0.00038466695696115494,
+        "successful_attempt_s": 0.18950395798310637,
+        "postprocess_commit_lag_s": 8.237501606345177e-05,
+        "actual_recorded_s": 28.191873291973025,
+        "normalized_ready_s": 28.191488625016063,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 15,
+        "first_started_s": 30.004963458981365,
+        "first_dispatch_lag_s": 0.0004165000282227993,
+        "excluded_dispatch_s": 0.0004165000282227993,
+        "successful_attempt_s": 0.21584274992346764,
+        "postprocess_commit_lag_s": 9.129103273153305e-05,
+        "actual_recorded_s": 30.220897499937564,
+        "normalized_ready_s": 30.22048099990934,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 16,
+        "first_started_s": 32.005426042247564,
+        "first_dispatch_lag_s": 0.000372542068362236,
+        "excluded_dispatch_s": 0.000372542068362236,
+        "successful_attempt_s": 0.19654895784333348,
+        "postprocess_commit_lag_s": 0.00012129219248890877,
+        "actual_recorded_s": 32.202096292283386,
+        "normalized_ready_s": 32.201723750215024,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 17,
+        "first_started_s": 34.00248720915988,
+        "first_dispatch_lag_s": 0.00040908390656113625,
+        "excluded_dispatch_s": 0.00040908390656113625,
+        "successful_attempt_s": 0.18957941606640816,
+        "postprocess_commit_lag_s": 8.733384311199188e-05,
+        "actual_recorded_s": 34.1921539590694,
+        "normalized_ready_s": 34.19174487516284,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 18,
+        "first_started_s": 36.00543029187247,
+        "first_dispatch_lag_s": 0.00037516700103878975,
+        "excluded_dispatch_s": 0.00037516700103878975,
+        "successful_attempt_s": 0.20321720838546753,
+        "postprocess_commit_lag_s": 0.0003444589674472809,
+        "actual_recorded_s": 36.208991959225386,
+        "normalized_ready_s": 36.20861679222435,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 19,
+        "first_started_s": 38.002274417318404,
+        "first_dispatch_lag_s": 0.00038900040090084076,
+        "excluded_dispatch_s": 0.00038900040090084076,
+        "successful_attempt_s": 0.21353433281183243,
+        "postprocess_commit_lag_s": 0.00014016684144735336,
+        "actual_recorded_s": 38.21594891697168,
+        "normalized_ready_s": 38.21555991657078,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 20,
+        "first_started_s": 40.00455458415672,
+        "first_dispatch_lag_s": 0.0003915000706911087,
+        "excluded_dispatch_s": 0.0003915000706911087,
+        "successful_attempt_s": 0.1982003329321742,
+        "postprocess_commit_lag_s": 0.00014333287253975868,
+        "actual_recorded_s": 40.202898249961436,
+        "normalized_ready_s": 40.202506749890745,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 21,
+        "first_started_s": 42.00248695909977,
+        "first_dispatch_lag_s": 0.00026899995282292366,
+        "excluded_dispatch_s": 0.00026899995282292366,
+        "successful_attempt_s": 0.22714954102411866,
+        "postprocess_commit_lag_s": 9.737489745020866e-05,
+        "actual_recorded_s": 42.22973387502134,
+        "normalized_ready_s": 42.229464875068516,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 22,
+        "first_started_s": 44.003216084092855,
+        "first_dispatch_lag_s": 0.00042133405804634094,
+        "excluded_dispatch_s": 0.00042133405804634094,
+        "successful_attempt_s": 0.19308550003916025,
+        "postprocess_commit_lag_s": 0.0001149158924818039,
+        "actual_recorded_s": 44.1964165000245,
+        "normalized_ready_s": 44.19599516596645,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 23,
+        "first_started_s": 46.00508700031787,
+        "first_dispatch_lag_s": 0.0004035411402583122,
+        "excluded_dispatch_s": 0.0004035411402583122,
+        "successful_attempt_s": 0.21728358371183276,
+        "postprocess_commit_lag_s": 0.00011429097503423691,
+        "actual_recorded_s": 46.22248487500474,
+        "normalized_ready_s": 46.22208133386448,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 24,
+        "first_started_s": 48.00484637496993,
+        "first_dispatch_lag_s": 0.0003819996491074562,
+        "excluded_dispatch_s": 0.0003819996491074562,
+        "successful_attempt_s": 0.23643045919016004,
+        "postprocess_commit_lag_s": 0.00010891584679484367,
+        "actual_recorded_s": 48.241385750006884,
+        "normalized_ready_s": 48.24100375035778,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 25,
+        "first_started_s": 50.00542779220268,
+        "first_dispatch_lag_s": 0.0003759581595659256,
+        "excluded_dispatch_s": 0.0003759581595659256,
+        "successful_attempt_s": 0.2401147079654038,
+        "postprocess_commit_lag_s": 0.00010708393529057503,
+        "actual_recorded_s": 50.245649584103376,
+        "normalized_ready_s": 50.24527362594381,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 26,
+        "first_started_s": 52.005410792306066,
+        "first_dispatch_lag_s": 0.00035800039768218994,
+        "excluded_dispatch_s": 0.00035800039768218994,
+        "successful_attempt_s": 0.1974262078292668,
+        "postprocess_commit_lag_s": 0.00011408375576138496,
+        "actual_recorded_s": 52.202951083891094,
+        "normalized_ready_s": 52.20259308349341,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 27,
+        "first_started_s": 54.0025982093066,
+        "first_dispatch_lag_s": 0.00027304235845804214,
+        "excluded_dispatch_s": 0.00027304235845804214,
+        "successful_attempt_s": 0.24476420786231756,
+        "postprocess_commit_lag_s": 0.00010820804163813591,
+        "actual_recorded_s": 54.24747062521055,
+        "normalized_ready_s": 54.247197582852095,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 28,
+        "first_started_s": 56.00469395890832,
+        "first_dispatch_lag_s": 0.00031395861878991127,
+        "excluded_dispatch_s": 0.00031395861878991127,
+        "successful_attempt_s": 0.1989386253990233,
+        "postprocess_commit_lag_s": 0.0001220828853547573,
+        "actual_recorded_s": 56.2037546671927,
+        "normalized_ready_s": 56.20344070857391,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 29,
+        "first_started_s": 58.00540062505752,
+        "first_dispatch_lag_s": 0.00035620806738734245,
+        "excluded_dispatch_s": 0.00035620806738734245,
+        "successful_attempt_s": 0.2855302500538528,
+        "postprocess_commit_lag_s": 0.0001127920113503933,
+        "actual_recorded_s": 58.29104366712272,
+        "normalized_ready_s": 58.290687459055334,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 30,
+        "first_started_s": 60.00393204204738,
+        "first_dispatch_lag_s": 0.0004415828734636307,
+        "excluded_dispatch_s": 0.0004415828734636307,
+        "successful_attempt_s": 0.21286804182454944,
+        "postprocess_commit_lag_s": 0.00013300031423568726,
+        "actual_recorded_s": 60.21693308418617,
+        "normalized_ready_s": 60.2164915013127,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 31,
+        "first_started_s": 62.005422125104815,
+        "first_dispatch_lag_s": 0.0003726249560713768,
+        "excluded_dispatch_s": 0.0003726249560713768,
+        "successful_attempt_s": 0.21190929180011153,
+        "postprocess_commit_lag_s": 8.579203858971596e-05,
+        "actual_recorded_s": 62.217417208943516,
+        "normalized_ready_s": 62.217044583987445,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 32,
+        "first_started_s": 64.00225641718134,
+        "first_dispatch_lag_s": 0.0003663748502731323,
+        "excluded_dispatch_s": 0.0003663748502731323,
+        "successful_attempt_s": 0.20694187469780445,
+        "postprocess_commit_lag_s": 0.0001644170843064785,
+        "actual_recorded_s": 64.20936270896345,
+        "normalized_ready_s": 64.20899633411318,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 33,
+        "first_started_s": 66.0054001249373,
+        "first_dispatch_lag_s": 0.00035562505945563316,
+        "excluded_dispatch_s": 0.00035562505945563316,
+        "successful_attempt_s": 0.23378037521615624,
+        "postprocess_commit_lag_s": 0.00010091671720147133,
+        "actual_recorded_s": 66.23928141687065,
+        "normalized_ready_s": 66.2389257918112,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 34,
+        "first_started_s": 68.00542516727,
+        "first_dispatch_lag_s": 0.00036412524059414864,
+        "excluded_dispatch_s": 0.00036412524059414864,
+        "successful_attempt_s": 0.24082016665488482,
+        "postprocess_commit_lag_s": 0.00010004127398133278,
+        "actual_recorded_s": 68.24634537519887,
+        "normalized_ready_s": 68.24598124995828,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 35,
+        "first_started_s": 70.00514883408323,
+        "first_dispatch_lag_s": 0.00032674986869096756,
+        "excluded_dispatch_s": 0.00032674986869096756,
+        "successful_attempt_s": 0.23134254105389118,
+        "postprocess_commit_lag_s": 0.00010429183021187782,
+        "actual_recorded_s": 70.23659566696733,
+        "normalized_ready_s": 70.23626891709864,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 36,
+        "first_started_s": 72.0053785839118,
+        "first_dispatch_lag_s": 0.0003338749520480633,
+        "excluded_dispatch_s": 0.0003338749520480633,
+        "successful_attempt_s": 0.20319462521001697,
+        "postprocess_commit_lag_s": 0.00010037515312433243,
+        "actual_recorded_s": 72.20867358427495,
+        "normalized_ready_s": 72.2083397093229,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 37,
+        "first_started_s": 74.0054307919927,
+        "first_dispatch_lag_s": 0.0003782077692449093,
+        "excluded_dispatch_s": 0.0003782077692449093,
+        "successful_attempt_s": 0.25523179210722446,
+        "postprocess_commit_lag_s": 7.758289575576782e-05,
+        "actual_recorded_s": 74.26074016699567,
+        "normalized_ready_s": 74.26036195922643,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 38,
+        "first_started_s": 76.00469962507486,
+        "first_dispatch_lag_s": 0.0003353329375386238,
+        "excluded_dispatch_s": 0.0003353329375386238,
+        "successful_attempt_s": 0.2744011669419706,
+        "postprocess_commit_lag_s": 0.00011683302000164986,
+        "actual_recorded_s": 76.27921762503684,
+        "normalized_ready_s": 76.2788822920993,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 39,
+        "first_started_s": 78.00058416696265,
+        "first_dispatch_lag_s": 0.0004292917437851429,
+        "excluded_dispatch_s": 0.0004292917437851429,
+        "successful_attempt_s": 0.20106233330443501,
+        "postprocess_commit_lag_s": 8.141668513417244e-05,
+        "actual_recorded_s": 78.20172791695222,
+        "normalized_ready_s": 78.20129862520844,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 40,
+        "first_started_s": 80.00477245915681,
+        "first_dispatch_lag_s": 0.00040583405643701553,
+        "excluded_dispatch_s": 0.00040583405643701553,
+        "successful_attempt_s": 0.2365235830657184,
+        "postprocess_commit_lag_s": 9.541679173707962e-05,
+        "actual_recorded_s": 80.24139145901427,
+        "normalized_ready_s": 80.24098562495783,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 41,
+        "first_started_s": 82.00472175003961,
+        "first_dispatch_lag_s": 0.00037666596472263336,
+        "excluded_dispatch_s": 0.00037666596472263336,
+        "successful_attempt_s": 0.2167880842462182,
+        "postprocess_commit_lag_s": 9.224982932209969e-05,
+        "actual_recorded_s": 82.22160208411515,
+        "normalized_ready_s": 82.22122541815042,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 42,
+        "first_started_s": 84.00542245898396,
+        "first_dispatch_lag_s": 0.00036858394742012024,
+        "excluded_dispatch_s": 0.00036858394742012024,
+        "successful_attempt_s": 0.22967745829373598,
+        "postprocess_commit_lag_s": 8.945772424340248e-05,
+        "actual_recorded_s": 84.23518937500194,
+        "normalized_ready_s": 84.23482079105452,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 43,
+        "first_started_s": 86.00342695927247,
+        "first_dispatch_lag_s": 0.0003800000995397568,
+        "excluded_dispatch_s": 0.0003800000995397568,
+        "successful_attempt_s": 0.239376625046134,
+        "postprocess_commit_lag_s": 9.9916011095047e-05,
+        "actual_recorded_s": 86.2429035003297,
+        "normalized_ready_s": 86.24252350023016,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 44,
+        "first_started_s": 88.00320804212242,
+        "first_dispatch_lag_s": 0.00041283294558525085,
+        "excluded_dispatch_s": 0.00041283294558525085,
+        "successful_attempt_s": 0.20972820790484548,
+        "postprocess_commit_lag_s": 8.979206904768944e-05,
+        "actual_recorded_s": 88.21302604209632,
+        "normalized_ready_s": 88.21261320915073,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 45,
+        "first_started_s": 90.00236400030553,
+        "first_dispatch_lag_s": 0.0003270832821726799,
+        "excluded_dispatch_s": 0.0003270832821726799,
+        "successful_attempt_s": 0.26110820891335607,
+        "postprocess_commit_lag_s": 8.870800957083702e-05,
+        "actual_recorded_s": 90.26356091722846,
+        "normalized_ready_s": 90.26323383394629,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 46,
+        "first_started_s": 92.00473212497309,
+        "first_dispatch_lag_s": 0.00042058294638991356,
+        "excluded_dispatch_s": 0.00042058294638991356,
+        "successful_attempt_s": 0.23769766697660089,
+        "postprocess_commit_lag_s": 0.00011604232713580132,
+        "actual_recorded_s": 92.24254583427683,
+        "normalized_ready_s": 92.24212525133044,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 47,
+        "first_started_s": 94.00545200007036,
+        "first_dispatch_lag_s": 0.00040058279410004616,
+        "excluded_dispatch_s": 0.00040058279410004616,
+        "successful_attempt_s": 0.20284075010567904,
+        "postprocess_commit_lag_s": 0.00011312495917081833,
+        "actual_recorded_s": 94.20840587513521,
+        "normalized_ready_s": 94.20800529234111,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 48,
+        "first_started_s": 96.0054431669414,
+        "first_dispatch_lag_s": 0.0003897920250892639,
+        "excluded_dispatch_s": 0.0003897920250892639,
+        "successful_attempt_s": 0.19734412524849176,
+        "postprocess_commit_lag_s": 0.00011008279398083687,
+        "actual_recorded_s": 96.20289737498388,
+        "normalized_ready_s": 96.20250758295879,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 49,
+        "first_started_s": 98.00545324990526,
+        "first_dispatch_lag_s": 0.00040074996650218964,
+        "excluded_dispatch_s": 0.00040074996650218964,
+        "successful_attempt_s": 0.29943941719830036,
+        "postprocess_commit_lag_s": 0.00011404184624552727,
+        "actual_recorded_s": 98.3050067089498,
+        "normalized_ready_s": 98.3046059589833,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 50,
+        "first_started_s": 100.00265737529844,
+        "first_dispatch_lag_s": 0.0003880830481648445,
+        "excluded_dispatch_s": 0.0003880830481648445,
+        "successful_attempt_s": 0.27117066690698266,
+        "postprocess_commit_lag_s": 6.65830448269844e-05,
+        "actual_recorded_s": 100.27389462525025,
+        "normalized_ready_s": 100.27350654220209,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 51,
+        "first_started_s": 102.0008306670934,
+        "first_dispatch_lag_s": 0.0003225831314921379,
+        "excluded_dispatch_s": 0.0003225831314921379,
+        "successful_attempt_s": 0.23416654206812382,
+        "postprocess_commit_lag_s": 0.00015737488865852356,
+        "actual_recorded_s": 102.23515458405018,
+        "normalized_ready_s": 102.23483200091869,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 52,
+        "first_started_s": 104.00156204216182,
+        "first_dispatch_lag_s": 0.00027525005862116814,
+        "excluded_dispatch_s": 0.00027525005862116814,
+        "successful_attempt_s": 0.20223737508058548,
+        "postprocess_commit_lag_s": 0.00010958267375826836,
+        "actual_recorded_s": 104.20390899991617,
+        "normalized_ready_s": 104.20363374985754,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 53,
+        "first_started_s": 106.00544574996457,
+        "first_dispatch_lag_s": 0.0003970828838646412,
+        "excluded_dispatch_s": 0.0003970828838646412,
+        "successful_attempt_s": 0.2051302921026945,
+        "postprocess_commit_lag_s": 8.88328067958355e-05,
+        "actual_recorded_s": 106.21066487487406,
+        "normalized_ready_s": 106.21026779199019,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 54,
+        "first_started_s": 108.00462104193866,
+        "first_dispatch_lag_s": 0.0003652917221188545,
+        "excluded_dispatch_s": 0.0003652917221188545,
+        "successful_attempt_s": 0.2204033751040697,
+        "postprocess_commit_lag_s": 0.00011795805767178535,
+        "actual_recorded_s": 108.2251423751004,
+        "normalized_ready_s": 108.22477708337829,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 55,
+        "first_started_s": 110.00412250030786,
+        "first_dispatch_lag_s": 0.0004220413975417614,
+        "excluded_dispatch_s": 0.0004220413975417614,
+        "successful_attempt_s": 0.24208183400332928,
+        "postprocess_commit_lag_s": 7.820781320333481e-05,
+        "actual_recorded_s": 110.24628254212439,
+        "normalized_ready_s": 110.24586050072685,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 56,
+        "first_started_s": 112.00156695907936,
+        "first_dispatch_lag_s": 0.0004649590700864792,
+        "excluded_dispatch_s": 0.0004649590700864792,
+        "successful_attempt_s": 0.2191639579832554,
+        "postprocess_commit_lag_s": 0.0001461249776184559,
+        "actual_recorded_s": 112.22087704204023,
+        "normalized_ready_s": 112.22041208297014,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 57,
+        "first_started_s": 114.01069095917046,
+        "first_dispatch_lag_s": 0.0003537088632583618,
+        "excluded_dispatch_s": 0.0003537088632583618,
+        "successful_attempt_s": 0.22907145787030458,
+        "postprocess_commit_lag_s": 0.00010933307930827141,
+        "actual_recorded_s": 114.23987175012007,
+        "normalized_ready_s": 114.23951804125682,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 58,
+        "first_started_s": 116.00913000013679,
+        "first_dispatch_lag_s": 0.000712249893695116,
+        "excluded_dispatch_s": 0.000712249893695116,
+        "successful_attempt_s": 0.20317674987018108,
+        "postprocess_commit_lag_s": 8.966727182269096e-05,
+        "actual_recorded_s": 116.2123964172788,
+        "normalized_ready_s": 116.2116841673851,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      },
+      {
+        "t": 59,
+        "first_started_s": 118.01065133418888,
+        "first_dispatch_lag_s": 0.0007373341359198093,
+        "excluded_dispatch_s": 0.0007373341359198093,
+        "successful_attempt_s": 0.23217429080978036,
+        "postprocess_commit_lag_s": 0.00010649999603629112,
+        "actual_recorded_s": 118.2429321249947,
+        "normalized_ready_s": 118.24219479085878,
+        "excluded_retry_s": 0.0,
+        "attempt_count": 1,
+        "accepted": true,
+        "discard_reason": null
+      }
+    ]
+  }
+}

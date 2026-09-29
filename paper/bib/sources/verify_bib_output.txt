@@ -1,0 +1,17 @@
+froger2026gaia2          src=arxiv   title_match=True authors_match=True n_authors=24
+li2026beyond             src=arxiv   title_match=True authors_match=True n_authors=8
+li2026never              src=arxiv   title_match=True authors_match=True n_authors=2
+lin2024streamingbench    src=arxiv   title_match=True authors_match=True n_authors=8
+liu2026streammembench    src=arxiv   title_match=True authors_match=True n_authors=8
+dhanda2026deltalogic     src=arxiv   title_match=True authors_match=True n_authors=1
+chakrabarti2025cope      src=arxiv   title_match=True authors_match=True n_authors=6
+cheng2026your            src=acl     title_match=True authors_match=True n_authors=8
+ding2026proactor         src=acl     title_match=True authors_match=True n_authors=4
+wilie2024belief          src=acl     title_match=True authors_match=True n_authors=5
+kang2025win              src=neurips title_match=True authors_match=True n_authors=7
+lin2026streamingbench    src=crossref title_match=True (case-insensitive; IEEE casing 'Streamingbench') authors_match=True n_authors=10 doi_match=True pages_match=True
+cheng2026your            doi_match=True pages_match=True
+ding2026proactor         doi_match=True pages_match=True
+wilie2024belief          doi_match=True pages_match=True
+kang2025win              doi_match=True pages_match=True
+ALL_OK
