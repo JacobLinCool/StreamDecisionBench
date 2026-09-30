@@ -14,6 +14,13 @@ erroneous instant to **judgment** (wrong for the current state), **latency** (a 
 right for an outdated state) or both. The primary score is **normalized log-AUC**: in-force accuracy
 averaged over time-step intervals from 1 to 5 s on a logarithmic axis.
 
+![StreamDecisionBench leaderboard: all thirteen single-model settings ranked by normalized log-AUC over 1–5 seconds](docs/figures/leaderboard.svg)
+
+![StreamDecisionBench in-force accuracy curves across update intervals from 1 to 5 seconds, for all thirteen single-model settings](docs/figures/interval-curves.svg)
+
+The curves show in-force accuracy at each update interval; the leaderboard summarizes them with
+normalized log-AUC. [Figure data and regeneration](docs/figures/README.md).
+
 <!-- BEGIN GENERATED SDB RESULTS -->
 ## Results
 

@@ -1,0 +1,11 @@
+{
+  "name": "sdb-readme-figures",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "echarts": "6.1.0"
+  }
+}

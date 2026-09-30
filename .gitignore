@@ -256,6 +256,7 @@ cython_debug/
 .cache/
 *.shadow.md
 .chart-data-*/
+/docs/figures/node_modules/
 # Secrets: only the template is versioned.
 .env.*
 !.env.example
