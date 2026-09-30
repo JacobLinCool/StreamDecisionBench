@@ -98,6 +98,11 @@ def _network_report_lines(net: dict) -> list[str]:
         lines.append(f"| {name} | {pct(pick(net['observed']))} | {pct(pick(s['estimate'])['time_accuracy'])} | "
                      f"{pct(pick(s['low'])['time_accuracy'])}–{pct(pick(s['high'])['time_accuracy'])} | "
                      f"{pct(pick(net['untimed_ceiling']))} |")
+    if net["negative_intercept_projected"]:
+        raw = net["unconstrained_intercept_s"]
+        lines += ["", f"未限制截距為 {raw['estimate']:.6f} 秒（範圍 {raw['low']:.6f}–{raw['high']:.6f} 秒）。"
+                  "截距是對零 token 的外推，可能為負值；負值不能當作可移除延遲，因此重放時投影為零。"
+                  "原始估計保留在 analysis.json，主要分數與錄製資料不變。"]
     lines += ["", "這是次要估計，主分數不變。不隨 token 變化的時間也可能包含固定的伺服器時間，因此它是網路影響的上界；"
               "範圍只反映估計的不確定性，不含模型重跑的變異。", ""]
     return lines
@@ -211,12 +216,16 @@ def report(data: dict, output: Path) -> None:
         lines.append(f"| {r['episode_id']} | {r['reference_transitions']} | {pct(r['untimed_decision_accuracy'])} | {pct(r['time_accuracy'])} | {r['latency_s_p50']:.2f} / {r['latency_s_p95']:.2f} | {r['failed_requests']} |")
     lines += ["", "## 執行與計分核對", "",
               f"- 完成 {scores['states']} 個狀態、{scores['episodes']} 個情境；失敗請求 {data['total_failed']}。",
-              f"- {'成功 attempt' if normalized else '全部回應'}延遲 p50 {data['latency_s']['p50']:.3f} 秒、p95 {data['latency_s']['p95']:.3f} 秒；包含該次本機 client 與正常網路時間。",
+              f"- {'成功 attempt' if normalized else '全部回應'}延遲 p50 {data['latency_s']['p50']:.3f} 秒、p95 {data['latency_s']['p95']:.3f} 秒；"
+              + ("包含同機原生函式呼叫、排隊與推論。" if config.get('transport') == 'native_library' else "包含該次本機 client 與正常網路時間。"),
               f"- 原始錄製的最大釋出落後 {data['max_release_lag_s']:.4f} 秒；最大派送落後 {data['max_dispatch_lag_s']:.4f} 秒。",
               f"- 有 {scores['inactive_only_error_states']} 個狀態只有未使用問題答錯，因此有效決策仍正確。",
               f"- {'重建時間軸' if normalized else '原始時鐘'}接受更新 {data['accepted_updates']} 次；未採用回覆：{json.dumps(data['discarded_updates'], ensure_ascii=False)}。",
               "- 使用 pipeline：每次釋出都送出一次請求；完整的新來源回覆原子生效，較舊來源晚到不得覆寫。情境間序列執行。",
-              f"- 不計延遲分數使用同一批回覆，並非另外跑一次模型。SDK retries 為 {config['sdk_retries']}，網路 timeout 為 {config['request_timeout_s']:g} 秒。",
+              "- 不計延遲分數使用同一批回覆，並非另外跑一次模型。"
+              + (f"使用同機原生函式，無網路 timeout；單一設定的程序逾時為 {config['setting_process_timeout_s']:g} 秒。"
+                 if config.get('transport') == 'native_library'
+                 else f"SDK retries 為 {config['sdk_retries']}，網路 timeout 為 {config['request_timeout_s']:g} 秒。"),
               f"- 執行設定：{config['protocol']}，最多 {config['workers']} 個 request workers，情境並行數 {config['episode_concurrency']}。",
               "- 分數由本次分析以目前的計分程式從原始事件重算；原執行與本次分析的 source manifest 分別保存，僅供追溯。", "",
               "錯誤持續時間另依當時使用的答案來源分類：尚無答案 "

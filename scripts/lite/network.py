@@ -143,8 +143,13 @@ def network_adjustment(episodes: list[dict], responses: dict, releases: dict, *,
                                 for group in groups
                                 for start in rng.integers(0, len(group), max(1, len(group) // BLOCK))])
         draws.append(fit(X[index], y[index])[0])
-    low, high = (float(v) for v in np.percentile(draws, [2.5, 97.5]))
-    estimate = float(coef[0])
+    raw_low, raw_high = (float(v) for v in np.percentile(draws, [2.5, 97.5]))
+    raw_estimate = float(coef[0])
+    # Token slopes are nonnegative, but the fitted intercept can be negative:
+    # it extrapolates to zero tokens, outside the observed input lengths. A
+    # negative intercept is not a removable delay. Preserve the fit for
+    # diagnosis and project only the replay offsets onto their physical domain.
+    estimate, low, high = (max(0.0, value) for value in (raw_estimate, raw_low, raw_high))
     untimed = summarize_normalized([normalized_episode_scores(e, responses[e["episode_id"]], releases[e["episode_id"]])
                                     for e in episodes])
     observed = {"overall": untimed["overall"]["time_accuracy"],
@@ -157,6 +162,8 @@ def network_adjustment(episodes: list[dict], responses: dict, releases: dict, *,
         "estimator": f"{TAU:.2f}-quantile regression intercept with nonnegative token slopes; 95% range from "
                      f"{resamples} moving-block bootstrap resamples ({BLOCK} consecutive releases within each scenario, seed {seed})",
         "network_s": {"estimate": estimate, "low": low, "high": high},
+        "unconstrained_intercept_s": {"estimate": raw_estimate, "low": raw_low, "high": raw_high},
+        "negative_intercept_projected": min(raw_estimate, raw_low, raw_high) < 0,
         "prefill_s_per_1k_input_tokens": float(coef[1]),
         "decode_s_per_output_token": float(coef[2]) if generates_text else None,
         "latency_floor_s": float(y.min()),
@@ -166,6 +173,7 @@ def network_adjustment(episodes: list[dict], responses: dict, releases: dict, *,
         "untimed_ceiling": {"overall": untimed["overall"]["untimed_decision_accuracy"],
                             "by_family": {f: row["untimed_decision_accuracy"] for f, row in untimed["by_family"].items()}},
         "interpretation": "Secondary estimate. By assumption everything not proportional to tokens is network; it can "
-                          "include fixed server time, so this bounds the network effect from above. The range reflects "
-                          "estimator uncertainty only. The observed in-force score remains primary.",
+                          "include fixed server time, so this bounds the network effect from above. Negative fitted "
+                          "intercepts are retained as diagnostics and projected to zero removable delay for replay. "
+                          "The range reflects estimator uncertainty only. The observed in-force score remains primary.",
     }

@@ -34,6 +34,15 @@ uv run python paper/analysis/lite_numbers.py --list   # also prints every macro 
 # figures -> figures/fig_*.pdf (+ local .svg previews, not versioned) and figures/lite_figures_data.json
 # matplotlib comes from the `paper` dependency group in pyproject.toml
 uv run --group paper python paper/analysis/lite_figures.py
+
+# transition-local errors and fast/slow arbitration -> docs/research/trajectory-value/
+# plus generated/trajectory_{numbers,tables}.tex and figures/fig_arbitration.pdf
+uv run --group paper python paper/analysis/lite_trajectory_value.py
+
+# seven self-hosted settings and all seven/Terra-none pairs under three policies
+# -> docs/research/openweight-hybrids/, generated/openweight_{numbers,tables}.tex
+# plus the generated Results section in the root README and a composition figure
+uv run --group paper python paper/analysis/lite_openweight.py
 ```
 
 `lite_numbers.py` does the following:
@@ -58,9 +67,11 @@ If any check fails, the script lists every failure and does not publish new numb
 | `analysis/lite_figures.py`, `analysis/figstyle.py` | Figures in `figures/`, drawn at ACL print width (column 7.7 cm, text block 16 cm) with no text below 7 pt |
 | `analysis/lite_window.py` | The rule that selects the Figure 1 window, shared by both scripts |
 | `analysis/lite_reports.py`, `analysis/lite_auc.py`, `analysis/evaluation_policy.json` | Primary log-AUC reports in `docs/lite/results/four-family/` and the declared integration policy |
+| `analysis/lite_trajectory_value.py`, `analysis/trajectory_replay.py`, `analysis/trajectory_policy.json` | Transition-local judgment errors and all five Jev/GPT pairs under three arbitration rules; exact log integration between arrival-order crossings; reproducible report in `docs/research/trajectory-value/` |
+| `analysis/lite_openweight.py`, `analysis/openweight_policy.json` | Seven self-hosted settings and every local/Terra-none pair under three rules; verified original-clock standalone results, common-clock compositions, generated README tables and reproducible report in `docs/research/openweight-hybrids/` |
 | `generated/` | Generated macros and table bodies. Do not edit these by hand |
 | `figures/` | Main text: `fig_trajectory` (Figure 1, full width), `fig_errortime` (column width) and `fig_pace` (full width, one row of five panels: all families, then each family). Appendix: `fig_map`, `fig_latency` and `fig_separability`. Each is a vector PDF (the LaTeX input, versioned) with a local SVG preview that is not versioned; `lite_figures_data.json` holds every plotted value and the window scan |
-| `notes/FACTS.md` | Fact sheet. Each fact and number the paper states is listed here with its source |
+| `notes/FACTS.md` | Fact sheet for the standalone measurements, with source provenance; the composition and transition-local measurements are in `docs/research/trajectory-value/` and `generated/trajectory_numbers.tex` |
 | `notes/audit_record.json` | Extract of the LLM-agent validity audit: every check with its reported agreement and every grouped finding with its adjudication votes |
 | `notes/audit_presenter_record.json` | Record of the LLM-agent checks of the two presenter scenarios (2026-09-29, three rounds, with the fixes made between rounds); the paper's audit numbers come from `audit_record.json` and cover the original six scenarios only |
 | `notes/audit_summary.md`, `notes/pricing.md`, `notes/latency_grounding.md`, `notes/terminology_audit.md` | Historical six-scenario audit summary (an input of `lite_numbers.py`), the list prices behind the cost rows, and working notes on latency literature and terminology |
@@ -83,9 +94,11 @@ If any check fails, the script lists every failure and does not publish new numb
 
 `analysis/evaluation_policy.json` declares the primary normalized log-AUC over 1–5 s, plus linear 1–5 s and log 1–3 s / 0.5–5 s sensitivity conditions. Equal multiplicative ranges have equal weight; each family averages scenarios equally, and the macro score averages families equally. `src/streamdecisionbench/lite/interval_scoring.py` integrates scenario fractions on nested grids, refining until all metrics change by at most 0.001 percentage point. This is numerical convergence, not statistical uncertainty.
 
-The aggregation rule was adopted after inspecting the recorded passes, not preregistered. All six settings were recorded at 2 s. For Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and a disjoint two-scenario presenter pass were recorded in separate sessions and merged; merged artifacts retain both sessions. Astra low was recorded in one session covering all eight scenarios (2026-09-29 16:51–17:07 UTC). No existing response was re-queried or excluded for this evaluation.
+The aggregation rule was adopted after inspecting the recorded passes, not preregistered. All six hosted and seven self-hosted settings were recorded at 2 s. For Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and a disjoint two-scenario presenter pass were recorded in separate sessions and merged; merged artifacts retain both sessions. Astra low was recorded in one session covering all eight scenarios (2026-09-29 16:51–17:07 UTC). No existing response was re-queried or excluded for this evaluation.
 
-Each `analysis.json` has `auc.primary` and `auc.sensitivity`; `scores` and `network_adjustment` describe fixed 2 s diagnostics. Network-removal methods, ranges and adjusted figures are confined to the appendix. `fig_pace` plots the aggregate curve and the four family curves on log interval axes in one main-text figure; `fig_errortime` integrates the partition with the primary score's weights. `fig_trajectory` illustrates presenter voice control (presenter A) on the 2 s recording-cadence replay: every public ASR change in the window on the shared time axis, quoted where the composed reference decision changes, the reference fields that change, and the decisions in force of Luna low, Terra low and Jev in the error-time classes, with each setting's correct share of the window and two brackets measured at the slide change.
+Each per-setting `analysis.json` has `auc.primary` and `auc.sensitivity`; `scores` and `network_adjustment` describe fixed 2 s diagnostics. Network-removal methods, ranges and adjusted figures are confined to the appendix. `fig_pace` plots the aggregate curve and the four family curves on log interval axes in one main-text figure; `fig_errortime` integrates the partition with the primary score's weights. `fig_trajectory` illustrates presenter voice control (presenter A) on the 2 s recording-cadence replay: every public ASR change in the window on the shared time axis, quoted where the composed reference decision changes, the reference fields that change, and the decisions in force of Luna low, Terra low and Jev in the error-time classes, with each setting's correct share of the window and two brackets measured at the slide change.
+
+The separate composition reports contain `standalone`, `systems`, `controls` and provenance. `lite_openweight.py` verifies all thirteen original-clock time partitions, validates input audits and published standalone areas, and analytically integrates the seven local/Terra-none pairs under every existing rule. Its self-hosted inputs are exposed through exact file allowlists in `runs/`; no GPU or model runtime is needed. `fig_openweight_hybrids` and the full local tables are in the appendix.
 
 To rebuild a merged recording (the five merged settings) in a fresh directory:
 

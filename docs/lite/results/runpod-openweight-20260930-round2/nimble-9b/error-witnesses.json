@@ -1,0 +1,94 @@
+[
+  {
+    "family": "live_debugging",
+    "episode_id": "lite_debugging_a",
+    "t": 0,
+    "reference_decision": {
+      "route": "wait",
+      "process": "running",
+      "target_result": "original_error"
+    },
+    "predicted_decision": {
+      "route": "ready",
+      "process": "running",
+      "target_result": "original_error"
+    },
+    "wrong_active_questions": [
+      "route"
+    ],
+    "reference_evidence": [
+      "clock advanced to 0; cursor moved to line 30; no relevant event"
+    ]
+  },
+  {
+    "family": "procedural_coaching",
+    "episode_id": "lite_assembly_a",
+    "t": 2,
+    "reference_decision": {
+      "route": "advance",
+      "stage": "seal",
+      "next_step": "cover"
+    },
+    "predicted_decision": {
+      "route": "handoff",
+      "stage": "seal",
+      "destination": "outbound_lane"
+    },
+    "wrong_active_questions": [
+      "route",
+      "next_step"
+    ],
+    "reference_evidence": [
+      "a-2-0"
+    ]
+  },
+  {
+    "family": "support_call_assist",
+    "episode_id": "lite_support_a",
+    "t": 0,
+    "reference_decision": {
+      "route": "payment",
+      "recorder": "record",
+      "payment_stage": "ask_consent",
+      "instrument": "unknown"
+    },
+    "predicted_decision": {
+      "route": "payment",
+      "recorder": "record",
+      "payment_stage": "choose_card",
+      "instrument": "unknown"
+    },
+    "wrong_active_questions": [
+      "payment_stage"
+    ],
+    "reference_evidence": [
+      "telephony.status=connected",
+      "The complete public workflow rules are in prepared.rules.",
+      "Customer u0-Customer: I'd like to pay the balance, please."
+    ]
+  },
+  {
+    "family": "presenter_voice_control",
+    "episode_id": "lite_presenter_a",
+    "t": 3,
+    "reference_decision": {
+      "mode": "talk",
+      "slide": "s5",
+      "captions": "presenter",
+      "host_cue": "listen"
+    },
+    "predicted_decision": {
+      "mode": "talk",
+      "slide": "s6",
+      "captions": "presenter",
+      "host_cue": "listen"
+    },
+    "wrong_active_questions": [
+      "slide"
+    ],
+    "reference_evidence": [
+      "The complete public rules are in prepared.rules.",
+      "Presenter p3 (partial): next slide"
+    ]
+  }
+]

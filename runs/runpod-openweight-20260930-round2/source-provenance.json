@@ -1,0 +1,10 @@
+{
+  "upstream_commits": {
+    "kev": "0fe8fc97c2bcc247fa3efb6e5c32af4e99770e91",
+    "nimble": "62076b4f2d365b5879dafcf7f6dd072a1fe76df7",
+    "semif": "23cf1f39fc9534fe81437200959b6dfc7106e45a"
+  },
+  "gpu": "NVIDIA L40S",
+  "experiment_id": "runpod-openweight-20260930-round2",
+  "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af"
+}

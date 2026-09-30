@@ -1,0 +1,6 @@
+{
+  "benchmark_commit": "43f206cac6c3a92b5acd8ca2fcf926bda67da9f8",
+  "laya_commit": "6d942c92081fbc139e736bbd9ac0023223c29b7f",
+  "djev_commit": "e5841cf41e9211608e698492658685c36e24e77a",
+  "vllm_commit": "1ee7f78e806b5e9b7476c74edf453b58fe108157"
+}

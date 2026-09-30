@@ -14,24 +14,85 @@ erroneous instant to **judgment** (wrong for the current state), **latency** (a 
 right for an outdated state) or both. The primary score is **normalized log-AUC**: in-force accuracy
 averaged over time-step intervals from 1 to 5 s on a logarithmic axis.
 
+<!-- BEGIN GENERATED SDB RESULTS -->
 ## Results
 
 One recorded pass per setting over all 480 states (8 scenarios in 4 families), recorded at a 2 s
-time step and evaluated at every interval from 1 to 5 s with the recorded answers and latencies.
+time-step interval. The primary score is normalized log-AUC over 1–5 s, with equal scenario weights
+within each family and then equal family weights. Interval evaluations retain the recorded answers
+and latencies; they assume service latency does not change with the request rate.
 
-| Setting | Model | Log-AUC, 1–5 s (%) | Untimed accuracy (%) | Median latency (s) |
+### Hosted APIs
+
+Latency includes the remote service and internet round trip from the benchmark client.
+
+| Setting | Model | Log-AUC 1–5 s (%) | Untimed (%) | Median latency (s) |
 |---|---|---:|---:|---:|
-| Jev | `jev-latest` (TypeSafe) | 60.7 | 63.8 | 0.25 |
-| Terra none | `gpt-5.6-terra`, reasoning effort none | 60.1 | 82.1 | 1.49 |
-| Terra low | `gpt-5.6-terra`, reasoning effort low | 52.6 | 95.4 | 2.44 |
-| Luna low | `gpt-5.6-luna`, reasoning effort low | 50.0 | 88.8 | 2.41 |
-| Astra low | `gpt-6-astra`, reasoning effort low | 49.3 | 99.8 | 2.67 |
-| Luna none | `gpt-5.6-luna`, reasoning effort none | 33.4 | 43.8 | 1.32 |
+| Jev | `jev-latest` | 60.72 | 63.75 | 0.253 |
+| Terra none | `gpt-5.6-terra` | 60.10 | 82.08 | 1.493 |
+| Terra low | `gpt-5.6-terra` | 52.60 | 95.42 | 2.439 |
+| Luna low | `gpt-5.6-luna` | 49.96 | 88.75 | 2.405 |
+| Astra low | `gpt-6-astra` | 49.27 | 99.79 | 2.671 |
+| Luna none | `gpt-5.6-luna` | 33.42 | 43.75 | 1.318 |
 
-Astra low answers 479 of 480 states correctly when latency is ignored, yet ends near the bottom in
-force: almost all of its error time is stale. Per-family scores and reports are in
-[docs/lite/results/four-family](docs/lite/results/four-family/README.md). Each setting has a single
-pass, so differences of a few points may not be stable.
+[Family scores and hosted reports](docs/lite/results/four-family/README.md).
+
+### Self-hosted open-weight settings
+
+| Setting | Log-AUC 1–5 s (%) | Untimed (%) | p50 / p95 (s) | GPU; same-host latency |
+|---|---:|---:|---:|---|
+| [Laya English](docs/lite/results/runpod-openweight-20260930/laya-english/REPORT.md) | 0.42 | 0.42 | 0.126 / 0.240 | RTX PRO 6000 (96 GB) |
+| [Laya typed-decisions](docs/lite/results/runpod-openweight-20260930/laya-typed-decisions/REPORT.md) | 1.46 | 1.46 | 0.129 / 0.235 | RTX PRO 6000 (96 GB) |
+| [Laya multilingual](docs/lite/results/runpod-openweight-20260930/laya-multilingual/REPORT.md) | 0.21 | 0.21 | 0.068 / 0.132 | RTX PRO 6000 (96 GB) |
+| [DJev / DiffusionGemma](docs/lite/results/runpod-openweight-20260930/djev-diffusiongemma/REPORT.md) | 21.20 | 21.88 | 0.257 / 0.403 | RTX PRO 6000 (96 GB) |
+| [Kev-4B](docs/lite/results/runpod-openweight-20260930-round2/kev-4b/REPORT.md) | 21.06 | 21.46 | 0.160 / 0.261 | L40S (48 GB) |
+| [Bespoke Nimble-9B](docs/lite/results/runpod-openweight-20260930-round2/nimble-9b/REPORT.md) | 11.20 | 22.50 | 6.162 / 41.782 | L40S (48 GB) |
+| [Qwen3.5-4B direct-logit](docs/lite/results/runpod-openweight-20260930-round2/semif-qwen35-4b/REPORT.md) | 15.48 | 17.08 | 0.972 / 1.707 | L40S (48 GB) |
+
+All seven settings use BF16 backbones and native decision readouts. Benchmark and model run on the
+same GPU host; latency includes request processing, runtime queueing and inference, and excludes
+download, initialization and warmup. These rows describe the measured deployments: the GPU cohorts
+and hosted APIs are not a controlled hardware comparison.
+
+Nimble scores each field sequentially with its full prompt; its latency covers the complete decision
+request. The Qwen row uses SemIf's direct option logits with thinking disabled; it is not an evaluation
+of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/results/runpod-openweight-20260930/README.md)
+and [L40S cohort](docs/lite/results/runpod-openweight-20260930-round2/README.md).
+
+### Provisional decisions with corrections
+
+| System | Log-AUC 1–5 s (%) |
+|---|---:|
+| Terra none alone | 60.10 |
+| Jev + Terra none | 67.82 |
+| Laya English + Terra none | 28.37 |
+| Laya typed-decisions + Terra none | 28.75 |
+| Laya multilingual + Terra none | 26.86 |
+| DJev / DiffusionGemma + Terra none | 43.75 |
+| Kev-4B + Terra none | 42.13 |
+| Bespoke Nimble-9B + Terra none | 60.07 |
+| Qwen3.5-4B direct-logit + Terra none | 53.32 |
+
+Both components receive each state. A provisional answer never moves the active source backward;
+the correction wins equal-source ties and, under the **freshest-source** rule used above, cannot
+overwrite a newer source. These are counterfactual compositions of independent recordings on
+common nominal releases, retaining original measured latencies. Joint deployment contention is unmeasured.
+
+The Jev pairing improves on Terra none alone, while several faster self-hosted components reduce
+accuracy: an incorrect answer for a newer state can displace a still-correct correction. Speed alone
+does not determine whether composition helps. Nimble occupies the provisional slot in this analysis
+even though its recorded median latency exceeds Terra none's.
+
+[Complete local/policy matrix, curves and provenance](docs/research/openweight-hybrids/README.md);
+[all five Jev/GPT pairs and three arbitration policies](docs/research/trajectory-value/README.md).
+Each setting has one pass and adjacent states are dependent; differences do not establish stable rankings.
+
+Regenerate the verified summary, paper tables and composition curves without model calls:
+
+```bash
+uv run --group paper python paper/analysis/lite_openweight.py
+```
+<!-- END GENERATED SDB RESULTS -->
 
 ## Quick start
 

@@ -1,0 +1,96 @@
+[
+  {
+    "family": "live_debugging",
+    "episode_id": "lite_debugging_a",
+    "t": 0,
+    "reference_decision": {
+      "route": "wait",
+      "process": "running",
+      "target_result": "original_error"
+    },
+    "predicted_decision": {
+      "route": "delegate",
+      "process": "running",
+      "target_result": "original_error",
+      "owner": "none"
+    },
+    "wrong_active_questions": [
+      "route"
+    ],
+    "reference_evidence": [
+      "clock advanced to 0; cursor moved to line 30; no relevant event"
+    ]
+  },
+  {
+    "family": "procedural_coaching",
+    "episode_id": "lite_assembly_a",
+    "t": 0,
+    "reference_decision": {
+      "route": "advance",
+      "stage": "intake",
+      "next_step": "seal"
+    },
+    "predicted_decision": {
+      "route": "advance",
+      "stage": "intake",
+      "next_step": "none"
+    },
+    "wrong_active_questions": [
+      "next_step"
+    ],
+    "reference_evidence": [
+      "a-0-0"
+    ]
+  },
+  {
+    "family": "support_call_assist",
+    "episode_id": "lite_support_a",
+    "t": 0,
+    "reference_decision": {
+      "route": "payment",
+      "recorder": "record",
+      "payment_stage": "ask_consent",
+      "instrument": "unknown"
+    },
+    "predicted_decision": {
+      "route": "payment",
+      "recorder": "pause",
+      "payment_stage": "ask_consent",
+      "instrument": "none"
+    },
+    "wrong_active_questions": [
+      "recorder",
+      "instrument"
+    ],
+    "reference_evidence": [
+      "telephony.status=connected",
+      "The complete public workflow rules are in prepared.rules.",
+      "Customer u0-Customer: I'd like to pay the balance, please."
+    ]
+  },
+  {
+    "family": "presenter_voice_control",
+    "episode_id": "lite_presenter_a",
+    "t": 0,
+    "reference_decision": {
+      "mode": "talk",
+      "slide": "s5",
+      "captions": "presenter",
+      "host_cue": "listen"
+    },
+    "predicted_decision": {
+      "mode": "talk",
+      "slide": "s5",
+      "captions": "off",
+      "host_cue": "none"
+    },
+    "wrong_active_questions": [
+      "captions",
+      "host_cue"
+    ],
+    "reference_evidence": [
+      "The complete public rules are in prepared.rules.",
+      "Presenter p0 (partial): so the decoder keeps one"
+    ]
+  }
+]

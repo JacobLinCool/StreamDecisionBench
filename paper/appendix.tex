@@ -362,14 +362,14 @@ The interval $\Delta$ is spacing between evidence states; it is distinct from re
 We use the same 1--5\,s domain for all families to compare performance across a declared seconds-scale range.
 Related interaction studies motivate investigating this scale but do not calibrate its endpoints: developer feedback in \citet[Section~7.2]{murali2024ai} discusses 300--500\,ms suggestions and an upper expectation of 1\,s; \citet{chen2017empirical} derive 0.6--2.7\,s bounds for LEGO guidance, and \citet{olguin2021impact} test injected delays up to 3\,s.
 These concern response delays, not the event rates of our synthetic streams. Five seconds is a declared relaxed condition, not a validated safe response budget.
-The same rule and bounds apply to all settings. The aggregation rule was adopted after inspecting the recorded passes; we therefore report the alternative weights and bounds in Table~\ref{tab:auc-sensitivity} and make no preregistration claim.
+The same rule and bounds apply to all settings. The aggregation rule was adopted after inspecting the hosted passes; we therefore report their alternative weights and bounds in Table~\ref{tab:auc-sensitivity} and make no preregistration claim.
 The same table sets the primary score beside in-force accuracy at the 2\,s recording cadence and at the 5\,s integration endpoint.
 
 \paragraph{Replay and quadrature.}
 Each interval evaluation retains the recorded answers and latency in seconds while scaling releases, the horizon and tick-valued policies together.
 For example, support A's four-tick hold threshold represents 4\,s at an interval of 1\,s and 20\,s at 5\,s. These are controlled scenario variants, not new latency thresholds on an unchanged call.
 The inner integral over scenario time is exact. For the outer integral, we use nested trapezoidal grids in $\ln\Delta$ (or $\Delta$ for linear weighting), starting with 128 subintervals and doubling until every integrated scenario metric changes by at most $10^{-5}$, or 0.001 percentage point.
-Nonconvergence at 4096 subintervals is an error. The maximum final refinement change across all settings and sensitivity conditions is \AucMaxRefinementChange{} points; this is a numerical diagnostic, not a statistical uncertainty bound.
+Nonconvergence at 4096 subintervals is an error. The maximum final refinement change across the hosted settings and sensitivity conditions is \AucMaxRefinementChange{} points; this is numerical convergence, not statistical uncertainty. Appendix~\ref{app:openweight} additionally verifies self-hosted standalone results using exact crossing-based integration.
 Scenario fractions are normalized before integration, then averaged within each family and across families equally. With common bounds and weights, integrating the aggregate curve equals averaging the family integrals.
 
 
@@ -610,6 +610,198 @@ The complete transcript remains in the artifact, and Figure~\ref{fig:errortime} 
 The rule is implemented once and checked again whenever the figure is drawn.
 
 % ---------------------------------------------------------------------------
+\FloatBarrier
+\section{Transition-Local Errors and Fast/Slow Composition}
+\label{app:composition}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig_arbitration.pdf}
+  \caption{\textbf{Allowing old slow answers to overwrite newer fast answers can reverse whether composition helps.}
+  Counterfactual Jev/Terra pairs with identical component answers and latencies, under three arbitration rules; the gray line is Jev alone.}
+  \label{fig:arbitration}
+\end{figure*}
+
+\begin{table}[t]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lrr}
+    \toprule
+    Setting & Near error (\%) & Far error (\%) \\
+    \midrule
+    \LunaRowLabel & \TrajLunaNearError & \TrajLunaFarError \\
+    \LunaNoneRowLabel & \TrajLunaNoneNearError & \TrajLunaNoneFarError \\
+    \TerraRowLabel & \TrajTerraNearError & \TrajTerraFarError \\
+    \TerraNoneRowLabel & \TrajTerraNoneNearError & \TrajTerraNoneFarError \\
+    \AstraRowLabel & \TrajAstraNearError & \TrajAstraFarError \\
+    \JevRowLabel & \TrajJevNearError & \TrajJevFarError \\
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Judgment errors concentrate near reference changes for some settings.}
+  Near: at most one tick from a change (\TrajLunaNearStates{} states); far: the remaining \TrajLunaFarStates{}.}
+  \label{tab:transition-errors}
+\end{table}
+
+\paragraph{Localizing errors.}
+Each state is assigned to the nearest actual change of the branch-composed reference, with ties assigned to the earlier change; initial availability is excluded.
+The signed offset distinguishes before ($-1$), at ($0$) and after ($+1$) a change.
+Table~\ref{tab:transition-errors} compares untimed error rates within one tick with rates farther away, counting every state once.
+The near neighborhood already contains \TrajLunaNearStates{} of \NumStates{} states, so raw counts alone exaggerate concentration.
+Luna low makes \TrajLunaNearErrors{} errors near changes and \TrajLunaFarErrors{} farther away; Terra low makes \TrajTerraNearErrors{} and \TrajTerraFarErrors{}, respectively.
+Luna none shows little difference, and Astra's single miss supports no concentration claim.
+These counts describe the fixed timelines; they establish neither a causal effect of a change nor significance across independent recordings.
+The accompanying analysis provides every signed-offset bin, denominator and family breakdown.
+
+\paragraph{Joint replay and arbitration.}
+We pair Jev with each of the five GPT settings and dispatch both at every time step.
+Both components use common nominal releases $r_i=i\Delta$ and retain their recorded successful-attempt duration plus commit lag in seconds.
+The maximum standalone difference from the original client-release clocks is \TrajNominalGap{} points at 2\,s; on each original clock, our independent replay exactly reproduces every setting's correctness and six-part time partition.
+Within each component, an arrival must have a strictly newer source than any it has already delivered, including deliveries rejected by arbitration.
+Fast answers never regress the active source; on equal sources, the slow answer has priority and can correct the fast answer.
+For a slow answer with source $i$ and active source $j$, the three policies accept it when $i\geq j$ (\emph{freshest}), $i\geq j-1$ (\emph{one-tick lag}), or without a cross-component source restriction (\emph{late override}).
+At simultaneous arrivals we process newer sources first, then slow before fast; arrivals at or beyond the horizon are excluded.
+No policy consults a reference answer or the correctness of an output.
+
+\begin{table}[t]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{llrrr}
+    \toprule
+    Slow setting & Arbitration & 1\,s & 2\,s & AUC \\
+    \midrule
+    \TabTrajectoryBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Fast/slow composition depends on when corrections remain in force.}
+  Fast = Jev; in-force accuracy at fixed intervals and log-AUC over 1--5\,s (\%). All pairs and policies are reported.}
+  \label{tab:composition}
+\end{table}
+
+\paragraph{What summaries omit.}
+Table~\ref{tab:composition} and Figure~\ref{fig:arbitration} keep component answers, full latency distributions and the reference schedule identical across arbitration rules.
+At 2\,s, Jev/Terra low improves on standalone Jev under freshest-source arbitration (\TrajTerraFreshestTwo\% versus \TrajJevTwo\%), but falls below it under late override (\TrajTerraArrivalTwo\%).
+At 1\,s these policies give \TrajTerraFreshestOne\% and \TrajTerraArrivalOne\%.
+The component summaries cannot select between these system designs because they omit the interleaving of provisional answers and corrections.
+In \TrajExampleScenario, the reference changes \TrajExampleChange.
+Jev's correct source-\TrajExampleFastSource{} answer arrives at \TrajExampleFastArrival\,s; Terra's answer for source~\TrajExampleOldSource, correct for that source, arrives at \TrajExampleOldArrival\,s.
+Late override reinstates the old decision until \TrajExampleRestore\,s, adding \TrajExampleLoss\,s of stale time; freshest-source arbitration rejects it.
+This is the longest contiguous stale loss from one Terra-low override of a correct Jev source across the eight scenarios.
+Freshest-source arbitration accepts few Terra-low corrections: the slow component remains in force for only \TrajTerraFreshestSlowShare\% of time at 2\,s.
+Using its final-answer accuracy as a proxy for system $U$, even with the exact policy-specific oracle, predicts \TrajTerraFreshestProxy\% rather than \TrajTerraFreshestTwo\%.
+A two-output system has no unique per-state untimed answer representing both exposure durations; its current-source judgment must follow the component actually in force.
+The exact identity in Equation~\eqref{eq:factor} continues to hold because selection is independent of answers.
+
+\paragraph{Integration and scope.}
+We report all five pairs and all three policies as an exploratory analysis of the existing recordings; no rule is tuned to references.
+The components were recorded separately: joint service contention, recording-rate effects and repeated-run stability are unmeasured.
+Arbitration can produce a discontinuity when a slow answer moves from just before to just after a newer fast arrival.
+We split the interval domain at every crossing of release, arrival and horizon times.
+Between crossings, arrival order and acceptance are fixed and each normalized time fraction has form $c_0+c_1/\Delta$, whose log-weighted integral is analytical.
+Two interior evaluations determine the coefficients and a third checks them; the displayed curve is sampled independently of this integral.
+Family weights and bounds match Equation~\eqref{eq:macro}.
+
+% ---------------------------------------------------------------------------
+\FloatBarrier
+\section{Self-Hosted Decisions and Composition}
+\label{app:openweight}
+
+\begin{table*}[t]
+  \centering
+  \small
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    & \multicolumn{5}{c}{Normalized log-AUC over 1--5\,s (\%)} & \\
+    \cmidrule(lr){2-6}
+    Setting & IDE & Assembly & Support & Presenter & Macro & Untimed \\
+    \midrule
+    \TabOpenweightFamilies
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Fast native readouts can remain limited by decision judgment.}
+  Untimed is branch-composed decision accuracy (\%); standalone areas retain each recording's original release clock.}
+  \label{tab:openweight-families}
+\end{table*}
+
+\begin{table*}[t]
+  \centering
+  \small
+  \begin{tabular}{llrr}
+    \toprule
+    Setting & GPU & p50 (s) & p95 (s) \\
+    \midrule
+    \TabOpenweightLatency
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Latency depends on the complete decision runtime.}
+  Successful-attempt durations include runtime queueing; the replay also retains measured postprocessing commit lag.}
+  \label{tab:openweight-latency}
+\end{table*}
+
+\paragraph{Settings and measurement.}
+We record \OwNumSettingsWord{} completed settings on the same frozen dataset, at the same 2\,s cadence with 32 workers and serial scenarios; each covers all \NumStates{} states once with zero failed model attempts.
+The three Laya checkpoints and DJev/DiffusionGemma run on one RTX PRO 6000 Blackwell Server GPU (96\,GB); Kev-4B, Bespoke Nimble-9B and SemIf/Qwen3.5-4B run on one L40S (48\,GB).
+All use BF16 backbones and native decision readouts. The benchmark and model share a host, so latency includes tokenization, runtime queueing and complete-decision inference, with no internet round trip.
+Download, initialization, input audits and three unrelated synthetic warmups precede measurement.
+These are measurements of the configured deployments: differences between GPU cohorts or with hosted APIs do not isolate architecture speed.
+
+\FloatBarrier
+\paragraph{Native execution and coverage.}
+Laya uses its released calibration policy with maximum sequence length 8192 and head length 1024; its input audits cover all \AnswersPerPass{} question rows, with no state or option truncation.
+DJev uses DiffusionGemma 26B-A4B with a 128-token canvas, one denoising step, no thinking and upstream automatic noise sampling (up to four draws, threshold 0.1).
+Kev uses its native pointer head and fused CUDA runtime, with CUDA graphs, cross-request prefix caching and date-fact augmentation disabled.
+Nimble uses the released merged adapter at temperature 1 and independently processes the full prompt for each of the six or seven fields, sequentially; its latency includes the entire request and runtime contention.
+SemIf reads uncalibrated option logits from the pinned Qwen3.5-4B checkpoint, with thinking and generation disabled; no decision-trained checkpoint is used. This row evaluates that direct-logit configuration.
+Their native input audits check every request for context overflow. No setting uses CPU offload or a truncated-input path.
+All mappings preserve state fields, instructions, option descriptions, order and output identifiers.
+The released recordings retain model revisions, execution configuration, source and weight hashes, input audits and native diagnostics where available.
+Sol-2B has no executable public native runtime at the inspected revisions, so no inference is attempted and no score is assigned.
+
+\paragraph{Judgment and timing.}
+Tables~\ref{tab:openweight-families} and~\ref{tab:openweight-latency} separate untimed decision accuracy from the measured deployment path.
+DJev and Kev obtain \OwDJevUntimed\% and \OwKevUntimed\% untimed accuracy, with log-AUC of \OwDJevAuc\% and \OwKevAuc\%; most of their loss is already present with timing ignored.
+Nimble instead falls from \OwNimbleUntimed\% untimed to \OwNimbleAuc\% log-AUC, with p95 latency \OwNimbleTail\,s, so timing is a substantial additional limitation of this runtime.
+Exact composed decisions require all reference-active fields to agree; low composed accuracy is a result for this decision contract, not a claim about general language ability.
+The accompanying analysis retains the six time classes by scenario and family for every setting.
+
+\begin{table*}[t]
+  \centering
+  \small
+  \begin{tabular}{lrrr}
+    \toprule
+    Provisional setting & Freshest & One-tick lag & Late override \\
+    \midrule
+    \TabOpenweightHybrids
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Correction rules and provisional judgment jointly determine composition.}
+  All local settings paired with Terra none; normalized log-AUC over 1--5\,s (\%).}
+  \label{tab:openweight-hybrids}
+\end{table*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig_openweight_hybrids.pdf}
+  \caption{\textbf{A fast provisional component can lower accuracy across update intervals.}
+  Common-clock replay with freshest-source arbitration and Terra none corrections; areas appear in Table~\ref{tab:openweight-hybrids}.}
+  \label{fig:openweight-hybrids}
+\end{figure*}
+
+\paragraph{Counterfactual composition.}
+We pair every completed self-hosted setting with Terra none, the GPT setting with the highest standalone log-AUC in the existing recordings, applying all three rules from Appendix~\ref{app:composition} unchanged.
+Table~\ref{tab:openweight-hybrids} reports every pair and rule; none is excluded based on its outcome.
+Nimble occupies the provisional slot as a control even though its median latency exceeds Terra none's.
+Under freshest-source arbitration, Jev plus Terra none reaches \OwJevTerraNoneAuc\%, while DJev, Kev and Qwen direct-logit plus Terra none give \OwDJevFreshestAuc\%, \OwKevFreshestAuc\% and \OwQwenLogitsFreshestAuc\%, against \OwTerraNoneAuc\% for Terra none alone (Figure~\ref{fig:openweight-hybrids}).
+The acceptance rule favors source recency, so a wrong new provisional answer can replace an earlier answer that still matches the reference.
+These interleaved exposure durations determine the composed score; neither faster service nor adding a correction guarantees improvement.
+
+Standalone measurements retain their original release clocks; joint applications use common nominal releases and preserve every recorded successful-attempt duration plus commit lag.
+The maximum standalone difference between these clocks is \OwNominalGap{} points at the fixed 2\,s interval, across all thirteen settings; replay on each original clock reproduces every correctness and six-part time partition.
+All areas use the same exact crossing-based integration as Appendix~\ref{app:composition}.
+The fixed-delay replay assumes latency is unchanged when the interval changes; components were recorded separately, and shared-resource contention, joint deployment performance and repeated-pass stability remain unmeasured.
+
+\FloatBarrier
 \section{Reproducibility}
 \label{app:repro}
 
@@ -619,7 +811,8 @@ Code and data are released under the MIT license and are intended for evaluating
 The event logs have SHA-256 digests beginning \texttt{\LunaEventsHash} and \texttt{\LunaNoneEventsHash} (Luna, low and none), \texttt{\TerraEventsHash} and \texttt{\TerraNoneEventsHash} (Terra), \texttt{\AstraEventsHash} (Astra) and \texttt{\JevEventsHash} (Jev).
 Every number, table and figure in the paper is regenerated from these logs without any model call; regeneration verifies that recomputed scores match the published analyses and that the executable reference reproduces all \NumStates{} stored answers. The independent audit remains limited to its original six-scenario scope.
 A new pass needs access to the evaluated models: an OpenAI API key for the GPT models and access to \JevProvider's service for Jev.
-At the list prices of Table~\ref{tab:tokens}, OpenAI bills reasoning tokens as output and \JevProvider{} bills input tokens only; the \NumSettingsWord{} reported passes cost \CostTotalUSD{} USD in total, the charges actually billed can differ, and passes not reported here are not included.
+At the list prices of Table~\ref{tab:tokens}, OpenAI bills reasoning tokens as output and \JevProvider{} bills input tokens only; the \NumSettingsWord{} hosted passes cost \CostTotalUSD{} USD in total. Actual billed charges can differ; self-hosted provisioning costs are documented separately with the cohort reports.
+The self-hosted evidence contains original event logs, frozen scenarios and configurations, input audits and pinned native revisions; the release includes no model weights. Recomputing all standalone and composition results requires neither GPUs nor service credentials.
 Hosted models may change or be retired; the logs record the requested and served model identifiers.
 
 \paragraph{Commands.}
@@ -648,5 +841,25 @@ uv run python paper/analysis/lite_reports.py
 uv run python paper/analysis/lite_numbers.py
 uv run --group paper \
   python paper/analysis/lite_figures.py
+uv run --group paper \
+  python paper/analysis/lite_trajectory_value.py
+uv run --group paper \
+  python paper/analysis/lite_openweight.py
 \end{verbatim}
 \end{quote}
+
+\FloatBarrier
+\newpage
+\section{Story Behind the Paper}
+\label{app:story}
+
+This work began while we were building a presenter tool, similar to the presenter family in SDB, and exploring newly introduced decision models such as Jev.
+On social media, we saw open-weight alternatives emerge, with informal comparisons suggesting small differences between models.
+In our own attempts to use them in the tool, however, we noticed clear differences in the decisions they produced.
+This discrepancy prompted us to examine what the benchmarks in those comparisons actually evaluated; many focused on static classification.
+For tasks organized around semantic similarity, embedding-based matching seemed a natural baseline, which led us to ask what additional capability a specialized decision model should provide.
+Our application required instruction following over changing state: given the current evidence and rules, the model had to select the application's next control state.
+We came to think of this as instruction-conditioned next-state prediction, where ``next state'' refers to the control state the application should adopt.
+The choice depends on the instructions and the evolving context, not just on which option is semantically closest to the input.
+Starting from the presenter use case, we extended this evaluation idea to other application families, forming StreamDecisionBench.
+Our goal was to make model comparisons informative for real applications by examining the decisions a component would keep in force as its input changes, helping developers choose components for the behavior their applications require.

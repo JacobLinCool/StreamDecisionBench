@@ -18,6 +18,29 @@ import lite_compare
 import lite_report
 
 
+def test_negative_latency_intercept_is_preserved_but_cannot_remove_negative_delay(tmp_path, monkeypatch):
+    import numpy as np
+    import network
+
+    run = tmp_path / "run"
+    _write_recording(run)
+    verified = lite_cli.rescore_run(run)
+    coefficients = iter([np.array([-0.01, 0.1]), np.array([-0.02, 0.1]), np.array([0.03, 0.1])])
+    monkeypatch.setattr(network, "fit", lambda *_: next(coefficients))
+    result = network.network_adjustment(
+        verified["episodes"], verified["responses"], verified["releases"],
+        generates_text=False, resamples=2,
+    )
+    assert result["unconstrained_intercept_s"]["estimate"] == -0.01
+    assert result["unconstrained_intercept_s"]["low"] < 0
+    assert result["negative_intercept_projected"]
+    assert result["network_s"]["estimate"] == result["network_s"]["low"] == 0
+    assert result["network_s"]["high"] > 0
+    # A zero removable delay gives exactly the original reconstructed score.
+    assert result["scores"]["estimate"]["overall"]["time_accuracy"] == verified["scores"]["overall"]["time_accuracy"]
+    assert "負值不能當作可移除延遲" in "\n".join(lite_report._network_report_lines(result))
+
+
 def _write_recording(path, *, normalized=True):
     question = lambda values: {"type": "choice", "instructions": "Choose the specified value.", "criteria": {v: v for v in values}}
     episode = encode_scenario({
@@ -265,4 +288,3 @@ def test_analysis_names_runs_relative_to_the_repository(tmp_path, monkeypatch):
     assert not any(Path(p).is_absolute() for p in paths)
     assert (lite_report.ROOT / data["run"]).resolve() == run.resolve()
     assert [(lite_report.ROOT / p["run"]).resolve() for p in data["combined_from"]] == [part.resolve()] * 2
-

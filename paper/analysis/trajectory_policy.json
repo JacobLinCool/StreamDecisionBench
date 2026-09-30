@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "fast_setting": "Jev",
+  "slow_settings": ["Luna", "LunaNone", "Terra", "TerraNone", "Astra"],
+  "policies": ["freshest", "lag_one", "arrival"],
+  "fixed_intervals_s": [1, 2, 4, 5],
+  "transition_neighborhood_ticks": 1,
+  "selection": "Exploratory analysis of all five Jev/GPT pairs and three explicitly defined policies, using the existing recordings. No policy was tuned on reference answers.",
+  "limitations": "Counterfactual composition of separately recorded components; simultaneous deployment, shared service contention and repeated-run stability are not measured."
+}
