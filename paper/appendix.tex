@@ -743,10 +743,10 @@ Family weights and bounds match Equation~\eqref{eq:macro}.
 
 \paragraph{Settings and measurement.}
 We record \OwNumSettingsWord{} completed settings on the same frozen dataset, at the same 2\,s cadence with 32 workers and serial scenarios; each covers all \NumStates{} states once with zero failed model attempts.
-The three Laya checkpoints and DJev/DiffusionGemma run on one RTX PRO 6000 Blackwell Server GPU (96\,GB); Kev-4B, Bespoke Nimble-9B and SemIf/Qwen3.5-4B run on one L40S (48\,GB).
+Every setting runs on one RTX PRO 6000 Blackwell Server Edition GPU (96\,GB).
 All use BF16 backbones and native decision readouts. The benchmark and model share a host, so latency includes tokenization, runtime queueing and complete-decision inference, with no internet round trip.
 Download, initialization, input audits and three unrelated synthetic warmups precede measurement.
-These are measurements of the configured deployments: differences between GPU cohorts or with hosted APIs do not isolate architecture speed.
+These are measurements of the configured deployments: differences with hosted APIs do not isolate architecture speed.
 
 \FloatBarrier
 \begin{table*}[t]
@@ -775,7 +775,7 @@ These are measurements of the configured deployments: differences between GPU co
 \paragraph{Native execution and coverage.}
 Laya uses its released calibration policy with maximum sequence length 8192 and head length 1024; its input audits cover all \AnswersPerPass{} question rows, with no state or option truncation.
 DJev uses DiffusionGemma 26B-A4B with a 128-token canvas, one denoising step, no thinking and upstream automatic noise sampling (up to four draws, threshold 0.1).
-Kev uses its native pointer head and fused CUDA runtime, with CUDA graphs, cross-request prefix caching and date-fact augmentation disabled.
+Kev uses its native pointer head and fused CUDA runtime, with CUDA graphs, cross-request prefix caching and date-fact augmentation disabled; Kev-4B and Kev-9B are LoRA adapters merged into their Qwen3.5 bases, Kev-27B is a full-weight checkpoint, and each serves the temperature its checkpoint carries.
 Nimble uses the released merged adapter at temperature 1 and independently processes the full prompt for each of the six or seven fields, sequentially; its latency includes the entire request and runtime contention.
 SemIf reads uncalibrated option logits from the pinned Qwen3.5-4B checkpoint, with thinking and generation disabled; no decision-trained checkpoint is used. This row evaluates that direct-logit configuration.
 Their native input audits check every request for context overflow. No setting uses CPU offload or a truncated-input path.
@@ -785,7 +785,8 @@ Sol-2B has no executable public native runtime at the inspected revisions, so no
 
 \paragraph{Judgment and timing.}
 Tables~\ref{tab:openweight-families} and~\ref{tab:openweight-latency} separate untimed decision accuracy from the measured deployment path.
-DJev and Kev obtain \OwDJevUntimed\% and \OwKevUntimed\% untimed accuracy, with log-AUC of \OwDJevAuc\% and \OwKevAuc\%; most of their loss is already present with timing ignored.
+DJev and Kev-4B obtain \OwDJevUntimed\% and \OwKevUntimed\% untimed accuracy, with log-AUC of \OwDJevAuc\% and \OwKevAuc\%; most of their loss is already present with timing ignored.
+Larger Kev checkpoints raise untimed accuracy to \OwKevNineUntimed\% (Kev-9B) and \OwKevTwentySevenUntimed\% (Kev-27B); Kev-27B keeps \OwKevTwentySevenAuc\% log-AUC at p95 latency \OwKevTwentySevenTail\,s, so judgment still accounts for most of its loss.
 Nimble instead falls from \OwNimbleUntimed\% untimed to \OwNimbleAuc\% log-AUC, with p95 latency \OwNimbleTail\,s, so timing is a substantial additional limitation of this runtime.
 Exact composed decisions require all reference-active fields to agree; low composed accuracy is a result for this decision contract, not a claim about general language ability.
 The accompanying analysis retains the six time classes by scenario and family for every setting.
@@ -794,12 +795,13 @@ The accompanying analysis retains the six time classes by scenario and family fo
 We pair every completed self-hosted setting with Terra none, the GPT setting with the highest standalone log-AUC in the existing recordings, applying all three rules from Appendix~\ref{app:composition} unchanged.
 Table~\ref{tab:openweight-hybrids} reports every pair and rule; none is excluded based on its outcome.
 Nimble occupies the provisional slot as a control even though its median latency exceeds Terra none's.
-Under freshest-source arbitration, Jev plus Terra none reaches \OwJevTerraNoneAuc\%, while DJev, Kev and Qwen direct-logit plus Terra none give \OwDJevFreshestAuc\%, \OwKevFreshestAuc\% and \OwQwenLogitsFreshestAuc\%, against \OwTerraNoneAuc\% for Terra none alone (Figure~\ref{fig:openweight-hybrids}).
+Under freshest-source arbitration, Jev plus Terra none reaches \OwJevTerraNoneAuc\%, while DJev, Kev-4B and Qwen direct-logit plus Terra none give \OwDJevFreshestAuc\%, \OwKevFreshestAuc\% and \OwQwenLogitsFreshestAuc\%, against \OwTerraNoneAuc\% for Terra none alone (Figure~\ref{fig:openweight-hybrids}).
+Kev-27B plus Terra none reaches \OwKevTwentySevenFreshestAuc\%, above both Kev-27B alone (\OwKevTwentySevenAuc\%) and Jev plus Terra none; Kev-9B plus Terra none gives \OwKevNineFreshestAuc\%.
 The acceptance rule favors source recency, so a wrong new provisional answer can replace an earlier answer that still matches the reference.
 These interleaved exposure durations determine the composed score; neither faster service nor adding a correction guarantees improvement.
 
 Standalone measurements retain their original release clocks; joint applications use common nominal releases and preserve every recorded successful-attempt duration plus commit lag.
-The maximum standalone difference between these clocks is \OwNominalGap{} points at the fixed 2\,s interval, across all thirteen settings; replay on each original clock reproduces every correctness and six-part time partition.
+The maximum standalone difference between these clocks is \OwNominalGap{} points at the fixed 2\,s interval, across all \OwTotalSettingsWord{} settings; replay on each original clock reproduces every correctness and six-part time partition.
 All areas use the same exact crossing-based integration as Appendix~\ref{app:composition}.
 The fixed-delay replay assumes latency is unchanged when the interval changes; components were recorded separately, and shared-resource contention, joint deployment performance and repeated-pass stability remain unmeasured.
 
@@ -813,7 +815,7 @@ Code and data are released under the MIT license and are intended for evaluating
 The event logs have SHA-256 digests beginning \texttt{\LunaEventsHash} and \texttt{\LunaNoneEventsHash} (Luna, low and none), \texttt{\TerraEventsHash} and \texttt{\TerraNoneEventsHash} (Terra), \texttt{\AstraEventsHash} (Astra) and \texttt{\JevEventsHash} (Jev).
 Every number, table and figure in the paper is regenerated from these logs without any model call; regeneration verifies that recomputed scores match the published analyses and that the executable reference reproduces all \NumStates{} stored answers. The independent audit remains limited to its original six-scenario scope.
 A new pass needs access to the evaluated models: an OpenAI API key for the GPT models and access to \JevProvider's service for Jev.
-At the list prices of Table~\ref{tab:tokens}, OpenAI bills reasoning tokens as output and \JevProvider{} bills input tokens only; the \NumSettingsWord{} hosted passes cost \CostTotalUSD{} USD in total. Actual billed charges can differ; self-hosted provisioning costs are documented separately with the cohort reports.
+At the list prices of Table~\ref{tab:tokens}, OpenAI bills reasoning tokens as output and \JevProvider{} bills input tokens only; the \NumSettingsWord{} hosted passes cost \CostTotalUSD{} USD in total. Actual billed charges can differ; the self-hosted passes ran on a laboratory GPU without provider charges.
 The self-hosted evidence contains original event logs, frozen scenarios and configurations, input audits and pinned native revisions; the release includes no model weights. Recomputing all standalone and composition results requires neither GPUs nor service credentials.
 Hosted models may change or be retired; the logs record the requested and served model identifiers.
 

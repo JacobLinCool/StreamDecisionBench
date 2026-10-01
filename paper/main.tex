@@ -85,7 +85,7 @@ We make three contributions.
 First, we release StreamDecisionBench (SDB), a dataset of eight streaming scenarios in four application families, with executable reference decisions derived from public rules.
 Second, we propose an evaluation protocol and a metric, in-force accuracy: the share of time the applied decision is correct across update intervals of 0.5--8\,s.
 It reflects accuracy and latency jointly, attributing each error to judgment, latency or both.
-Third, we evaluate thirteen single-model settings, and this attribution separates speed-limited from judgment-limited models: slower, more accurate models lose \LowEffortStaleRoundedMin--\LowEffortStaleRoundedMax\% of the time to outdated answers, a fast model \JevJudgmentRounded\% to wrong ones.
+Third, we evaluate \OwTotalSettingsWord{} single-model settings, and this attribution separates speed-limited from judgment-limited models: slower, more accurate models lose \LowEffortStaleRoundedMin--\LowEffortStaleRoundedMax\% of the time to outdated answers, a fast model \JevJudgmentRounded\% to wrong ones.
 We therefore test hybrids in which a slow model corrects a fast one; with the right pairing and configuration, a hybrid outperforms every single model.
 However, even the best evaluated system keeps a correct decision in force only about two-thirds of the time, leaving a substantial gap for real-time use.
 \end{abstract}
@@ -125,7 +125,7 @@ Across this range they fall short for different reasons.
 At low reasoning effort, Luna, Terra and Astra lose \LunaAucGap, \TerraAucGap{} and \AstraAucGap{} points from untimed accuracy to the integrated score, mostly through stale decisions, so Astra, correct at \AstraUntimedStates{} of \NumStates{} states untimed, reaches only \AstraAuc\%, close to Luna low's \LunaAuc\%.
 Jev responds in \JevLatencyMedian\,s, but its judgment errors account for \JevAucJudgment\% of log-weighted time.
 Dropping reasoning pays off where judgment survives: Terra reaches \TerraNoneAuc\%, close to Jev's \JevAuc\%, while Luna falls to \LunaNoneAuc\%.
-The family curves expose differences hidden by the aggregate: Terra without reasoning leads in IDE debugging, whereas Jev leads in the other three families over the integrated range.
+The family curves expose differences hidden by the aggregate: Terra without reasoning leads the hosted settings in IDE debugging, whereas Jev leads them in the other three families over the integrated range.
 
 Our contributions are:\footnote{Code, data, recordings and reproducible analysis accompany the submission (Appendix~\ref{app:repro}).}
 \begin{itemize}[leftmargin=*,itemsep=1pt,topsep=2pt]
@@ -304,7 +304,7 @@ Trivial baselines indicate that the composed decisions require reading the rules
 \paragraph{Models.}
 The hosted settings are \LunaLabel{} and \TerraLabel{} (Luna and Terra) at low and no reasoning effort, \AstraLabel{} \citep{openai2026astra} (Astra) at low, the lowest it accepts, and Jev through \JevProvider's \JevInterface{} interface (requested as \texttt{\JevRequestedModel}, served as \texttt{\JevServedModel}).
 GPT models receive JSON through the Responses API with strict structured outputs; Jev receives the same content through its native typed-question interface (Appendix~\ref{app:protocol}).
-Supplementary measurements cover \OwNumSettingsWord{} self-hosted native settings: three Laya checkpoints, DJev/DiffusionGemma, Kev-4B, Nimble-9B and Qwen3.5-4B direct logits. Their same-host latency includes runtime queueing and inference; Appendix~\ref{app:openweight} gives GPU and execution details.
+Supplementary measurements cover \OwNumSettingsWord{} self-hosted native settings on one RTX PRO 6000 GPU: three Laya checkpoints, DJev/DiffusionGemma, Kev-4B, Kev-9B and Kev-27B, Nimble-9B and Qwen3.5-4B direct logits. Their same-host latency includes runtime queueing and inference; Appendix~\ref{app:openweight} gives execution details.
 
 \begin{figure}[t]
   \centering
@@ -370,7 +370,8 @@ A shorter response helps only if the decision remains accurate enough.
 We replay every Jev/GPT pair, dispatching both at each state and allowing the slower answer to correct the faster answer for that state.
 At 2\,s, Jev plus Terra low attains \TrajTerraFreshestTwo\% when slow answers cannot regress the active source, but \TrajTerraArrivalTwo\% when they may overwrite newer fast answers: composition changes from improving on Jev alone (\TrajJevTwo\%) to reducing accuracy, with identical component answers, latency distributions and reference transitions.
 Jev plus Terra none with the freshness rule attains \OwJevTerraNoneAuc\% log-AUC, against \OwTerraNoneAuc\% for Terra none alone and \TrajJevAuc\% for Jev alone.
-With the same correction model and rule, DJev and Kev give \OwDJevFreshestAuc\% and \OwKevFreshestAuc\%, despite median latencies of \OwDJevMedian\,s and \OwKevMedian\,s: their untimed decision accuracies are \OwDJevUntimed\% and \OwKevUntimed\%.
+With the same correction model and rule, DJev and Kev-4B give \OwDJevFreshestAuc\% and \OwKevFreshestAuc\%, despite median latencies of \OwDJevMedian\,s and \OwKevMedian\,s: their untimed decision accuracies are \OwDJevUntimed\% and \OwKevUntimed\%.
+Kev-27B is untimed-correct at \OwKevTwentySevenUntimed\% of states; alone it reaches \OwKevTwentySevenAuc\% log-AUC at a median latency of \OwKevTwentySevenMedian\,s, above Jev, and with Terra none corrections \OwKevTwentySevenFreshestAuc\%, the highest evaluated system in this recording.
 A wrong provisional answer for a newer state can displace a still-correct earlier decision; speed helps composition only where judgment survives.
 Marginal accuracy and latency summaries omit which component remains in force and for how long; the exact factorization still holds with the composed path's $U_{\mathrm{cur}}$.
 These are counterfactual combinations of separate recordings on common nominal releases; Appendices~\ref{app:composition} and~\ref{app:openweight} report all evaluated pairs and rules. Joint contention is unmeasured.

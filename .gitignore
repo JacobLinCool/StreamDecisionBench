@@ -242,6 +242,17 @@ cython_debug/
 !/runs/runpod-openweight-20260930-round2/semif-qwen35-4b.input-audit.json
 !/runs/runpod-openweight-20260930-round2/semif-qwen35-4b.prepared.json
 !/runs/runpod-openweight-20260930-round2/source-provenance.json
+!/runs/pro6000-lab-20261001/
+/runs/pro6000-lab-20261001/*
+!/runs/pro6000-lab-20261001/runs/
+/runs/pro6000-lab-20261001/runs/*/*
+!/runs/pro6000-lab-20261001/runs/*/episodes.json
+!/runs/pro6000-lab-20261001/runs/*/events.jsonl
+!/runs/pro6000-lab-20261001/runs/*/run.json
+!/runs/pro6000-lab-20261001/*.input-audit.json
+!/runs/pro6000-lab-20261001/*.prepared.json
+!/runs/pro6000-lab-20261001/*-requirements.txt
+!/runs/pro6000-lab-20261001/source-provenance.json
 # Archived earlier versions stay local and are not versioned.
 /data/legacy/
 /docs/legacy/

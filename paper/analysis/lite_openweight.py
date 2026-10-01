@@ -249,20 +249,19 @@ def render_results(data):
         lines.append(f"| {row['label']} | `{row['model']}` | {100*row['accuracy']:.2f} | {100*row['untimed']:.2f} | {row['median_s']:.3f} |")
     lines += ["", "[Family scores and hosted reports](docs/lite/results/four-family/README.md).", "",
         "### Self-hosted open-weight settings", "", *standalone_table(data), "",
-        "All seven settings use BF16 backbones and native decision readouts. Benchmark and model run on the",
-        "same GPU host; latency includes request processing, runtime queueing and inference, and excludes",
-        "download, initialization and warmup. These rows describe the measured deployments: the GPU cohorts",
+        f"All {len(data['standalone'])} settings use BF16 backbones and native decision readouts on one RTX PRO 6000. Benchmark and",
+        "model run on the same GPU host; latency includes request processing, runtime queueing and inference, and excludes",
+        "download, initialization and warmup. These rows describe the measured deployment: the self-hosted settings",
         "and hosted APIs are not a controlled hardware comparison.", "",
         "Nimble scores each field sequentially with its full prompt; its latency covers the complete decision",
         "request. The Qwen row uses SemIf's direct option logits with thinking disabled; it is not an evaluation",
-        "of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/results/runpod-openweight-20260930/README.md)",
-        "and [L40S cohort](docs/lite/results/runpod-openweight-20260930-round2/README.md).", "",
+        "of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/results/pro6000-lab-20261001/README.md).", "",
         "### Provisional decisions with corrections", "", *hybrid_summary(data), "",
         "Both components receive each state. A provisional answer never moves the active source backward;",
         "the correction wins equal-source ties and, under the **freshest-source** rule used above, cannot",
         "overwrite a newer source. These are counterfactual compositions of independent recordings on",
         "common nominal releases, retaining original measured latencies. Joint deployment contention is unmeasured.", "",
-        "The Jev pairing improves on Terra none alone, while several faster self-hosted components reduce",
+        "The Jev and Kev-27B pairings improve on Terra none alone, while the other self-hosted components reduce",
         "accuracy: an incorrect answer for a newer state can displace a still-correct correction. Speed alone",
         "does not determine whether composition helps. Nimble occupies the provisional slot in this analysis",
         "even though its recorded median latency exceeds Terra none's.", "",
@@ -312,7 +311,7 @@ def write_tex(data):
     def add(name, value, source):
         numbers.extend([f"% docs/research/openweight-hybrids/analysis.json: {source}", f"\\newcommand{{\\Ow{name}}}{{{value}}}"])
     add("NumSettings", str(len(data["standalone"])), "policy.settings")
-    words = {7: "seven", 13: "thirteen"}
+    words = {7: "seven", 9: "nine", 13: "thirteen", 15: "fifteen"}
     add("NumSettingsWord", words[len(data["standalone"])], "policy.settings")
     add("TotalSettingsWord", words[len(data["hosted"]) + len(data["standalone"])], "hosted + standalone")
     add("NominalGap", fixed(data["verification"]["max_nominal_recorded_gap_points"], 6), "verification.max_nominal_recorded_gap_points")
@@ -349,7 +348,8 @@ def plot(data):
                                     ("JevTerraNone", "Jev + Terra none", PALETTE["blue"], "-")]:
         curve = data["controls"][key]["curve"]
         ax.plot(curve["intervals_s"], np.array(curve["accuracy"]) * 100, label=label, color=color, linestyle=style)
-    for name, color, style in [("DJev", "orange", "-"), ("Kev", "green", "-."), ("QwenLogits", "purple", ":")]:
+    for name, color, style in [("KevTwentySeven", "red", "-"), ("DJev", "orange", "-"), ("Kev", "green", "-."),
+                               ("QwenLogits", "purple", ":")]:
         curve = data["systems"][name]["freshest"]["integrated"]["curve"]
         ax.plot(curve["intervals_s"], np.array(curve["accuracy"]) * 100,
                 label=data["standalone"][name]["spec"]["label"] + " + Terra none", color=PALETTE[color], linestyle=style)

@@ -1,0 +1,254 @@
+{
+  "started_at_utc": "2026-10-01T15:14:13.254796+00:00",
+  "status": "complete",
+  "config": {
+    "provider": "kev",
+    "model": "jaredpalmer/kev-9b",
+    "model_revision": "b5d8c18e44c60888d138b65cb6507ff0a5a448a0",
+    "reasoning_effort": null,
+    "protocol": "retry_excluded_successful_attempt_v1",
+    "workers": 32,
+    "episode_concurrency": 1,
+    "request_timeout_s": null,
+    "transport": "native_library",
+    "setting_process_timeout_s": 3600,
+    "max_attempts": 3,
+    "retry_delay_s": 0.5,
+    "sdk_retries": 0,
+    "custom_endpoint": false,
+    "measurement_location": "NYCU lab host EVA-241-125, one RTX PRO 6000 Blackwell Server Edition (96 GB); benchmark and model on the same GPU host",
+    "untimed": "final successful response per state; transport failures excluded",
+    "adapter_sha256": "11d179843dca88e9565a558daa17a7f9494eea2c4d2427264106e0405c90b6cb",
+    "inference": {
+      "dtype": "bfloat16",
+      "fused": true,
+      "cuda_graphs": false,
+      "prefix_cache_size": 0,
+      "temperature": 2.193649959389252,
+      "date_facts": false
+    },
+    "prepared_checkpoint": {
+      "model": "jaredpalmer/kev-9b",
+      "model_revision": "b5d8c18e44c60888d138b65cb6507ff0a5a448a0",
+      "model_path": "/eva_data1/takala/sdb-pro6000/hf/hub/models--jaredpalmer--kev-9b/snapshots/b5d8c18e44c60888d138b65cb6507ff0a5a448a0",
+      "weight_and_config_sha256": {
+        "release/adapter_config.json": "2b2563a94d1bc1065653bec4d296f5a1a6287ab895b14d23e5997333503ecd97",
+        "release/adapter_model.safetensors": "2b2a70cf4ef4440b6c22899e1f72c2f8ea5c6f65b19aa344539b4b8971d1f13d",
+        "release/chat_template.jinja": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+        "release/head.pt": "8e1dab2c8e3664f6fee843e0257d57946c25e0210c61901ea77e71761f4244e1",
+        "release/provenance.json": "3f00f098b9da420787ed796a20c9895cf938bf9e712a73aa29ea9b4efa17f97b",
+        "release/result.json": "10f8c76f454b42f30c115e292d3d23572677fa5de60d3f0351ecc8403886aaa5",
+        "release/tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "release/tokenizer_config.json": "8671bed7c852ce9e661be94f179a7b4ffd091c2a65aea0363e5501c20318ee45",
+        "release/training_config.json": "7bda335e667780dc22a47fd2651232447abdfd505414c92d1433022282df8408",
+        "release/training_metrics.json": "da75124319bc5446c84898ccfc09c6a50c93d5b20c16267c4944d46a4f5a710d",
+        "base/config.json": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+        "base/model.safetensors-00001-of-00004.safetensors": "862bf7bba8a50145d19d0ae463931fae515284024736592a73a336bc4dfa54ee",
+        "base/model.safetensors-00002-of-00004.safetensors": "bace8e115e11ca93c22f0352a60d2fb0c76ac6d7d1c2993c143b7ad2b6c8868c",
+        "base/model.safetensors-00003-of-00004.safetensors": "63a021ac0011cbfc66166e77103327a8b45dee95832e36551f6b4c3337448959",
+        "base/model.safetensors-00004-of-00004.safetensors": "1a643bbed669266917b5058b5d3f660c03233599249ff7d8fd083decfe662ae0",
+        "base/model.safetensors.index.json": "026b9d9fe03f19fd065f2a2f56a332c67640878106c0ca6be2f60c655ed5a8c1",
+        "base/preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516",
+        "base/tokenizer.json": "fe000e3ed39ed12b8d2481d527d44f93c65d37e87645d2dcc80d1bf9d50d2927",
+        "base/tokenizer_config.json": "3891e840d7dc5fca0af33d3a25083a735e36fe06214e3f707024820cb6b9f89c",
+        "base/video_preprocessor_config.json": "d039cd7d88b3502a99edd455496b75b44ecf7dd3b3669748bafac37e6cecc085",
+        "base/vocab.json": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003",
+        "loaded/adapter_config.json": "2b2563a94d1bc1065653bec4d296f5a1a6287ab895b14d23e5997333503ecd97",
+        "loaded/adapter_model.safetensors": "2b2a70cf4ef4440b6c22899e1f72c2f8ea5c6f65b19aa344539b4b8971d1f13d",
+        "loaded/chat_template.jinja": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+        "loaded/head.pt": "8e1dab2c8e3664f6fee843e0257d57946c25e0210c61901ea77e71761f4244e1",
+        "loaded/provenance.json": "3f00f098b9da420787ed796a20c9895cf938bf9e712a73aa29ea9b4efa17f97b",
+        "loaded/result.json": "10f8c76f454b42f30c115e292d3d23572677fa5de60d3f0351ecc8403886aaa5",
+        "loaded/tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "loaded/tokenizer_config.json": "8671bed7c852ce9e661be94f179a7b4ffd091c2a65aea0363e5501c20318ee45",
+        "loaded/training_config.json": "7bda335e667780dc22a47fd2651232447abdfd505414c92d1433022282df8408",
+        "loaded/training_metrics.json": "da75124319bc5446c84898ccfc09c6a50c93d5b20c16267c4944d46a4f5a710d"
+      }
+    },
+    "input_audit_sha256": "0cef18c9b1d9cacfdf42f1693e45faefa57d90032422fc361eaee537c9ad5b67"
+  },
+  "dataset_manifest": {
+    "schema_version": "sdb-lite/0.1",
+    "episodes": [
+      {
+        "episode_id": "lite_debugging_a",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 20,
+        "routes_seen": [
+          "delegate",
+          "inspect",
+          "ready",
+          "rerun",
+          "wait"
+        ],
+        "routes_unseen": [
+          "control"
+        ],
+        "public_hash": "d5269620543a02225bbb7a32b29197b3436558b99f17f37261d186c8eb96e979"
+      },
+      {
+        "episode_id": "lite_debugging_b",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 21,
+        "routes_seen": [
+          "control",
+          "delegate",
+          "inspect",
+          "ready",
+          "rerun",
+          "wait"
+        ],
+        "routes_unseen": [],
+        "public_hash": "ba7ee8a898f0fe101c53f08d389667e72dffe3a4818b6220b7376fc142c27cbd"
+      },
+      {
+        "episode_id": "lite_assembly_a",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 21,
+        "routes_seen": [
+          "advance",
+          "escalate",
+          "handoff",
+          "hold",
+          "release",
+          "repair",
+          "wait"
+        ],
+        "routes_unseen": [],
+        "public_hash": "d21b5e8d96317964cd9b3b400a2a64ec99f35d9350543463837a13c66eff6580"
+      },
+      {
+        "episode_id": "lite_assembly_b",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 23,
+        "routes_seen": [
+          "advance",
+          "escalate",
+          "handoff",
+          "hold",
+          "release",
+          "repair",
+          "wait"
+        ],
+        "routes_unseen": [],
+        "public_hash": "b2dea04150d4146b0bccbf7494c06ffeee938c9e8d3b0abe1cec8f54ec89cc88"
+      },
+      {
+        "episode_id": "lite_support_a",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 22,
+        "routes_seen": [
+          "hold",
+          "payment",
+          "service",
+          "wrap"
+        ],
+        "routes_unseen": [],
+        "public_hash": "ff02247857c9bf2744acad7f4931ef3f48c9a2219178d4c631926c968d4621de"
+      },
+      {
+        "episode_id": "lite_support_b",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 24,
+        "routes_seen": [
+          "cancel",
+          "closed",
+          "delivery",
+          "hold_return",
+          "hold_wait",
+          "repair"
+        ],
+        "routes_unseen": [],
+        "public_hash": "58f27118b2f8eb27e20abe82e7a63b5e53db2996f6ebf758b9032734ea944397"
+      },
+      {
+        "episode_id": "lite_presenter_a",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 24,
+        "routes_seen": [
+          "clip",
+          "closed",
+          "questions",
+          "talk"
+        ],
+        "routes_unseen": [],
+        "public_hash": "627ba38004dae1b3a33e86cbda1c23e3c02231ece848dde035a873be7075decc"
+      },
+      {
+        "episode_id": "lite_presenter_b",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 22,
+        "routes_seen": [
+          "clip",
+          "closed",
+          "questions",
+          "talk"
+        ],
+        "routes_unseen": [],
+        "public_hash": "81f4d0bb57ff96a65d6ffd9aab103963e7dd85267d52e0ef8d18e2cd301f7b56"
+      }
+    ],
+    "hashes": {
+      "lite_debugging_a": "df7d0703f937a005f2c8530515b0491dc285110a5bd612d115c69b36fff786da",
+      "lite_debugging_b": "53fd9ce08a4de5cc618e9065123f4bfa2f7830cd4d8893fe73d3cdee314919ce",
+      "lite_assembly_a": "4b513874a06f59750dd447b2f23928e4f29e7a52b19b99a07cf26dbfe1b87973",
+      "lite_assembly_b": "8113c218bee0a52325182599a37f9313e3ac34d1e2f58d09816a4aa0cd77d870",
+      "lite_support_a": "427e0819efce15e5f88d4da06db6192e18ad3303f6fa5e26696f217bbf3f4cfe",
+      "lite_support_b": "85b70aa9f9351c0f4491c7e78b70fb1b39bb557c52022643f84a58833795ce0f",
+      "lite_presenter_a": "b95e74e0c963de0d6205ea101b1e33abe2c526ca755142bb18d75e8e9d18c864",
+      "lite_presenter_b": "d7c787a4562c67f52d02d8a5d7ce902f92a11931714d333398cf3e3c53311307"
+    },
+    "generator_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "afc1b8c824cf0a9dd9e36268841b312174ec0ad2a9310778b1a5fd9468398418",
+      "lite/core.py": "6e792b226e43126cccef80107f296c7897eedecb0a57ba53a35d324e053baa70",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/presenter.py": "2148486ab6339d73b41d9d30259d0301352809b3ac1320eb3f60c4128f67d0c3",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8"
+    },
+    "reference_validation": "public-only executable reference agreement; not independent human adjudication",
+    "dataset_hash": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af"
+  },
+  "run_sources": {
+    "adapters/llm.py": "14a64eb0c3ee6b6b7d755ea55bd52cb87aaa56356c800a740fe71a4b79fa8ae2",
+    "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+    "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+    "lite/__main__.py": "9b42eb5f1be4d3943a913f0b3a39c11e9fd2b49b6055cba052fee8fff83d01de",
+    "lite/core.py": "6e792b226e43126cccef80107f296c7897eedecb0a57ba53a35d324e053baa70",
+    "lite/interval_scoring.py": "ce3eda9c2fe2efcd84b75a02ce329e8fc7bf7f21b9abd65e65fd10bf3d9a6eb3",
+    "lite/reference_scoring.py": "14036a3799c453fef6c19baca3935f30d63f01aec6241cf785235eb966cd969d",
+    "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+    "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+    "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+    "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+    "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+    "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+    "lite/tasks/presenter.py": "2148486ab6339d73b41d9d30259d0301352809b3ac1320eb3f60c4128f67d0c3",
+    "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8"
+  },
+  "events_sha256": "9f179168e39010c66d0b85ad54b2da349779ab36dda261afc1db0f033d37df1f",
+  "finished_at_utc": "2026-10-01T15:30:13.742872+00:00"
+}

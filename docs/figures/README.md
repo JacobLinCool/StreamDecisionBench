@@ -1,7 +1,7 @@
 # StreamDecisionBench README figures
 
-These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all thirteen
-completed single-model settings: six hosted APIs and seven self-hosted open-weight settings.
+These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all fifteen
+completed single-model settings: six hosted APIs and nine self-hosted open-weight settings.
 Bars start at zero and rank settings by normalized log-AUC over 0.5–8 seconds.
 
 The second figure plots **in-force accuracy against the time-step interval**, on a logarithmic

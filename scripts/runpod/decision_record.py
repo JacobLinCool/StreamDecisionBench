@@ -128,7 +128,7 @@ def main():
         raise RuntimeError("Native CUDA BF16 is required")
     if os.environ.get("HF_HUB_OFFLINE") != "1":
         raise RuntimeError("Recording must use the prepared offline checkpoints")
-    path = Path("/opt/sdb-models") / setting["id"]
+    path = Path(os.environ.get("SDB_MODELS", "/opt/sdb-models")) / setting["id"]
     prepared = json.loads((path / "prepared.json").read_text())
     if prepared["model_revision"] != setting["revision"]:
         raise ValueError("Prepared checkpoint differs from plan")
@@ -177,7 +177,7 @@ def main():
               "workers": 32, "episode_concurrency": 1, "request_timeout_s": None,
               "transport": "native_library", "setting_process_timeout_s": 3600,
               "max_attempts": 3, "retry_delay_s": 0.5, "sdk_retries": 0, "custom_endpoint": False,
-              "measurement_location": "RunPod; native library and benchmark on same GPU host",
+              "measurement_location": os.environ.get("SDB_MEASUREMENT_LOCATION", "RunPod; native library and benchmark on same GPU host"),
               "untimed": "final successful response per state; transport failures excluded",
               "adapter_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               "inference": inference, "prepared_checkpoint": prepared,

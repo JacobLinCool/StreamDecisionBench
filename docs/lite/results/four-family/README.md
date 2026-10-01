@@ -19,13 +19,15 @@ The domain spans update rates four times faster and slower than the recording ca
 
 | Setting | IDE | Assembly | Support | Presenter | Macro log-AUC | Untimed | Report |
 |---|---:|---:|---:|---:|---:|---:|---|
-| Laya English | 0.00% | 0.00% | 1.67% | 0.00% | 0.42% | 0.42% | [report](../runpod-openweight-20260930/laya-english/REPORT.md) |
-| Laya typed-decisions | 0.00% | 0.00% | 1.67% | 4.17% | 1.46% | 1.46% | [report](../runpod-openweight-20260930/laya-typed-decisions/REPORT.md) |
-| Laya multilingual | 0.00% | 0.84% | 0.00% | 0.00% | 0.21% | 0.21% | [report](../runpod-openweight-20260930/laya-multilingual/REPORT.md) |
-| DJev / DiffusionGemma | 22.59% | 6.15% | 28.63% | 26.43% | 20.95% | 21.88% | [report](../runpod-openweight-20260930/djev-diffusiongemma/REPORT.md) |
-| Kev-4B | 15.69% | 12.94% | 36.71% | 18.30% | 20.91% | 21.46% | [report](../runpod-openweight-20260930-round2/kev-4b/REPORT.md) |
-| Bespoke Nimble-9B | 1.25% | 6.03% | 21.36% | 13.05% | 10.42% | 22.50% | [report](../runpod-openweight-20260930-round2/nimble-9b/REPORT.md) |
-| Qwen3.5-4B direct-logit | 0.00% | 11.68% | 27.61% | 19.88% | 14.79% | 17.08% | [report](../runpod-openweight-20260930-round2/semif-qwen35-4b/REPORT.md) |
+| Laya English | 0.00% | 0.00% | 1.67% | 0.00% | 0.42% | 0.42% | [report](../pro6000-lab-20261001/laya-english/REPORT.md) |
+| Laya typed-decisions | 0.00% | 0.00% | 1.67% | 4.17% | 1.46% | 1.46% | [report](../pro6000-lab-20261001/laya-typed-decisions/REPORT.md) |
+| Laya multilingual | 0.00% | 0.83% | 0.00% | 0.00% | 0.21% | 0.21% | [report](../pro6000-lab-20261001/laya-multilingual/REPORT.md) |
+| DJev / DiffusionGemma | 25.72% | 5.65% | 25.91% | 25.15% | 20.61% | 22.92% | [report](../pro6000-lab-20261001/djev-diffusiongemma/REPORT.md) |
+| Kev-4B | 17.77% | 12.76% | 35.96% | 18.29% | 21.20% | 22.08% | [report](../pro6000-lab-20261001/kev-4b/REPORT.md) |
+| Kev-9B | 17.04% | 28.83% | 40.21% | 31.00% | 29.27% | 30.42% | [report](../pro6000-lab-20261001/kev-9b/REPORT.md) |
+| Kev-27B | 41.41% | 67.38% | 71.69% | 67.38% | 61.97% | 72.50% | [report](../pro6000-lab-20261001/kev-27b/REPORT.md) |
+| Bespoke Nimble-9B | 0.17% | 11.05% | 24.45% | 23.24% | 14.72% | 22.50% | [report](../pro6000-lab-20261001/nimble-9b/REPORT.md) |
+| Qwen3.5-4B direct-logit | 0.00% | 12.40% | 27.09% | 22.36% | 15.46% | 17.71% | [report](../pro6000-lab-20261001/semif-qwen35-4b/REPORT.md) |
 
 Each setting has one complete pass over all 480 states. For Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and the two presenter scenarios were recorded in separate sessions; Astra low was recorded in one session covering all eight scenarios. No new model query was made for this evaluation.
 
