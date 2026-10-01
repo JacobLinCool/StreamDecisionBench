@@ -14,19 +14,21 @@ from test_lite_retry_scoring import record
 
 
 @pytest.mark.parametrize("weighting", ["log", "linear"])
-def test_perfect_answers_constant_delay_have_known_area(weighting):
+@pytest.mark.parametrize("lo,hi", [(1, 5), (.5, 8), (1, 4)])
+def test_perfect_answers_constant_delay_have_known_area(weighting, lo, hi):
     # A,A,B with .5 s delay loses .5 s at the start and at A->B:
-    # A(delta) = 1 - 1/(3 delta), throughout [1,5].
-    result = integrate_intervals(frozen(), 1, 5, weighting)
+    # A(delta) = 1 - 1/(3 delta), throughout every tested domain (delta >= .5).
+    result = integrate_intervals(frozen(), lo, hi, weighting)
     penalty = (
-        (1 - 1 / 5) / (3 * math.log(5)) if weighting == "log" else math.log(5) / 12
+        (1 / lo - 1 / hi) / (3 * math.log(hi / lo))
+        if weighting == "log" else math.log(hi / lo) / (3 * (hi - lo))
     )
     assert result["overall"]["accuracy"] == pytest.approx(1 - penalty, abs=1e-5)
     assert result["overall"]["oracle"] == pytest.approx(1 - penalty, abs=1e-5)
     assert result["overall"]["untimed"] == 1
 
 
-@pytest.mark.parametrize("interval", [0.5, 1, 2, 5])
+@pytest.mark.parametrize("interval", [0.5, 1, 2, 4, 8])
 @pytest.mark.parametrize("network", [0, 0.2, 3])
 def test_scaled_delay_matches_retimed_clock_including_reordering_and_clamping(
     interval, network

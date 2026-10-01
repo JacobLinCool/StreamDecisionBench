@@ -38,7 +38,7 @@ assert(data.series.filter(row => row.deployment === 'hosted').length === 6,
   'Six hosted settings are required');
 assert(data.series.filter(row => row.deployment === 'self-hosted').length === 7,
   'Seven self-hosted settings are required');
-assert(data.intervals_s[0] === 1 && data.intervals_s.at(-1) === 5, 'Interval range must be 1–5 s');
+assert(data.intervals_s[0] === 0.5 && data.intervals_s.at(-1) === 8, 'Interval range must be 0.5–8 s');
 for (const [path, expected] of Object.entries(data.sources_sha256)) {
   const hash = createHash('sha256').update(readFileSync(new URL(path, root))).digest('hex');
   assert(hash === expected, `Stale chart data: ${path}; rerun prepare.py`);
@@ -79,7 +79,7 @@ function base(subtitle, description) {
 }
 
 function leaderboard() {
-  const option = base('Single-model leaderboard', 'Normalized log-AUC over 1–5 s  ·  Higher is better');
+  const option = base('Single-model leaderboard', 'Normalized log-AUC over 0.5–8 s  ·  Higher is better');
   option.grid = { left: 373, right: 77, top: 178, bottom: 86 };
   option.xAxis = {
     type: 'value', min: 0, max: 100, interval: 20,
@@ -123,15 +123,15 @@ function leaderboard() {
 
 function intervalCurves() {
   const option = base('Accuracy across update intervals',
-    'The curves beneath the leaderboard score  ·  Logarithmic interval weighting from 1 to 5 s');
+    'The curves beneath the leaderboard score  ·  Logarithmic interval weighting from 0.5 to 8 s');
   option.grid = { left: 98, right: 373, top: 179, bottom: 86 };
   option.xAxis = {
-    type: 'log', min: 1, max: 5, logBase: 10,
+    type: 'log', min: 0.5, max: 8, logBase: 2,
     name: 'Time-step interval (s) · logarithmic scale', nameLocation: 'middle', nameGap: 47,
     nameTextStyle: { fontSize: 16, color: MUTED },
     axisLine: { lineStyle: { color: '#CBD5E1' } },
-    axisTick: { customValues: [1, 2, 3, 4, 5] },
-    axisLabel: { customValues: [1, 2, 3, 4, 5], fontSize: 15, color: MUTED,
+    axisTick: { customValues: [0.5, 1, 2, 4, 8] },
+    axisLabel: { customValues: [0.5, 1, 2, 4, 8], fontSize: 15, color: MUTED,
       margin: 14, showMinLabel: true, showMaxLabel: true, formatter: value => String(value) },
     splitLine: { lineStyle: { color: GRID } },
     minorTick: { show: false }, minorSplitLine: { show: false },
@@ -177,7 +177,7 @@ function save(name, option, description) {
       .replace(/(<svg\b[^>]*>)/,
         `$1\n<title id="chart-title">StreamDecisionBench — ${description}</title>\n`
         + '<desc id="chart-description">Thirteen single-model settings, six cloud APIs and seven self-hosted open-weight settings. '
-        + 'Normalized log-AUC over update intervals of 1–5 seconds; one recorded pass per setting.</desc>');
+        + 'Normalized log-AUC over update intervals of 0.5–8 seconds; one recorded pass per setting.</desc>');
     assert(!svg.includes('NaN'), `${name}: invalid SVG geometry`);
     writeFileSync(new URL(name, directory), svg + '\n');
     console.log(`Rendered ${fileURLToPath(new URL(name, directory))}`);

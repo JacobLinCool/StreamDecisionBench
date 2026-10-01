@@ -2,17 +2,19 @@
 
 3 of 3 executable settings completed; 480 unique requests and 8 scenarios per completed setting.
 
-| Setting | Log-AUC 1–5 s (%) | Untimed (%) | p50 / p95 (s) | Failed attempts |
+| Setting | Log-AUC 0.5–8 s (%) | Untimed (%) | p50 / p95 (s) | Failed attempts |
 |---|---:|---:|---:|---:|
-| [Kev-4B](kev-4b/REPORT.md) | 21.06 | 21.46 | 0.160 / 0.261 | 0 |
-| [Bespoke Nimble-9B](nimble-9b/REPORT.md) | 11.20 | 22.50 | 6.162 / 41.782 | 0 |
-| [SemIf / Qwen3.5-4B (direct logits)](semif-qwen35-4b/REPORT.md) | 15.48 | 17.08 | 0.972 / 1.707 | 0 |
+| [Kev-4B](kev-4b/REPORT.md) | 20.91 | 21.46 | 0.160 / 0.261 | 0 |
+| [Bespoke Nimble-9B](nimble-9b/REPORT.md) | 10.42 | 22.50 | 6.162 / 41.782 | 0 |
+| [SemIf / Qwen3.5-4B (direct logits)](semif-qwen35-4b/REPORT.md) | 14.79 | 17.08 | 0.972 / 1.707 | 0 |
+
+Regenerate all current evaluation scores with `uv run python paper/analysis/lite_reports.py`. The execution and cost records below describe the original recordings.
 
 ## Measurement
 
 One NVIDIA L40S GPU, BF16 backbones, native upstream decision code. Benchmark and model execute on the same Pod; latency includes tokenization, queueing and inference. Download, model initialization, input audits and three unrelated synthetic warmups are excluded. No internet round trip is included.
 
-The unchanged dataset uses a 2 s release cadence, 32 workers and serial scenarios. Complete results use the existing retry-excluded timing protocol and equal-family normalized log-AUC over 1–5 s. Failed or partial settings receive no complete score. No incorrect answer is retried, repaired or used to choose a configuration.
+The unchanged dataset uses a 2 s release cadence, 32 workers and serial scenarios. Complete results use the existing retry-excluded timing protocol and equal-family normalized log-AUC over 0.5–8 s. Failed or partial settings receive no complete score. No incorrect answer is retried, repaired or used to choose a configuration.
 
 Kev uses its native pointer head and fused CUDA runtime, with CUDA graphs, cross-request prefix caching and date-fact augmentation disabled. Nimble uses its released BF16 merged adapter, T=1.0 and independent full-prompt scoring per field. SemIf reads uncalibrated native option logits from the pinned untrained Qwen checkpoint, in fresh direct mode with thinking disabled. For Nimble and SemIf, latency includes answering every question in the decision, rather than one field.
 
@@ -58,4 +60,4 @@ Original budget: US$10 across both rounds; previous round reserved US$2.63. This
 
 ## Reproduction verification
 
-46 relevant tests passed against a freshly extracted deployment source. Original event files were preserved. Pod and local result fields agree within an absolute tolerance of 1e-12; the largest observed difference is 4.44e-16 percentage points in one family score. Coverage, event hashes and latency quantiles agree exactly. The original failed extraction and a local test-interpreter invocation failure are preserved separately from model attempts. There were zero failed benchmark attempts.
+46 relevant tests passed against a freshly extracted deployment source. Original event files were preserved. At the original evaluation domain, Pod and local result fields agreed within an absolute tolerance of 1e-12; the largest observed difference is 4.44e-16 percentage points in one family score. Coverage, event hashes and latency quantiles agree exactly. The original failed extraction and a local test-interpreter invocation failure are preserved separately from model attempts. There were zero failed benchmark attempts.

@@ -48,7 +48,7 @@ def build() -> dict:
         provenance[name] = {"run": source["run"], "sha256": hashes,
                             "published_report": report_source}
     scenarios = prepare(runs)
-    intervals = sorted(set(np.geomspace(1, 5, 161).tolist()) | {1., 2., 3., 4., 5.})
+    intervals = sorted(set(np.geomspace(.5, 8, 161).tolist()) | {.5, 1., 2., 4., 8.})
     series = []
     for name in names:
         run = runs[name]
@@ -56,7 +56,7 @@ def build() -> dict:
         own = original_clock(scenarios, run)
         report = reports[name]
         auc = report["auc"]["primary"]
-        if (auc["min_s"], auc["max_s"], auc["weighting"], auc["network_s"]) != (1, 5, "log", 0):
+        if (auc["min_s"], auc["max_s"], auc["weighting"], auc["network_s"]) != (.5, 8, "log", 0):
             raise ValueError(f"{name}: incompatible primary metric")
         hosted = name in summary["hosted"]
         row = summary["hosted"][name] if hosted else summary["standalone"][name]
@@ -79,7 +79,7 @@ def build() -> dict:
     series.sort(key=lambda row: -row["log_auc_pct"])
     sources = ["docs/figures/prepare.py", "paper/analysis/lite_openweight.py",
                "paper/analysis/trajectory_replay.py", "paper/analysis/evaluation_policy.json"]
-    return {"benchmark": "StreamDecisionBench", "metric": "Normalized log-AUC over 1–5 s (%)",
+    return {"benchmark": "StreamDecisionBench", "metric": "Normalized log-AUC over 0.5–8 s (%)",
             "states": 480, "scenarios": 8, "families": 4, "passes_per_setting": 1,
             "clock": "original recorded release clock; successful-attempt latency and commit lag retained",
             "weighting": "equal scenarios within each family, then equal families; logarithmic interval weighting",

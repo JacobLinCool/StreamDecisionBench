@@ -98,12 +98,13 @@ def test_single_component_matches_existing_exact_scorer(durations):
         assert actual[k] == pytest.approx(seconds / 6, abs=1e-12)
 
 
-def test_outer_integral_has_known_closed_form():
+@pytest.mark.parametrize("lo,hi", [(1, 5), (.5, 8), (1, 4)])
+def test_outer_integral_has_known_closed_form(lo, hi):
     # Wrong provisional output lasts until .5 after each release: A(delta)=1-.5/delta.
     actual = integrate([scenario()], "fast", "slow", "freshest",
-                       {"min_s": 1, "max_s": 5, "weighting": "log"})
+                       {"min_s": lo, "max_s": hi, "weighting": "log"})
     import math
-    assert actual["overall"]["accuracy"] == pytest.approx(1 - 0.4 / math.log(5), abs=1e-12)
+    assert actual["overall"]["accuracy"] == pytest.approx(1 - .5 * (1 / lo - 1 / hi) / math.log(hi / lo), abs=1e-12)
 
 
 def test_log_integral_splits_at_discontinuous_acceptance_crossing():

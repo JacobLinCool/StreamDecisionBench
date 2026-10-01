@@ -2,36 +2,41 @@
   {
     "a": "Jev",
     "b": "Luna",
-    "interval_s": 3.1894768208265303
+    "interval_s": 3.1894768234342337
   },
   {
     "a": "Jev",
     "b": "Terra",
-    "interval_s": 2.766179683804512
+    "interval_s": 2.766179682686925
   },
   {
     "a": "Jev",
     "b": "TerraNone",
-    "interval_s": 2.0953736692667007
+    "interval_s": 2.0953736696392298
   },
   {
     "a": "TerraNone",
     "b": "Terra",
-    "interval_s": 3.762406250834465
+    "interval_s": 3.7624062467366457
+  },
+  {
+    "a": "TerraNone",
+    "b": "Luna",
+    "interval_s": 6.28847655467689
   },
   {
     "a": "Jev",
     "b": "Astra",
-    "interval_s": 2.9768022388219832
+    "interval_s": 2.976802235469222
   },
   {
     "a": "Luna",
     "b": "Astra",
-    "interval_s": 2.456665202975273
+    "interval_s": 2.456665201112628
   },
   {
     "a": "Terra",
     "b": "Astra",
-    "interval_s": 4.34853855073452
+    "interval_s": 4.348538553342223
   }
 ]

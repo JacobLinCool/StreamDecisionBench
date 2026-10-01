@@ -1,16 +1,16 @@
-# SDB log-AUC: SemIf / Qwen3.5-4B (direct logits)
+# SDB log-AUC: Qwen3.5-4B direct-logit
 
-Primary normalized log-AUC over 1–5 s: **15.48%**; untimed accuracy: 17.08%.
+Primary normalized log-AUC over 0.5–8 s: **14.79%**; untimed accuracy: 17.08%.
 Equal multiplicative interval ranges receive equal weight. This is a benchmark weighting rule, not an empirical usage distribution.
 
 | Family | Log-AUC (%) |
 |---|---:|
 | live_debugging | 0.00 |
-| procedural_coaching | 12.27 |
-| support_call_assist | 28.49 |
-| presenter_voice_control | 21.16 |
+| procedural_coaching | 11.68 |
+| support_call_assist | 27.61 |
+| presenter_voice_control | 19.88 |
 
-Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000190 percentage points across all scenario metrics.
+Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000518 percentage points across all scenario metrics.
 This is numerical convergence, not statistical uncertainty. One recorded pass per setting.
 
 The following diagnostics use the fixed **2 s recording cadence**, not the integrated primary score.
@@ -146,7 +146,7 @@ The following diagnostics use the fixed **2 s recording cadence**, not the integ
 在專案根目錄，從完成的原始紀錄重算報告與本機基線：
 
 ```sh
-uv run python paper/analysis/lite_reports.py --run runs/runpod-openweight-20260930-round2/runs/semif-qwen35-4b --out docs/lite/results/runpod-openweight-20260930-round2/semif-qwen35-4b --label 'SemIf / Qwen3.5-4B (direct logits)'
+uv run python paper/analysis/lite_reports.py --run runs/runpod-openweight-20260930-round2/runs/semif-qwen35-4b --out docs/lite/results/runpod-openweight-20260930-round2/semif-qwen35-4b --label 'Qwen3.5-4B direct-logit'
 ```
 
 Token usage（含 cached input，不另推估費用；僅加總回覆中取得的 usage，失敗請求未回傳的用量未知）：

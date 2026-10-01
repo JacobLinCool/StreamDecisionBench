@@ -28,32 +28,32 @@ At every state, dispatch both components. Retain their recorded successful-attem
 
 All rules depend on source order and component identity, never reference answers or correctness. Newest source, then slow, is processed first at exactly simultaneous arrivals; arrivals at the horizon are excluded.
 
-| Slow component (fast = Jev) | Policy | 1 s | 2 s | 4 s | 5 s | Log-AUC 1–5 s |
+| Slow component (fast = Jev) | Policy | 1 s | 2 s | 4 s | 8 s | Log-AUC 0.5–8 s |
 |---|---|---:|---:|---:|---:|---:|
-| Luna low | Freshest source | 57.65 | 61.17 | 70.97 | 74.38 | 63.92 |
-| Luna low | One-tick lag | 56.00 | 58.18 | 71.11 | 74.38 | 62.32 |
-| Luna low | Late override | 47.04 | 57.62 | 71.11 | 74.38 | 61.05 |
-| Luna none | Freshest source | 57.30 | 52.80 | 48.30 | 47.39 | 52.30 |
-| Luna none | One-tick lag | 43.14 | 52.63 | 48.30 | 47.39 | 50.60 |
-| Luna none | Late override | 43.12 | 52.63 | 48.30 | 47.39 | 50.60 |
-| Terra low | Freshest source | 57.70 | 61.60 | 73.27 | 77.53 | 64.86 |
-| Terra low | One-tick lag | 56.23 | 58.29 | 73.47 | 77.60 | 63.91 |
-| Terra low | Late override | 47.59 | 58.15 | 73.47 | 77.60 | 62.66 |
-| Terra none | Freshest source | 57.72 | 67.23 | 74.65 | 76.13 | 67.82 |
-| Terra none | One-tick lag | 52.82 | 67.16 | 74.65 | 76.13 | 66.80 |
-| Terra none | Late override | 52.66 | 67.16 | 74.65 | 76.13 | 66.80 |
-| Astra low | Freshest source | 57.65 | 60.93 | 74.21 | 78.98 | 64.85 |
-| Astra low | One-tick lag | 57.58 | 59.05 | 74.42 | 78.82 | 63.98 |
-| Astra low | Late override | 45.02 | 58.51 | 74.42 | 78.82 | 61.61 |
+| Luna low | Freshest source | 57.65 | 61.17 | 70.97 | 79.67 | 63.93 |
+| Luna low | One-tick lag | 56.00 | 58.18 | 71.11 | 79.67 | 62.94 |
+| Luna low | Late override | 47.04 | 57.62 | 71.11 | 79.67 | 59.33 |
+| Luna none | Freshest source | 57.30 | 52.80 | 48.30 | 46.03 | 51.99 |
+| Luna none | One-tick lag | 43.14 | 52.63 | 48.30 | 46.03 | 48.22 |
+| Luna none | Late override | 43.12 | 52.63 | 48.30 | 46.03 | 47.44 |
+| Terra low | Freshest source | 57.70 | 61.60 | 73.27 | 84.07 | 65.13 |
+| Terra low | One-tick lag | 56.23 | 58.29 | 73.47 | 84.08 | 64.45 |
+| Terra low | Late override | 47.59 | 58.15 | 73.47 | 84.08 | 61.06 |
+| Terra none | Freshest source | 57.72 | 67.23 | 74.65 | 78.36 | 66.21 |
+| Terra none | One-tick lag | 52.82 | 67.16 | 74.65 | 78.39 | 64.86 |
+| Terra none | Late override | 52.66 | 67.16 | 74.65 | 78.39 | 63.64 |
+| Astra low | Freshest source | 57.65 | 60.93 | 74.21 | 86.76 | 65.48 |
+| Astra low | One-tick lag | 57.58 | 59.05 | 74.42 | 86.76 | 64.96 |
+| Astra low | Late override | 45.02 | 58.51 | 74.42 | 86.76 | 60.41 |
 
-| Standalone setting, same nominal releases | 2 s | Log-AUC 1–5 s |
+| Standalone setting, same nominal releases | 2 s | Log-AUC 0.5–8 s |
 |---|---:|---:|
-| Luna low | 47.71 | 49.96 |
-| Luna none | 33.26 | 33.42 |
-| Terra low | 50.37 | 52.60 |
-| Terra none | 59.85 | 60.10 |
-| Astra low | 45.84 | 49.27 |
-| Jev | 60.70 | 60.72 |
+| Luna low | 47.71 | 45.27 |
+| Luna none | 33.26 | 30.67 |
+| Terra low | 50.37 | 48.04 |
+| Terra none | 59.85 | 54.11 |
+| Astra low | 45.84 | 45.15 |
+| Jev | 60.70 | 59.63 |
 
 ## Why the scalar summaries are insufficient
 

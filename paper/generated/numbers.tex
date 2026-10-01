@@ -10,12 +10,12 @@
 %   0c66028fec79394f  data/lite/v1/lite_support_b.json
 %   86e7c16628dcf909  data/lite/v1/lite_presenter_a.json
 %   af198a31a0061072  data/lite/v1/lite_presenter_b.json
-%   b05d1e98b53ec540  docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json
-%   45e93485555d98dc  docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json
-%   adda5d669fbb850f  docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json
-%   dbac54bdec857d17  docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json
-%   5bb82b2d2b798fe9  docs/lite/results/four-family/gpt-6-astra-low/analysis.json
-%   7e28b86832813c1a  docs/lite/results/four-family/jev-latest/analysis.json
+%   fc706d0348b0b194  docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json
+%   4952eec1e48faf2a  docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json
+%   2751cbfabbe5340a  docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json
+%   35818ece42391182  docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json
+%   38a2ce331d8d0e00  docs/lite/results/four-family/gpt-6-astra-low/analysis.json
+%   ee4e1651c3465e1a  docs/lite/results/four-family/jev-latest/analysis.json
 %   61379abdedb29aea  runs/lite-v1-gpt-5.6-luna-low-four-family-retry-v1/events.jsonl
 %   67913b2242cd8535  runs/lite-v1-gpt-5.6-luna-none-four-family-retry-v1/events.jsonl
 %   770f5d2195a80fd5  runs/lite-v1-gpt-5.6-terra-low-four-family-retry-v1/events.jsonl
@@ -24,8 +24,8 @@
 %   eb86c4e1a0bf650c  runs/lite-v1-jev-latest-four-family-retry-v1/events.jsonl
 %   ecd3dcc1582413b5  paper/notes/audit_summary.md
 %   3c91f2e23afc7d19  paper/notes/audit_record.json
-%   fc2ae748309e8e77  docs/lite/results/README.md
-%   81c982448eaa1cf8  paper/analysis/evaluation_policy.json
+%   e8233693702e3083  docs/lite/results/README.md
+%   80dd3f83ef720566  paper/analysis/evaluation_policy.json
 %
 % Naming (letters only; LaTeX macro names cannot contain digits):
 %   \<Model><Metric>            one model, overall (equal family macro mean). Model: Luna, LunaNone, Terra, TerraNone, Astra, Jev
@@ -45,7 +45,7 @@
 % Metrics:
 %   Untimed        untimed branch-composed decision accuracy (%)      UntimedSeg   its segment-balanced version (%)
 %   ExactMatch     all-question exact match, diagnostic (%)            UntimedStates  correct states of 480
-%   Auc            primary normalized log-AUC over 1--5 s (%)
+%   Auc            primary normalized log-AUC over 0.5--8 s (%)
 %   InForce        fixed 2 s diagnostic: correct duration / observed duration (%)
 %   InForceSeg     segment-balanced in-force accuracy (%)
 %   NetRemoved[Low|High]     network-removed in-force accuracy, estimate and 95% bootstrap range (%)
@@ -1689,25 +1689,26 @@
 \newcommand{\ProductMaxDeviation}{6.6}                                  % per scenario |in-force - untimed x oracle| (points, maximum over settings and scenarios)
 \newcommand{\InForceMinusProductMin}{0.1}                               % minimum over settings (\AstraInForceMinusProduct)
 \newcommand{\InForceMinusProductMax}{3.2}                               % maximum over settings (\TerraNoneInForceMinusProduct)
-\newcommand{\CrossJevLunaSec}{3.19}                                     % common-interval replay, root found within 1--5 s
-\newcommand{\CrossJevTerraSec}{2.77}                                    % common-interval replay, root found within 1--5 s
-\newcommand{\CrossJevTerraNoneSec}{2.10}                                % common-interval replay, root found within 1--5 s
-\newcommand{\CrossTerraNoneTerraSec}{3.76}                              % common-interval replay, root found within 1--5 s
-\newcommand{\CrossJevAstraSec}{2.98}                                    % common-interval replay, root found within 1--5 s
-\newcommand{\CrossLunaAstraSec}{2.46}                                   % common-interval replay, root found within 1--5 s
-\newcommand{\CrossTerraAstraSec}{4.35}                                  % common-interval replay, root found within 1--5 s
+\newcommand{\CrossJevLunaSec}{3.19}                                     % common-interval replay, root found within 0.5--8 s
+\newcommand{\CrossJevTerraSec}{2.77}                                    % common-interval replay, root found within 0.5--8 s
+\newcommand{\CrossJevTerraNoneSec}{2.10}                                % common-interval replay, root found within 0.5--8 s
+\newcommand{\CrossTerraNoneTerraSec}{3.76}                              % common-interval replay, root found within 0.5--8 s
+\newcommand{\CrossTerraNoneLunaSec}{6.29}                               % common-interval replay, root found within 0.5--8 s
+\newcommand{\CrossJevAstraSec}{2.98}                                    % common-interval replay, root found within 0.5--8 s
+\newcommand{\CrossLunaAstraSec}{2.46}                                   % common-interval replay, root found within 0.5--8 s
+\newcommand{\CrossTerraAstraSec}{4.35}                                  % common-interval replay, root found within 0.5--8 s
 \newcommand{\LunaCommonTwo}{47.7}                                       % common-interval replay of frozen answers and latencies
-\newcommand{\LunaCommonFive}{71.4}                                      % common-interval replay of frozen answers and latencies
+\newcommand{\LunaCommonEight}{77.8}                                     % common-interval replay of frozen answers and latencies
 \newcommand{\LunaNoneCommonTwo}{33.3}                                   % common-interval replay of frozen answers and latencies
-\newcommand{\LunaNoneCommonFive}{39.4}                                  % common-interval replay of frozen answers and latencies
+\newcommand{\LunaNoneCommonEight}{40.9}                                 % common-interval replay of frozen answers and latencies
 \newcommand{\TerraCommonTwo}{50.4}                                      % common-interval replay of frozen answers and latencies
-\newcommand{\TerraCommonFive}{76.2}                                     % common-interval replay of frozen answers and latencies
+\newcommand{\TerraCommonEight}{83.3}                                    % common-interval replay of frozen answers and latencies
 \newcommand{\TerraNoneCommonTwo}{59.8}                                  % common-interval replay of frozen answers and latencies
-\newcommand{\TerraNoneCommonFive}{73.0}                                 % common-interval replay of frozen answers and latencies
+\newcommand{\TerraNoneCommonEight}{76.4}                                % common-interval replay of frozen answers and latencies
 \newcommand{\AstraCommonTwo}{45.8}                                      % common-interval replay of frozen answers and latencies
-\newcommand{\AstraCommonFive}{76.8}                                     % common-interval replay of frozen answers and latencies
+\newcommand{\AstraCommonEight}{85.4}                                    % common-interval replay of frozen answers and latencies
 \newcommand{\JevCommonTwo}{60.7}                                        % common-interval replay of frozen answers and latencies
-\newcommand{\JevCommonFive}{62.5}                                       % common-interval replay of frozen answers and latencies
+\newcommand{\JevCommonEight}{63.0}                                      % common-interval replay of frozen answers and latencies
 \newcommand{\RegimeLiteLuna}{46.0}                                      % projection on the eight SDB reference schedules (300 latency resamples each)
 \newcommand{\RegimeLiteLunaNone}{32.2}                                  % projection on the eight SDB reference schedules (300 latency resamples each)
 \newcommand{\RegimeLiteTerra}{50.6}                                     % projection on the eight SDB reference schedules (300 latency resamples each)
@@ -1769,166 +1770,187 @@
 \newcommand{\RegimeStructureGainOtherMax}{0.4}                          % max absolute change from uniform, other settings
 \newcommand{\RegimeSteps}{60}                                           % time steps per projected schedule
 \newcommand{\RegimeDraws}{300}                                          % latency resamples per projected schedule
-\newcommand{\LunaAuc}{50.0}                                             % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaDebugAuc}{52.6}                                        % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAssemblyAuc}{47.2}                                     % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaSupportAuc}{51.1}                                      % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaPresenterAuc}{48.9}                                    % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaDebugAAuc}{53.4}                                       % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaDebugBAuc}{51.8}                                       % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAssemblyAAuc}{52.8}                                    % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAssemblyBAuc}{41.6}                                    % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaSupportAAuc}{50.2}                                     % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaSupportBAuc}{52.0}                                     % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaPresenterAAuc}{50.2}                                   % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaPresenterBAuc}{47.6}                                   % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAucGap}{38.8}                                          % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAucOracle}{53.4}                                       % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAucProduct}{47.3}                                      % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAucUCurrent}{91.3}                                     % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAucStale}{37.9}                                        % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAucJudgment}{4.6}                                      % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAucCompound}{5.3}                                      % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAucNone}{2.2}                                          % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAucLucky}{1.2}                                         % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
-\newcommand{\LunaAucLinear}{56.2}                                       % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.sensitivity.Linear
-\newcommand{\LunaAucShort}{42.4}                                        % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.sensitivity.Short
-\newcommand{\LunaAucSubsecond}{39.2}                                    % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.sensitivity.Subsecond
-\newcommand{\LunaNoneAuc}{33.4}                                         % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneDebugAuc}{15.8}                                    % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAssemblyAuc}{21.4}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneSupportAuc}{47.4}                                  % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNonePresenterAuc}{49.1}                                % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneDebugAAuc}{13.4}                                   % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneDebugBAuc}{18.2}                                   % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAssemblyAAuc}{24.8}                                % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAssemblyBAuc}{18.1}                                % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneSupportAAuc}{41.6}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneSupportBAuc}{53.2}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNonePresenterAAuc}{57.2}                               % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNonePresenterBAuc}{40.9}                               % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAucGap}{10.3}                                      % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAucOracle}{73.2}                                   % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAucProduct}{31.9}                                  % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAucUCurrent}{44.2}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAucStale}{10.9}                                    % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAucJudgment}{40.9}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAucCompound}{13.4}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAucNone}{1.3}                                      % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAucLucky}{1.1}                                     % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
-\newcommand{\LunaNoneAucLinear}{35.3}                                   % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.sensitivity.Linear
-\newcommand{\LunaNoneAucShort}{31.3}                                    % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.sensitivity.Short
-\newcommand{\LunaNoneAucSubsecond}{28.7}                                % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.sensitivity.Subsecond
-\newcommand{\TerraAuc}{52.6}                                            % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraDebugAuc}{50.2}                                       % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAssemblyAuc}{50.5}                                    % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraSupportAuc}{56.0}                                     % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraPresenterAuc}{53.7}                                   % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraDebugAAuc}{50.2}                                      % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraDebugBAuc}{50.1}                                      % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAssemblyAAuc}{53.0}                                   % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAssemblyBAuc}{48.0}                                   % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraSupportAAuc}{56.2}                                    % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraSupportBAuc}{55.9}                                    % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraPresenterAAuc}{55.5}                                  % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraPresenterBAuc}{51.9}                                  % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAucGap}{42.8}                                         % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAucOracle}{54.1}                                      % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAucProduct}{51.6}                                     % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAucUCurrent}{96.2}                                    % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAucStale}{41.1}                                       % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAucJudgment}{2.1}                                     % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAucCompound}{2.3}                                     % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAucNone}{2.0}                                         % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAucLucky}{0.6}                                        % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
-\newcommand{\TerraAucLinear}{59.5}                                      % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.sensitivity.Linear
-\newcommand{\TerraAucShort}{44.2}                                       % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.sensitivity.Short
-\newcommand{\TerraAucSubsecond}{41.5}                                   % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.sensitivity.Subsecond
-\newcommand{\TerraNoneAuc}{60.1}                                        % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneDebugAuc}{55.2}                                   % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAssemblyAuc}{54.9}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneSupportAuc}{62.9}                                 % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNonePresenterAuc}{67.4}                               % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneDebugAAuc}{58.6}                                  % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneDebugBAuc}{51.9}                                  % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAssemblyAAuc}{53.6}                               % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAssemblyBAuc}{56.1}                               % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneSupportAAuc}{63.3}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneSupportBAuc}{62.5}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNonePresenterAAuc}{67.4}                              % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNonePresenterBAuc}{67.5}                              % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAucGap}{22.0}                                     % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAucOracle}{69.7}                                  % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAucProduct}{57.2}                                 % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAucUCurrent}{84.2}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAucStale}{22.5}                                   % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAucJudgment}{11.0}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAucCompound}{4.9}                                 % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAucNone}{1.5}                                     % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\LunaAuc}{45.3}                                             % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaDebugAuc}{46.7}                                        % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAssemblyAuc}{43.3}                                     % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaSupportAuc}{45.7}                                      % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaPresenterAuc}{45.4}                                    % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaDebugAAuc}{47.0}                                       % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaDebugBAuc}{46.4}                                       % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAssemblyAAuc}{48.2}                                    % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAssemblyBAuc}{38.4}                                    % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaSupportAAuc}{45.6}                                     % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaSupportBAuc}{45.9}                                     % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaPresenterAAuc}{46.7}                                   % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaPresenterBAuc}{44.0}                                   % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAucGap}{43.5}                                          % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAucOracle}{48.6}                                       % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAucProduct}{43.1}                                      % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAucUCurrent}{90.9}                                     % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAucStale}{42.0}                                        % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAucJudgment}{4.4}                                      % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAucCompound}{5.4}                                      % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAucNone}{2.9}                                          % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAucLucky}{1.1}                                         % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.primary
+\newcommand{\LunaAucLinear}{61.0}                                       % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.sensitivity.Linear
+\newcommand{\LunaAucNarrow}{46.8}                                       % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.sensitivity.Narrow
+\newcommand{\LunaAucHalfFour}{36.0}                                     % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.sensitivity.HalfFour
+\newcommand{\LunaAucOneEight}{55.6}                                     % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.sensitivity.OneEight
+\newcommand{\LunaAucTenthFour}{22.1}                                    % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.sensitivity.TenthFour
+\newcommand{\LunaAucTenthEight}{30.2}                                   % docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json:auc.sensitivity.TenthEight
+\newcommand{\LunaNoneAuc}{30.7}                                         % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneDebugAuc}{14.3}                                    % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAssemblyAuc}{19.5}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneSupportAuc}{43.3}                                  % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNonePresenterAuc}{45.5}                                % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneDebugAAuc}{11.8}                                   % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneDebugBAuc}{16.8}                                   % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAssemblyAAuc}{23.3}                                % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAssemblyBAuc}{15.8}                                % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneSupportAAuc}{38.4}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneSupportBAuc}{48.2}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNonePresenterAAuc}{53.0}                               % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNonePresenterBAuc}{38.0}                               % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAucGap}{13.1}                                      % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAucOracle}{66.1}                                   % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAucProduct}{28.8}                                  % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAucUCurrent}{44.4}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAucStale}{13.7}                                    % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAucJudgment}{36.7}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAucCompound}{17.1}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAucNone}{1.8}                                      % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAucLucky}{1.3}                                     % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.primary
+\newcommand{\LunaNoneAucLinear}{36.2}                                   % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.sensitivity.Linear
+\newcommand{\LunaNoneAucNarrow}{32.5}                                   % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.sensitivity.Narrow
+\newcommand{\LunaNoneAucHalfFour}{27.6}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.sensitivity.HalfFour
+\newcommand{\LunaNoneAucOneEight}{35.0}                                 % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.sensitivity.OneEight
+\newcommand{\LunaNoneAucTenthFour}{17.9}                                % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.sensitivity.TenthFour
+\newcommand{\LunaNoneAucTenthEight}{21.3}                               % docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json:auc.sensitivity.TenthEight
+\newcommand{\TerraAuc}{48.0}                                            % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraDebugAuc}{44.6}                                       % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAssemblyAuc}{46.6}                                    % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraSupportAuc}{50.3}                                     % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraPresenterAuc}{50.6}                                   % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraDebugAAuc}{44.2}                                      % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraDebugBAuc}{45.0}                                      % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAssemblyAAuc}{48.7}                                   % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAssemblyBAuc}{44.5}                                   % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraSupportAAuc}{51.3}                                    % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraSupportBAuc}{49.3}                                    % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraPresenterAAuc}{51.7}                                  % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraPresenterBAuc}{49.5}                                  % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAucGap}{47.4}                                         % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAucOracle}{49.6}                                      % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAucProduct}{47.3}                                     % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAucUCurrent}{95.9}                                    % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAucStale}{44.7}                                       % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAucJudgment}{2.0}                                     % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAucCompound}{2.6}                                     % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAucNone}{2.6}                                         % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAucLucky}{0.5}                                        % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.primary
+\newcommand{\TerraAucLinear}{65.0}                                      % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.sensitivity.Linear
+\newcommand{\TerraAucNarrow}{49.2}                                      % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.sensitivity.Narrow
+\newcommand{\TerraAucHalfFour}{38.0}                                    % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.sensitivity.HalfFour
+\newcommand{\TerraAucOneEight}{58.8}                                    % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.sensitivity.OneEight
+\newcommand{\TerraAucTenthFour}{23.4}                                   % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.sensitivity.TenthFour
+\newcommand{\TerraAucTenthEight}{32.1}                                  % docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json:auc.sensitivity.TenthEight
+\newcommand{\TerraNoneAuc}{54.1}                                        % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneDebugAuc}{48.8}                                   % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAssemblyAuc}{49.9}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneSupportAuc}{56.2}                                 % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNonePresenterAuc}{61.5}                               % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneDebugAAuc}{51.3}                                  % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneDebugBAuc}{46.4}                                  % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAssemblyAAuc}{48.8}                               % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAssemblyBAuc}{51.1}                               % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneSupportAAuc}{57.4}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneSupportBAuc}{54.9}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNonePresenterAAuc}{61.0}                              % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNonePresenterBAuc}{61.9}                              % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAucGap}{28.0}                                     % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAucOracle}{62.5}                                  % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAucProduct}{51.3}                                 % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAucUCurrent}{84.4}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAucStale}{28.0}                                   % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAucJudgment}{9.8}                                 % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAucCompound}{6.1}                                 % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
+\newcommand{\TerraNoneAucNone}{2.0}                                     % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
 \newcommand{\TerraNoneAucLucky}{1.4}                                    % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.primary
-\newcommand{\TerraNoneAucLinear}{64.2}                                  % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.sensitivity.Linear
-\newcommand{\TerraNoneAucShort}{55.3}                                   % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.sensitivity.Short
-\newcommand{\TerraNoneAucSubsecond}{49.9}                               % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.sensitivity.Subsecond
-\newcommand{\AstraAuc}{49.3}                                            % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraDebugAuc}{51.3}                                       % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraAssemblyAuc}{50.6}                                    % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraSupportAuc}{42.2}                                     % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraPresenterAuc}{53.0}                                   % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraDebugAAuc}{50.8}                                      % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraDebugBAuc}{51.8}                                      % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraAssemblyAAuc}{52.0}                                   % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraAssemblyBAuc}{49.3}                                   % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraSupportAAuc}{41.3}                                    % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraSupportBAuc}{43.0}                                    % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraPresenterAAuc}{50.9}                                  % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraPresenterBAuc}{55.1}                                  % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraAucGap}{50.5}                                         % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraAucOracle}{49.3}                                      % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraAucProduct}{49.2}                                     % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\TerraNoneAucLinear}{66.0}                                  % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.sensitivity.Linear
+\newcommand{\TerraNoneAucNarrow}{58.2}                                  % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.sensitivity.Narrow
+\newcommand{\TerraNoneAucHalfFour}{47.5}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.sensitivity.HalfFour
+\newcommand{\TerraNoneAucOneEight}{63.4}                                % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.sensitivity.OneEight
+\newcommand{\TerraNoneAucTenthFour}{29.0}                               % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.sensitivity.TenthFour
+\newcommand{\TerraNoneAucTenthEight}{36.1}                              % docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json:auc.sensitivity.TenthEight
+\newcommand{\AstraAuc}{45.2}                                            % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraDebugAuc}{45.6}                                       % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraAssemblyAuc}{47.2}                                    % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraSupportAuc}{39.2}                                     % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraPresenterAuc}{48.7}                                   % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraDebugAAuc}{45.0}                                      % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraDebugBAuc}{46.2}                                      % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraAssemblyAAuc}{48.0}                                   % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraAssemblyBAuc}{46.3}                                   % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraSupportAAuc}{39.2}                                    % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraSupportBAuc}{39.2}                                    % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraPresenterAAuc}{46.7}                                  % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraPresenterBAuc}{50.7}                                  % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraAucGap}{54.6}                                         % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraAucOracle}{45.2}                                      % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraAucProduct}{45.1}                                     % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
 \newcommand{\AstraAucUCurrent}{100.0}                                   % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraAucStale}{48.1}                                       % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraAucStale}{51.4}                                       % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
 \newcommand{\AstraAucJudgment}{0.0}                                     % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraAucCompound}{0.2}                                     % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraAucNone}{2.4}                                         % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraAucCompound}{0.1}                                     % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
+\newcommand{\AstraAucNone}{3.3}                                         % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
 \newcommand{\AstraAucLucky}{0.0}                                        % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.primary
-\newcommand{\AstraAucLinear}{57.2}                                      % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.sensitivity.Linear
-\newcommand{\AstraAucShort}{39.6}                                       % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.sensitivity.Short
-\newcommand{\AstraAucSubsecond}{37.7}                                   % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.sensitivity.Subsecond
-\newcommand{\JevAuc}{60.7}                                              % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevDebugAuc}{42.1}                                         % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAssemblyAuc}{63.8}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevSupportAuc}{68.9}                                       % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevPresenterAuc}{68.1}                                     % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevDebugAAuc}{41.1}                                        % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevDebugBAuc}{43.0}                                        % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAssemblyAAuc}{70.2}                                     % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAssemblyBAuc}{57.5}                                     % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevSupportAAuc}{64.1}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevSupportBAuc}{73.8}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevPresenterAAuc}{68.3}                                    % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevPresenterBAuc}{67.8}                                    % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAucGap}{3.0}                                            % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAucOracle}{94.9}                                        % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAucProduct}{60.4}                                       % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\AstraAucLinear}{64.0}                                      % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.sensitivity.Linear
+\newcommand{\AstraAucNarrow}{45.3}                                      % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.sensitivity.Narrow
+\newcommand{\AstraAucHalfFour}{33.8}                                    % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.sensitivity.HalfFour
+\newcommand{\AstraAucOneEight}{56.5}                                    % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.sensitivity.OneEight
+\newcommand{\AstraAucTenthFour}{20.3}                                   % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.sensitivity.TenthFour
+\newcommand{\AstraAucTenthEight}{29.6}                                  % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:auc.sensitivity.TenthEight
+\newcommand{\JevAuc}{59.6}                                              % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevDebugAuc}{41.3}                                         % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAssemblyAuc}{62.8}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevSupportAuc}{68.0}                                       % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevPresenterAuc}{66.5}                                     % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevDebugAAuc}{40.3}                                        % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevDebugBAuc}{42.3}                                        % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAssemblyAAuc}{69.0}                                     % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAssemblyBAuc}{56.6}                                     % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevSupportAAuc}{63.1}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevSupportBAuc}{72.8}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevPresenterAAuc}{66.5}                                    % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevPresenterBAuc}{66.5}                                    % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAucGap}{4.1}                                            % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAucOracle}{93.0}                                        % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAucProduct}{59.3}                                       % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
 \newcommand{\JevAucUCurrent}{63.8}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAucStale}{3.0}                                          % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAucJudgment}{34.4}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAucCompound}{1.6}                                       % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAucNone}{0.4}                                           % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAucLucky}{0.2}                                          % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
-\newcommand{\JevAucLinear}{61.3}                                        % docs/lite/results/four-family/jev-latest/analysis.json:auc.sensitivity.Linear
-\newcommand{\JevAucShort}{60.1}                                         % docs/lite/results/four-family/jev-latest/analysis.json:auc.sensitivity.Short
-\newcommand{\JevAucSubsecond}{59.0}                                     % docs/lite/results/four-family/jev-latest/analysis.json:auc.sensitivity.Subsecond
+\newcommand{\JevAucStale}{4.0}                                          % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAucJudgment}{33.7}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAucCompound}{2.1}                                       % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAucNone}{0.5}                                           % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAucLucky}{0.3}                                          % docs/lite/results/four-family/jev-latest/analysis.json:auc.primary
+\newcommand{\JevAucLinear}{61.5}                                        % docs/lite/results/four-family/jev-latest/analysis.json:auc.sensitivity.Linear
+\newcommand{\JevAucNarrow}{60.5}                                        % docs/lite/results/four-family/jev-latest/analysis.json:auc.sensitivity.Narrow
+\newcommand{\JevAucHalfFour}{58.6}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.sensitivity.HalfFour
+\newcommand{\JevAucOneEight}{61.2}                                      % docs/lite/results/four-family/jev-latest/analysis.json:auc.sensitivity.OneEight
+\newcommand{\JevAucTenthFour}{49.4}                                     % docs/lite/results/four-family/jev-latest/analysis.json:auc.sensitivity.TenthFour
+\newcommand{\JevAucTenthEight}{51.5}                                    % docs/lite/results/four-family/jev-latest/analysis.json:auc.sensitivity.TenthEight
+\newcommand{\LowEffortStaleRoundedMin}{42}                              % minimum primary stale share of low-effort GPT settings, rounded to whole percent
+\newcommand{\LowEffortStaleRoundedMax}{51}                              % maximum primary stale share of low-effort GPT settings, rounded to whole percent
+\newcommand{\JevJudgmentRounded}{34}                                    % Jev primary judgment share, rounded to whole percent
 \newcommand{\AucMaxRefinementChange}{0.0008}                            % max successive quadrature-grid change, all integrated scenario metrics and sensitivity conditions (points)
-\newcommand{\AucProductMaxDeviation}{5.5}                               % max per-scenario absolute difference: log-AUC minus U times oracle log-AUC (points)
+\newcommand{\AucProductMaxDeviation}{5.1}                               % max per-scenario absolute difference: log-AUC minus U times oracle log-AUC (points)
 \newcommand{\AucProductGapMin}{0.1}                                     % min macro log-AUC minus mean per-scenario U times oracle log-AUC (points)
-\newcommand{\AucProductGapMax}{2.9}                                     % max of the same (points)
+\newcommand{\AucProductGapMax}{2.8}                                     % max of the same (points)
 \newcommand{\AucLuckyMax}{1.4}                                          % max integrated lucky share over settings
-\newcommand{\AucUCurrentMaxDiff}{2.6}                                   % max integrated current-correct/current-source share minus untimed accuracy, absolute (points)
-\newcommand{\JevMinusTerraNoneAuc}{0.6}                                 % \JevAuc minus \TerraNoneAuc (points, from the printed values)
-\newcommand{\JevMinusLunaAuc}{10.7}                                     % \JevAuc minus \LunaAuc (points, from the printed values)
-\newcommand{\JevMinusTerraAuc}{8.1}                                     % \JevAuc minus \TerraAuc (points, from the printed values)
-\newcommand{\JevMinusAstraAuc}{11.4}                                    % \JevAuc minus \AstraAuc (points, from the printed values)
+\newcommand{\AucUCurrentMaxDiff}{2.3}                                   % max integrated current-correct/current-source share minus untimed accuracy, absolute (points)
+\newcommand{\JevMinusTerraNoneAuc}{5.5}                                 % \JevAuc minus \TerraNoneAuc (points, from the printed values)
+\newcommand{\JevMinusLunaAuc}{14.3}                                     % \JevAuc minus \LunaAuc (points, from the printed values)
+\newcommand{\JevMinusTerraAuc}{11.6}                                    % \JevAuc minus \TerraAuc (points, from the printed values)
+\newcommand{\JevMinusAstraAuc}{14.4}                                    % \JevAuc minus \AstraAuc (points, from the printed values)
 \newcommand{\NumWindows}{51}                                            % paper/analysis/lite_window.py over docs/lite/results/four-family/*/analysis.json scores.per_episode[*].intervals (candidate windows)
 \newcommand{\TrajWindowSec}{20}                                         % paper/analysis/lite_window.py over docs/lite/results/four-family/*/analysis.json scores.per_episode[*].intervals (window length)
 \newcommand{\TrajWindowStart}{72}                                       % paper/analysis/lite_window.py over docs/lite/results/four-family/*/analysis.json scores.per_episode[*].intervals (chosen window)
@@ -1965,10 +1987,10 @@
 \newcommand{\NumGPTModels}{3}                                           % docs/lite/results/four-family/*/analysis.json:config.model (distinct values with provider openai)
 \newcommand{\NumGPTModelsWord}{three}                                   % \NumGPTModels spelled out
 \newcommand{\NetRemovedLowEffortMinGap}{23.6}                           % min over Luna low, Terra low, Astra low and families of untimed minus network-removed (upper range end), printed points
-\newcommand{\GPTAboveJevCommonFive}{4}                                  % settings with provider openai whose \<Model>CommonFive exceeds \JevCommonFive (count)
-\newcommand{\GPTAboveJevCommonFiveWord}{four}                           % \GPTAboveJevCommonFive spelled out
+\newcommand{\GPTAboveJevCommonEight}{4}                                 % settings with provider openai whose \<Model>CommonEight exceeds \JevCommonEight (count)
+\newcommand{\GPTAboveJevCommonEightWord}{four}                          % \GPTAboveJevCommonEight spelled out
 \newcommand{\AstraRecordedEndUTC}{17:07}                                % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:finished_at_utc (minute; same UTC date as started_at_utc)
-\newcommand{\LunaMinusAstraAuc}{0.7}                                    % \LunaAuc minus \AstraAuc (points, from the printed values)
+\newcommand{\LunaMinusAstraAuc}{0.1}                                    % \LunaAuc minus \AstraAuc (points, from the printed values)
 \newcommand{\AstraMinusJevUntimed}{36.0}                                % \AstraUntimed minus \JevUntimed (points, from the printed values)
 \newcommand{\AstraReasoningResponses}{26}                               % runs/lite-v1-gpt-6-astra-low-four-family-retry-v1/events.jsonl: responses whose usage reports reasoning_tokens > 0
 \newcommand{\AstraStates}{480}                                          % docs/lite/results/four-family/gpt-6-astra-low/analysis.json:scores.states

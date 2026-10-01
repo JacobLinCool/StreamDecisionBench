@@ -99,7 +99,7 @@ def summarize(recordings: Path, reports: Path):
     lines = [
         "# RunPod open-weight SDB results", "",
         f"Completed {len(rows)} of {len(LABELS)} settings; each completed setting covers all 8 scenarios and 480 states.", "",
-        "| Setting | Log-AUC 1–5 s (%) | Untimed (%) | Latency p50 / p95 (s) | Failed attempts |",
+        "| Setting | Log-AUC 0.5–8 s (%) | Untimed (%) | Latency p50 / p95 (s) | Failed attempts |",
         "|---|---:|---:|---:|---:|",
     ]
     for row in rows:
@@ -114,7 +114,7 @@ def summarize(recordings: Path, reports: Path):
         "The unchanged four-family dataset, 2 s recording cadence, 32 client workers, one scenario at a time and "
         "retry_excluded_successful_attempt_v1 scoring are used. Only transport failures may be retried, at most three attempts. "
         "No incorrect answer is retried or repaired. Raw wall-clock metrics are preserved separately. "
-        "The primary normalized log-AUC is recomputed by the existing paper analysis over 1–5 s with equal family weights.", "",
+        "The primary normalized log-AUC is recomputed by the existing paper analysis over 0.5–8 s with equal family weights.", "",
         "The standard reports also retain the benchmark's secondary latency-intercept diagnostic and its range. "
         "It assumes latency can be decomposed into network, prefill and (when applicable) decode contributions; "
         "the intercept can also contain fixed server or client time. On these same-host deployments it is not a measurement "

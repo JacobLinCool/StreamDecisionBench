@@ -148,14 +148,14 @@ def summarize(raw, reports):
     labels = {s["id"]: s["label"] for s in plan["settings"]}
     lines = ["# Native open-weight SDB experiment — round 2", "",
              f"{len(rows)} of {len(plan['settings'])} executable settings completed; 480 unique requests and 8 scenarios per completed setting.", "",
-             "| Setting | Log-AUC 1–5 s (%) | Untimed (%) | p50 / p95 (s) | Failed attempts |",
+             "| Setting | Log-AUC 0.5–8 s (%) | Untimed (%) | p50 / p95 (s) | Failed attempts |",
              "|---|---:|---:|---:|---:|"]
     for row in rows:
         label = row["setting"]
         lines.append(f"| [{labels[label]}]({label}/REPORT.md) | {row['log_auc_pct']:.2f} | {row['untimed_accuracy_pct']:.2f} | {row['latency_p50_s']:.3f} / {row['latency_p95_s']:.3f} | {row['failed_attempts']} |")
     lines += ["", "## Measurement", "",
               f"One {plan['gpu']} GPU, BF16 backbones, native upstream decision code. Benchmark and model execute on the same Pod; latency includes tokenization, queueing and inference. Download, model initialization, input audits and three unrelated synthetic warmups are excluded. No internet round trip is included.", "",
-              "The unchanged dataset uses a 2 s release cadence, 32 workers and serial scenarios. Complete results use the existing retry-excluded timing protocol and equal-family normalized log-AUC over 1–5 s. Failed or partial settings receive no complete score. No incorrect answer is retried, repaired or used to choose a configuration.", "",
+              "The unchanged dataset uses a 2 s release cadence, 32 workers and serial scenarios. Complete results use the existing retry-excluded timing protocol and equal-family normalized log-AUC over 0.5–8 s. Failed or partial settings receive no complete score. No incorrect answer is retried, repaired or used to choose a configuration.", "",
               "Kev uses its native pointer head and fused CUDA runtime, with CUDA graphs, cross-request prefix caching and date-fact augmentation disabled. Nimble uses its released BF16 merged adapter, T=1.0 and independent full-prompt scoring per field. SemIf reads uncalibrated native option logits from the pinned untrained Qwen checkpoint, in fresh direct mode with thinking disabled. For Nimble and SemIf, latency includes answering every question in the decision, rather than one field.", "",
               "All state fields, structured instructions, choice descriptions, option order and opaque output IDs are preserved through native mappings. The native encoders audit all 480 requests before model recording and reject context overflow. There is no CPU offload or truncated-input path. Native probability/logit diagnostics are retained for Nimble and SemIf; Kev commits its native answers without retaining a full probability vector in the SDB event schema.", "",
               "One pass per setting. Related stream states are dependent. Differences describe this dataset and deployment; they do not establish significance, a stable model ranking, or a controlled comparison with the hosted API rows or the previous RTX PRO 6000 cohort. Standard reports also retain the secondary latency-intercept diagnostic and its range; its network + prefill + decode assumption can include fixed server time, and it does not replace the primary score.", "",

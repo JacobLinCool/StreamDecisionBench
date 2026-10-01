@@ -1,16 +1,16 @@
 # SDB log-AUC: Luna none
 
-Primary normalized log-AUC over 1–5 s: **33.42%**; untimed accuracy: 43.75%.
+Primary normalized log-AUC over 0.5–8 s: **30.67%**; untimed accuracy: 43.75%.
 Equal multiplicative interval ranges receive equal weight. This is a benchmark weighting rule, not an empirical usage distribution.
 
 | Family | Log-AUC (%) |
 |---|---:|
-| live_debugging | 15.82 |
-| procedural_coaching | 21.43 |
-| support_call_assist | 47.39 |
-| presenter_voice_control | 49.06 |
+| live_debugging | 14.31 |
+| procedural_coaching | 19.52 |
+| support_call_assist | 43.31 |
+| presenter_voice_control | 45.53 |
 
-Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000256 percentage points across all scenario metrics.
+Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000521 percentage points across all scenario metrics.
 This is numerical convergence, not statistical uncertainty. One recorded pass per setting.
 
 The following diagnostics use the fixed **2 s recording cadence**, not the integrated primary score.
@@ -144,7 +144,7 @@ The following diagnostics use the fixed **2 s recording cadence**, not the integ
 在專案根目錄，從完成的原始紀錄重算報告與本機基線：
 
 ```sh
-uv run python paper/analysis/lite_reports.py
+uv run python paper/analysis/lite_reports.py --run runs/lite-v1-gpt-5.6-luna-none-four-family-retry-v1 --out docs/lite/results/four-family/gpt-5.6-luna-none --label 'Luna none'
 ```
 
 Token usage（含 cached input，不另推估費用；僅加總回覆中取得的 usage，失敗請求未回傳的用量未知）：

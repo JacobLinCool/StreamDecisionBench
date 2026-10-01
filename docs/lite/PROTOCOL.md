@@ -155,7 +155,7 @@ successful attempt contributes two seconds of attempt latency, one failed
 attempt out of two, and one retried logical request out of one. It does not
 become a 32-second model response.
 
-Raw recording summaries use equal episode means. The paper integrates each scenario's in-force accuracy over 1–5 s with normalized log weighting, then averages scenarios within each family and families equally; this build has two scenarios per family. Each scenario's time fractions are normalized before integration; seconds from different horizons are never pooled. This first
+Raw recording summaries use equal episode means. The paper integrates each scenario's in-force accuracy over 0.5–8 s with normalized log weighting, then averages scenarios within each family and families equally; this build has two scenarios per family. Each scenario's time fractions are normalized before integration; seconds from different horizons are never pooled. This first
 dataset has the same episode count and nominal duration in every family.
 The reported results contain one pass per setting and two independent scenarios
 per family, with no confidence interval claim and no assertion that the sample
@@ -248,13 +248,13 @@ here are SDB's evaluation specification, not a scoring claim made by those docs.
 
 ## Integrated evaluation across time scales
 
-All frozen requests use a 2 s recording cadence. The paper's primary summary is normalized log-AUC over the common 1–5 s interval range, as declared in `paper/analysis/evaluation_policy.json`. For each family, integrate mean scenario accuracy against `dΔ / (Δ ln 5)`, then average the four family scores equally. Equal multiplicative ranges receive equal weight; additivity and continuity determine this logarithmic measure. This is an evaluation principle, not an empirical event-rate distribution or human delay tolerance.
+All frozen requests use a 2 s recording cadence. The paper's primary summary is normalized log-AUC over the common 0.5–8 s interval range, as declared in `paper/analysis/evaluation_policy.json`. For each family, integrate mean scenario accuracy against `dΔ / (Δ ln 16)`, then average the four family scores equally. The domain spans update rates four times faster and slower than the 2 s recording cadence, assigning each side half the log weight. Equal multiplicative ranges receive equal weight; additivity and continuity determine this logarithmic measure. This is an evaluation principle, not an empirical event-rate distribution or human delay tolerance.
 
 `interval_scoring.evaluate_interval` changes the ratio of each measured response delay to the evaluation interval. This is equivalent to scaling releases, the horizon and tick-valued policies while keeping each successful-attempt duration and postprocessing lag in seconds. Acceptance is recomputed, with dispatch/retry waits excluded under the existing protocol. This replay does not measure service latency under the changed request load or predict another response draw.
 
 The integration uses nested trapezoidal grids in log interval, starting at 128 subintervals and doubling until every scenario metric changes by at most 0.001 percentage point. Nonconvergence at 4096 subintervals is an error. The same normalized weights apply to error partitions and oracle metrics. Current-source judgment in the integrated factorization is the ratio of integrated current-correct and current-source shares. The approximation averages the scenario-wise untimed-times-oracle product, not the product of two overall means.
 
-Main-text figures show both aggregate and family curves. Appendix sensitivity conditions use linear weighting over 1–5 s and log weighting over 1–3 s and 0.5–5 s. Fixed 2 s and 5 s comparisons remain diagnostic. A larger interval need not improve accuracy for arbitrary wrong predictions, and 5 s is not a safe response budget. The aggregation rule was adopted after inspecting the recorded passes; one pass per setting does not establish a stable ranking.
+Main-text figures show both aggregate and family curves. Appendix sensitivity conditions use linear weighting over 0.5–8 s and the five other log ranges formed by lower bounds 0.1, 0.5 and 1 s and upper bounds 4 and 8 s. Fixed 2 s and 8 s comparisons remain diagnostic. A larger interval need not improve accuracy for arbitrary wrong predictions, and 8 s is a controlled slow-update condition, not a validated response budget. The aggregation rule was adopted after inspecting the recorded passes; one pass per setting does not establish a stable ranking.
 
 Reproduce the integrated reports without model requests:
 

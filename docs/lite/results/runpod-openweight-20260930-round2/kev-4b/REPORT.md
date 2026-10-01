@@ -1,16 +1,16 @@
 # SDB log-AUC: Kev-4B
 
-Primary normalized log-AUC over 1–5 s: **21.06%**; untimed accuracy: 21.46%.
+Primary normalized log-AUC over 0.5–8 s: **20.91%**; untimed accuracy: 21.46%.
 Equal multiplicative interval ranges receive equal weight. This is a benchmark weighting rule, not an empirical usage distribution.
 
 | Family | Log-AUC (%) |
 |---|---:|
-| live_debugging | 15.95 |
-| procedural_coaching | 13.04 |
-| support_call_assist | 36.92 |
-| presenter_voice_control | 18.31 |
+| live_debugging | 15.69 |
+| procedural_coaching | 12.94 |
+| support_call_assist | 36.71 |
+| presenter_voice_control | 18.30 |
 
-Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000046 percentage points across all scenario metrics.
+Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000186 percentage points across all scenario metrics.
 This is numerical convergence, not statistical uncertainty. One recorded pass per setting.
 
 The following diagnostics use the fixed **2 s recording cadence**, not the integrated primary score.

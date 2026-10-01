@@ -24,7 +24,8 @@ For the camera-ready version, add an entry file that sets `\SDBVersion` to `fina
 Run these from the repository root. They read the frozen data and the recorded runs, and they make no model call or network request.
 
 ```bash
-# primary log-AUC reports and recorded-cadence diagnostics -> docs/lite/results/four-family/
+# primary log-AUC reports and recorded-cadence diagnostics for all thirteen settings
+# -> docs/lite/results/four-family/ and both self-hosted cohorts
 uv run python paper/analysis/lite_reports.py
 
 # numbers and table bodies -> generated/numbers.tex, generated/tables.tex
@@ -92,7 +93,7 @@ If any check fails, the script lists every failure and does not publish new numb
 
 ## Integrated evaluation and recording provenance
 
-`analysis/evaluation_policy.json` declares the primary normalized log-AUC over 1–5 s, plus linear 1–5 s and log 1–3 s / 0.5–5 s sensitivity conditions. Equal multiplicative ranges have equal weight; each family averages scenarios equally, and the macro score averages families equally. `src/streamdecisionbench/lite/interval_scoring.py` integrates scenario fractions on nested grids, refining until all metrics change by at most 0.001 percentage point. This is numerical convergence, not statistical uncertainty.
+`analysis/evaluation_policy.json` declares the primary normalized log-AUC over 0.5–8 s, plus linear 0.5–8 s and the five other log ranges formed by lower bounds 0.1, 0.5 and 1 s and upper bounds 4 and 8 s. Equal multiplicative ranges have equal weight; each family averages scenarios equally, and the macro score averages families equally. `src/streamdecisionbench/lite/interval_scoring.py` integrates scenario fractions on nested grids, refining until all metrics change by at most 0.001 percentage point. This is numerical convergence, not statistical uncertainty.
 
 The aggregation rule was adopted after inspecting the recorded passes, not preregistered. All six hosted and seven self-hosted settings were recorded at 2 s. For Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and a disjoint two-scenario presenter pass were recorded in separate sessions and merged; merged artifacts retain both sessions. Astra low was recorded in one session covering all eight scenarios (2026-09-29 16:51–17:07 UTC). No existing response was re-queried or excluded for this evaluation.
 

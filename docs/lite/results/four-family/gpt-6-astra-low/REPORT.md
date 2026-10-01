@@ -1,16 +1,16 @@
 # SDB log-AUC: Astra low
 
-Primary normalized log-AUC over 1–5 s: **49.27%**; untimed accuracy: 99.79%.
+Primary normalized log-AUC over 0.5–8 s: **45.15%**; untimed accuracy: 99.79%.
 Equal multiplicative interval ranges receive equal weight. This is a benchmark weighting rule, not an empirical usage distribution.
 
 | Family | Log-AUC (%) |
 |---|---:|
-| live_debugging | 51.29 |
-| procedural_coaching | 50.64 |
-| support_call_assist | 42.15 |
-| presenter_voice_control | 52.98 |
+| live_debugging | 45.58 |
+| procedural_coaching | 47.16 |
+| support_call_assist | 39.20 |
+| presenter_voice_control | 48.66 |
 
-Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000174 percentage points across all scenario metrics.
+Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000465 percentage points across all scenario metrics.
 This is numerical convergence, not statistical uncertainty. One recorded pass per setting.
 
 The following diagnostics use the fixed **2 s recording cadence**, not the integrated primary score.
@@ -144,7 +144,7 @@ The following diagnostics use the fixed **2 s recording cadence**, not the integ
 在專案根目錄，從完成的原始紀錄重算報告與本機基線：
 
 ```sh
-uv run python paper/analysis/lite_reports.py
+uv run python paper/analysis/lite_reports.py --run runs/lite-v1-gpt-6-astra-low-four-family-retry-v1 --out docs/lite/results/four-family/gpt-6-astra-low --label 'Astra low'
 ```
 
 Token usage（含 cached input，不另推估費用；僅加總回覆中取得的 usage，失敗請求未回傳的用量未知）：

@@ -19,7 +19,6 @@ Widths are the ACL layout's (one column 7.7 cm, text block 16 cm; see figstyle).
 from __future__ import annotations
 
 import json
-import os
 import sys
 
 sys.dont_write_bytecode = True  # imports src/ and scripts/ read-only; leave no bytecode behind
@@ -50,9 +49,6 @@ from streamdecisionbench.lite.reference_scoring import family_mean
 from lite_numbers import POLICY  # noqa: E402
 
 OUT = ROOT / "paper" / "figures"
-# Matplotlib stamps PDF/SVG files with the current date unless this is set; a
-# fixed epoch makes every rerun byte-identical.
-os.environ.setdefault("SOURCE_DATE_EPOCH", "0")
 
 
 @dataclass(frozen=True)
@@ -770,7 +766,7 @@ def fig_errortime(data: dict) -> dict:
     ax.spines["left"].set_visible(False)
     ax.set_xlim(0, 100)
     ax.set_xticks(range(0, 101, 20))
-    ax.set_xlabel("Share of log-weighted time over 1–5 s (%)")
+    ax.set_xlabel("Share of log-weighted time over 0.5–8 s (%)")
     # One row, in the bars' left-to-right order.
     fig.legend(handles=[partition_patch(k) for k in PARTITION_ORDER], loc="outside upper center",
                ncol=len(PARTITION_ORDER), fontsize=SMALL, handlelength=1.1, handleheight=0.9, columnspacing=0.65,
@@ -821,7 +817,7 @@ def fig_separability(data: dict) -> dict:
 
 # Time-step intervals for the interval figure: each recorded pass is evaluated with every
 # latency scaled by (SDB Lite interval) / (interval), which is equivalent.
-PACE_INTERVALS = tuple(float(x) for x in np.geomspace(1, 5, 129))
+PACE_INTERVALS = tuple(float(x) for x in np.geomspace(.5, 8, 129))
 RECORDED_INK = "#9A9A9A"
 # Name placement (points offset, horizontal and vertical alignment) beside a setting's untimed point,
 # or below its in-force point where the space beside the untimed point is taken (Luna none's name
@@ -992,10 +988,10 @@ def fig_pace(data: dict) -> dict:
                     markerfacecolor=colour if low_effort(model.key) else "white",
                     markeredgewidth=0.8, linewidth=0.9, zorder=3, clip_on=False)
         ax.set_xscale("log")
-        ax.set_xlim(1, 5)
+        ax.set_xlim(.5, 8)
         ax.set_ylim(0, 100)
         ax.set_yticks(range(0, 101, 20))
-        ax.set_xticks([1, 2, 3, 4, 5], ["1", "2", "3", "4", "5"])
+        ax.set_xticks([.5, 1, 2, 4, 8], [".5", "1", "2", "4", "8"])
         ax.xaxis.set_minor_locator(mpl.ticker.NullLocator())
         ax.annotate(f"({'abcde'[i]}) {name}", xy=(0, 1), xycoords="axes fraction", xytext=(0, 2.5),
                     textcoords="offset points", ha="left", va="bottom", fontsize=SMALL,
@@ -1023,7 +1019,6 @@ def fig_pace(data: dict) -> dict:
 
 def main() -> None:
     use_style()
-    mpl.rcParams["svg.hashsalt"] = "sdb-lite-figures"  # stable SVG element ids
     mpl.rcParams["hatch.linewidth"] = 0.6  # one hatch weight in every figure
     OUT.mkdir(parents=True, exist_ok=True)
     data = load()

@@ -12,11 +12,11 @@ SDB evaluates the **decision in force** at every instant. It streams evidence in
 families, computes reference decisions from public rules with executable code, and attributes every
 erroneous instant to **judgment** (wrong for the current state), **latency** (a *stale* decision,
 right for an outdated state) or both. The primary score is **normalized log-AUC**: in-force accuracy
-averaged over time-step intervals from 1 to 5 s on a logarithmic axis.
+averaged over time-step intervals from 0.5 to 8 s on a logarithmic axis.
 
-![StreamDecisionBench leaderboard: all thirteen single-model settings ranked by normalized log-AUC over 1–5 seconds](docs/figures/leaderboard.svg)
+![StreamDecisionBench leaderboard: all thirteen single-model settings ranked by normalized log-AUC over 0.5–8 seconds](docs/figures/leaderboard.svg)
 
-![StreamDecisionBench in-force accuracy curves across update intervals from 1 to 5 seconds, for all thirteen single-model settings](docs/figures/interval-curves.svg)
+![StreamDecisionBench in-force accuracy curves across update intervals from 0.5 to 8 seconds, for all thirteen single-model settings](docs/figures/interval-curves.svg)
 
 The curves show in-force accuracy at each update interval; the leaderboard summarizes them with
 normalized log-AUC. [Figure data and regeneration](docs/figures/README.md).
@@ -25,36 +25,40 @@ normalized log-AUC. [Figure data and regeneration](docs/figures/README.md).
 ## Results
 
 One recorded pass per setting over all 480 states (8 scenarios in 4 families), recorded at a 2 s
-time-step interval. The primary score is normalized log-AUC over 1–5 s, with equal scenario weights
+time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights
 within each family and then equal family weights. Interval evaluations retain the recorded answers
 and latencies; they assume service latency does not change with the request rate.
+
+The 0.5–8 s domain spans update rates four times faster and slower than the 2 s recording cadence.
+Each doubling interval receives equal log weight, balancing faster and slower conditions around that cadence.
+These bounds define a controlled evaluation domain; deployment-specific event rates can motivate other ranges.
 
 ### Hosted APIs
 
 Latency includes the remote service and internet round trip from the benchmark client.
 
-| Setting | Model | Log-AUC 1–5 s (%) | Untimed (%) | Median latency (s) |
+| Setting | Model | Log-AUC 0.5–8 s (%) | Untimed (%) | Median latency (s) |
 |---|---|---:|---:|---:|
-| Jev | `jev-latest` | 60.72 | 63.75 | 0.253 |
-| Terra none | `gpt-5.6-terra` | 60.10 | 82.08 | 1.493 |
-| Terra low | `gpt-5.6-terra` | 52.60 | 95.42 | 2.439 |
-| Luna low | `gpt-5.6-luna` | 49.96 | 88.75 | 2.405 |
-| Astra low | `gpt-6-astra` | 49.27 | 99.79 | 2.671 |
-| Luna none | `gpt-5.6-luna` | 33.42 | 43.75 | 1.318 |
+| Jev | `jev-latest` | 59.63 | 63.75 | 0.253 |
+| Terra none | `gpt-5.6-terra` | 54.11 | 82.08 | 1.493 |
+| Terra low | `gpt-5.6-terra` | 48.04 | 95.42 | 2.439 |
+| Luna low | `gpt-5.6-luna` | 45.26 | 88.75 | 2.405 |
+| Astra low | `gpt-6-astra` | 45.15 | 99.79 | 2.671 |
+| Luna none | `gpt-5.6-luna` | 30.67 | 43.75 | 1.318 |
 
 [Family scores and hosted reports](docs/lite/results/four-family/README.md).
 
 ### Self-hosted open-weight settings
 
-| Setting | Log-AUC 1–5 s (%) | Untimed (%) | p50 / p95 (s) | GPU; same-host latency |
+| Setting | Log-AUC 0.5–8 s (%) | Untimed (%) | p50 / p95 (s) | GPU; same-host latency |
 |---|---:|---:|---:|---|
 | [Laya English](docs/lite/results/runpod-openweight-20260930/laya-english/REPORT.md) | 0.42 | 0.42 | 0.126 / 0.240 | RTX PRO 6000 (96 GB) |
 | [Laya typed-decisions](docs/lite/results/runpod-openweight-20260930/laya-typed-decisions/REPORT.md) | 1.46 | 1.46 | 0.129 / 0.235 | RTX PRO 6000 (96 GB) |
 | [Laya multilingual](docs/lite/results/runpod-openweight-20260930/laya-multilingual/REPORT.md) | 0.21 | 0.21 | 0.068 / 0.132 | RTX PRO 6000 (96 GB) |
-| [DJev / DiffusionGemma](docs/lite/results/runpod-openweight-20260930/djev-diffusiongemma/REPORT.md) | 21.20 | 21.88 | 0.257 / 0.403 | RTX PRO 6000 (96 GB) |
-| [Kev-4B](docs/lite/results/runpod-openweight-20260930-round2/kev-4b/REPORT.md) | 21.06 | 21.46 | 0.160 / 0.261 | L40S (48 GB) |
-| [Bespoke Nimble-9B](docs/lite/results/runpod-openweight-20260930-round2/nimble-9b/REPORT.md) | 11.20 | 22.50 | 6.162 / 41.782 | L40S (48 GB) |
-| [Qwen3.5-4B direct-logit](docs/lite/results/runpod-openweight-20260930-round2/semif-qwen35-4b/REPORT.md) | 15.48 | 17.08 | 0.972 / 1.707 | L40S (48 GB) |
+| [DJev / DiffusionGemma](docs/lite/results/runpod-openweight-20260930/djev-diffusiongemma/REPORT.md) | 20.95 | 21.88 | 0.257 / 0.403 | RTX PRO 6000 (96 GB) |
+| [Kev-4B](docs/lite/results/runpod-openweight-20260930-round2/kev-4b/REPORT.md) | 20.91 | 21.46 | 0.160 / 0.261 | L40S (48 GB) |
+| [Bespoke Nimble-9B](docs/lite/results/runpod-openweight-20260930-round2/nimble-9b/REPORT.md) | 10.42 | 22.50 | 6.162 / 41.782 | L40S (48 GB) |
+| [Qwen3.5-4B direct-logit](docs/lite/results/runpod-openweight-20260930-round2/semif-qwen35-4b/REPORT.md) | 14.79 | 17.08 | 0.972 / 1.707 | L40S (48 GB) |
 
 All seven settings use BF16 backbones and native decision readouts. Benchmark and model run on the
 same GPU host; latency includes request processing, runtime queueing and inference, and excludes
@@ -68,17 +72,17 @@ and [L40S cohort](docs/lite/results/runpod-openweight-20260930-round2/README.md)
 
 ### Provisional decisions with corrections
 
-| System | Log-AUC 1–5 s (%) |
+| System | Log-AUC 0.5–8 s (%) |
 |---|---:|
-| Terra none alone | 60.10 |
-| Jev + Terra none | 67.82 |
-| Laya English + Terra none | 28.37 |
-| Laya typed-decisions + Terra none | 28.75 |
-| Laya multilingual + Terra none | 26.86 |
-| DJev / DiffusionGemma + Terra none | 43.75 |
-| Kev-4B + Terra none | 42.13 |
-| Bespoke Nimble-9B + Terra none | 60.07 |
-| Qwen3.5-4B direct-logit + Terra none | 53.32 |
+| Terra none alone | 54.11 |
+| Jev + Terra none | 66.21 |
+| Laya English + Terra none | 27.27 |
+| Laya typed-decisions + Terra none | 27.77 |
+| Laya multilingual + Terra none | 26.22 |
+| DJev / DiffusionGemma + Terra none | 42.07 |
+| Kev-4B + Terra none | 41.05 |
+| Bespoke Nimble-9B + Terra none | 54.08 |
+| Qwen3.5-4B direct-logit + Terra none | 48.73 |
 
 Both components receive each state. A provisional answer never moves the active source backward;
 the correction wins equal-source ties and, under the **freshest-source** rule used above, cannot

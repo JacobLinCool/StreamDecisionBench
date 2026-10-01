@@ -22,7 +22,7 @@ from lite_numbers import FACTS_COLUMNS, FAMILIES, MODELS, fixed
 from lite_trajectory_value import LABELS, POLICY_MACROS, integrate
 from streamdecisionbench.lite.__main__ import rescore_run
 from streamdecisionbench.lite.core import digest
-from trajectory_replay import PARTITION, aggregate, evaluate, prepare
+from trajectory_replay import METRICS, PARTITION, aggregate, evaluate, prepare
 
 POLICY_PATH = ROOT / "paper/analysis/openweight_policy.json"
 OUT = ROOT / "docs/research/openweight-hybrids"
@@ -190,25 +190,32 @@ def analyze():
                 "integrated": integrate(scenarios, name, slow, arbitration, auc_policy["primary"]),
                 "fixed_two": aggregate([evaluate(sc, name, slow, 2, arbitration) for sc in scenarios])}
             print(f"Replayed {name}/{arbitration}", flush=True)
-    expected = {"TerraNone": 60.10, "JevTerraNone": 67.82, "DJev": 43.75, "Kev": 42.13, "QwenLogits": 53.32}
-    for name, value in expected.items():
-        result = data["controls"][name] if name in data["controls"] else data["systems"][name]["freshest"]["integrated"]
-        if fixed(100 * result["overall"]["accuracy"], 2) != fixed(value, 2):
-            raise ValueError(f"{name}: requested regression value changed")
+    hosted_compositions = json.loads((ROOT / "docs/research/trajectory-value/analysis.json").read_text())
+    if hosted_compositions["auc_policy"] != auc_policy:
+        raise ValueError("hosted composition report uses a different evaluation policy")
+    shared = {"TerraNone": hosted_compositions["standalone"]["TerraNone"]["integrated"],
+              "JevTerraNone": hosted_compositions["systems"]["TerraNone"]["freshest"]["integrated"]}
+    for name, expected in shared.items():
+        for metric in METRICS:
+            if not math.isclose(data["controls"][name]["overall"][metric],
+                                expected["overall"][metric], rel_tol=0, abs_tol=1e-12):
+                raise ValueError(f"{name}: shared hosted composition disagrees for {metric}")
     data["verification"] = {"standalone_partition_checks": len(runs) * len(scenarios),
-        "max_nominal_recorded_gap_points": max(gaps.values()), "nominal_recorded_gaps_points": gaps}
+        "max_nominal_recorded_gap_points": max(gaps.values()), "nominal_recorded_gaps_points": gaps,
+        "shared_hosted_control_checks": len(shared) * len(METRICS)}
     sources = ["paper/analysis/lite_openweight.py", "paper/analysis/openweight_policy.json",
         "paper/analysis/lite_trajectory_value.py", "paper/analysis/trajectory_replay.py",
         "paper/analysis/lite_numbers.py", "paper/analysis/evaluation_policy.json",
         "paper/analysis/figstyle.py", "src/streamdecisionbench/lite/__main__.py",
         "src/streamdecisionbench/lite/core.py", "src/streamdecisionbench/lite/scoring.py",
-        "src/streamdecisionbench/lite/retry_scoring.py", "src/streamdecisionbench/lite/interval_scoring.py"]
+        "src/streamdecisionbench/lite/retry_scoring.py", "src/streamdecisionbench/lite/interval_scoring.py",
+        "docs/research/trajectory-value/analysis.json"]
     data["sources_sha256"] = {p: sha(ROOT / p) for p in sources}
     return data
 
 
 def standalone_table(data, prefix=""):
-    lines = ["| Setting | Log-AUC 1–5 s (%) | Untimed (%) | p50 / p95 (s) | GPU; same-host latency |",
+    lines = ["| Setting | Log-AUC 0.5–8 s (%) | Untimed (%) | p50 / p95 (s) | GPU; same-host latency |",
              "|---|---:|---:|---:|---|"]
     for name, row in data["standalone"].items():
         spec = row["spec"]
@@ -220,7 +227,7 @@ def standalone_table(data, prefix=""):
 
 
 def hybrid_summary(data):
-    lines = ["| System | Log-AUC 1–5 s (%) |", "|---|---:|"]
+    lines = ["| System | Log-AUC 0.5–8 s (%) |", "|---|---:|"]
     for key, label in [("TerraNone", "Terra none alone"), ("JevTerraNone", "Jev + Terra none")]:
         lines.append(f"| {label} | {100*data['controls'][key]['overall']['accuracy']:.2f} |")
     for name, row in data["standalone"].items():
@@ -230,11 +237,14 @@ def hybrid_summary(data):
 
 def render_results(data):
     lines = ["## Results", "", "One recorded pass per setting over all 480 states (8 scenarios in 4 families), recorded at a 2 s",
-        "time-step interval. The primary score is normalized log-AUC over 1–5 s, with equal scenario weights",
+        "time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights",
         "within each family and then equal family weights. Interval evaluations retain the recorded answers",
         "and latencies; they assume service latency does not change with the request rate.", "",
+        "The 0.5–8 s domain spans update rates four times faster and slower than the 2 s recording cadence.",
+        "Each doubling interval receives equal log weight, balancing faster and slower conditions around that cadence.",
+        "These bounds define a controlled evaluation domain; deployment-specific event rates can motivate other ranges.", "",
         "### Hosted APIs", "", "Latency includes the remote service and internet round trip from the benchmark client.", "",
-        "| Setting | Model | Log-AUC 1–5 s (%) | Untimed (%) | Median latency (s) |", "|---|---|---:|---:|---:|"]
+        "| Setting | Model | Log-AUC 0.5–8 s (%) | Untimed (%) | Median latency (s) |", "|---|---|---:|---:|---:|"]
     for row in sorted(data["hosted"].values(), key=lambda r: -r["accuracy"]):
         lines.append(f"| {row['label']} | `{row['model']}` | {100*row['accuracy']:.2f} | {100*row['untimed']:.2f} | {row['median_s']:.3f} |")
     lines += ["", "[Family scores and hosted reports](docs/lite/results/four-family/README.md).", "",
@@ -267,7 +277,7 @@ def render_results(data):
 def render_report(data):
     lines = ["# Self-hosted decisions and their counterfactual compositions", "",
         "Reproduce: `uv run --group paper python paper/analysis/lite_openweight.py`.", "",
-        "All primary values are normalized log-AUC over 1–5 s, equally averaged over scenarios within each",
+        "All primary values are normalized log-AUC over 0.5–8 s, equally averaged over scenarios within each",
         "family and then families. Standalone measurements retain their original release clocks; compositions",
         "use common nominal releases. Every recorded successful-attempt duration plus commit lag is retained.", "",
         *standalone_table(data, "../../../"), "", "## Pair selection and acceptance", "", data["policy"]["selection"], "",
@@ -277,7 +287,7 @@ def render_report(data):
         "deliveries. No rule consults references or output correctness. Nimble is a provisional-role control,",
         "not a faster component in these recordings.", "", *hybrid_summary(data), "",
         "## Complete local/policy matrix", "",
-        "| Provisional setting | Arbitration | Log-AUC 1–5 s (%) | Fixed 2 s A (%) | Correction time share, log-weighted (%) |",
+        "| Provisional setting | Arbitration | Log-AUC 0.5–8 s (%) | Fixed 2 s A (%) | Correction time share, log-weighted (%) |",
         "|---|---|---:|---:|---:|"]
     for name, policies in data["systems"].items():
         for policy, row in policies.items():
@@ -343,8 +353,8 @@ def plot(data):
         curve = data["systems"][name]["freshest"]["integrated"]["curve"]
         ax.plot(curve["intervals_s"], np.array(curve["accuracy"]) * 100,
                 label=data["standalone"][name]["spec"]["label"] + " + Terra none", color=PALETTE[color], linestyle=style)
-    ax.set(xscale="log", xlim=(1, 5), ylim=(20, 100), xlabel="Time-step interval (s)", ylabel="In-force accuracy (%)")
-    ax.set_xticks([1, 2, 3, 4, 5], labels=["1", "2", "3", "4", "5"])
+    ax.set(xscale="log", xlim=(.5, 8), ylim=(0, 100), xlabel="Time-step interval (s)", ylabel="In-force accuracy (%)")
+    ax.set_xticks([.5, 1, 2, 4, 8], labels=["0.5", "1", "2", "4", "8"])
     ax.minorticks_off()
     ax.legend(loc="upper left", fontsize=7, frameon=False, ncol=2)
     save(fig, str(ROOT / "paper/figures/fig_openweight_hybrids"))

@@ -10,12 +10,12 @@
 %   0c66028fec79394f  data/lite/v1/lite_support_b.json
 %   86e7c16628dcf909  data/lite/v1/lite_presenter_a.json
 %   af198a31a0061072  data/lite/v1/lite_presenter_b.json
-%   b05d1e98b53ec540  docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json
-%   45e93485555d98dc  docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json
-%   adda5d669fbb850f  docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json
-%   dbac54bdec857d17  docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json
-%   5bb82b2d2b798fe9  docs/lite/results/four-family/gpt-6-astra-low/analysis.json
-%   7e28b86832813c1a  docs/lite/results/four-family/jev-latest/analysis.json
+%   fc706d0348b0b194  docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json
+%   4952eec1e48faf2a  docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json
+%   2751cbfabbe5340a  docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json
+%   35818ece42391182  docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json
+%   38a2ce331d8d0e00  docs/lite/results/four-family/gpt-6-astra-low/analysis.json
+%   ee4e1651c3465e1a  docs/lite/results/four-family/jev-latest/analysis.json
 %   61379abdedb29aea  runs/lite-v1-gpt-5.6-luna-low-four-family-retry-v1/events.jsonl
 %   67913b2242cd8535  runs/lite-v1-gpt-5.6-luna-none-four-family-retry-v1/events.jsonl
 %   770f5d2195a80fd5  runs/lite-v1-gpt-5.6-terra-low-four-family-retry-v1/events.jsonl
@@ -24,8 +24,8 @@
 %   eb86c4e1a0bf650c  runs/lite-v1-jev-latest-four-family-retry-v1/events.jsonl
 %   ecd3dcc1582413b5  paper/notes/audit_summary.md
 %   3c91f2e23afc7d19  paper/notes/audit_record.json
-%   fc2ae748309e8e77  docs/lite/results/README.md
-%   81c982448eaa1cf8  paper/analysis/evaluation_policy.json
+%   e8233693702e3083  docs/lite/results/README.md
+%   80dd3f83ef720566  paper/analysis/evaluation_policy.json
 %
 % Table bodies (rows only, booktabs). \input{generated/numbers} must come first; cells are macros from it.
 % Model and family labels below are defaults the paper may define before this file.
@@ -194,7 +194,7 @@
   recurrent A-B-A & \RegimeRecurrentChanges & \RegimeRecurrentLuna & \RegimeRecurrentLunaNone & \RegimeRecurrentTerra & \RegimeRecurrentTerraNone & \RegimeRecurrentAstra & \RegimeRecurrentJev \\
 }
 
-% Normalized log-AUC 1--5 s per family, macro mean, and untimed accuracy (%).
+% Normalized log-AUC 0.5--8 s per family, macro mean, and untimed accuracy (%).
 \newcommand{\TabAucBody}{%
   \LunaRowLabel & \LunaDebugAuc & \LunaAssemblyAuc & \LunaSupportAuc & \LunaPresenterAuc & \LunaAuc & \LunaUntimed \\
   \LunaNoneRowLabel & \LunaNoneDebugAuc & \LunaNoneAssemblyAuc & \LunaNoneSupportAuc & \LunaNonePresenterAuc & \LunaNoneAuc & \LunaNoneUntimed \\
@@ -204,14 +204,14 @@
   \JevRowLabel & \JevDebugAuc & \JevAssemblyAuc & \JevSupportAuc & \JevPresenterAuc & \JevAuc & \JevUntimed \\
 }
 
-% Primary log-AUC 1--5, linear 1--5, log 1--3, log 0.5--5, and in-force accuracy at 2 s and 5 s (%).
+% Primary log-AUC 0.5--8, linear 0.5--8, log 1--4, 0.5--4, 1--8, 0.1--4, 0.1--8, and in-force accuracy at 2 s (%).
 \newcommand{\TabAucSensitivityBody}{%
-  \LunaRowLabel & \LunaAuc & \LunaAucLinear & \LunaAucShort & \LunaAucSubsecond & \LunaCommonTwo & \LunaCommonFive \\
-  \LunaNoneRowLabel & \LunaNoneAuc & \LunaNoneAucLinear & \LunaNoneAucShort & \LunaNoneAucSubsecond & \LunaNoneCommonTwo & \LunaNoneCommonFive \\
-  \TerraRowLabel & \TerraAuc & \TerraAucLinear & \TerraAucShort & \TerraAucSubsecond & \TerraCommonTwo & \TerraCommonFive \\
-  \TerraNoneRowLabel & \TerraNoneAuc & \TerraNoneAucLinear & \TerraNoneAucShort & \TerraNoneAucSubsecond & \TerraNoneCommonTwo & \TerraNoneCommonFive \\
-  \AstraRowLabel & \AstraAuc & \AstraAucLinear & \AstraAucShort & \AstraAucSubsecond & \AstraCommonTwo & \AstraCommonFive \\
-  \JevRowLabel & \JevAuc & \JevAucLinear & \JevAucShort & \JevAucSubsecond & \JevCommonTwo & \JevCommonFive \\
+  \LunaRowLabel & \LunaAuc & \LunaAucLinear & \LunaAucNarrow & \LunaAucHalfFour & \LunaAucOneEight & \LunaAucTenthFour & \LunaAucTenthEight & \LunaCommonTwo \\
+  \LunaNoneRowLabel & \LunaNoneAuc & \LunaNoneAucLinear & \LunaNoneAucNarrow & \LunaNoneAucHalfFour & \LunaNoneAucOneEight & \LunaNoneAucTenthFour & \LunaNoneAucTenthEight & \LunaNoneCommonTwo \\
+  \TerraRowLabel & \TerraAuc & \TerraAucLinear & \TerraAucNarrow & \TerraAucHalfFour & \TerraAucOneEight & \TerraAucTenthFour & \TerraAucTenthEight & \TerraCommonTwo \\
+  \TerraNoneRowLabel & \TerraNoneAuc & \TerraNoneAucLinear & \TerraNoneAucNarrow & \TerraNoneAucHalfFour & \TerraNoneAucOneEight & \TerraNoneAucTenthFour & \TerraNoneAucTenthEight & \TerraNoneCommonTwo \\
+  \AstraRowLabel & \AstraAuc & \AstraAucLinear & \AstraAucNarrow & \AstraAucHalfFour & \AstraAucOneEight & \AstraAucTenthFour & \AstraAucTenthEight & \AstraCommonTwo \\
+  \JevRowLabel & \JevAuc & \JevAucLinear & \JevAucNarrow & \JevAucHalfFour & \JevAucOneEight & \JevAucTenthFour & \JevAucTenthEight & \JevCommonTwo \\
 }
 
 % Integrated timing, current-source judgment, lucky share, U times timing, and log-AUC (%).

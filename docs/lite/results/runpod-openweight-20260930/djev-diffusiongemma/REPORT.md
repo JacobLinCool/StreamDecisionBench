@@ -1,16 +1,16 @@
-# SDB log-AUC: DJev / DiffusionGemma 26B-A4B (BF16)
+# SDB log-AUC: DJev / DiffusionGemma
 
-Primary normalized log-AUC over 1–5 s: **21.20%**; untimed accuracy: 21.88%.
+Primary normalized log-AUC over 0.5–8 s: **20.95%**; untimed accuracy: 21.88%.
 Equal multiplicative interval ranges receive equal weight. This is a benchmark weighting rule, not an empirical usage distribution.
 
 | Family | Log-AUC (%) |
 |---|---:|
-| live_debugging | 22.79 |
-| procedural_coaching | 6.29 |
-| support_call_assist | 29.00 |
-| presenter_voice_control | 26.71 |
+| live_debugging | 22.59 |
+| procedural_coaching | 6.15 |
+| support_call_assist | 28.63 |
+| presenter_voice_control | 26.43 |
 
-Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000065 percentage points across all scenario metrics.
+Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000262 percentage points across all scenario metrics.
 This is numerical convergence, not statistical uncertainty. One recorded pass per setting.
 
 The following diagnostics use the fixed **2 s recording cadence**, not the integrated primary score.
@@ -21,6 +21,8 @@ The following diagnostics use the fixed **2 s recording cadence**, not the integ
 **有效決策正確率（不計延遲）：21.88%；正確持續時間比例（排除連線重試）：21.19%。**
 
 移除網路延遲後的正確持續時間（次要估計）：21.59%（範圍 21.56%–21.64%）。
+
+[錯誤案例與下一步建議](FINDINGS.md)逐項對照公開規則，說明值得補測的判斷需求。
 
 ## 各家族結果
 
@@ -144,7 +146,7 @@ The following diagnostics use the fixed **2 s recording cadence**, not the integ
 在專案根目錄，從完成的原始紀錄重算報告與本機基線：
 
 ```sh
-uv run python paper/analysis/lite_reports.py --run runs/runpod-openweight-20260930/runs/djev-diffusiongemma --out docs/lite/results/runpod-openweight-20260930/djev-diffusiongemma --label 'DJev / DiffusionGemma 26B-A4B (BF16)'
+uv run python paper/analysis/lite_reports.py --run runs/runpod-openweight-20260930/runs/djev-diffusiongemma --out docs/lite/results/runpod-openweight-20260930/djev-diffusiongemma --label 'DJev / DiffusionGemma'
 ```
 
 Token usage（含 cached input，不另推估費用；僅加總回覆中取得的 usage，失敗請求未回傳的用量未知）：
@@ -157,5 +159,3 @@ Token usage（含 cached input，不另推估費用；僅加總回覆中取得�
   "reasoning_tokens": 0
 }
 ```
-
-[Recorded error witnesses and deployment review](FINDINGS.md).

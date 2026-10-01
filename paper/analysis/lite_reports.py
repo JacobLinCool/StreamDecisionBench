@@ -4,6 +4,9 @@ Without arguments, regenerate the published reports of the paper's settings. Wit
 recorded pass (for example a new model) the same way and write its report to --out.
 """
 import argparse
+import csv
+import json
+import os
 from pathlib import Path
 import shlex
 import sys
@@ -15,10 +18,6 @@ from lite_numbers import FACTS_COLUMNS, FAMILIES, MODELS, POLICY
 from lite_report import analyze, command_path, report
 from lite_auc import compute_auc
 from streamdecisionbench.lite.__main__ import rescore_run
-
-# Recordings on the same build that the paper does not report; indexed separately. None at present: every
-# recorded setting (GPT-6 Astra low included) is in lite_numbers.MODELS and reported in the paper.
-EXTRA = ()
 
 HEADER = [
     "| Setting | IDE | Assembly | Support | Presenter | Macro log-AUC | Untimed | Report |",
@@ -55,7 +54,7 @@ def write_setting(label: str, folder: str, run: str, *, run_dir: Path | None = N
     intro = [
         f"# SDB log-AUC: {label}",
         "",
-        f"Primary normalized log-AUC over 1–5 s: **{100*auc['overall']['accuracy']:.2f}%**; untimed accuracy: {100*auc['overall']['untimed']:.2f}%.",
+        f"Primary normalized log-AUC over 0.5–8 s: **{100*auc['overall']['accuracy']:.2f}%**; untimed accuracy: {100*auc['overall']['untimed']:.2f}%.",
         "Equal multiplicative interval ranges receive equal weight. This is a benchmark weighting rule, not an empirical usage distribution.",
         "",
         "| Family | Log-AUC (%) |",
@@ -87,8 +86,39 @@ def write_setting(label: str, folder: str, run: str, *, run_dir: Path | None = N
     return row, data["retry_reliability"], len(data.get("combined_from") or [data])
 
 
-def _join(labels: list[str]) -> str:
-    return labels[0] if len(labels) == 1 else ", ".join(labels[:-1]) + " and " + labels[-1]
+def refresh_cohort_summary(directory: Path) -> None:
+    """Refresh derived cohort scores, preserving the historical execution record."""
+    path = directory / "results.json"
+    summary = json.loads(path.read_text())
+    for row in summary["results"]:
+        analysis = json.loads((directory / row["setting"] / "analysis.json").read_text())
+        if row["events_sha256"] != analysis["events_sha256"]:
+            raise ValueError(f"{directory}/{row['setting']}: cohort event hash mismatch")
+        primary = analysis["auc"]["primary"]
+        if (primary["min_s"], primary["max_s"], primary["weighting"]) != (.5, 8, "log"):
+            raise ValueError(f"{directory}: stale primary domain")
+        row["log_auc_pct"] = 100 * primary["overall"]["accuracy"]
+        for family, result in primary["by_family"].items():
+            row[f"{family}_log_auc_pct"] = 100 * result["accuracy"]
+        for kind in ("judgment", "stale", "compound", "no_decision"):
+            key = f"{kind}_time_pct"
+            if key in row:  # The first cohort publishes the integrated partition.
+                row[key] = 100 * primary["overall"][kind]
+    summary["evaluation_domain"] = {"min_s": .5, "max_s": 8, "weighting": "log"}
+    path.write_text(json.dumps(summary, indent=2) + "\n")
+    with (directory / "results.csv").open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(summary["results"][0]))
+        writer.writeheader()
+        writer.writerows(summary["results"])
+    readme = directory / "README.md"
+    lines = readme.read_text().splitlines()
+    for index, line in enumerate(lines):
+        for row in summary["results"]:
+            if f"]({row['setting']}/REPORT.md)" in line:
+                cells = line.split("|")
+                cells[2] = f" {row['log_auc_pct']:.2f} "
+                lines[index] = "|".join(cells)
+    readme.write_text("\n".join(lines) + "\n")
 
 
 def evaluate_one(run: Path, out: Path, label: str | None) -> None:
@@ -100,6 +130,54 @@ def evaluate_one(run: Path, out: Path, label: str | None) -> None:
     print("\n".join(["", *HEADER, row, ""]))
     print(f"{reliability['successful_logical_requests']} logical requests with valid responses, "
           f"{reliability['failed_attempts']} failed attempts. Report: {command_path(out)}/REPORT.md")
+
+
+def write_index() -> None:
+    """Render the published index and cohort summaries from verified reports."""
+    local_policy = json.loads((ROOT / "paper/analysis/openweight_policy.json").read_text())
+    groups = [
+        ("Hosted APIs", [(FACTS_COLUMNS[name], folder, run) for name, folder, run in MODELS]),
+        ("Self-hosted settings", [(spec["label"], spec["run"].replace("/runs/", "/"), spec["run"])
+                                  for spec in local_policy["settings"]]),
+    ]
+    index_dir = ROOT / "docs/lite/results/four-family"
+    lines = ["# Four-family log-AUC results", "",
+        "Primary score: normalized area under in-force accuracy over 0.5–8 s, integrated with respect to log interval. "
+        "Average scenarios equally within each family, then average the four families equally. "
+        "All requests were recorded at 2 s; the replay retains each answer and measured latency.", "",
+        "The domain spans update rates four times faster and slower than the recording cadence, "
+        "with equal log weight on each side. It defines a controlled evaluation domain; deployment-specific "
+        "event rates can motivate other ranges.", ""]
+    for title, settings in groups:
+        lines += [f"## {title}", "", *HEADER]
+        for label, folder, run in settings:
+            path = ROOT / "docs/lite/results" / folder / "analysis.json"
+            data = json.loads(path.read_text())
+            frozen = json.loads((ROOT / "runs" / run / "run.json").read_text())
+            if data["events_sha256"] != frozen["events_sha256"]:
+                raise ValueError(f"{folder}: report event hash mismatch")
+            auc = data["auc"]["primary"]
+            if (auc["min_s"], auc["max_s"], auc["weighting"]) != (.5, 8, "log"):
+                raise ValueError(f"{folder}: stale primary domain")
+            values = [auc["by_family"][f]["accuracy"] for _, f in FAMILIES]
+            values += [auc["overall"]["accuracy"], auc["overall"]["untimed"]]
+            link = Path(os.path.relpath(path.with_name("REPORT.md"), index_dir)).as_posix()
+            lines.append("| " + " | ".join([label, *[f"{100*v:.2f}%" for v in values], f"[report]({link})"]) + " |")
+        lines += [""]
+    lines += [
+        "Each setting has one complete pass over all 480 states. For Luna low, Luna none, Terra low, Terra none "
+        "and Jev, the original six scenarios and the two presenter scenarios were recorded in separate sessions; "
+        "Astra low was recorded in one session covering all eight scenarios. No new model query was made for this evaluation.", "",
+        "Each analysis contains `auc.primary`, six `auc.sensitivity` conditions, and fixed 2 s diagnostics in `scores`. "
+        "The physical wall-clock trace and secondary network-removal estimate are separate. The integration rule "
+        "was adopted after inspecting the recorded passes; comparisons are descriptive and do not establish stable rankings.", "",
+        "The self-hosted settings use their respective GPU runtime and native decision interface. "
+        "See the [deployment and composition analysis](../../../research/openweight-hybrids/README.md).", "",
+        "[Evaluation policy](../../../../paper/analysis/evaluation_policy.json). "
+        "Regenerate: `uv run python paper/analysis/lite_reports.py`.", ""]
+    (index_dir / "README.md").write_text("\n".join(lines))
+    for cohort in sorted({Path(spec["run"]).parts[0] for spec in local_policy["settings"]}):
+        refresh_cohort_summary(ROOT / "docs/lite/results" / cohort)
 
 
 def main():
@@ -115,64 +193,12 @@ def main():
         return
     if args.out or args.label:
         parser.error("--out and --label need --run")
-    lines = [
-        "# Four-family log-AUC results",
-        "",
-        "Primary score: normalized area under in-force accuracy over 1–5 s, integrated with respect to log interval. "
-        "Average scenarios equally within each family, then average the four families equally. "
-        "All requests were recorded at 2 s; the replay retains each answer and measured latency.",
-        "",
-        *HEADER,
-    ]
-    failures = responses = 0
-    sessions = {}
-    for prefix, folder, run in MODELS:
-        row, reliability, sessions[FACTS_COLUMNS[prefix]] = write_setting(FACTS_COLUMNS[prefix], folder, run)
-        lines.append(row)
-        failures += reliability["failed_attempts"]
-        responses += reliability["successful_logical_requests"]
-    merged = [label for label, n in sessions.items() if n > 1]
-    single = [label for label, n in sessions.items() if n == 1]
-    recorded = []
-    if merged:
-        recorded.append(f"For {_join(merged)}, the original six scenarios and the two presenter scenarios were recorded in separate sessions")
-    if single:
-        recorded.append(f"{_join(single)} {'was' if len(single) == 1 else 'were each'} recorded in one session covering all eight scenarios")
-    lines += [
-        "",
-        f"All {responses} logical requests have valid responses; {failures} failed attempts. "
-        + "; ".join(recorded) + ". No new model query was made for this evaluation.",
-        "",
-        "Each analysis contains `auc.primary`, three `auc.sensitivity` conditions, and fixed 2 s diagnostics in `scores`. "
-        "The physical wall-clock trace and the secondary network-removal estimate are separate. "
-        "The integration rule was adopted after inspecting the recorded passes; no claim of preregistration, significance or stable ranking is made.",
-        "",
-    ]
-    if EXTRA:
-        extra_failures = extra_responses = 0
-        extra_rows = []
-        for label, folder, run in EXTRA:
-            row, reliability, _ = write_setting(label, folder, run)
-            extra_rows.append(row)
-            extra_failures += reliability["failed_attempts"]
-            extra_responses += reliability["successful_logical_requests"]
-        lines += [
-            "## Additional recordings (not reported in the paper)",
-            "",
-            "Same build, protocol and evaluation rule; each was recorded in one session covering all eight scenarios.",
-            "",
-            *HEADER,
-            *extra_rows,
-            "",
-            f"All {extra_responses} logical requests have valid responses; {extra_failures} failed attempts.",
-            "",
-        ]
-    lines += [
-        "[Evaluation policy](../../../../paper/analysis/evaluation_policy.json). "
-        "Regenerate: `uv run python paper/analysis/lite_reports.py`.",
-        "",
-    ]
-    (ROOT / "docs/lite/results/four-family/README.md").write_text("\n".join(lines))
+    for name, folder, run in MODELS:
+        write_setting(FACTS_COLUMNS[name], folder, run)
+    local_policy = json.loads((ROOT / "paper/analysis/openweight_policy.json").read_text())
+    for spec in local_policy["settings"]:
+        write_setting(spec["label"], spec["run"].replace("/runs/", "/"), spec["run"])
+    write_index()
 
 
 if __name__ == "__main__":

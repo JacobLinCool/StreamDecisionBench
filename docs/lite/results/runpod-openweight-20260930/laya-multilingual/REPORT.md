@@ -1,16 +1,16 @@
 # SDB log-AUC: Laya multilingual
 
-Primary normalized log-AUC over 1–5 s: **0.21%**; untimed accuracy: 0.21%.
+Primary normalized log-AUC over 0.5–8 s: **0.21%**; untimed accuracy: 0.21%.
 Equal multiplicative interval ranges receive equal weight. This is a benchmark weighting rule, not an empirical usage distribution.
 
 | Family | Log-AUC (%) |
 |---|---:|
 | live_debugging | 0.00 |
-| procedural_coaching | 0.83 |
+| procedural_coaching | 0.84 |
 | support_call_assist | 0.00 |
 | presenter_voice_control | 0.00 |
 
-Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000018 percentage points across all scenario metrics.
+Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000074 percentage points across all scenario metrics.
 This is numerical convergence, not statistical uncertainty. One recorded pass per setting.
 
 The following diagnostics use the fixed **2 s recording cadence**, not the integrated primary score.

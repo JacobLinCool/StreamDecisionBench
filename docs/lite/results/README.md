@@ -2,7 +2,7 @@
 
 ## Current four-family evaluation
 
-See [the log-AUC results](four-family/README.md): normalized area under in-force accuracy over a common 1–5 s range, giving equal weight to equal multiplicative ranges and to each family. All API recordings used a 2 s cadence. For Luna low, Luna none, Terra low, Terra none and Jev, a separate presenter pass contributes 120 responses per setting, merged with the unchanged original 360; Astra low recorded all 480 in one session. The paper reports these 480-state evaluations, aggregate and family curves, and sensitivity to the integration bounds and weights.
+See [the log-AUC results](four-family/README.md): normalized area under in-force accuracy over a common 0.5–8 s range, giving equal weight to equal multiplicative ranges and to each family. All API recordings used a 2 s cadence. For Luna low, Luna none, Terra low, Terra none and Jev, a separate presenter pass contributes 120 responses per setting, merged with the unchanged original 360; Astra low recorded all 480 in one session. The paper reports these 480-state evaluations, aggregate and family curves, and sensitivity to the integration bounds and weights.
 
 The per-run reports (`REPORT.md`, `COMPARISON.md`) are written in Traditional Chinese, apart from the English log-AUC summary that opens each four-family report; [the protocol](../PROTOCOL.md) and the paper are the English references.
 

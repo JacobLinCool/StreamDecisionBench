@@ -9,15 +9,15 @@
       "requests": 480,
       "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
       "events_sha256": "f050452f75447a5a466124851e97e640e46b835c2b242044fb6029e735607858",
-      "log_auc_pct": 21.055057550304397,
+      "log_auc_pct": 20.909676202664805,
       "untimed_accuracy_pct": 21.458333333333364,
       "latency_p50_s": 0.15975374728441238,
       "latency_p95_s": 0.261090991506353,
       "failed_attempts": 0,
-      "live_debugging_log_auc_pct": 15.948112466174907,
-      "presenter_voice_control_log_auc_pct": 18.312364998170374,
-      "procedural_coaching_log_auc_pct": 13.044060375765781,
-      "support_call_assist_log_auc_pct": 36.91569236110654
+      "live_debugging_log_auc_pct": 15.689057008676299,
+      "presenter_voice_control_log_auc_pct": 18.30482208787191,
+      "procedural_coaching_log_auc_pct": 12.939778632658408,
+      "support_call_assist_log_auc_pct": 36.705047081452605
     },
     {
       "setting": "nimble-9b",
@@ -26,15 +26,15 @@
       "requests": 480,
       "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
       "events_sha256": "149b808310d27a4ee62d48e4de907f7fdc731dd065f11ef7aed9d89c0cf2389a",
-      "log_auc_pct": 11.198693010095537,
+      "log_auc_pct": 10.421427922526991,
       "untimed_accuracy_pct": 22.499999999999968,
       "latency_p50_s": 6.162395768333226,
       "latency_p95_s": 41.78174210013822,
       "failed_attempts": 0,
-      "live_debugging_log_auc_pct": 2.0534181780262597,
-      "presenter_voice_control_log_auc_pct": 14.155240084634984,
-      "procedural_coaching_log_auc_pct": 6.040770428390516,
-      "support_call_assist_log_auc_pct": 22.545343349330384
+      "live_debugging_log_auc_pct": 1.2507390621177854,
+      "presenter_voice_control_log_auc_pct": 13.047115116403655,
+      "procedural_coaching_log_auc_pct": 6.027484478520026,
+      "support_call_assist_log_auc_pct": 21.360373033066505
     },
     {
       "setting": "semif-qwen35-4b",
@@ -43,15 +43,15 @@
       "requests": 480,
       "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
       "events_sha256": "c7c621e280634d45347cf54bde5c189b7d4ce0107b25a45ae7f6a84e0c54b953",
-      "log_auc_pct": 15.481347375816995,
+      "log_auc_pct": 14.792479209172397,
       "untimed_accuracy_pct": 17.08333333333334,
       "latency_p50_s": 0.9719022242352366,
       "latency_p95_s": 1.70741251669824,
       "failed_attempts": 0,
       "live_debugging_log_auc_pct": 0.0,
-      "presenter_voice_control_log_auc_pct": 21.164409008622815,
-      "procedural_coaching_log_auc_pct": 12.273571892793427,
-      "support_call_assist_log_auc_pct": 28.487408601851737
+      "presenter_voice_control_log_auc_pct": 19.880401035732376,
+      "procedural_coaching_log_auc_pct": 11.675731248203594,
+      "support_call_assist_log_auc_pct": 27.61378455275361
     }
   ],
   "unavailable_or_failed": [
@@ -61,5 +61,10 @@
       "revision": "ce0c018a28de16d6639b1cd203b761bf643b89e6",
       "reason": "Public release contains weights only. Referenced Decision runtime absent from semantic-router main 101639482e0345b62abd339d8fa0a7c226500b7f. Official decision-studio 1ab04aedc51a41f57e6ea98c480664972c5dc49c imports private decision_runtime/decision_inference modules from external DECISION_RUNTIME_PATH and requires ROCm. No native CUDA loader is published at the inspected revisions. No model inference attempted."
     }
-  ]
+  ],
+  "evaluation_domain": {
+    "min_s": 0.5,
+    "max_s": 8,
+    "weighting": "log"
+  }
 }

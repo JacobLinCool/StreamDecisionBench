@@ -2,7 +2,7 @@
 
 These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all thirteen
 completed single-model settings: six hosted APIs and seven self-hosted open-weight settings.
-Bars start at zero and rank settings by normalized log-AUC over 1–5 seconds.
+Bars start at zero and rank settings by normalized log-AUC over 0.5–8 seconds.
 
 The second figure plots **in-force accuracy against the time-step interval**, on a logarithmic
 horizontal axis. Its curves are the functions summarized by the leaderboard's log-AUC values;

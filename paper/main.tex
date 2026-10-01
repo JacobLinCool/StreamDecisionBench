@@ -83,9 +83,9 @@ Language models increasingly make real-time decisions in applications that apply
 A late answer can prolong an outdated decision, such as a call recorder still running while a customer reads out card details, an error offline accuracy misses.
 We make three contributions.
 First, we release StreamDecisionBench (SDB), a dataset of eight streaming scenarios in four application families, with executable reference decisions derived from public rules.
-Second, we propose an evaluation protocol and a metric, in-force accuracy: the share of time the applied decision is correct across update intervals of 1--5\,s.
+Second, we propose an evaluation protocol and a metric, in-force accuracy: the share of time the applied decision is correct across update intervals of 0.5--8\,s.
 It reflects accuracy and latency jointly, attributing each error to judgment, latency or both.
-Third, we evaluate thirteen single-model settings, and this attribution separates speed-limited from judgment-limited models: slower, more accurate models lose 38--48\% of the time to outdated answers, a fast model 34\% to wrong ones.
+Third, we evaluate thirteen single-model settings, and this attribution separates speed-limited from judgment-limited models: slower, more accurate models lose \LowEffortStaleRoundedMin--\LowEffortStaleRoundedMax\% of the time to outdated answers, a fast model \JevJudgmentRounded\% to wrong ones.
 We therefore test hybrids in which a slow model corrects a fast one; with the right pairing and configuration, a hybrid outperforms every single model.
 However, even the best evaluated system keeps a correct decision in force only about two-thirds of the time, leaving a substantial gap for real-time use.
 \end{abstract}
@@ -118,7 +118,7 @@ We therefore evaluate an embedded decision component by its decision in force at
 
 We introduce StreamDecisionBench (\sdb), a benchmark built on this evaluation, with controlled synthetic streams in four application families: IDE debugging, an assembly station, a support call and presenter voice control.
 Responses are composed into the \emph{branch-composed decision} the application consumes, and an executable reference applies the rules written into every state, so the reference decision changes at known moments for known reasons.
-Every erroneous instant is attributed exactly to judgment, to latency or to both. We report the accuracy curves and summarize their normalized area over 1--5\,s on a logarithmic time axis, first within each family and then across families equally.
+Every erroneous instant is attributed exactly to judgment, to latency or to both. We report the accuracy curves and summarize their normalized area over 0.5--8\,s on a logarithmic time axis, first within each family and then across families equally.
 
 We evaluate \NumSettingsWord{} hosted settings: Luna and Terra at low and no reasoning effort, Astra at low, and Jev, a commercial decision model; supplementary measurements cover \OwNumSettingsWord{} self-hosted decision settings.
 Across this range they fall short for different reasons.
@@ -160,7 +160,7 @@ Because time enters the score, the conditions that set it are part of the measur
 \label{sec:setting}
 A scenario publishes public states $S_0,\ldots,S_{n-1}$ at time steps $r_0<\cdots<r_{n-1}$ within a horizon $H$.
 Every time in a state, from its clock to thresholds and deadlines, is counted in ticks. The \emph{time-step interval} $\Delta$ maps these ticks to seconds and scales the horizon, reference dwell times and tick-valued policies together.
-All requests are recorded at $\Delta_{\mathrm{rec}}=\ReleaseIntervalSec$\,s; evaluation varies $\Delta$ from 1 to 5\,s in every family.
+All requests are recorded at $\Delta_{\mathrm{rec}}=\ReleaseIntervalSec$\,s; evaluation varies $\Delta$ from 0.5 to 8\,s in every family.
 Re-evaluation moves evidence releases while retaining each recorded response and latency in seconds; it assumes that changing request frequency would not change service latency.
 At every time step the application asks the same typed choice questions $\mathcal{Q}$, and a request contains only the state and the questions.
 Option labels are opaque codes, shuffled per question and fixed within a scenario, so an answer must come from the option text and the state, the aim with which MMMU-Pro hardens multiple-choice questions against shortcuts \citep{yue2025mmmupro}.
@@ -200,14 +200,14 @@ The error penalty of status-update systems weights erroneous time the same way \
 For family $f$, $A_f(\Delta)$ is the mean in-force accuracy of its scenarios at interval $\Delta$.
 The primary summary across $F$ families is \emph{normalized log-AUC}, the area under this curve with respect to log interval, divided by the log-range width:
 \begin{equation}
- S_f=\frac{1}{\ln 5}\int_{1\,\mathrm{s}}^{5\,\mathrm{s}} A_f(\Delta)\frac{d\Delta}{\Delta},\qquad
+ S_f=\frac{1}{\ln 16}\int_{0.5\,\mathrm{s}}^{8\,\mathrm{s}} A_f(\Delta)\frac{d\Delta}{\Delta},\quad
  S=\frac{1}{F}\sum_{f=1}^{F} S_f.
  \label{eq:macro}
 \end{equation}
 The score lies in $[0,1]$ and is reported as a percentage.
 Our objective is to give equal weight to equal multiplicative ranges of environment speed: changing an interval by a factor changes every response's relative delay $L/\Delta$ by the inverse factor.
 If the weight of $[a,ra]$ depends only on $r$ and weights add over adjacent intervals, continuity gives a weight proportional to $\ln r$, hence $d\Delta/\Delta$ (Appendix~\ref{app:intervals}).
-The 1--5\,s bounds define a common seconds-scale evaluation range, not an empirical event-rate distribution or a response-time budget.
+We summarize performance over update intervals of 0.5--8\,s, spanning a fourfold increase and decrease in update rate relative to the 2\,s recording cadence. Logarithmic weighting balances faster and slower conditions around that cadence (Appendix~\ref{app:intervals}).
 We apply the same scenario, family and log-interval weights to error fractions and oracle scores; each scenario's time fractions are normalized before averaging.
 
 \paragraph{Judgment and latency.}
@@ -248,7 +248,7 @@ A supplementary estimate removes the fixed, non-token part of latency. It may al
 \label{sec:families}
 \sdb{} has \NumFamiliesWord{} application families with \ScenariosPerFamilyWord{} independently authored scenarios each (Table~\ref{tab:benchmark}, Appendix~\ref{app:tasks}).
 Together, the scenarios provide \NumStates{} state-level decision evaluations and \AnswersPerPass{} evaluated state--question pairs per model pass.
-Each scenario publishes \ReleasesPerScenario{} states, spanning 120\,s at the recording cadence and 60--300\,s over the evaluation range. Each state asks \QuestionsMin--\QuestionsMax{} questions with \OptionsMin--\OptionsMax{} options; the application composes \ConsumedAnswersMin--\ConsumedAnswersMax{} answers, depending on the active branch, into one decision. The primary metric measures this composed decision in force.
+Each scenario publishes \ReleasesPerScenario{} states, spanning 120\,s at the recording cadence and 30--480\,s over the evaluation range. Each state asks \QuestionsMin--\QuestionsMax{} questions with \OptionsMin--\OptionsMax{} options; the application composes \ConsumedAnswersMin--\ConsumedAnswersMax{} answers, depending on the active branch, into one decision. The primary metric measures this composed decision in force.
 In \emph{IDE debugging} the component maintains two status badges and an action card (wait, rerun, inspect, control a run, delegate or ready) from runner results, editor buffers, saves, debugger events, terminal output, ownership rules and teammate messages.
 At the \emph{assembly station} it shows the procedure stage and one of \AssemblyRouteOptions{} routes (wait, advance, repair, escalate, hand off, hold, release) from scans, camera observations, measurements, quality tickets and badges.
 In the \emph{support call} it sets the workflow route, its branch guidance and one command used in every branch, such as the call recorder, from telephony status, a transcript with speaker roles and partial or final utterances, and tool fields.
@@ -260,7 +260,7 @@ Appendix~\ref{app:tasks} lists every decision specification and shows an example
   \small
   \begin{tabular}{lrrrrr@{\hspace{2.4em}}r}
     \toprule
-    & \multicolumn{5}{c}{Normalized log-AUC over 1--5\,s (\%)} & \\
+    & \multicolumn{5}{c}{Normalized log-AUC over 0.5--8\,s (\%)} & \\
     \cmidrule(lr){2-6}
     Setting & IDE & Assembly & Support & Presenter & Macro & Untimed \\
     \midrule
@@ -310,7 +310,7 @@ Supplementary measurements cover \OwNumSettingsWord{} self-hosted native setting
   \centering
   \includegraphics[width=\linewidth]{figures/fig_errortime.pdf}
   \caption{\textbf{Hosted settings chiefly lose stale time; Jev and Luna none chiefly lose judgment time.}
-  Log-weighted time shares over 1--5\,s as in Table~\ref{tab:main}; lucky time (at most \AucLuckyMax\%) counts as correct.}
+  Log-weighted time shares over 0.5--8\,s as in Table~\ref{tab:main}; lucky time (at most \AucLuckyMax\%) counts as correct.}
   \label{fig:errortime}
 \end{figure}
 
@@ -348,7 +348,7 @@ Astra low has the highest untimed accuracy (\AstraUntimed\%) and longest median 
 Its slower output decoding is detailed in Appendix~\ref{app:network}.
 Jev responds in \JevLatencyMedian\,s at the median and spends \JevAucStale\% of log-weighted time stale.
 
-The oracle's log-AUC is \LunaAucOracle\% (Luna low), \TerraAucOracle\% (Terra low), \AstraAucOracle\% (Astra low), \LunaNoneAucOracle\% (Luna none), \TerraNoneAucOracle\% (Terra none) and \JevAucOracle\% (Jev); Astra low's is the lowest and equals its observed score, since all its current-source decisions are correct ($U_{\mathrm{cur}}=\AstraAucUCurrent\%$ over the integral).
+The oracle's log-AUC is \LunaAucOracle\% (Luna low), \TerraAucOracle\% (Terra low), \AstraAucOracle\% (Astra low), \LunaNoneAucOracle\% (Luna none), \TerraNoneAucOracle\% (Terra none) and \JevAucOracle\% (Jev); Astra low's is the lowest and nearly matches its observed score, with negligible current-source judgment error.
 For the hosted scenarios, multiplying untimed accuracy by the oracle's log-AUC, then averaging with the same family weights, approximates the primary score: the observed score exceeds this product by \AucProductGapMin--\AucProductGapMax{} points per setting, with an absolute deviation of at most \AucProductMaxDeviation{} points per scenario.
 The exact partition in Equation~\eqref{eq:factor} explains the residual through current-source judgment and lucky time (Appendix~\ref{app:auc-decomposition}).
 
@@ -362,7 +362,7 @@ Jev's log-AUC exceeds Luna low's by \JevMinusLunaAuc, Terra low's by \JevMinusTe
 Its judgment errors still occupy \JevAucJudgment\% of log-weighted time.
 
 Dropping reasoning makes responses \LunaNoneLatencySavingSec\,s (Luna) and \TerraNoneLatencySavingSec\,s (Terra) faster at the median.
-Terra retains \TerraNoneUntimed\% untimed accuracy, and its log-AUC rises to \TerraNoneAuc\%, only \JevMinusTerraNoneAuc{} points below Jev in this recording.
+Terra retains \TerraNoneUntimed\% untimed accuracy, and its log-AUC rises to \TerraNoneAuc\%, \JevMinusTerraNoneAuc{} points below Jev in this recording.
 Luna loses \LunaMinusLunaNoneUntimed{} points untimed; judgment errors occupy \LunaNoneAucJudgment\% of log-weighted time, and its log-AUC falls to \LunaNoneAuc\%.
 A shorter response helps only if the decision remains accurate enough.
 
@@ -378,8 +378,8 @@ These are counterfactual combinations of separate recordings on common nominal r
 \subsection{RQ3: The Curves Reveal Where the Tradeoff Changes}
 \label{sec:rq3}
 The aggregate curve in Figure~\ref{fig:pace}a shows the conditions summarized by the primary score.
-At 2\,s Jev and Terra without reasoning obtain \JevCommonTwo\% and \TerraNoneCommonTwo\% in-force accuracy; at 5\,s they obtain \JevCommonFive\% and \TerraNoneCommonFive\%.
-A larger interval gives slow answers more time to remain current, although arbitrary wrong answers need not yield a monotone curve; at 5\,s Astra low, the slowest setting at the median, has the highest in-force accuracy (\AstraCommonFive\%).
+At 2\,s Jev and Terra without reasoning obtain \JevCommonTwo\% and \TerraNoneCommonTwo\% in-force accuracy; at 8\,s they obtain \JevCommonEight\% and \TerraNoneCommonEight\%.
+A larger interval gives slow answers more time to remain current, although arbitrary wrong answers need not yield a monotone curve; at 8\,s Astra low, the slowest setting at the median, has the highest in-force accuracy (\AstraCommonEight\%).
 The area summarizes a declared range; it does not identify a setting that dominates at every interval.
 
 Panels b--e show how the four families contribute to this aggregate.
@@ -387,8 +387,8 @@ Terra without reasoning has the highest log-AUC in IDE debugging (\TerraNoneDebu
 IDE debugging remains Jev's weakest family (\JevDebugAuc\% log-AUC, \JevDebugUntimed\% untimed).
 The family curves retain the different authored patterns of evidence and reference changes even though their integration bounds and weights are identical.
 
-Weighting and bounds also matter. Linear averaging over 1--5\,s gives Terra without reasoning \TerraNoneAucLinear\% and Jev \JevAucLinear\%, reversing their integrated ordering.
-Appendix~\ref{app:intervals} reports this comparison and log-AUC over 1--3\,s and 0.5--5\,s; a separate projection varies reference-change schedules at the 2\,s recording interval (Table~\ref{tab:regime}).
+Weighting and bounds also matter. Linear averaging over 0.5--8\,s gives Terra without reasoning \TerraNoneAucLinear\% and Jev \JevAucLinear\%, reversing their integrated ordering.
+Appendix~\ref{app:intervals} reports this comparison and all six combinations of lower bounds 0.1, 0.5 and 1\,s with upper bounds 4 and 8\,s; a separate projection varies reference-change schedules at the 2\,s recording interval (Table~\ref{tab:regime}).
 
 % ---------------------------------------------------------------------------
 \section{Discussion}
@@ -406,20 +406,20 @@ Counterfactual compositions of hosted and self-hosted components further show th
 
 % ---------------------------------------------------------------------------
 \section*{Limitations}
-\sdb{} contains \NumScenariosWord{} synthetic scenarios authored with a bounded range of wording; they are development scenarios that the benchmark designers wrote with AI assistance, not a held-out test set, and its results come from one recorded pass per setting.
-Adjacent states within a scenario are dependent, so the paper reports no confidence intervals over states or scenarios and makes no claim about stable rankings; differences of a few points may change with repeated passes.
-The 1--5\,s integration bounds and log weighting are benchmark design choices, not empirically calibrated event-rate distributions. Human response budgets, measured service latencies, update intervals and reference dwell times are different quantities. The aggregation rule was adopted after inspecting the recorded passes; its sensitivity analysis is descriptive, not a preregistered model comparison.
-Changing an interval also changes the real-time meaning of tick-valued policies. The 1--5\,s sweeps expose this dependence while keeping answers and latencies fixed; a new deployment may change both latency and the evidence stream.
-The schedule projection additionally assumes that $A\approx U\,O$ and untimed accuracy carry over to other schedules.
-Luna and Terra are measured at two reasoning efforts, Astra only at low, and Jev at one setting. The \OwNumSettingsWord{} self-hosted settings use two different GPUs and native readouts; their latency and the hosted API latency describe deployment paths, not a controlled hardware comparison. Nimble answers fields sequentially, and the Qwen direct-logit baseline does not evaluate generated answers. Content is preserved across interfaces; prompt caching, other service tiers and alternative runtime configurations remain unmeasured.
-In-force accuracy suits displayed or continuously applied decisions and weights every instant and every consumed field equally, so a wrong status badge costs as much as a recorder left running during card capture; one-time actions, such as submitting a payment, need event-based evaluation, and decisions with unequal or duration-dependent costs need cost-weighted metrics or the age of incorrect information \citep{maatouk2020age}, which the same trajectories support.
-The executable reference establishes agreement with the declared rules; it does not establish that these rules are the best policy for a real IDE, assembly line, contact centre or presentation.
-The validity audit covers only the original six scenarios and was carried out by LLM agents, which may share blind spots with the evaluated models; Astra's agreement is likewise evidence from a model, and no human annotator has adjudicated the references.
-Pipelined requests overlap, so recorded latency includes the concurrency effects of the 2\,s recording cadence. For hosted settings except Astra low, presenter was recorded in a later session, so family and session effects on their latency are not separable here.
-The network-removal diagnostic also absorbs fixed server time; its range describes estimator uncertainty only (Appendix~\ref{app:network}).
-Jev's probability distributions were not logged, so the one-step tolerance of its validity check (Appendix~\ref{app:protocol}) cannot be audited after the fact.
-The streams are open-loop, so the benchmark does not capture applications in which a decision changes the evidence that follows.
-Hosted models change over time; the runs record the requested and served model identifiers and the recording time.
+\sdb{} evaluates the decision an application keeps in force; the design choices behind this evaluation set its scope, and relaxing each one opens a direction worth studying.
+The \NumScenariosWord{} scenarios in \NumFamiliesWord{} families are controlled synthetic timelines, authored by the benchmark's designers so that every reference transition has a known cause, and their wording spans a bounded range.
+Held-out scenarios by other authors with more varied wording, and streams built from logged application sessions under declared rules, would show how far the latency and judgment limits observed here generalize and allow confidence intervals over scenarios.
+
+The executable references implement the declared public rules, so \sdb{} evaluates agreement with those rules.
+LLM agents re-derived the references blind for the IDE, assembly and support scenarios, and Astra's untimed agreement adds evidence from a model across all \NumFamiliesWord{} families.
+Adjudication by human domain experts would check the references against the rule text and test whether the rules make sound policy in the real settings they model.
+
+The evaluation also fixes two weightings.
+Across time scales, the primary score integrates over 0.5--8\,s time-step intervals with log weighting in every family; event rates measured in deployed applications would calibrate a range and weighting for each family.
+Within a scenario, in-force accuracy weights every instant and every field the application consumes equally, which fits displayed or continuously applied decisions; unequal or duration-dependent costs call for cost-weighted metrics or the age of incorrect information \citep{maatouk2020age}, and one-time actions, such as submitting a payment, for event-based evaluation.
+
+Finally, the streams are open-loop: all evidence is fixed in advance, so one recording can be evaluated at other time-step intervals and combined with other recordings.
+In closed-loop streams an applied decision shapes the evidence that follows, as when an action card prompts a test rerun; such streams would measure how a stale or wrong decision propagates through later states.
 
 \section*{Ethics Statement}
 All scenarios are synthetic and use invented people, accounts and devices; the payment scenario uses a short fictional test-card prefix, and no personal data were collected or sent to model providers.

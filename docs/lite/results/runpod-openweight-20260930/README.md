@@ -2,18 +2,20 @@
 
 Completed 4 of 4 settings; each completed setting covers all 8 scenarios and 480 states.
 
-| Setting | Log-AUC 1–5 s (%) | Untimed (%) | Latency p50 / p95 (s) | Failed attempts |
+| Setting | Log-AUC 0.5–8 s (%) | Untimed (%) | Latency p50 / p95 (s) | Failed attempts |
 |---|---:|---:|---:|---:|
 | [Laya English](laya-english/REPORT.md) | 0.42 | 0.42 | 0.126 / 0.240 | 0 |
 | [Laya typed-decisions](laya-typed-decisions/REPORT.md) | 1.46 | 1.46 | 0.129 / 0.235 | 0 |
 | [Laya multilingual](laya-multilingual/REPORT.md) | 0.21 | 0.21 | 0.068 / 0.132 | 0 |
-| [DJev / DiffusionGemma 26B-A4B (BF16)](djev-diffusiongemma/REPORT.md) | 21.20 | 21.88 | 0.257 / 0.403 | 0 |
+| [DJev / DiffusionGemma 26B-A4B (BF16)](djev-diffusiongemma/REPORT.md) | 20.95 | 21.88 | 0.257 / 0.403 | 0 |
+
+Regenerate all current evaluation scores with `uv run python paper/analysis/lite_reports.py`. The execution and cost records below describe the original recordings.
 
 ## Measurement and interpretation
 
 Recorded on 2026-09-30 (Asia/Taipei), on one RunPod NVIDIA RTX PRO 6000 Blackwell Server Edition (96 GB). The benchmark and model are on the same host. Laya calls its native library; DJev calls its local HTTP server. Latency includes normal request dispatch and inference. It does not include an internet round trip. Consequently, these latency-dependent scores describe this deployment and must not be treated as a controlled hardware comparison with the paper's hosted API rows.
 
-The unchanged four-family dataset, 2 s recording cadence, 32 client workers, one scenario at a time and retry_excluded_successful_attempt_v1 scoring are used. Only transport failures may be retried, at most three attempts. No incorrect answer is retried or repaired. Raw wall-clock metrics are preserved separately. The primary normalized log-AUC is recomputed by the existing paper analysis over 1–5 s with equal family weights.
+The unchanged four-family dataset, 2 s recording cadence, 32 client workers, one scenario at a time and retry_excluded_successful_attempt_v1 scoring are used. Only transport failures may be retried, at most three attempts. No incorrect answer is retried or repaired. Raw wall-clock metrics are preserved separately. The primary normalized log-AUC is recomputed by the existing paper analysis over 0.5–8 s with equal family weights.
 
 The standard reports also retain the benchmark's secondary latency-intercept diagnostic and its range. It assumes latency can be decomposed into network, prefill and (when applicable) decode contributions; the intercept can also contain fixed server or client time. On these same-host deployments it is not a measurement of internet latency and does not replace the primary score.
 

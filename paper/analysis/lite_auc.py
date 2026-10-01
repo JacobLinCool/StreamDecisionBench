@@ -93,6 +93,10 @@ def auc_macros(m, models):
             r["quadrature"]["max_successive_change"]
             for r in [primary, *auc["sensitivity"].values()]
         ]
+    low_stale = [models[p]["analysis"].data["auc"]["primary"]["overall"]["stale"] for p in ("Luna", "Terra", "Astra")]
+    m.add("LowEffortStaleRoundedMin", fixed(100 * min(low_stale), 0), "minimum primary stale share of low-effort GPT settings, rounded to whole percent")
+    m.add("LowEffortStaleRoundedMax", fixed(100 * max(low_stale), 0), "maximum primary stale share of low-effort GPT settings, rounded to whole percent")
+    m.add("JevJudgmentRounded", fixed(100 * models["Jev"]["analysis"].data["auc"]["primary"]["overall"]["judgment"], 0), "Jev primary judgment share, rounded to whole percent")
     m.add(
         "AucMaxRefinementChange",
         fixed(100 * max(changes), 4),
@@ -154,10 +158,12 @@ def auc_tables(models):
                 f"\\{p}RowLabel",
                 f"\\{p}Auc",
                 f"\\{p}AucLinear",
-                f"\\{p}AucShort",
-                f"\\{p}AucSubsecond",
+                f"\\{p}AucNarrow",
+                f"\\{p}AucHalfFour",
+                f"\\{p}AucOneEight",
+                f"\\{p}AucTenthFour",
+                f"\\{p}AucTenthEight",
                 f"\\{p}CommonTwo",
-                f"\\{p}CommonFive",
             ]
         )
         for p in models
@@ -178,12 +184,12 @@ def auc_tables(models):
     return [
         (
             "TabAucBody",
-            "Normalized log-AUC 1--5 s per family, macro mean, and untimed accuracy (%).",
+            "Normalized log-AUC 0.5--8 s per family, macro mean, and untimed accuracy (%).",
             main,
         ),
         (
             "TabAucSensitivityBody",
-            "Primary log-AUC 1--5, linear 1--5, log 1--3, log 0.5--5, and in-force accuracy at 2 s and 5 s (%).",
+            "Primary log-AUC 0.5--8, linear 0.5--8, log 1--4, 0.5--4, 1--8, 0.1--4, 0.1--8, and in-force accuracy at 2 s (%).",
             sensitivity,
         ),
         (

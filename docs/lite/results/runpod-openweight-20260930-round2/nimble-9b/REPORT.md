@@ -1,16 +1,16 @@
 # SDB log-AUC: Bespoke Nimble-9B
 
-Primary normalized log-AUC over 1–5 s: **11.20%**; untimed accuracy: 22.50%.
+Primary normalized log-AUC over 0.5–8 s: **10.42%**; untimed accuracy: 22.50%.
 Equal multiplicative interval ranges receive equal weight. This is a benchmark weighting rule, not an empirical usage distribution.
 
 | Family | Log-AUC (%) |
 |---|---:|
-| live_debugging | 2.05 |
-| procedural_coaching | 6.04 |
-| support_call_assist | 22.55 |
-| presenter_voice_control | 14.16 |
+| live_debugging | 1.25 |
+| procedural_coaching | 6.03 |
+| support_call_assist | 21.36 |
+| presenter_voice_control | 13.05 |
 
-Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000796 percentage points across all scenario metrics.
+Quadrature: 512 log-spaced subintervals; maximum change from the preceding grid 0.000601 percentage points across all scenario metrics.
 This is numerical convergence, not statistical uncertainty. One recorded pass per setting.
 
 The following diagnostics use the fixed **2 s recording cadence**, not the integrated primary score.

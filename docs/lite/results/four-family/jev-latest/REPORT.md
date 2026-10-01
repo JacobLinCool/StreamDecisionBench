@@ -1,16 +1,16 @@
 # SDB log-AUC: Jev
 
-Primary normalized log-AUC over 1–5 s: **60.72%**; untimed accuracy: 63.75%.
+Primary normalized log-AUC over 0.5–8 s: **59.63%**; untimed accuracy: 63.75%.
 Equal multiplicative interval ranges receive equal weight. This is a benchmark weighting rule, not an empirical usage distribution.
 
 | Family | Log-AUC (%) |
 |---|---:|
-| live_debugging | 42.06 |
-| procedural_coaching | 63.82 |
-| support_call_assist | 68.94 |
-| presenter_voice_control | 68.06 |
+| live_debugging | 41.30 |
+| procedural_coaching | 62.79 |
+| support_call_assist | 67.95 |
+| presenter_voice_control | 66.46 |
 
-Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000064 percentage points across all scenario metrics.
+Quadrature: 256 log-spaced subintervals; maximum change from the preceding grid 0.000259 percentage points across all scenario metrics.
 This is numerical convergence, not statistical uncertainty. One recorded pass per setting.
 
 The following diagnostics use the fixed **2 s recording cadence**, not the integrated primary score.

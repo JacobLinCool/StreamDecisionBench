@@ -104,6 +104,7 @@ def use_style(family: str = "sans") -> None:
     global _resolved_font
     _resolved_font = _available_font(SERIF if family == "serif" else SANS)
     mpl.rcParams.update({
+        "svg.hashsalt": "sdb-figures",
         "font.family": "serif" if family == "serif" else "sans-serif",
         "font.serif": SERIF,
         "font.sans-serif": SANS,
@@ -341,7 +342,9 @@ def save(fig, stem: str, formats=("pdf", "svg"), close: bool = True) -> list[str
     paths = []
     for ext in formats:
         path = f"{stem}.{ext}"
-        fig.savefig(path, format=ext)
+        # Export time is not part of a research figure's content.
+        metadata = {"CreationDate": None, "ModDate": None} if ext == "pdf" else {"Date": None} if ext == "svg" else None
+        fig.savefig(path, format=ext, metadata=metadata)
         paths.append(path)
     try:
         problems = _audit(fig)

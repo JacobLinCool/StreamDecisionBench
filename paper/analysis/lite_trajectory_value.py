@@ -182,7 +182,7 @@ def render(data):
               "- **Late override:** slow output may be arbitrarily older than the active decision.", "",
               "All rules depend on source order and component identity, never reference answers or correctness. "
               "Newest source, then slow, is processed first at exactly simultaneous arrivals; arrivals at the horizon are excluded.", "",
-              "| Slow component (fast = Jev) | Policy | 1 s | 2 s | 4 s | 5 s | Log-AUC 1–5 s |",
+              "| Slow component (fast = Jev) | Policy | 1 s | 2 s | 4 s | 8 s | Log-AUC 0.5–8 s |",
               "|---|---|---:|---:|---:|---:|---:|",
     ]
     for slow, systems in data["systems"].items():
@@ -191,7 +191,7 @@ def render(data):
                       for d in data["policy"]["fixed_intervals_s"]]
             lines.append("| " + " | ".join([FACTS_COLUMNS[slow], LABELS[policy], *scores,
                                           pct(result["integrated"]["overall"]["accuracy"])]) + " |")
-    lines += ["", "| Standalone setting, same nominal releases | 2 s | Log-AUC 1–5 s |",
+    lines += ["", "| Standalone setting, same nominal releases | 2 s | Log-AUC 0.5–8 s |",
               "|---|---:|---:|"]
     for name, row in data["standalone"].items():
         lines.append(f"| {FACTS_COLUMNS[name]} | {pct(row['fixed']['2']['overall']['accuracy'])} | "
@@ -306,7 +306,7 @@ First, we assign each state to its nearest actual change of the composed referen
 
 Second, we replay all five Jev/GPT pairs under three explicit, correctness-independent arbitration rules. Both components are requested at every state; the slow component may correct the fast component for that same state. The rules allow a slow answer to regress the active source by zero ticks, one tick, or arbitrarily many ticks. Every variant uses identical answers, complete latency distributions, reference transitions and request counts.
 
-At the recorded 2 s cadence, Jev plus Terra low obtains {pct(two('Terra', 'freshest'))}% in-force accuracy with the freshness rule, exceeding Jev alone ({pct(jev['fixed']['2']['overall']['accuracy'])}%). Allowing old slow answers to override newer fast answers instead gives {pct(two('Terra', 'arrival'))}%, below Jev alone: the system-design conclusion reverses while all component summaries remain unchanged. The penalty becomes larger at 1 s. Jev plus Terra none under the freshness rule reaches {pct(systems['TerraNone']['freshest']['integrated']['overall']['accuracy'])}% log-AUC over 1–5 s, compared with {pct(jev['integrated']['overall']['accuracy'])}% for Jev alone. The complete matrix includes all pairs and policies, including combinations that reduce accuracy.
+At the recorded 2 s cadence, Jev plus Terra low obtains {pct(two('Terra', 'freshest'))}% in-force accuracy with the freshness rule, exceeding Jev alone ({pct(jev['fixed']['2']['overall']['accuracy'])}%). Allowing old slow answers to override newer fast answers instead gives {pct(two('Terra', 'arrival'))}%, below Jev alone: the system-design conclusion reverses while all component summaries remain unchanged. The penalty becomes larger at 1 s. Jev plus Terra none under the freshness rule reaches {pct(systems['TerraNone']['freshest']['integrated']['overall']['accuracy'])}% log-AUC over 0.5–8 s, compared with {pct(jev['integrated']['overall']['accuracy'])}% for Jev alone. The complete matrix includes all pairs and policies, including combinations that reduce accuracy.
 
 A concrete trace explains the reversal. In {e['scenario_label']}, the reference changes {e['decision_change']}. Jev's correct source-{e['fast_source']} answer arrives at {e['fast_arrival_s']:.3f} s; Terra's source-{e['slow_source']} answer arrives at {e['start_s']:.3f} s, correct for its own state. Late override reinstates the previous decision for {e['duration_s']:.3f} s, until {e['end_s']:.3f} s. Freshest-source arbitration rejects it. This is the longest contiguous stale loss from a single Terra-low override of a correct Jev source in the eight scenarios, selected by an explicit rule.
 
@@ -331,9 +331,9 @@ def plot(data):
         ax.plot(curve["intervals_s"], np.array(curve["accuracy"]) * 100,
                 color="#777777", linestyle="-.", label="Jev alone")
         ax.text(0.04, 0.97, f"Jev + {FACTS_COLUMNS[slow]}", transform=ax.transAxes, va="top", fontsize=8)
-        ax.set(xscale="log", xlim=(1, 5), ylim=(45, 82),
+        ax.set(xscale="log", xlim=(.5, 8), ylim=(0, 100),
                xlabel="Time-step interval (s)", ylabel="In-force accuracy (%)")
-        ax.set_xticks([1, 2, 3, 4, 5], labels=["1", "2", "3", "4", "5"])
+        ax.set_xticks([.5, 1, 2, 4, 8], labels=["0.5", "1", "2", "4", "8"])
         ax.minorticks_off()
     axes[1].legend(loc="lower right", fontsize=7)
     save(fig, str(ROOT / "paper/figures/fig_arbitration"))
