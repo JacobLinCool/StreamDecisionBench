@@ -2,6 +2,7 @@
 # Rerun every open-weight SDB setting, plus Kev-9B and Kev-27B, on one lab RTX PRO 6000 (EVA-241-125).
 # Same recorders, pinned checkpoints, upstream commits and frozen RunPod requirements; only host paths differ.
 # ponytail: settings run sequentially per GPU; a second supervisor on the other RTX PRO 6000 (own SDB_OUT) halves wall time.
+# PREPARE_ONLY=1 downloads and prepares every setting without recording (run it once before parallel passes).
 # Run on the host:  setsid nohup scripts/lab/pro6000.sh <nvidia-smi index> [setting ...] > $SDB_LAB/supervisor.log 2>&1 &
 set -uo pipefail
 GPU=${1:?nvidia-smi index of an idle RTX PRO 6000}; shift
@@ -71,6 +72,7 @@ native() {  # Kev, Nimble and SemIf: decision_cohort.py --prepare, then decision
   [ -f "$SDB_MODELS/$id/prepared.json" ] || "${run[@]}" timeout -k 30 7200 "$B/envs/$env/bin/python" \
     "$SDB/scripts/runpod/decision_cohort.py" --plan "$PLAN" --prepare "$id" > "$OUT/logs/$id.prepare.log" 2>&1 || return 1
   cp "$SDB_MODELS/$id/prepared.json" "$OUT/$id.prepared.json"
+  [ -n "${PREPARE_ONLY:-}" ] && return 0
   gpu_idle "$id" || { log "$id gpu busy, not recorded"; return 1; }
   "${run[@]}" HF_HUB_OFFLINE=1 timeout -k 30 3600 "$B/envs/$env/bin/python" "$SDB/scripts/runpod/decision_record.py" \
     --plan "$PLAN" --setting "$id" --out "$OUT/runs/$id" > "$OUT/logs/$id.record.log" 2>&1
@@ -78,6 +80,11 @@ native() {  # Kev, Nimble and SemIf: decision_cohort.py --prepare, then decision
 
 laya() {  # id model revision; round 1 recorder, which loads the pinned checkpoint itself
   env_from bench "$R1/bench-requirements.txt" || return 1
+  if [ -n "${PREPARE_ONLY:-}" ]; then
+    "$B/envs/bench/bin/python" -c "from huggingface_hub import snapshot_download; snapshot_download('$2', revision='$3')" \
+      > "$OUT/logs/$1.prefetch.log" 2>&1
+    return
+  fi
   gpu_idle "$1" || { log "$1 gpu busy, not recorded"; return 1; }
   timeout -k 30 3600 "$B/envs/bench/bin/python" "$SDB/scripts/runpod/record.py" --backend laya \
     --model "$2" --revision "$3" --out "$OUT/runs/$1" > "$OUT/logs/$1.log" 2>&1
@@ -87,6 +94,7 @@ djev() {  # round 1: vLLM DiffusionGemma engine + DJev structured server + recor
   env_from bench "$R1/bench-requirements.txt" && env_from djev "$R1/djev-requirements.txt" || return 1
   local py=$B/envs/djev/bin/python path engine server rc
   path=$("$py" -c "from huggingface_hub import snapshot_download; print(snapshot_download('google/diffusiongemma-26B-A4B-it', revision='$DIFFUSION_REVISION', ignore_patterns=['*.msgpack','*.h5','*.bin','original/*']))" 2>> "$OUT/logs/download.log" | tail -1) || return 1
+  [ -n "${PREPARE_ONLY:-}" ] && return 0
   gpu_idle djev-diffusiongemma || { log "djev gpu busy, not recorded"; return 1; }
   setsid "$B/envs/djev/bin/vllm" serve "$path" --served-model-name dgemma --host 127.0.0.1 --port 18010 \
     --enforce-eager --language-model-only --attention-backend TRITON_ATTN --gpu-memory-utilization 0.9 \
@@ -130,8 +138,8 @@ for id in $SETTINGS; do
   fi
   # The runtime refuses an existing output directory; a partial pass is kept aside, never scored.
   [ -e "$OUT/runs/$id" ] && mv "$OUT/runs/$id" "$OUT/runs/$id.partial-$(date +%s)"
-  # Two supervisors (one per GPU) may share $B: a setting runs in at most one of them.
-  mkdir -p "$B/claims"; mkdir "$B/claims/$id" 2>/dev/null || { log "$id claimed by another supervisor, skipped"; continue; }
+  # Supervisors sharing an output directory run each setting at most once; separate passes use separate SDB_OUT.
+  mkdir -p "$OUT/claims"; mkdir "$OUT/claims/$id" 2>/dev/null || { log "$id claimed by another supervisor, skipped"; continue; }
   log "$id begin"
   case $id in
     laya-english) laya "$id" convaiinnovations/laya 55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851 ;;
@@ -142,7 +150,7 @@ for id in $SETTINGS; do
   esac
   rc=$?
   nvidia-smi -i "$GPU" --query-compute-apps=pid,used_memory --format=csv,noheader > "$OUT/logs/$id.gpu-after.txt"
-  rmdir "$B/claims/$id"
+  rmdir "$OUT/claims/$id"
   log "$id end exit=$rc"
 done
 log "finished"

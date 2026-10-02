@@ -15,7 +15,11 @@
         "run": "pro6000-lab-20261001/runs/laya-english",
         "gpu": "RTX PRO 6000 (96 GB)",
         "audit": "runpod-openweight-20260930/input-audit.json",
-        "audit_setting": "laya-english"
+        "audit_setting": "laya-english",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/laya-english",
+          "pro6000-lab-20261001-pass3/runs/laya-english"
+        ]
       },
       {
         "name": "LayaTyped",
@@ -23,7 +27,11 @@
         "run": "pro6000-lab-20261001/runs/laya-typed-decisions",
         "gpu": "RTX PRO 6000 (96 GB)",
         "audit": "runpod-openweight-20260930/input-audit.json",
-        "audit_setting": "laya-typed-decisions"
+        "audit_setting": "laya-typed-decisions",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/laya-typed-decisions",
+          "pro6000-lab-20261001-pass3/runs/laya-typed-decisions"
+        ]
       },
       {
         "name": "LayaMultilingual",
@@ -31,48 +39,76 @@
         "run": "pro6000-lab-20261001/runs/laya-multilingual",
         "gpu": "RTX PRO 6000 (96 GB)",
         "audit": "runpod-openweight-20260930/input-audit.json",
-        "audit_setting": "laya-multilingual"
+        "audit_setting": "laya-multilingual",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/laya-multilingual",
+          "pro6000-lab-20261001-pass3/runs/laya-multilingual"
+        ]
       },
       {
         "name": "DJev",
         "label": "DJev / DiffusionGemma",
         "run": "pro6000-lab-20261001/runs/djev-diffusiongemma",
-        "gpu": "RTX PRO 6000 (96 GB)"
+        "gpu": "RTX PRO 6000 (96 GB)",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/djev-diffusiongemma",
+          "pro6000-lab-20261001-pass3/runs/djev-diffusiongemma"
+        ]
       },
       {
         "name": "Kev",
         "label": "Kev-4B",
         "run": "pro6000-lab-20261001/runs/kev-4b",
         "gpu": "RTX PRO 6000 (96 GB)",
-        "audit": "pro6000-lab-20261001/kev-4b.input-audit.json"
+        "audit": "pro6000-lab-20261001/kev-4b.input-audit.json",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/kev-4b",
+          "pro6000-lab-20261001-pass3/runs/kev-4b"
+        ]
       },
       {
         "name": "KevNine",
         "label": "Kev-9B",
         "run": "pro6000-lab-20261001/runs/kev-9b",
         "gpu": "RTX PRO 6000 (96 GB)",
-        "audit": "pro6000-lab-20261001/kev-9b.input-audit.json"
+        "audit": "pro6000-lab-20261001/kev-9b.input-audit.json",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/kev-9b",
+          "pro6000-lab-20261001-pass3/runs/kev-9b"
+        ]
       },
       {
         "name": "KevTwentySeven",
         "label": "Kev-27B",
         "run": "pro6000-lab-20261001/runs/kev-27b",
         "gpu": "RTX PRO 6000 (96 GB)",
-        "audit": "pro6000-lab-20261001/kev-27b.input-audit.json"
+        "audit": "pro6000-lab-20261001/kev-27b.input-audit.json",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/kev-27b",
+          "pro6000-lab-20261001-pass3/runs/kev-27b"
+        ]
       },
       {
         "name": "Nimble",
         "label": "Bespoke Nimble-9B",
         "run": "pro6000-lab-20261001/runs/nimble-9b",
         "gpu": "RTX PRO 6000 (96 GB)",
-        "audit": "pro6000-lab-20261001/nimble-9b.input-audit.json"
+        "audit": "pro6000-lab-20261001/nimble-9b.input-audit.json",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/nimble-9b",
+          "pro6000-lab-20261001-pass3/runs/nimble-9b"
+        ]
       },
       {
         "name": "QwenLogits",
         "label": "Qwen3.5-4B direct-logit",
         "run": "pro6000-lab-20261001/runs/semif-qwen35-4b",
         "gpu": "RTX PRO 6000 (96 GB)",
-        "audit": "pro6000-lab-20261001/semif-qwen35-4b.input-audit.json"
+        "audit": "pro6000-lab-20261001/semif-qwen35-4b.input-audit.json",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/semif-qwen35-4b",
+          "pro6000-lab-20261001-pass3/runs/semif-qwen35-4b"
+        ]
       }
     ]
   },
@@ -610,7 +646,11 @@
         "run": "pro6000-lab-20261001/runs/laya-english",
         "gpu": "RTX PRO 6000 (96 GB)",
         "audit": "runpod-openweight-20260930/input-audit.json",
-        "audit_setting": "laya-english"
+        "audit_setting": "laya-english",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/laya-english",
+          "pro6000-lab-20261001-pass3/runs/laya-english"
+        ]
       },
       "integrated": {
         "per_episode": [
@@ -1210,7 +1250,39 @@
         "retried_logical_rate": 0.0,
         "retried_logical_rate_denominator": "all released logical requests",
         "attempt_errors_by_type": {}
-      }
+      },
+      "repeats": [
+        {
+          "run": "pro6000-lab-20261001-pass2/runs/laya-english",
+          "sha256": {
+            "run.json": "ffc0d773ae457da74eb5ba4eba845af784d0d950afef960dddf3cb1c77e0fc60",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "eccfbbda51780db10b3430f275bc77e50176c0bbe928cae96e2cbe64bfeac0dc"
+          },
+          "accuracy": 0.004166470181986668,
+          "untimed": 0.004166666666666667,
+          "latency_s": {
+            "p50": 0.1432199503760785,
+            "p95": 0.25726579739712174,
+            "max": 0.4432048639282584
+          }
+        },
+        {
+          "run": "pro6000-lab-20261001-pass3/runs/laya-english",
+          "sha256": {
+            "run.json": "86e9e995265c8b7aa9669f5edb0d342e41129139340cad0dad8f9a243fc76299",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "29ce3ac1e42f89b8be66e1338680c5a5931ff0f1ddf82858991bbb9bc93de9c7"
+          },
+          "accuracy": 0.004166456401846978,
+          "untimed": 0.004166666666666667,
+          "latency_s": {
+            "p50": 0.14447122509591281,
+            "p95": 0.255090915155597,
+            "max": 0.3155887839384377
+          }
+        }
+      ]
     },
     "LayaTyped": {
       "spec": {
@@ -1219,7 +1291,11 @@
         "run": "pro6000-lab-20261001/runs/laya-typed-decisions",
         "gpu": "RTX PRO 6000 (96 GB)",
         "audit": "runpod-openweight-20260930/input-audit.json",
-        "audit_setting": "laya-typed-decisions"
+        "audit_setting": "laya-typed-decisions",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/laya-typed-decisions",
+          "pro6000-lab-20261001-pass3/runs/laya-typed-decisions"
+        ]
       },
       "integrated": {
         "per_episode": [
@@ -1822,7 +1898,39 @@
         "retried_logical_rate": 0.0,
         "retried_logical_rate_denominator": "all released logical requests",
         "attempt_errors_by_type": {}
-      }
+      },
+      "repeats": [
+        {
+          "run": "pro6000-lab-20261001-pass2/runs/laya-typed-decisions",
+          "sha256": {
+            "run.json": "86b18f0d71bff8df0153f8ed028c075a1f855ee629e8b66f6420efb2b0d4e234",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "cbe576f08fd3717af0faaa0f8300a37bd47efcd42410cb94bc08e7c061250f00"
+          },
+          "accuracy": 0.014583392046349368,
+          "untimed": 0.014583333333333334,
+          "latency_s": {
+            "p50": 0.14349366584792733,
+            "p95": 0.2530964183853938,
+            "max": 0.31663877703249454
+          }
+        },
+        {
+          "run": "pro6000-lab-20261001-pass3/runs/laya-typed-decisions",
+          "sha256": {
+            "run.json": "3230d1a4cf138e830359d9e65f16f64a3f9dd249089599d2fd50e0fef4ae117b",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "bf1dd55461bf16bffdecffae73dd70e47ad9fb2ad3a499de6acce7933bbefaec"
+          },
+          "accuracy": 0.014583394331115874,
+          "untimed": 0.014583333333333334,
+          "latency_s": {
+            "p50": 0.14246823056600988,
+            "p95": 0.2525226715952158,
+            "max": 0.31566848792135715
+          }
+        }
+      ]
     },
     "LayaMultilingual": {
       "spec": {
@@ -1831,7 +1939,11 @@
         "run": "pro6000-lab-20261001/runs/laya-multilingual",
         "gpu": "RTX PRO 6000 (96 GB)",
         "audit": "runpod-openweight-20260930/input-audit.json",
-        "audit_setting": "laya-multilingual"
+        "audit_setting": "laya-multilingual",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/laya-multilingual",
+          "pro6000-lab-20261001-pass3/runs/laya-multilingual"
+        ]
       },
       "integrated": {
         "per_episode": [
@@ -2424,14 +2536,50 @@
         "retried_logical_rate": 0.0,
         "retried_logical_rate_denominator": "all released logical requests",
         "attempt_errors_by_type": {}
-      }
+      },
+      "repeats": [
+        {
+          "run": "pro6000-lab-20261001-pass2/runs/laya-multilingual",
+          "sha256": {
+            "run.json": "a7668c1a830fb905d65d155a03e3dc7ad6ed0a866032d81e6b6b8dc0101c3510",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "7558e26754118348113dc985a80d97a817162ab267a4f028e57260ca505a38e6"
+          },
+          "accuracy": 0.002085557247314166,
+          "untimed": 0.0020833333333333333,
+          "latency_s": {
+            "p50": 0.08390962518751621,
+            "p95": 0.15277046370320008,
+            "max": 0.1952886339277029
+          }
+        },
+        {
+          "run": "pro6000-lab-20261001-pass3/runs/laya-multilingual",
+          "sha256": {
+            "run.json": "e7a3dbd74efb82e2362ba2e8b717eb6f89f079bcc7a8b111836fa0f78703eaac",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "58cf9d7ba2232af0ff521fcb5a6fa14c724f07adecda764b9ecfd1e32cd52c08"
+          },
+          "accuracy": 0.0020878437011763226,
+          "untimed": 0.0020833333333333333,
+          "latency_s": {
+            "p50": 0.08458319562487304,
+            "p95": 0.15401480335276568,
+            "max": 1.265897038858384
+          }
+        }
+      ]
     },
     "DJev": {
       "spec": {
         "name": "DJev",
         "label": "DJev / DiffusionGemma",
         "run": "pro6000-lab-20261001/runs/djev-diffusiongemma",
-        "gpu": "RTX PRO 6000 (96 GB)"
+        "gpu": "RTX PRO 6000 (96 GB)",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/djev-diffusiongemma",
+          "pro6000-lab-20261001-pass3/runs/djev-diffusiongemma"
+        ]
       },
       "integrated": {
         "per_episode": [
@@ -2999,7 +3147,39 @@
         "retried_logical_rate": 0.0,
         "retried_logical_rate_denominator": "all released logical requests",
         "attempt_errors_by_type": {}
-      }
+      },
+      "repeats": [
+        {
+          "run": "pro6000-lab-20261001-pass2/runs/djev-diffusiongemma",
+          "sha256": {
+            "run.json": "c23a744530d4fbb2ffe09b103a37a2698320d6d023e878cc8dd7008d2f01af8d",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "6af12d22155aaeac4868de4b54933a29bbdcaf5d88b8e0a6a8751d0264c11d40"
+          },
+          "accuracy": 0.20881882758413542,
+          "untimed": 0.23125,
+          "latency_s": {
+            "p50": 0.5426182374358177,
+            "p95": 0.6302520985715089,
+            "max": 0.9548030500300229
+          }
+        },
+        {
+          "run": "pro6000-lab-20261001-pass3/runs/djev-diffusiongemma",
+          "sha256": {
+            "run.json": "02447f4bf475b50a9ab7540ad33ec02a51d2347ecc7be92ac5a3929f641b4ffe",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "0d22bf2488ac31796d0581c9ab68f0750a3e0f957c3b95fda0bddadb76534026"
+          },
+          "accuracy": 0.2119286777768388,
+          "untimed": 0.23333333333333334,
+          "latency_s": {
+            "p50": 0.5389614701271057,
+            "p95": 0.6456279990728943,
+            "max": 8.496358335018158
+          }
+        }
+      ]
     },
     "Kev": {
       "spec": {
@@ -3007,7 +3187,11 @@
         "label": "Kev-4B",
         "run": "pro6000-lab-20261001/runs/kev-4b",
         "gpu": "RTX PRO 6000 (96 GB)",
-        "audit": "pro6000-lab-20261001/kev-4b.input-audit.json"
+        "audit": "pro6000-lab-20261001/kev-4b.input-audit.json",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/kev-4b",
+          "pro6000-lab-20261001-pass3/runs/kev-4b"
+        ]
       },
       "integrated": {
         "per_episode": [
@@ -3617,7 +3801,39 @@
         "retried_logical_rate": 0.0,
         "retried_logical_rate_denominator": "all released logical requests",
         "attempt_errors_by_type": {}
-      }
+      },
+      "repeats": [
+        {
+          "run": "pro6000-lab-20261001-pass2/runs/kev-4b",
+          "sha256": {
+            "run.json": "9f9a5b18f03db9f7da7f8cef7b6652782bc68e9e73d2b487f30c8d227ac34e6a",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "569dff0d72d182bf0c6dad6c58079b5e841fa64bfc2f3b580e9039ca8cf384dd"
+          },
+          "accuracy": 0.2122275836166913,
+          "untimed": 0.22083333333333333,
+          "latency_s": {
+            "p50": 0.21987753501161933,
+            "p95": 0.31264424247201533,
+            "max": 0.3245854852721095
+          }
+        },
+        {
+          "run": "pro6000-lab-20261001-pass3/runs/kev-4b",
+          "sha256": {
+            "run.json": "36f76415ee8ffd3bd9441f02a8b1def42f07b1b399f6354ff747105184c0147c",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "39d37e9419956e3128f06b3c353b605fb51fdb77dc5859593e7dab3ad9748b33"
+          },
+          "accuracy": 0.21230975785340023,
+          "untimed": 0.22083333333333333,
+          "latency_s": {
+            "p50": 0.21748782298527658,
+            "p95": 0.3336259419796988,
+            "max": 0.345931647811085
+          }
+        }
+      ]
     },
     "KevNine": {
       "spec": {
@@ -3625,7 +3841,11 @@
         "label": "Kev-9B",
         "run": "pro6000-lab-20261001/runs/kev-9b",
         "gpu": "RTX PRO 6000 (96 GB)",
-        "audit": "pro6000-lab-20261001/kev-9b.input-audit.json"
+        "audit": "pro6000-lab-20261001/kev-9b.input-audit.json",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/kev-9b",
+          "pro6000-lab-20261001-pass3/runs/kev-9b"
+        ]
       },
       "integrated": {
         "per_episode": [
@@ -4233,7 +4453,39 @@
         "retried_logical_rate": 0.0,
         "retried_logical_rate_denominator": "all released logical requests",
         "attempt_errors_by_type": {}
-      }
+      },
+      "repeats": [
+        {
+          "run": "pro6000-lab-20261001-pass2/runs/kev-9b",
+          "sha256": {
+            "run.json": "b4b4d004cba731dfde9cdb32be299bb3d0db13061cf15cfc0968f38f0dd1a404",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "cb76d7ca58a1d4548e5ab5af7a125b46f05bdade73c85942e2344d849f4dfddf"
+          },
+          "accuracy": 0.2844719702398313,
+          "untimed": 0.29583333333333334,
+          "latency_s": {
+            "p50": 0.23054078803397715,
+            "p95": 0.3754887346876785,
+            "max": 1.139494757167995
+          }
+        },
+        {
+          "run": "pro6000-lab-20261001-pass3/runs/kev-9b",
+          "sha256": {
+            "run.json": "732833e6fa43ebbbb3f0439b709924917c557cf3cdf9233fe5eec8cc4fc5ead9",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "b65ce5c0ef914756b065c3ea2898e7095a5078329144a38bb7b3e656fa77b825"
+          },
+          "accuracy": 0.28574006032216903,
+          "untimed": 0.29583333333333334,
+          "latency_s": {
+            "p50": 0.22722005494870245,
+            "p95": 0.3624354291707277,
+            "max": 0.3831523582339287
+          }
+        }
+      ]
     },
     "KevTwentySeven": {
       "spec": {
@@ -4241,7 +4493,11 @@
         "label": "Kev-27B",
         "run": "pro6000-lab-20261001/runs/kev-27b",
         "gpu": "RTX PRO 6000 (96 GB)",
-        "audit": "pro6000-lab-20261001/kev-27b.input-audit.json"
+        "audit": "pro6000-lab-20261001/kev-27b.input-audit.json",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/kev-27b",
+          "pro6000-lab-20261001-pass3/runs/kev-27b"
+        ]
       },
       "integrated": {
         "per_episode": [
@@ -4863,7 +5119,39 @@
         "retried_logical_rate": 0.0,
         "retried_logical_rate_denominator": "all released logical requests",
         "attempt_errors_by_type": {}
-      }
+      },
+      "repeats": [
+        {
+          "run": "pro6000-lab-20261001-pass2/runs/kev-27b",
+          "sha256": {
+            "run.json": "1c4f1f9b85d3e8ae113e76cd2c79cbe03235e755387d43c7aa1ca76343427629",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "e2fbabb2ca17a84c29d4832f848e86417dfbf3033f6736d2d48ac9c70149eaf7"
+          },
+          "accuracy": 0.6217211212319039,
+          "untimed": 0.7270833333333333,
+          "latency_s": {
+            "p50": 0.5247872080653906,
+            "p95": 0.9000421489123255,
+            "max": 1.2645765040069818
+          }
+        },
+        {
+          "run": "pro6000-lab-20261001-pass3/runs/kev-27b",
+          "sha256": {
+            "run.json": "487cf71ee0a1dc2210d51c8191326f42cc5ad3bebeebbe7bf1b3ba4ef4f1ab4b",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "ca58d088780910956071d082d542e84b5d233ffd2aafc47f3c1b1d6614c74d03"
+          },
+          "accuracy": 0.6230381562922954,
+          "untimed": 0.7270833333333333,
+          "latency_s": {
+            "p50": 0.5228768079541624,
+            "p95": 0.8926434574415907,
+            "max": 0.9733099951408803
+          }
+        }
+      ]
     },
     "Nimble": {
       "spec": {
@@ -4871,7 +5159,11 @@
         "label": "Bespoke Nimble-9B",
         "run": "pro6000-lab-20261001/runs/nimble-9b",
         "gpu": "RTX PRO 6000 (96 GB)",
-        "audit": "pro6000-lab-20261001/nimble-9b.input-audit.json"
+        "audit": "pro6000-lab-20261001/nimble-9b.input-audit.json",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/nimble-9b",
+          "pro6000-lab-20261001-pass3/runs/nimble-9b"
+        ]
       },
       "integrated": {
         "per_episode": [
@@ -5486,7 +5778,39 @@
         "retried_logical_rate": 0.0,
         "retried_logical_rate_denominator": "all released logical requests",
         "attempt_errors_by_type": {}
-      }
+      },
+      "repeats": [
+        {
+          "run": "pro6000-lab-20261001-pass2/runs/nimble-9b",
+          "sha256": {
+            "run.json": "1b25eb83ae10f1b88acf12badd261619c2e99ea456b12d0e3b798ae83b3b2f56",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "ef4a74184be3c4296dc04620f15bc7322d7bb0db42a656df7ba7359103974138"
+          },
+          "accuracy": 0.13344233652262488,
+          "untimed": 0.22291666666666665,
+          "latency_s": {
+            "p50": 1.9734645236749202,
+            "p95": 17.212367298523887,
+            "max": 29.981955082155764
+          }
+        },
+        {
+          "run": "pro6000-lab-20261001-pass3/runs/nimble-9b",
+          "sha256": {
+            "run.json": "88871e252ed248389d1e914a2286f878a8f33bd87cf5904dd9dd7f82aa0aa2d4",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "e231f1fec27aa660dab6243e854cd74a177d26006a359e85f1527c904ae998fa"
+          },
+          "accuracy": 0.15212961746545858,
+          "untimed": 0.22291666666666665,
+          "latency_s": {
+            "p50": 1.541788486065343,
+            "p95": 5.77987302711699,
+            "max": 14.079351895023137
+          }
+        }
+      ]
     },
     "QwenLogits": {
       "spec": {
@@ -5494,7 +5818,11 @@
         "label": "Qwen3.5-4B direct-logit",
         "run": "pro6000-lab-20261001/runs/semif-qwen35-4b",
         "gpu": "RTX PRO 6000 (96 GB)",
-        "audit": "pro6000-lab-20261001/semif-qwen35-4b.input-audit.json"
+        "audit": "pro6000-lab-20261001/semif-qwen35-4b.input-audit.json",
+        "repeats": [
+          "pro6000-lab-20261001-pass2/runs/semif-qwen35-4b",
+          "pro6000-lab-20261001-pass3/runs/semif-qwen35-4b"
+        ]
       },
       "integrated": {
         "per_episode": [
@@ -6095,7 +6423,39 @@
         "retried_logical_rate": 0.0,
         "retried_logical_rate_denominator": "all released logical requests",
         "attempt_errors_by_type": {}
-      }
+      },
+      "repeats": [
+        {
+          "run": "pro6000-lab-20261001-pass2/runs/semif-qwen35-4b",
+          "sha256": {
+            "run.json": "a40d6ad0994327d1c54513e25e083270214f9540af7324896375ee761133b14c",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "1f94b474c9fad893349d9b805348ab0f902f6757d9965525f526912497ba53e9"
+          },
+          "accuracy": 0.15678630338307625,
+          "untimed": 0.17708333333333334,
+          "latency_s": {
+            "p50": 0.7472740495577455,
+            "p95": 1.1431486959336319,
+            "max": 1.3557263761758804
+          }
+        },
+        {
+          "run": "pro6000-lab-20261001-pass3/runs/semif-qwen35-4b",
+          "sha256": {
+            "run.json": "275ee961fe1790fc3854fbac62f73635ae0cbeb97427ebb9bafa2bbe404a4089",
+            "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+            "events.jsonl": "1475d73bff8f4096fcba0c4ec9f2d720bcf0914f196d01e5803ee8a1ea3744b7"
+          },
+          "accuracy": 0.1570130316597284,
+          "untimed": 0.17708333333333334,
+          "latency_s": {
+            "p50": 0.7678979290649295,
+            "p95": 1.279713334771804,
+            "max": 10.795099071227014
+          }
+        }
+      ]
     }
   },
   "systems": {
@@ -27757,8 +28117,8 @@
     "shared_hosted_control_checks": 20
   },
   "sources_sha256": {
-    "paper/analysis/lite_openweight.py": "5194730bc8aaea08584e335be5761b0d7f11114119637f4a7bcac1d9233c7cd1",
-    "paper/analysis/openweight_policy.json": "de4447bb77ebbb65cef3a1f3e4e516f5f4dec8b5cec2407cc7d39c4616e9865b",
+    "paper/analysis/lite_openweight.py": "35f4d3a9a6905c794313ed589b52e20ddf8288e6b0cb8bbd8d73931636278533",
+    "paper/analysis/openweight_policy.json": "ec9a9ad2b0ad18ca66fd1f43cc23b254a93e8009df6890801826ec31eebdad7b",
     "paper/analysis/lite_trajectory_value.py": "fea66b556faae61adb6d74780d30c9b6e6e6ac0cbc47b2dbc4b4a2a491fce764",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
     "paper/analysis/lite_numbers.py": "944f9b645bf30e14556b97e755dd4b57594541880f7c264cadd40adc54569cba",

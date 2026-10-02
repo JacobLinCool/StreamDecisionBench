@@ -81,6 +81,25 @@ def verify_audit(spec: dict, run: dict) -> dict:
             "max_sequence_tokens": row["max_sequence_tokens"], "issues": len(row["issues"])}
 
 
+def verify_repeats(spec: dict, first: dict) -> list[dict]:
+    """Further passes of the same deployment: verified recordings and their published primary scores."""
+    repeats = []
+    for folder in spec.get("repeats", []):
+        run, hashes = verified_run(ROOT / "runs" / folder)
+        config, base = run["frozen"]["config"], first["frozen"]["config"]
+        if (config["model"], config["model_revision"]) != (base["model"], base["model_revision"]):
+            raise ValueError(f"{spec['name']}: repeated pass uses a different checkpoint")
+        if run["frozen"]["dataset_manifest"] != first["frozen"]["dataset_manifest"]:
+            raise ValueError(f"{spec['name']}: repeated pass uses different data")
+        report = json.loads((ROOT / "docs/lite/results" / folder.replace("/runs/", "/") / "analysis.json").read_text())
+        auc = report["auc"]["primary"]
+        if report["events_sha256"] != run["frozen"]["events_sha256"] or (auc["min_s"], auc["max_s"], auc["weighting"]) != (.5, 8, "log"):
+            raise ValueError(f"{spec['name']}: repeated-pass report is stale")
+        repeats.append({"run": folder, "sha256": hashes, "accuracy": auc["overall"]["accuracy"],
+                        "untimed": run["scores"]["overall"]["untimed_decision_accuracy"], "latency_s": report["latency_s"]})
+    return repeats
+
+
 def original_clock(scenarios, run):
     return [replace(sc, releases_s=tuple(r["release_s"] for r in run["releases"][sc.episode_id]))
             for sc in scenarios]
@@ -175,7 +194,7 @@ def analyze():
         data["standalone"][name] = {"spec": spec, "integrated": result,
             "untimed": run["scores"]["overall"]["untimed_decision_accuracy"],
             "latency_s": report["latency_s"], "config": run["frozen"]["config"],
-            "retry_reliability": report["retry_reliability"]}
+            "retry_reliability": report["retry_reliability"], "repeats": verify_repeats(spec, run)}
         print(f"Verified standalone {name}", flush=True)
     slow = policy["correction_setting"]
     if data["hosted"][slow]["accuracy"] != max(r["accuracy"] for n, r in data["hosted"].items() if n != "Jev"):
@@ -267,7 +286,8 @@ def render_results(data):
         "even though its recorded median latency exceeds Terra none's.", "",
         "[Complete local/policy matrix, curves and provenance](docs/research/openweight-hybrids/README.md);",
         "[all five Jev/GPT pairs and three arbitration policies](docs/research/trajectory-value/README.md).",
-        "Each setting has one pass and adjacent states are dependent; differences do not establish stable rankings.", "",
+        "Hosted settings have one pass; self-hosted settings have three, of which every other analysis uses the first.",
+        "Adjacent states are dependent; differences do not establish stable rankings.", "",
         "Regenerate the verified summary, paper tables and composition curves without model calls:", "",
         "```bash", "uv run --group paper python paper/analysis/lite_openweight.py", "```"]
     return "\n".join(lines)
@@ -298,7 +318,7 @@ def render_report(data):
         f"The largest nominal/original-clock difference at 2 s is {data['verification']['max_nominal_recorded_gap_points']:.6f} percentage points.",
         "The log integral is analytical between every release/arrival crossing; a third interior point checks each affine piece.",
         "Published standalone aggregates and family partitions are checked against independently recomputed areas.",
-        "The observations cover one pass per setting on synthetic development scenarios. Retiming assumes fixed",
+        "Compositions use the first of three passes per setting on synthetic development scenarios. Retiming assumes fixed",
         "service latency; hardware normalization, joint contention, repeated-run stability and generative Qwen",
         "performance are outside the measurements. Sol-2B had no executable public native runtime and receives no score.", "",
         "[analysis.json](analysis.json) includes all scenario/family partitions, full curves, raw event and input-audit",
@@ -325,6 +345,15 @@ def write_tex(data):
             add(name + POLICY_MACROS[policy] + "Auc", pct(result["integrated"]["overall"]["accuracy"]), f"systems.{name}.{policy}.integrated.overall.accuracy")
     for name, row in data["controls"].items():
         add(name + "Auc", pct(row["overall"]["accuracy"]), f"controls.{name}.overall.accuracy")
+    passes = {name: [(row["integrated"]["overall"]["accuracy"], row["untimed"])]
+              + [(r["accuracy"], r["untimed"]) for r in row["repeats"]] for name, row in data["standalone"].items()}
+    if any(len(p) > 1 for p in passes.values()):
+        spread = {name: [max(v) - min(v) for v in zip(*p)] for name, p in passes.items()}
+        add("RepeatPasses", str(max(len(p) for p in passes.values())), "standalone.*.repeats")
+        add("RepeatMaxAucRange", pct(max(s[0] for s in spread.values())), "standalone.*.repeats")
+        add("RepeatMaxUntimedRange", pct(max(s[1] for s in spread.values())), "standalone.*.repeats")
+        for name, p in passes.items():
+            add(name + "RepeatMeanAuc", pct(np.mean([a for a, _ in p])), f"standalone.{name}.repeats")
     (ROOT / "paper/generated/openweight_numbers.tex").write_text("\n".join(numbers) + "\n")
     tables = ["% Generated by paper/analysis/lite_openweight.py; do not edit."]
     def table(command, rows):
@@ -337,6 +366,14 @@ def write_tex(data):
     table("TabOpenweightHybrids", [" & ".join([row["spec"]["label"],
         *[f"\\Ow{name}{POLICY_MACROS[p]}Auc" for p in data["policy"]["policies"]]]) + r" \\"
         for name, row in data["standalone"].items()])
+    if any(row["repeats"] for row in data["standalone"].values()):
+        rows = []
+        for name, row in data["standalone"].items():
+            aucs = [row["integrated"]["overall"]["accuracy"], *[r["accuracy"] for r in row["repeats"]]]
+            untimed = [row["untimed"], *[r["untimed"] for r in row["repeats"]]]
+            rows.append(" & ".join([row["spec"]["label"], *[pct(a) for a in aucs], pct(np.mean(aucs)),
+                pct(max(aucs) - min(aucs)), pct(np.mean(untimed)), pct(max(untimed) - min(untimed))]) + r" \\")
+        table("TabOpenweightRepeats", rows)
     (ROOT / "paper/generated/openweight_tables.tex").write_text("\n".join(tables) + "\n")
 
 

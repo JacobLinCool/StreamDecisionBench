@@ -1,0 +1,15 @@
+{
+  "upstream_commits": {
+    "kev": "90512f1c517d977741f2104470a40635408236c9",
+    "nimble": "62076b4f2d365b5879dafcf7f6dd072a1fe76df7",
+    "semif": "23cf1f39fc9534fe81437200959b6dfc7106e45a",
+    "laya": "6d942c92081fbc139e736bbd9ac0023223c29b7f",
+    "djev": "e5841cf41e9211608e698492658685c36e24e77a"
+  },
+  "benchmark_commit": "1f77e865cba7d409314068936f866f84164fbd72",
+  "vllm_wheel_commit": "1ee7f78e806b5e9b7476c74edf453b58fe108157",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "host": "NYCU lab EVA-241-125",
+  "experiment_id": "pro6000-lab-20261001-pass2",
+  "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af"
+}

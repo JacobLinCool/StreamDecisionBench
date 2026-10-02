@@ -2937,11 +2937,11 @@
   },
   "summary": {
     "path": "docs/research/openweight-hybrids/analysis.json",
-    "sha256": "9c81de5f524ec65bbfe4e9a28bfbc2ea38d3f2f23f4028220c1e18de20cf8fba"
+    "sha256": "ef7c9c4cda33fe7f139a4b16163e17a525074a0bc69a0122427ea4290d7052d6"
   },
   "sources_sha256": {
     "docs/figures/prepare.py": "8bcc9a3f36bcc15324e520723e07c6c8167ba44b824f88da671ecfe0b98ea2c6",
-    "paper/analysis/lite_openweight.py": "5194730bc8aaea08584e335be5761b0d7f11114119637f4a7bcac1d9233c7cd1",
+    "paper/analysis/lite_openweight.py": "35f4d3a9a6905c794313ed589b52e20ddf8288e6b0cb8bbd8d73931636278533",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616"
   }
