@@ -83,16 +83,17 @@ def test_heartbeat_wording_is_new_and_fills_quiet_ticks(steps):
         assert not _runs(assembly_c.HEARTBEAT) & _runs(message)
 
 
-def test_press_before_body_scan_then_transposed_body(steps):
-    assert gold(steps, 0)["route"] == "wait"  # No record yet: intake, incomplete, no defect.
-    assert gold(steps, 0)["stage"] == "intake"
-    # A press before any body scan: intake is a missing earlier stage.
-    assert (gold(steps, 1)["route"], gold(steps, 1)["stage"]) == ("repair", "bearing")
-    assert (gold(steps, 1)["target"], gold(steps, 1)["method"]) == ("body", "complete_missing")
-    assert gold(steps, 2) == gold(steps, 1)  # Speech about skipping the scan does not decide.
-    assert (gold(steps, 3)["stage"], gold(steps, 3)["target"], gold(steps, 3)["method"]) == ("intake", "body", "swap_body")
-    # The correct body makes the t=1 press obsolete, so the bearing stage is still to do.
-    assert (gold(steps, 5)["route"], gold(steps, 5)["next_step"]) == ("advance", "bearing")
+def test_wrong_casting_pressed_anyway_then_correct_body(steps):
+    # The opening record is productive, so the always-displayed stage never needs a default.
+    assert steps[0]["state"]["station_log"][0]["kind"] == "scan"
+    assert (gold(steps, 0)["route"], gold(steps, 0)["stage"]) == ("repair", "intake")
+    assert (gold(steps, 0)["target"], gold(steps, 0)["method"]) == ("body", "swap_body")
+    assert gold(steps, 1) == gold(steps, 0)  # "the bores match" is speech.
+    # The press moves the stage on, but the known intake defect is still the repair.
+    assert (gold(steps, 2)["route"], gold(steps, 2)["stage"]) == ("repair", "bearing")
+    assert (gold(steps, 2)["target"], gold(steps, 2)["method"]) == ("body", "swap_body")
+    # The correct body makes the t=2 press obsolete, so the bearing stage is still to do.
+    assert (gold(steps, 5)["route"], gold(steps, 5)["stage"], gold(steps, 5)["next_step"]) == ("advance", "intake", "bearing")
 
 
 def test_bearing_repress_wait_no_read_and_withdrawn_escalation(steps):
@@ -139,34 +140,49 @@ def test_flow_retest_and_neighbouring_unit_reading(steps):
     assert gold(steps, 46) == gold(steps, 45)  # The recall is speech until a record follows.
 
 
-def test_post_release_recall_swap_missing_rear_press_and_flipped_seal(steps):
+def test_post_release_recall_rushed_leak_test_late_press_and_flipped_seal(steps):
+    # The swap clears the rear reading; the t=45 flow is still newer than every leak test.
     assert (gold(steps, 48)["route"], gold(steps, 48)["stage"]) == ("wait", "bearing")
-    # The swap clears the rear reading; the seal record moves past bearing, so rear is missing.
-    assert (gold(steps, 50)["route"], gold(steps, 50)["stage"]) == ("repair", "seal")
+    assert gold(steps, 49) == gold(steps, 48)  # The courier speech decides nothing.
+    # A passing, current leak test cannot hide the skipped rear press.
+    assert (gold(steps, 50)["route"], gold(steps, 50)["stage"]) == ("repair", "pressure")
     assert (gold(steps, 50)["target"], gold(steps, 50)["method"]) == ("rear_bearing", "complete_missing")
-    # Rear passes at its 6.5 kN endpoint; the known seal defect is repaired even from the bearing stage.
-    assert (gold(steps, 52)["stage"], gold(steps, 52)["target"], gold(steps, 52)["method"]) == ("bearing", "seal", "refit_seal")
-    assert (gold(steps, 54)["route"], gold(steps, 54)["next_step"]) == ("advance", "pressure")  # Old leak test obsolete.
-    assert gold(steps, 55) == gold(steps, 54)  # Another station's leak test.
-    assert gold(steps, 57)["next_step"] == "functional"  # The t=45 flow test is now obsolete.
-    assert gold(steps, 59)["route"] == "release"
+    # Rear passes at its 6.5 kN endpoint and makes the t=50 leak test obsolete; seal is still done.
+    assert (gold(steps, 52)["route"], gold(steps, 52)["stage"], gold(steps, 52)["next_step"]) == ("advance", "bearing", "pressure")
+    assert gold(steps, 53) == gold(steps, 52)
+    assert (gold(steps, 54)["stage"], gold(steps, 54)["target"], gold(steps, 54)["method"]) == ("seal", "seal", "refit_seal")
+    assert (gold(steps, 56)["route"], gold(steps, 56)["stage"], gold(steps, 56)["next_step"]) == ("advance", "seal", "pressure")
+    assert gold(steps, 57) == gold(steps, 56)  # Another station's leak test.
+    assert gold(steps, 58)["next_step"] == "functional"  # The t=45 flow test is now obsolete.
+    assert (gold(steps, 59)["route"], gold(steps, 59)["destination"]) == ("release", "spares_crate")
+
+
+def test_targets_never_belong_to_a_later_stage_than_the_current_one(steps):
+    order = assembly_c.INSTRUCTION["stage_order"]
+    stage_of = {"body": "intake", "front_bearing": "bearing", "rear_bearing": "bearing", "seal": "seal",
+                "pressure_decay": "pressure", "flow": "functional"}
+    for step in steps:
+        target = step["gold"]["target"]
+        if target != "none":
+            assert order.index(stage_of[target]) <= order.index(step["gold"]["stage"]), step["t"]
 
 
 def test_counterfactual_without_rear_swap_old_reading_still_counts(steps):
     state = deepcopy(steps[50]["state"])
     state["station_log"] = [e for e in state["station_log"] if e["kind"] != "bearing_swap"]
-    result = reference(state)
-    assert (result["route"], result["target"], result["method"]) == ("repair", "seal", "refit_seal")
+    result = reference(state)  # The t=9 rear reading is current again, so the passing leak test advances.
+    assert (result["route"], result["stage"], result["next_step"]) == ("advance", "pressure", "functional")
 
 
 def test_counterfactual_current_failing_rear_press_is_a_defect_not_missing(steps):
     state = deepcopy(steps[50]["state"])
-    seal = state["station_log"].pop()
-    state["station_log"].append({**seal, "event_id": "cf-49", "tick": 49, "kind": "press",
-                                 "target": "rear_bearing", "value": 5.2, "confidence": 1.0})
-    state["station_log"].append(seal)
+    decay = state["station_log"].pop()
+    assert decay["kind"] == "pressure_decay"
+    state["station_log"].append({"event_id": "cf-49", "tick": 49, "station": decay["station"], "serial": decay["serial"],
+                                 "kind": "press", "target": "rear_bearing", "value": 5.2})
+    state["station_log"].append(decay)
     result = reference(state)
-    assert (result["route"], result["target"], result["method"]) == ("repair", "rear_bearing", "repress")
+    assert (result["route"], result["stage"], result["target"], result["method"]) == ("repair", "pressure", "rear_bearing", "repress")
 
 
 @pytest.mark.parametrize("value", [3.55, 4.45])
@@ -213,10 +229,10 @@ def test_counterfactual_simultaneous_failures_follow_target_order(steps):
 
 
 def test_public_order_changes_reference_but_private_fields_and_clock_do_not(steps):
-    state = deepcopy(steps[3]["state"])
+    state = deepcopy(steps[0]["state"])
     assert reference(state)["method"] == "swap_body"
-    state["order"]["body_code"] = "PB-64S"
-    assert reference(state)["route"] == "advance"
+    state["order"]["body_code"] = "PB-46L"
+    assert (reference(state)["route"], reference(state)["next_step"]) == ("advance", "bearing")
     state["gold"] = {"route": "repair"}
     state["hidden"] = {"desired_route": "repair"}
     state["clock"] = {"tick": 59}
