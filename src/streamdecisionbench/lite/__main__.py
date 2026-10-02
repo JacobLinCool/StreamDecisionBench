@@ -145,6 +145,8 @@ def main() -> None:
     commands = parser.add_subparsers(dest="command", required=True)
     build = commands.add_parser("build")
     build.add_argument("--data", type=Path, required=True)
+    build.add_argument("--split", choices=("eval", "train"), default="eval",
+                       help="eval: the benchmark scenarios; train: the training variants, audited against eval")
     run = commands.add_parser("run")
     run.add_argument("--data", type=Path, required=True)
     run.add_argument("--out", type=Path, required=True)
@@ -167,7 +169,7 @@ def main() -> None:
                        help="combine parts even if the provider served different model versions")
     args = parser.parse_args()
     if args.command == "build":
-        manifest = build_dataset(args.data)
+        manifest = build_dataset(args.data, args.split)
         print(json.dumps({"dataset_hash": manifest["dataset_hash"], "episodes": manifest["episodes"]}, indent=2))
     elif args.command == "run":
         from streamdecisionbench.cli import load_dotenv

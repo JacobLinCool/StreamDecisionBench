@@ -111,29 +111,53 @@ def sources() -> dict[str, str]:
     return {str(p.relative_to(package.parent)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(paths)}
 
 
-def build_dataset(destination: Path) -> dict:
-    from streamdecisionbench.lite.tasks import assembly, debugging, presenter, support
+SPLITS = ("eval", "train")
 
-    episodes = []
-    for module in (debugging, assembly, support, presenter):
+
+def split_modules(split: str) -> list:
+    """Task modules of a split: the evaluation scenarios, or the training variants kept apart from them."""
+    if split == "eval":
+        from streamdecisionbench.lite.tasks import assembly, debugging, presenter, support
+
+        return [debugging, assembly, support, presenter]
+    if split == "train":
+        from streamdecisionbench.lite.training import modules
+
+        return modules()
+    raise ValueError(f"unknown split: {split!r}")
+
+
+def build_dataset(destination: Path, split: str = "eval") -> dict:
+    episodes, scenarios = [], []
+    for module in split_modules(split):
         for scenario in module.scenarios():
             for step in scenario["steps"]:
                 if module.reference(copy.deepcopy(step["state"])) != step["gold"]:
                     raise ValueError(f"public reference mismatch: {scenario['episode_id']} t={step['t']}")
+            scenarios.append(scenario)
             episodes.append(encode_scenario(scenario))
     ids = [e["episode_id"] for e in episodes]
     if len(set(ids)) != len(ids):
         raise ValueError("duplicate episode ids")
+    if split == "train":
+        from streamdecisionbench.lite.training.audit import leakage
+
+        if issues := leakage(scenarios):
+            raise ValueError("evaluation content leaks into training:\n" + "\n".join(issues))
     if destination.exists() and any(destination.iterdir()):
         raise FileExistsError("dataset directory must be empty; freeze each revision separately")
     destination.mkdir(parents=True, exist_ok=True)
     manifest = {
         "schema_version": SCHEMA_VERSION,
+        **({"split": "train", "use": "training only; never part of an evaluation score"} if split == "train" else {}),
         "episodes": [validate_episode(e) for e in episodes],
         "hashes": {e["episode_id"]: digest(e) for e in episodes},
         "generator_sources": sources(),
         "reference_validation": "public-only executable reference agreement; not independent human adjudication",
     }
+    if split == "train":
+        manifest["leakage_audit"] = ("no evaluation state, sentence, six-word run or identifier outside the "
+                                     "families' published rules (streamdecisionbench.lite.training.audit)")
     manifest["dataset_hash"] = digest(manifest["hashes"])
     for e in episodes:
         (destination / f"{e['episode_id']}.json").write_text(json.dumps(e, ensure_ascii=False, indent=2) + "\n")

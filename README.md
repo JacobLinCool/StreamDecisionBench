@@ -225,7 +225,8 @@ branches. Create the client with SDK retries disabled: the runner retries transp
 - **Families.** IDE debugging (an action card and status badges), an assembly station (the next
   work instruction), a support call (workflow route, guidance and the call recorder) and presenter
   voice control (slide, captions and cues from streaming ASR). Each has two independently authored
-  scenarios of 60 states.
+  scenarios of 60 states. A separate [training split](docs/lite/training.md) adds two more scenarios
+  per family for training; it shares no evaluation content and is never scored.
 - **States and time.** State *t* is published at time step *t*. All times the model sees are written
   in time steps, so a recording at a 2 s step can be evaluated at any other interval.
 - **Questions and decisions.** Each state asks six or seven multiple-choice questions with opaque
@@ -284,7 +285,8 @@ See [paper/README.md](paper/README.md) for details.
 | Path | Contents |
 |---|---|
 | `data/lite/v1/` | The benchmark: eight scenarios and a manifest with their hashes |
-| `src/streamdecisionbench/lite/` | Scenario generators, executable references, runner, scorer, merge |
+| `data/lite/train-v1/` | Training split: two further scenarios per family, never scored ([details](docs/lite/training.md)) |
+| `src/streamdecisionbench/lite/` | Scenario generators, executable references, runner, scorer, merge; `training/` holds the training variants and their leakage audit |
 | `src/streamdecisionbench/adapters/` | Model adapters (OpenAI, TypeSafe, and legacy ones) |
 | `runs/lite-v1-*-retry-v1/` | The recorded passes, with raw event logs ([index](runs/README.md)) |
 | `docs/lite/` | Protocol, task rules and published results |
