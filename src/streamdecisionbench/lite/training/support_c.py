@@ -42,7 +42,7 @@ PASSPORT_DIGITS = re.compile(
 
 RULES = [
     "Timing and transcript: clock.now, telephony.since, promised_at and every utterance 'at' are ticks; "
-    "snapshot t is published at tick t and decisions change only at published ticks. The transcript keeps "
+    "the state for tick t appears at tick t, and decisions change only when a new state appears. The transcript keeps "
     "every utterance. A final utterance replaces the earlier partial with the same utterance_id and keeps "
     "that partial's 'at'. Only FINAL Customer utterances can change the route, the segment or the bag; "
     "partial utterances, Agent speech and Background speech never do, whatever they say. A request stays "
@@ -55,8 +55,8 @@ RULES = [
     "'never' (these negating words are also matched case-insensitively), is not a request. Each utterance "
     "contains at most one counted request. Any other wording (agreeing to a waitlist, thanks, remarks about "
     "a bag or a fare, similar but different phrasings) is not a request and changes nothing.",
-    "Route priority: telephony ended -> closed; telephony hold with clock.now minus telephony.since >= "
-    "hold_check_ticks -> hold_return (equality counts); any shorter hold -> hold_wait; otherwise the "
+    "Route priority: telephony ended -> closed; telephony hold whose elapsed time (clock.now - "
+    "telephony.since) is >= hold_check_ticks -> hold_return (equality counts); any shorter hold -> hold_wait; otherwise the "
     "latest request: rebook request -> rebook, refund request -> refund, baggage request -> baggage. "
     "Default rebook before any request. Returning from hold resumes the latest request.",
     "segment is the flight named in the latest rebook or refund request: island or return. It serves both "
@@ -81,7 +81,7 @@ RULES = [
     "confirm_delivery; otherwise clock.now >= promised_at -> open_claim (equality counts as late); "
     "otherwise unlocated -> keep_tracing; located -> arrange_delivery; forwarding -> share_eta.",
     "Recorder (applies in every branch, including hold and closed): telephony ended -> stop. Otherwise "
-    "pause while passport capture is open, or while the Customer's newest utterance (greatest 'at', "
+    "pause during open passport capture, and also whenever the Customer's newest utterance (greatest 'at', "
     "partial or final) is partial and contains the word 'passport' (any case) followed later in that "
     "utterance by a digit, written (0-9) or spoken as a whole digit word (zero, one, two, three, four, "
     "five, six, seven, eight, nine, in any case; a digit word joined by a hyphen, as in 'thirty-five', "
@@ -232,8 +232,8 @@ def _questions() -> dict[str, Any]:
             hold_return="On hold, threshold reached: return to the Customer", closed="Call ended"),
         "recorder": _choice(
             "What should the call recorder do now? This applies in every branch: stop once the call has "
-            "ended; pause while passport capture is open or while the Customer's newest utterance is "
-            "partial and contains passport digits; otherwise record.",
+            "ended; pause during open passport capture, and also whenever the Customer's newest utterance "
+            "is a partial containing passport digits; otherwise record.",
             record="Keep recording", pause="Pause recording", stop="Stop: the call has ended"),
         "segment": _choice(
             "Which flight segment did the latest final Customer rebook or refund request name? Used by "

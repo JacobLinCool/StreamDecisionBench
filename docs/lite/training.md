@@ -25,18 +25,28 @@ uv run pytest -q tests/test_lite_training*.py
 
 ## Separation from evaluation
 
-A family's published rules are its task specification: the debugging policy, the presenter rules
-and the assembly station's common rules are shared, as they are between the two evaluation scenarios
-of a family. Everything else is new instance content: projects, people, organisations, files, tests,
-decks, slide names, orders, codes, utterances and story beats. The assembly and support variants go
-further and define new workflows with their own rules, questions and references.
+Training scenarios share neither instance content nor, with one declared exception, specification
+with evaluation. Both the build and the tests run the two audits in
+`streamdecisionbench.lite.training.audit`.
 
-`streamdecisionbench.lite.training.audit.leakage` enforces the separation, and both the build and the
-tests run it. Outside the `rules`/`policy` fields and question instructions, a training state may not
-repeat an evaluation state, an evaluation string of four or more words, any six-word run of
-evaluation text, or an evaluation identifier (paths, file names, `@teams`, codes containing digits,
-codes such as `ST-A`); positional record ids such as `u12-Customer` are exempt. Test-runner summary lines are tool
-output formats, not authored content, and are exempt too.
+**Content (`leakage`).** Outside the `rules`/`policy` fields and question instructions, a training
+state may not repeat an evaluation state, an evaluation string of four or more words, any six-word
+run of evaluation text, or an evaluation identifier (paths, file names, `@teams`, codes containing
+digits, codes such as `ST-A`). Positional record ids such as `u12-Customer` and test-runner summary
+lines are exempt. Projects, people, organisations, files, tests, decks, orders, codes, utterances and
+story beats are all new; the reviews also compared story beats, which the audit cannot see.
+
+**Specification (`spec_overlap`, `layout_overlap`).** Each variant writes its own rule text,
+questions and state layout and is a different design within its family's application type: no
+evaluation rule paragraph, question instruction or option set; no ten-word run of evaluation rules or
+instructions; a different set of question ids; and a state layout whose key paths have a Jaccard
+similarity of at most 0.5 with every evaluation scenario of the family. The exception is
+`SHARED_SPEC`: the two assembly variants define new workflows (stages, targets, ranges, methods and
+workflow rules) but keep the family's six common station rules and its question ids and instructions.
+
+| Variant | Own rules | Own questions | State layout overlap with evaluation |
+|---|---|---|---:|
+<!-- SPEC TABLE -->
 
 ## Verification
 
