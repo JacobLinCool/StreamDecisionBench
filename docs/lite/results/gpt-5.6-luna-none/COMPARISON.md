@@ -1,36 +1,38 @@
-# SDB Lite 對照：gpt-5.6-luna low 與 gpt-5.6-luna none
+# SDB comparison: gpt-5.6-luna low and gpt-5.6-luna none
 
-比較同一凍結資料的 6 個情境、360 個相同狀態。兩份紀錄均以目前的計分程式從各自的原始事件重算；逐情境資料與除模型身分（provider、模型、reasoning effort）外的執行設定相同。兩次執行的程式版本分別記錄於對照 JSON。
+6 scenarios and 360 matching states from the same frozen dataset. Both analyses re-score their original events. Episodes and execution settings match except model identity (provider, model and reasoning effort). The comparison JSON retains each recording's source versions.
 
-主比較採排除連線重試的重建時間軸：成功 attempt 由證據釋出時刻起算，保留後處理耗時；失敗 attempts、重試等待與派送排隊不計入。原始時鐘另列診斷，不能與歷史原始時鐘主分數混比。
+The comparison uses reconstructed timelines excluding transport retries: successful-attempt durations start at evidence release and retain postprocessing time. Failed attempts, retry waits and dispatch queueing are excluded. Raw-clock diagnostics use a different time basis.
 
-下表的「基準」為 **gpt-5.6-luna low**；「比較」為 **gpt-5.6-luna none**。
+All duration scores below use the recording cadence; the public leaderboard uses log-AUC over 0.5–8 s.
 
-整體不計延遲正確率的差值為 **-48.33 個百分點**，正確持續時間比例的差值為 **-20.44 個百分點**，皆以比較模型減基準模型計算。家族與整體分數按情境等權重。完整差值保留於對照 JSON。
+Baseline: **gpt-5.6-luna low**. Candidate: **gpt-5.6-luna none**.
 
-## 整體與家族
+Overall candidate minus baseline: **-48.33 percentage points** untimed and **-20.44 percentage points** in-force accuracy. Family and overall scores give scenarios equal weight. The JSON retains all differences.
 
-| 範圍 | 基準：不計延遲 | 比較：不計延遲 | 基準：正確時間 | 比較：正確時間 |
+## Overall and families
+
+| Scope | Baseline untimed | Candidate untimed | Baseline in-force | Candidate in-force |
 |---|---:|---:|---:|---:|
-| 整體 | 86.11% | 37.78% | 48.45% | 28.01% |
-| IDE 除錯 | 84.17% | 19.17% | 51.63% | 15.86% |
-| 裝配流程 | 87.50% | 30.00% | 44.00% | 21.14% |
-| 客服流程 | 86.67% | 64.17% | 49.74% | 47.05% |
+| Overall | 86.11% | 37.78% | 48.45% | 28.01% |
+| IDE debugging | 84.17% | 19.17% | 51.63% | 15.86% |
+| Assembly | 87.50% | 30.00% | 44.00% | 21.14% |
+| Support | 86.67% | 64.17% | 49.74% | 47.05% |
 
-## 移除網路延遲後的估計（次要）
+## Network-removed estimate (secondary)
 
-各自以本次紀錄估計網路延遲（不隨 token 變化的時間，取快速請求的下緣），再從每個回覆扣除後重播；估計網路：基準 0.378 秒（0.005–0.530），比較 0.863 秒（0.496–1.115）。括號為 bootstrap 範圍；主分數與上表不變。
+Estimate the token-independent latency from each recording's fast envelope, subtract it from each response and replay. This assumes network + prefill + decode where applicable; the remainder can include fixed service time, so it is an upper bound on the network effect. Baseline network estimate 0.378 s (0.005–0.530); candidate 0.863 s (0.496–1.115). Parentheses show bootstrap ranges. Primary scores remain unchanged.
 
-| 範圍 | 基準：移除網路 | 比較：移除網路 | 差值（估計） | 範圍重疊 |
+| Scope | Baseline network removed | Candidate network removed | Estimated difference | Ranges overlap |
 |---|---:|---:|---:|---|
-| 整體 | 53.81%（48.52%–56.03%） | 33.57%（31.18%–35.20%） | -20.24 個百分點 | 否 |
-| IDE 除錯 | 56.46%（51.69%–58.55%） | 17.65%（16.89%–18.14%） | -38.80 個百分點 | 否 |
-| 裝配流程 | 49.29%（44.06%–51.58%） | 25.94%（23.82%–27.44%） | -23.35 個百分點 | 否 |
-| 客服流程 | 55.70%（49.82%–57.98%） | 57.11%（52.83%–60.01%） | +1.42 個百分點 | 是 |
+| Overall | 53.81% (48.52%–56.03%) | 33.57% (31.18%–35.20%) | -20.24 pp | No |
+| IDE debugging | 56.46% (51.69%–58.55%) | 17.65% (16.89%–18.14%) | -38.80 pp | No |
+| Assembly | 49.29% (44.06%–51.58%) | 25.94% (23.82%–27.44%) | -23.35 pp | No |
+| Support | 55.70% (49.82%–57.98%) | 57.11% (52.83%–60.01%) | +1.42 pp | Yes |
 
-## 相同情境
+## Matching scenarios
 
-| 範圍 | 基準：不計延遲 | 比較：不計延遲 | 基準：正確時間 | 比較：正確時間 |
+| Scope | Baseline untimed | Candidate untimed | Baseline in-force | Candidate in-force |
 |---|---:|---:|---:|---:|
 | lite_debugging_a | 83.33% | 18.33% | 52.31% | 13.37% |
 | lite_debugging_b | 85.00% | 20.00% | 50.95% | 18.34% |
@@ -39,56 +41,56 @@
 | lite_support_a | 81.67% | 58.33% | 48.67% | 41.32% |
 | lite_support_b | 91.67% | 70.00% | 50.80% | 52.77% |
 
-## 回應延遲
+## Response latency
 
-各範圍只使用最終成功 attempt 的耗時，不包含失敗與重試等待。分位數直接由該範圍全部請求計算，不是各情境分位數的平均。單位為秒；含該次本機 client 與正常網路時間。
+Only final successful-attempt durations are used; failures and retry waits are excluded. Quantiles use all requests in each scope, rather than averaging scenario quantiles. Units are seconds and include client processing and the recorded service/network path.
 
-| 範圍 | 基準 p50 / p95 | 比較 p50 / p95 |
+| Scope | Baseline p50 / p95 | Candidate p50 / p95 |
 |---|---:|---:|
-| 整體 | 2.29 / 4.07 | 1.36 / 1.93 |
-| IDE 除錯 | 2.27 / 3.74 | 1.35 / 2.02 |
-| 裝配流程 | 2.63 / 4.68 | 1.36 / 1.98 |
-| 客服流程 | 2.02 / 2.96 | 1.37 / 1.82 |
+| Overall | 2.29 / 4.07 | 1.36 / 1.93 |
+| IDE debugging | 2.27 / 3.74 | 1.35 / 2.02 |
+| Assembly | 2.63 / 4.68 | 1.36 / 1.98 |
+| Support | 2.02 / 2.96 | 1.37 / 1.82 |
 
-## 同一狀態的有效決策配對
+## Paired decisions on identical states
 
-以下比較忽略交付時間的有效決策，保留模型自己選擇的分支；未使用的答案不影響此判定。四欄互斥且涵蓋全部狀態，僅描述這次紀錄的配對數量，不將相鄰狀態視為獨立樣本。
+Untimed comparisons retain each model's own route; inactive answers do not affect correctness. The four columns partition all states. Adjacent states are dependent.
 
-| 範圍 | 兩者皆對 | 只有基準對 | 只有比較對 | 兩者皆錯 |
+| Scope | Both correct | Only baseline correct | Only candidate correct | Both wrong |
 |---|---:|---:|---:|---:|
-| 整體 | 129 | 181 | 7 | 43 |
-| IDE 除錯 | 21 | 80 | 2 | 17 |
-| 裝配流程 | 35 | 70 | 1 | 14 |
-| 客服流程 | 73 | 31 | 4 | 12 |
+| Overall | 129 | 181 | 7 | 43 |
+| IDE debugging | 21 | 80 | 2 | 17 |
+| Assembly | 35 | 70 | 1 | 14 |
+| Support | 73 | 31 | 4 | 12 |
 
-## 連線可靠性與原始時鐘
+## Transport reliability and raw clock
 
-Attempt 錯誤率的分母是所有實際 attempts（包含最終成功）；logical 重試率的分母是所有釋出狀態。原始時鐘診斷保留失敗、等待與實際交付順序，和主比較使用不同時間基準。
+Attempt error rates divide by all physical attempts, including final successes. Logical retry rates divide by all released states. Raw-clock diagnostics retain failures, waits and actual delivery order.
 
-| 指標 | 基準 | 比較 |
+| Metric | Baseline | Candidate |
 |---|---:|---:|
-| Attempt 錯誤率 | 0.00%（0/360） | 0.00%（0/360） |
-| Logical 重試率 | 0.00%（0/360） | 0.00%（0/360） |
-| 原始正確時間 | 48.45% | 28.01% |
-| 原始 request p50 / p95（秒） | 2.29 / 4.07 | 1.36 / 1.93 |
+| Attempt error rate | 0.00% (0/360) | 0.00% (0/360) |
+| Logical retry rate | 0.00% (0/360) | 0.00% (0/360) |
+| Raw in-force accuracy | 48.45% | 28.01% |
+| Raw request p50 / p95 (s) | 2.29 / 4.07 | 1.36 / 1.93 |
 
-## 執行紀錄與解讀
+## Execution and interpretation
 
-- 協議：retry_excluded_successful_attempt_v1；workers：32；timeout：20 秒；SDK retries：0。
-- gpt-5.6-luna low：失敗請求 0，接受更新 349。
-- gpt-5.6-luna none：失敗請求 0，接受更新 359。
-- API 回傳模型：{"gpt-5.6-luna": 360}；{"gpt-5.6-luna": 360}。
+- Protocol: retry_excluded_successful_attempt_v1; workers: 32; timeout: 20 s; SDK retries: 0.
+- gpt-5.6-luna low: 0 failed requests, 349 accepted updates.
+- gpt-5.6-luna none: 0 failed requests, 359 accepted updates.
+- Served model names: {"gpt-5.6-luna": 360}; {"gpt-5.6-luna": 360}.
 
-每個模型在每個情境只有一次紀錄。這些差異不代表統計顯著性、跨情境族群的穩定排序，或模型速度的因果效果。兩次執行發生於不同時間，服務端與網路條件可能不同。時間分數同時取決於答案、交付延遲、更新接受規則和參考狀態持續時間。不計延遲分數使用同一批回覆，沒有另外查詢模型，也沒有依此比較修改題目。
+One recording per model and scenario. Differences do not establish significance, stable rankings or causal effects of model speed. Recordings occurred at different times and may have different service and network conditions. In-force accuracy depends jointly on answers, delays, acceptance and reference dwell times. Untimed scores use the same responses, without additional calls or question edits.
 
-## 可重現檔案
+## Reproduction files
 
-- [比較模型的完整單輪報告](REPORT.md)
-- [gpt-5.6-luna low 原始執行](../../../../runs/lite-v1-gpt-5.6-luna-low-retry-v1/run.json)
-- [gpt-5.6-luna none 原始執行](../../../../runs/lite-v1-gpt-5.6-luna-none-retry-v1/run.json)
-- [完整對照資料](comparison.json)
+- [Candidate recording report](REPORT.md)
+- [gpt-5.6-luna low frozen run](../../../../runs/lite-v1-gpt-5.6-luna-low-retry-v1/run.json)
+- [gpt-5.6-luna none frozen run](../../../../runs/lite-v1-gpt-5.6-luna-none-retry-v1/run.json)
+- [Complete comparison data](comparison.json)
 
-在專案根目錄重算：
+Reproduce from the repository root:
 
 ```sh
 uv run python scripts/lite/lite_compare.py --baseline runs/lite-v1-gpt-5.6-luna-low-retry-v1 --candidate runs/lite-v1-gpt-5.6-luna-none-retry-v1 --out docs/lite/results/gpt-5.6-luna-none

@@ -79,8 +79,8 @@ def write_setting(label: str, folder: str, run: str, *, run_dir: Path | None = N
     if diagnostics.count(single) != 1:
         raise SystemExit(f"{folder}: reproduction command not found in the diagnostics report: {single}")
     (out / "REPORT.md").write_text(
-        "\n".join(intro)
-        + diagnostics.replace("# SDB 錄製間距診斷", "## SDB 錄製間距診斷", 1)
+        "\n".join(intro) + "\n"
+        + diagnostics.replace("# SDB recording-cadence diagnostics", "## SDB recording-cadence diagnostics", 1)
         .replace(single, reproduce, 1)
     )
     print(f"Reproduced {folder}: {values[-2]*100:.4f}%", flush=True)

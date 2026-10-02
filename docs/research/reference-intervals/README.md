@@ -1,143 +1,135 @@
-# 各 task family 的 reference interval：文獻核對與呈現建議
+# Family reference intervals: evidence review and reporting proposal
 
-> 歷史紀錄（2026-09-29）：撰寫時 presenter voice control 尚未納入論文；目前四個 family 的結果見 `docs/lite/results/four-family/`。
+**Status: historical research proposal, audited on 2026-09-29.** This review originally covered the three families then in the manuscript, with presenter voice control assessed separately. The current benchmark includes all four families and uses [normalized log-AUC over 0.5–8 s](../../lite/PROTOCOL.md#integrated-evaluation-across-time-scales). The operating points proposed here have **not** replaced that evaluation policy. Current results are in the [results index](../../lite/results/README.md).
 
-查核日期：2026-09-29。範圍是 paper 的 IDE debugging、assembly station、support call，另列目前資料集已新增、尚未納入 paper 結果的 presenter voice control。
+## Conclusion and candidate operating points
 
-## 1. 結論與候選設定
+Family-specific reference points followed by an equal-weight family average are methodologically coherent. The literature supports different interaction time scales, but does not directly establish a unique environment update interval for any SDB family.
 
-**依 family 選定 reference point，再對 family 分數等權平均，方法上合理。文獻支持不同互動情境需要不同時間尺度，但尚不能直接推出每個 family「應該使用」的唯一 time-step interval。**
+The central gap is that human-factors studies usually measure response delay, waiting experience, or task completion time. SDB's interval Δ controls how often the environment releases a state. These quantities are related but distinct. The following are **literature-informed candidate operating points**, not human-tolerance percentiles, deployment SLAs, or calibrated real-world event frequencies.
 
-主要缺口是：人因研究通常測量回應延遲、等待感受或工作完成速度；SDB 的 Δ 則控制環境發布狀態的間隔。兩者有關，卻不是同一個量。以下是 **literature-informed reference operating points**，不是實測的人類 P50、部署 SLA 或已校準的真實事件頻率。
-
-| Family | 建議先討論的 Δ* | 選擇理由與證據強度 | 尚未建立的部分 |
+| Family | Candidate Δ* | Rationale | Unresolved mapping |
 |---|---:|---|---|
-| IDE debugging | **1 s** | 即時 IDE 輔助已有 sub-second 至 1 s 的證據；1 s 可作為在使用者指定 1–5 s 範圍內的積極參考點。 | 最接近的數值研究是 code completion，並非本 benchmark 的 rerun／inspect／delegate action card；精確 Δ 的外推弱。 |
-| Assembly station | **2 s** | 步驟完成後顯示下一指令，與 wearable cognitive assistance 最接近；2 s 可作為較寬鬆的整秒參考點。 | 2 s 不代表沒有負面影響，也不是組裝事件間隔的實測中位數；1 s 應保留為較嚴格比較。 |
-| Support call | **1 s，暫定且證據較弱** | 對話研究顯示 sub-second 停頓已改變聽者感受，支持優先檢查較短的時間尺度。 | 對話回應、agent desktop 更新與 recorder control 是不同事情；找不到能直接校準整個 family 的秒數。 |
-| Presenter voice control（另列） | **1 s，暫定** | Miller 的下一頁顯示建議比一般 2 s 規則更接近換投影片；可與 1 s 的互動連續性 guidance 交叉支持。 | 不是現代語音簡報控制實驗；不能涵蓋所有 pause／speaker-routing 動作的期限。 |
+| IDE debugging | 1 s | Sub-second to one-second evidence for interactive IDE assistance; an aggressive point within the original 1–5 s exploration. | The closest numerical studies concern code completion, rather than rerun/inspect/delegate action cards. |
+| Assembly station | 2 s | Step-triggered wearable guidance is the closest task analogue; two seconds is below one study's loose bound. | It is neither an observed step-interval median nor a no-impact waiting threshold; retain one second as a stricter comparison. |
+| Support call | 1 s, tentative | Sub-second conversational gaps already affect listener judgments. | Conversational response, desktop guidance, and recorder control have different deadlines; no study calibrates the full family. |
+| Presenter voice control | 1 s, tentative | Miller's next-page guidance and general interaction-continuity guidance provide an analogy for slide advance. | Neither is a modern voice-control experiment, and neither calibrates clip pause or speaker routing. |
 
-這組候選不是為了讓每個 family 都有不同數字；三個 1 s 也合理。**目前查到的證據沒有足夠理由將任一現有 family 的主要 reference point 放到 4–5 s。** 3–5 s 適合作為較慢環境的 sensitivity comparison。
+Distinct numbers are not a requirement. Three one-second candidates can be reasonable. The reviewed evidence does not justify choosing 4–5 s as a primary reference for a current family; 3–5 s can serve as slower-environment sensitivity conditions. Choose points from task semantics and evidence definitions, not from which model wins. This review did not compute model scores.
 
-選點原則：先看使用情境與研究量測的時間定義，再選容易解釋的整秒 operating point；不根據哪個模型在該秒數勝出來選。此筆記未重新計算模型分數。
+## What the primary sources support
 
-## 2. 原始文獻實際支持什麼
-
-以下標示「原文結果」與「本研究推論」。既有 introduction 的文獻優先，補充文獻只用來處理更貼近任務或數值仍缺證據的地方。每列的 DOI／全文連結可直接追查。
+The findings below come from the cited source versions and sections. The mapping to SDB is our inference. Guidance, experimental conditions, measured latency distributions, and human judgments must retain their different meanings.
 
 ### IDE debugging
 
-**E1 — Murali et al. (2024), AI-Assisted Code Authoring at Scale: Fine-Tuning, Deploying, and Mixed Methods Evaluation.** 已在 introduction 引用。DOI [10.1145/3643774](https://doi.org/10.1145/3643774)；查核 [作者全文 v2，§7.2](https://arxiv.org/html/2305.12050v2#S7.SS2)。
+**E1 — Murali et al. (2024), AI-Assisted Code Authoring at Scale.** [DOI](https://doi.org/10.1145/3643774); [author version v2, §7.2](https://arxiv.org/html/2305.12050v2#S7.SS2).
 
-- 原文結果：作者依 developer feedback 報告，建議在 300–500 ms 出現是可接受的，且不應超過 1 s；也觀察到 end-to-end latency 上升時 acceptance 下降。
-- 證據型態：部署經驗、混合方法研究中的使用者回饋；這不是「50% 使用者最多能等 1 s」的分布估計。
-- 適用範圍：即時 inline code suggestion。SDB debugging 顯示的是測試／除錯狀態和下一步動作，並不在每次按鍵時產生要採用的程式碼。
-- 推論：支持將 1 s 列為即時 IDE 元件的候選尺度，無法單獨驗證 debugging Δ=1 s。
+- Developer feedback describes suggestions arriving in 300–500 ms as acceptable and recommends not exceeding one second; acceptance also decreases as end-to-end latency increases.
+- This is deployment experience and mixed-methods feedback, not a distribution showing that half of users tolerate at most one second.
+- Inline code suggestions differ from SDB's debugging action cards. The finding supports a candidate interaction scale, not a validated Δ=1 s for this task.
 
-**E2 — Dunay et al. (2024), Multi-line AI-Assisted Code Authoring.** 已在 introduction 引用。DOI [10.1145/3663529.3663836](https://doi.org/10.1145/3663529.3663836)；[作者全文，§4.2、§5.1、Fig. 7](https://arxiv.org/html/2402.04141v1)。
+**E2 — Dunay et al. (2024), Multi-line AI-Assisted Code Authoring.** [DOI](https://doi.org/10.1145/3663529.3663836); [author version, §§4.2, 5.1 and Fig. 7](https://arxiv.org/html/2402.04141v1).
 
-- 原文結果：優化後，single-line suggestion 的 median latency 由 440 降至 280 ms，multi-line 由 2000 降至 750 ms；作者報告 accepted characters 相對增加 16%。建議會隨檔案狀態失效。
-- 這裡確實有 **P50（median）**，但它是系統建議延遲，不是人類容忍度或事件間距。另有「顯示超過 750 ms 才納入 acceptance」的量測規則，不能混為同一個 750 ms。
-- 限制：streaming、parallelism、batching 等一起改善；不應把全部效果解讀成固定減少某段延遲的純因果係數。
+- Optimization reduces median single-line suggestion latency from 440 to 280 ms and multi-line latency from 2000 to 750 ms; accepted characters increase by 16% relative to the previous system. File changes can invalidate suggestions.
+- These medians describe system latency, not human tolerance or event intervals. The separate rule counting suggestions displayed for more than 750 ms is an acceptance-measurement rule.
+- Streaming, parallelism, and batching change together, so the entire improvement cannot be assigned a pure causal coefficient for a fixed delay reduction.
 
-**E3 — Saff & Ernst (2004), An Experimental Evaluation of Continuous Testing During Development.** 補充更接近 debugging 的情境。DOI [10.1145/1007512.1007523](https://doi.org/10.1145/1007512.1007523)；[作者全文，§2、§4、§6](https://homes.cs.washington.edu/~mernst/pubs/ct-user-study.pdf)。
+**E3 — Saff & Ernst (2004), An Experimental Evaluation of Continuous Testing During Development.** [DOI](https://doi.org/10.1145/1007512.1007523); [author paper, §§2, 4, 6](https://homes.cs.washington.edu/~mernst/pubs/ct-user-study.pdf).
 
-- 原文研究：在編輯過程背景執行測試並顯示 regression 狀態，比較 continuous testing、continuous compilation 與 control。
-- 此研究支持持續測試回饋的用途，但沒有用 1／2／5 s 的受控回應延遲條件來辨識 action-card 的最佳秒數。因此不能用它替 3 s 或 5 s 做數值背書。
+The study compares background testing with continuous compilation and a control during editing. It supports ongoing regression feedback but does not manipulate 1/2/5 s response-delay conditions to identify an action-card optimum, and cannot numerically justify a three- or five-second setting.
 
-**判斷：** IDE 1 s 是合理、但較積極的類比選擇。若作者將任務明確定位成較慢的 test-run orchestration，2 s 也是應檢查的替代值；目前沒有證據能說 1 s 在這個具體任務上已被驗證優於 2 s。
+**Assessment:** one second is a plausible aggressive analogy. Two seconds also deserves evaluation if the task is framed as slower test-run orchestration. The reviewed evidence does not establish that one second is superior for this particular task.
 
 ### Assembly station
 
-**E4 — Chen et al. (2017), An Empirical Study of Latency in an Emerging Class of Edge Computing Applications for Wearable Cognitive Assistance.** 已在 introduction 引用。DOI [10.1145/3132211.3134458](https://doi.org/10.1145/3132211.3134458)；[作者全文，§5.3、Fig. 16，p. 12](https://www.cs.cmu.edu/~zhuoc/papers/latency2017.pdf#page=12)。方法核對詳見 [assembly 證據記錄](assembly-evidence.md)。
+**E4 — Chen et al. (2017), An Empirical Study of Latency in an Emerging Class of Edge Computing Applications for Wearable Cognitive Assistance.** [DOI](https://doi.org/10.1145/3132211.3134458); [author paper, §5.3, Fig. 16, p. 12](https://www.cs.cmu.edu/~zhuoc/papers/latency2017.pdf#page=12). See the [method extraction](assembly-evidence.md).
 
-- 13 位參與者的 LEGO／Google Glass 指導實驗提出約 **600 ms tight bound、2.7 s loose bound**。
-- 600 ms 來自 step-completion-to-signal 的平均時間扣除估計動作啟動時間；2.7 s 結合受控延遲條件的滿意度和系統 overhead。兩者都不是 P50，也不是觀察到的步驟間距。
-- 推論：同樣是判斷步驟已完成後更新指導，情境接近；2 s 可作為低於該寬鬆界線的候選，不能解讀成所有操作員都能無損等待 2 s。
+- A LEGO/Google Glass guidance experiment with 13 participants derives an approximately 600 ms tight bound and 2.7 s loose bound.
+- The tight bound subtracts estimated action-initiation time from mean step-completion-to-signal time. The loose bound combines satisfaction under controlled delays with system overhead. Neither is a percentile or a measured interval between steps.
+- Step-triggered guidance closely resembles SDB assembly. A two-second operating point is below the reported loose bound, but does not mean every operator can wait two seconds without cost.
 
-**E5 — Olguín Muñoz et al. (2021), Impact of Delayed Response on Wearable Cognitive Assistance.** 已在 introduction 引用。DOI／[全文](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0248690)，§3.2、§4、§5，Fig. 4、6–7。
+**E5 — Olguín Muñoz et al. (2021), Impact of Delayed Response on Wearable Cognitive Assistance.** [Paper and DOI](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0248690), §§3.2, 4, 5 and Figs. 4, 6–7.
 
-- 40 位參與者；在 **1.65 s 與 3.0 s controlled-delay conditions** 下，使用者自己的步驟執行時間平均增加約 12% 與 26%，這個 slowdown 已排除直接等系統的時間。
-- 延遲是受控 processing／feedback target，不能簡寫成「在原本 end-to-end latency 上再加同樣秒數」。
-- 推論：這是反對把 3–5 s 稱為普遍舒適區的直接證據。它也提醒我們：選 2 s operating point 是較寬鬆的研究設定，不是無影響門檻。
+- With 40 participants, controlled-delay conditions of 1.65 and 3.0 s increase users' own step-execution time by approximately 12% and 26%. This slowdown excludes directly waiting for the system.
+- The delay is a controlled processing/feedback target, not necessarily that many additional seconds on top of baseline end-to-end latency.
+- The results argue against a universal comfortable 3–5 s range. A two-second candidate is a relatively lenient research setting, not a no-effect threshold.
 
-**判斷：** 三個主要 family 中，assembly 的使用情境與數值依據最接近，但「回應延遲」到「Δ」的轉換仍是 benchmark 設計判斷。
+**Assessment:** assembly has the closest task and numerical analogues, but translating response delay into an environment interval remains a benchmark-design judgment.
 
 ### Support call
 
-**E6 — PCI SSC (2018), Protecting Telephone-Based Payment Card Data, v3.0.** 已在 introduction 引用。[官方全文](https://listings.pcisecuritystandards.org/documents/Protecting_Telephone_Based_Payment_Card_Data_v3-0_nov_2018.pdf)，§6.5.1，印刷頁 36–38。
+**E6 — PCI SSC (2018), Protecting Telephone-Based Payment Card Data, v3.0.** [Official document](https://listings.pcisecuritystandards.org/documents/Protecting_Telephone_Based_Payment_Card_Data_v3-0_nov_2018.pdf), §6.5.1, printed pp. 36–38.
 
-- 原文以付款欄位、付款畫面和 submit 等 desktop workflow events 說明自動 pause-and-resume；有效性取決於流程整合及正確時機。
-- **該節沒有提供可拿來設定 Δ 的 1、2 或 5 s 數值容忍門檻，也未測量 speech-driven recorder decisions。**
-- 推論：這份文件支持問題的重要性，無法證明「延後一秒停止錄音可接受」。SDB 的 transcript-triggered recorder 是本 benchmark 的設計。
+The document describes automated pause/resume using payment fields, screens, submission, and other desktop workflow events. It supplies no 1/2/5 s tolerance threshold for Δ and does not measure speech-driven recorder decisions. It motivates correctly timed integration; it does not establish that stopping recording one second late is acceptable. The transcript-triggered recorder is an SDB design choice.
 
-**E7 — Roberts & Francis (2013), Identifying a Temporal Threshold of Tolerance for Silent Gaps after Requests.** 補充數值證據。DOI [10.1121/1.4802900](https://doi.org/10.1121/1.4802900)；[作者全文](https://web.ics.purdue.edu/~francisa/Articles/Roberts-Francis_JASAEL13.pdf)，§2–4，EL472–EL475、Fig. 1。
+**E7 — Roberts & Francis (2013), Identifying a Temporal Threshold of Tolerance for Silent Gaps after Requests.** [DOI](https://doi.org/10.1121/1.4802900); [author paper](https://web.ics.purdue.edu/~francisa/Articles/Roberts-Francis_JASAEL13.pdf), §§2–4, EL472–EL475 and Fig. 1.
 
-- 380 位受試者聽模擬朋友間的電話對話；request 後的相同肯定答覆被設為 200–1200 ms、每 100 ms 一個條件。
-- willingness 評分在 600 ms 後開始下降；700 與 800 ms 間的下降達顯著。這是第三方聽者的社會判斷，不是客服員等待建議的實驗，也不是錄音保護時限。
-- 推論：支持 support 相關互動可能需要 sub-second responsiveness；在限定 1–5 s 的探索內先看 1 s，比以 5 s 為主要設定有較好的方向性依據。
+- 380 participants hear simulated phone conversations between friends, with the same affirmative answer delayed by 200–1200 ms in 100 ms increments.
+- Willingness ratings begin decreasing after 600 ms, with a significant decline between 700 and 800 ms. This is a third-party social judgment, not a support-agent suggestion experiment or recording-protection deadline.
+- It directionally favors investigating shorter response scales; within the original 1–5 s exploration, one second has a stronger analogy than five seconds.
 
-**E8 — Roberts, Francis & Morgan (2006), The Interaction of Inter-turn Silence with Prosodic Cues in Listener Perceptions of “Trouble” in Conversation.** DOI [10.1016/j.specom.2006.02.001](https://doi.org/10.1016/j.specom.2006.02.001)；[原文 PDF](https://citeseerx.ist.psu.edu/document?doi=1333d86632e61be810091e75d06512b043e5dfef&repid=rep1&type=pdf)，摘要與方法設計。
+**E8 — Roberts, Francis & Morgan (2006), The Interaction of Inter-turn Silence with Prosodic Cues in Listener Perceptions of “Trouble” in Conversation.** [DOI](https://doi.org/10.1016/j.specom.2006.02.001); [paper](https://citeseerx.ist.psu.edu/document?doi=1333d86632e61be810091e75d06512b043e5dfef&repid=rep1&type=pdf), abstract and experimental design.
 
-- 原文操弄 0／600／1200 ms 的 inter-turn silence，評分隨停頓增加而降低。它與 E7 方向一致；E7 的較密條件更適合討論轉折位置。
-- 本次只作補充核對，不用這三個條件推算精確門檻或人類 P50。
+Ratings decrease under 0/600/1200 ms inter-turn silence conditions, consistent with E7. These three conditions are a contextual check, not a basis for estimating an exact threshold or human P50.
 
-**E9 — Stivers et al. (2009), Universals and Cultural Variation in Turn-Taking in Conversation.** DOI [10.1073/pnas.0903616106](https://doi.org/10.1073/pnas.0903616106)；[研究機構紀錄](https://www.mpi.nl/publications/item66202/universals-and-cultural-variation-turn-taking-conversation)／[原文](https://cognitionandculture.net/wp-content/uploads/Stivers_2009_universals.pdf)，Results: Distribution of Turn Transitions，p. 10588。
+**E9 — Stivers et al. (2009), Universals and Cultural Variation in Turn-Taking in Conversation.** [DOI](https://doi.org/10.1073/pnas.0903616106); [institutional record](https://www.mpi.nl/publications/item66202/universals-and-cultural-variation-turn-taking-conversation); [paper](https://cognitionandculture.net/wp-content/uploads/Stivers_2009_universals.pdf), Results: Distribution of Turn Transitions, p. 10588.
 
-- 跨十語言的 polar-question responses：overall median gap **+100 ms**，mean **+208 ms**；各語言 median 約 0–300 ms。
-- 這是實測的對話 turn-transition 分布；不是每句話的長度、ASR 更新間隔、客服系統推理時間或可接受等待的分布。
+Polar-question responses across ten languages have an overall median gap of +100 ms and a mean of +208 ms, with language medians around 0–300 ms. This is a turn-transition distribution, not utterance length, an ASR update interval, inference latency, or an acceptable-waiting distribution.
 
-**判斷：** support 1 s 的方向性理由存在，完整 family 的校準證據仍不足。不能宣稱整個 family 遵循同一個自然人類時限；recorder 與 service／delivery guidance 的需求尤其不同。額外報 recorder 錯誤暴露時間會比聲稱「1 s 安全」更有意義，但它是未來的診斷項目，並非本次變更。
+**Assessment:** support's one-second candidate has directional support but lacks full-family calibration. Recorder control and service/delivery advice especially differ. Recorder error-exposure duration could be a useful future diagnostic; it is not implemented by this review and should not be replaced by an unsupported “one second is safe” claim.
 
-### 一般原則，以及 presenter 的補充依據
+### General guidance and presenter control
 
-**E10 — Miller (1968), Response Time in Man-Computer Conversational Transactions.** 已在 introduction 引用。DOI [10.1145/1476589.1476628](https://doi.org/10.1145/1476589.1476628)；[原文掃描全文](https://www.yusufarslan.net/sites/yusufarslan.net/files/upload/content/Miller1968.pdf)。
+**E10 — Miller (1968), Response Time in Man-Computer Conversational Transactions.** [DOI](https://doi.org/10.1145/1476589.1476628); [scanned paper](https://www.yusufarslan.net/sites/yusufarslan.net/files/upload/content/Miller1968.pdf).
 
-- p. 267 明確反對把 2 s 當成所有情境的通則；p. 269 的 2 s 是 meaningful reply 的一般 guidance。
-- **Topic 10，p. 274：請求下一頁後，至少最前面幾行應在 1 s 內顯示。** 這是 presenter 換頁的相關設計類比，不是受控實驗或 percentile。
-- 同篇的其他情境允許更長等待；例如完整工作任務結束後領取下一份 assignment。不能只因也叫「工廠／下一步」就移用到持續組裝中的即時指導。
+- Page 267 explicitly rejects a universal two-second rule; page 269 gives general two-second guidance for a meaningful reply.
+- Topic 10, p. 274 recommends displaying at least the first lines within one second of a next-page request. This is an analogy for slide advance, not a controlled experiment or percentile.
+- Other situations allow longer waits, including receiving a new assignment after finishing a complete task. A shared “factory/next step” label does not justify transferring that guidance to ongoing assembly assistance.
 
-**E11 — Nielsen (1993), Response Times: The 3 Important Limits.** [作者書籍摘錄](https://www.nngroup.com/articles/response-times-3-important-limits/)。1 s 維持思考連續性的 guidance 可以作旁證；它不提供各 family 的事件頻率或 P50，亦不應勝過更貼近情境的實證。
+**E11 — Nielsen (1993), Response Times: The 3 Important Limits.** [Author's book excerpt](https://www.nngroup.com/articles/response-times-3-important-limits/).
 
-**E12 — Gergle, Kraut & Fussell (2006), The Impact of Delayed Visual Feedback on Collaborative Performance.** 已在 introduction 引用。DOI [10.1145/1124772.1124968](https://doi.org/10.1145/1124772.1124968)；查核 [作者博士論文重刊的 Chapter 4](https://dgergle.soc.northwestern.edu/resources/Gergle_Dissertation2006.pdf)，§4.4，印刷頁 57–61；p. 41 註明與 CHI 論文的關係。
+The one-second interaction-continuity guidance is supporting context. It supplies neither family-specific event rates nor P50 values and should not override closer empirical task evidence.
 
-- 研究分別操弄 **visual-feedback delay** 與 **object change rate**。物件顯著變色約每 6–8 s、2–3 s、或 1 s 以下一次；環境變快時，可容忍的延遲縮短。
-- 例如 6–8 s 的 moderate-change condition，模型識別的初始 delay breakpoint 約 431 ms。這正好說明「世界多久變一次」與「訊息可以晚多久」並不相等。
-- 推論：強力支持 family-specific 環境節奏的研究動機，卻不能把該 puzzle 的 breakpoint 直接指定給 IDE、組裝或客服。
+**E12 — Gergle, Kraut & Fussell (2006), The Impact of Delayed Visual Feedback on Collaborative Performance.** [DOI](https://doi.org/10.1145/1124772.1124968); [author dissertation reproducing the study as Chapter 4](https://dgergle.soc.northwestern.edu/resources/Gergle_Dissertation2006.pdf), §4.4, printed pp. 57–61; p. 41 explains its relation to the CHI paper.
 
-Presenter 的完整輸出還包括 clip pause 與 captions speaker routing；其中 captions 是決定顯示哪個聲源，不是產生字幕文字。因此不能拿一般字幕文字延遲的 3–5 s 上限，替這個完整 composed decision 設定寬鬆 reference。Miller 的 1 s 類比主要支持換頁分支。
+- The experiments separately manipulate visual-feedback delay and object-change rate. Salient color changes occur about every 6–8 s, 2–3 s, or less than one second; faster environments reduce tolerated delay.
+- In the 6–8 s moderate-change condition, the modeled initial delay breakpoint is approximately 431 ms. Environment cadence and allowable information delay therefore need not be equal.
+- This strongly motivates studying family-specific cadence, but does not directly calibrate IDE, assembly, or support thresholds.
 
-## 3. P50／median 到底能不能找
+Presenter decisions also include clip pause and captions speaker routing. Routing selects the displayed audio source; it does not generate caption text. General 3–5 s caption-text latency limits cannot calibrate the complete composed decision. Miller's analogy primarily concerns slide advance.
 
-P50 就是 median；mean 則是平均值，三者名稱不可互換。這次找到的數值是不同測量對象：
+## What the reported medians mean
 
-| 數值 | 測的是什麼 | 能否當 family Δ 的實測 P50？ |
+P50 is the median; a mean is a different quantity.
+
+| Reported quantity | Measurement | Empirical P50 of a family update interval? |
 |---|---|---|
-| Dunay：multi-line 2.0 → 0.75 s | 系統 suggestion latency 的 median | 否 |
-| Chen：0.6／2.7 s | 由行為與滿意度推導的 tight／loose latency bounds | 否；也不是 P50／P95 |
-| Olguín：1.65／3 s | 實驗的 delay conditions | 否 |
-| Roberts：0.7 → 0.8 s | 評分曲線相鄰條件的顯著變化 | 否 |
-| Stivers：0.1 s median、0.208 s mean | 問答之間的 turn-transition gap | 否 |
-| Miller：1／2 s | 使用情境相關的設計 guidance | 否 |
+| Dunay: multi-line 2.0 → 0.75 s | Median system suggestion latency | No |
+| Chen: 0.6 / 2.7 s | Derived tight/loose latency bounds | No; neither is P50/P95 |
+| Olguín: 1.65 / 3 s | Experimental delay conditions | No |
+| Roberts: 0.7 → 0.8 s | Significant change between adjacent rating conditions | No |
+| Stivers: median 0.1 s, mean 0.208 s | Conversational turn-transition gap | No |
+| Miller: 1 / 2 s | Context-dependent design guidance | No |
 
-**目前未找到與 SDB 這些具體 composed decisions 匹配的真實事件／reference-change 間距分布。** 因此無法誠實地聲稱「我們從各任務的文獻 P50 選了 1／2／1 s」。能說的是：文獻提供互動尺度，據此宣告 benchmark reference points，並完整呈現 sensitivity。
+This audit found no real-world evidence-arrival or reference-change distribution matching SDB's complete composed decisions. It cannot support “we selected 1/2/1 s from each task's published P50.” It supports declaring literature-informed operating points and showing sensitivity.
 
-## 4. 先確定 reference interval 的語意
+## Distinguish cadence, latency, budget, and dwell time
 
-設第 i 個 public state 在 iΔ 發布，元件收到完整可用 state 後花 L_i 秒交付決策。
+If public state $i$ is released at $i\Delta$ and its usable decision takes $L_i$ seconds after receipt:
 
-- **Δ：** 環境 state 發布間隔；相同決策可能跨多個 ticks 不變。
-- **L：** decision component 的回應延遲。
-- **B：** 某種互動的人因回應預算／容忍範圍。
-- **D：** 一個 reference decision 持續有效的時間，即 segment dwell time。
+- **Δ** is the environment state-release interval. The correct action may span several ticks.
+- **L** is the decision component's response latency.
+- **B** is a human-response budget or tolerance range for a particular interaction.
+- **D** is the dwell time of a constant reference decision.
 
-文獻通常測 L 或 B；本 benchmark 改 Δ，同時改變 D。**B=1 s 並不推出 Δ=1 s，也不推出 D=1 s。** 若新增一個「1 s 內都算對」的 grace window，則是改了評估問題，不是現在的 in-force accuracy；此建議不需要加入 grace window。
+The literature usually measures L or B. Changing Δ in SDB also changes D. B=1 s implies neither Δ=1 s nor D=1 s. A grace window counting delayed decisions as correct would change the evaluation question; this proposal adds no grace window.
 
-### 現有資料的時間結構核對
+### Audit of the synthetic timeline
 
-以公開 gold 經 `decision_spec` 組合後，計算 maximal constant reference segments。這些數字來自合成資料，不能當作外部人因證據。
+Maximal constant-reference segments are computed after composing gold answers under the decision specification. These are synthetic dataset statistics, not external human-factors evidence.
 
-| Scenario | Reference 變化次數 | Segment median（ticks） | 候選 Δ* | 候選下 median dwell |
+| Scenario | Reference changes | Median segment (ticks) | Candidate Δ* | Median dwell at candidate |
 |---|---:|---:|---:|---:|
 | Debugging A | 20 | 3 | 1 s | 3 s |
 | Debugging B | 21 | 2 | 1 s | 2 s |
@@ -148,76 +140,60 @@ P50 就是 median；mean 則是平均值，三者名稱不可互換。這次找�
 | Presenter A | 24 | 2 | 1 s | 2 s |
 | Presenter B | 22 | 2 | 1 s | 2 s |
 
-重現：[timeline_audit.py](timeline_audit.py)；完整 segment lengths、來源 hash 與 frozen-data 一致性在 [timeline-audit.json](timeline-audit.json)。中位數對 segments 等權，非按每個時間瞬間加權。前六個 scenario 與 paper 使用的 frozen build 相同；presenter 另列。
+Reproduce with [timeline_audit.py](timeline_audit.py). [timeline-audit.json](timeline-audit.json) contains segment lengths, source hashes, and frozen-data checks. Medians weight segments equally, rather than time instants. The first six scenarios match the earlier frozen build; both presenter scenarios are included separately in this audit.
 
-改 Δ 還有以下實際含義：
+Changing Δ has additional consequences:
 
-1. 60 ticks 在 1／2／5 s 下成為 60／120／300 s 的 scenario；不是只讓模型多等幾秒。
-2. ticks 表達的政策時間一起改變。例如 debugging 的 2-tick save grace、4-tick stalled threshold、6-tick stop threshold，在 Δ=1 s 是 2／4／6 s，在 Δ=5 s 是 10／20／30 s。
-3. Support A 的 4-tick hold threshold 也從 recorded Δ=2 s 的 8 s，變成候選 Δ=1 s 的 4 s。這些是合成規則，不能誤稱產業標準。
-4. 語音任務的 upstream ASR、evidence availability 與實際 UI／actuator 的時間，不等於 component inference latency。SDB 的現有輸入從 public evidence 開始；不能直接將完整人類互動 latency budget 全數當作模型可用時間。
+1. Sixty ticks become 60/120/300 s at Δ=1/2/5 s. The environment slows; this is not merely extra waiting time for the model.
+2. Tick-valued rules rescale too. Debugging's 2-tick save grace, 4-tick stalled threshold, and 6-tick stop threshold become 2/4/6 s at Δ=1 s and 10/20/30 s at Δ=5 s.
+3. Support A's 4-tick hold threshold changes from eight seconds at the recorded Δ=2 s to four seconds at Δ=1 s. These are synthetic rules, not industry standards.
+4. Upstream ASR, evidence availability, and UI/actuator time differ from component inference latency. SDB begins at public evidence; a full human-interaction budget cannot be assigned entirely to model computation.
 
-若未來希望「環境節奏不變，只改合理回應預算」，必須另定參數／指標；若希望校準真實 Δ，則要量測 evidence arrivals 和 reference changes。兩者都不是單純修改表格標題。
+Changing response budgets while preserving environment cadence requires a separate parameter or metric. Calibrating Δ requires measuring evidence arrivals and reference changes.
 
-## 5. 建議的主結果與平均方法
+## Proposed aggregation, not the current primary score
 
-對模型 m、family f、scenario e，先在指定 Δ_f* 下計算原本的 in-force accuracy：
+For model $m$, family $f$, and scenario $e$, evaluate in-force accuracy at the declared family point:
 
-\[
-A_{mfe}(\Delta_f^*)=\frac{1}{H_{fe}}\int_0^{H_{fe}}\mathbf{1}\{d_{mfe}(t)=y^*_{fe}(t)\}\,dt.
-\]
+$$
+A_{mfe}(\Delta_f^*)=\frac{1}{H_{fe}}\int_0^{H_{fe}}
+\mathbf{1}\{d_{mfe}(t)=y^*_{fe}(t)\}\,dt.
+$$
 
-再先平均同 family 的 scenarios，最後平均 families：
+Then average scenarios within each family and families equally:
 
-\[
-A_{mf}^*=\frac{1}{n_f}\sum_{e=1}^{n_f}A_{mfe}(\Delta_f^*),\qquad
-S_m^*=\frac{1}{F}\sum_{f=1}^{F}A_{mf}^*.
-\]
+$$
+A_{mf}^*=\frac{1}{n_f}\sum_e A_{mfe}(\Delta_f^*),
+\qquad S_m^*=\frac{1}{F}\sum_f A_{mf}^*.
+$$
 
-主表欄位可直接寫成：
+The original proposed vector is (1,2,1) s for debugging, assembly, and support. Adding presenter at its tentative point gives (1,2,1,1) s and a separately labeled four-family aggregate. Any adoption requires an explicit evaluation-policy version, declared weights and dataset, and recomputed results. No such adoption is claimed here.
 
-| Model | IDE A@1 s | Assembly A@2 s | Support A@1 s | Family macro-average |
-|---|---|---|---|---|
-| 每個 model setting 一列 | 待後續決定採用後計算 | 待計算 | 待計算 | 前三欄等權平均 |
+This score would mean average time accuracy under the declared family conditions, not real-deployment accuracy or user satisfaction. Do not pool correct seconds across families: for equal scenario counts, (1,2,1) would give assembly half the pooled weight and each other family one quarter. Normalize within scenarios before averaging families. Do not additionally divide accuracy by Δ or multiply it by seconds. Use identical acceptance and clock rules for all models within each family, and retain uncertainty and assumptions for any secondary network estimate.
 
-表註必須宣告 `Δ*=(1, 2, 1) s`、family 權重和 dataset version。加入 presenter 時是四-family aggregate，應用新的版本／標籤；不可和舊三-family overall 當同一項比較。
+## Proposed sensitivity analysis
 
-這樣的平均表示「在各 family 宣告的環境條件下，平均正確的時間比例」，不是跨所有真實部署秒數的正確率，也不是使用者滿意度分數。
+The historical proposal would treat family-specific points as its main table and common intervals as sensitivity conditions. The current primary policy instead integrates a common log-weighted range; this section records an alternative, not instructions to change the leaderboard.
 
-**不要將各 family 的 correct seconds 直接加總再除總秒數。** 相同 scenario 數量下，候選 `(1,2,1)` 會讓 assembly 因 horizon 加倍而取得 1/2 權重，另外兩個 family 各只有 1/4。先做 scenario 的時間正規化，再做 family macro-average，才符合各 family 等權的意圖。現在每 family 都有兩個 scenarios，兩階段等權平均恰好等同六個 scenario accuracy 的平均；未來樣本數不同就不一定。
+- A common two-second interval is at least as slow as every candidate and matches the recording cadence.
+- A common five-second interval is the slow endpoint of the original 1–5 s exploration, not a universal tolerance limit.
+- Slower environments can reduce stale exposure, but accuracy need not be pointwise monotonic. Five seconds is not a strict upper bound for every model.
 
-不必再除以 Δ，也不要將 accuracy 乘上秒數做額外修正。保持同 family 內所有模型使用相同 Δ、同 acceptance policy 和同 network 處理方式。若另報 network-removed 結果，沿用現有不確定性區間與假設。
+A proposed appendix figure would show one accuracy-versus-Δ panel per family, identical axes, marked family points, and common 2/5 s points. A separate aggregate panel could show the equal-family curve at common Δ. A family-specific vector has no single common x-coordinate and must be displayed separately. Presenter recordings are now available; this historical memo does not fabricate curves or supply new scores.
 
-## 6. 共同設定與 appendix figure
+A robustness table could compare the original (1,2,1), debugging at two seconds, assembly at one or three, support at two, and common (2,2,2)/(5,5,5). The same principle extends to four families with explicit labels. These contrasts test the weakest extrapolations rather than reporting only a favorable operating point.
 
-**主結果採 family reference points；共同設定作 sensitivity。** 兩種比較回答的問題不同，不能因為所有模型都用相同秒數，就宣稱該設定已達成部署情境上的公平校準。
+Replay must retain recorded answers and second-valued latencies while changing event times, or equivalently scale latency by Δ_recorded/Δ_target. Recompute arrival order, acceptance, and horizon clipping; do not scale an old accuracy directly. This relies on open-loop, tick-valued states and an assumption that recorded latency remains representative under a different request rate. It does not measure service performance under that new load.
 
-- 若希望一個「至少和各 family reference 一樣寬鬆」的共同 interval，先用 `Δ_common=max_f Δ_f*=2 s`。這也保留與現有三-family結果對照的價值。
-- 另列 **共同 5 s**，作為使用者指定 1–5 s 範圍的慢端比較。它不是文獻證明的普遍容忍值。
-- 5 s 意味環境變慢；一般會減少 stale exposure，但完整模型 accuracy 不必然處處單調，因此不能稱為所有模型的嚴格 score upper bound。
+## Supported claims and calibration gaps
 
-建議一張 appendix figure，以三個 family panels 加一個 common-interval aggregate panel 組成：
-
-1. 每個 family panel：x 軸為 Δ（1–5 s），y 軸為 in-force accuracy，各模型一條曲線；用垂直線與曲線上的點標示該 family 的 Δ_f*。
-2. 各 family panel 共享座標尺度，並標出共同 2 s 與 5 s，讀者可比較採同一 interval 的差異。
-3. 第四 panel 顯示 `S_m(common Δ)=mean_f A_mf(Δ)`；family-specific macro-average 是 reference vector 上的值，不能假裝它對應某個單一共同 x 座標。可在 panel 旁列小表或獨立點欄。
-4. Presenter 在有相應 recorded runs 之後加入同類型 panel；目前只提供 reference 建議，不補造曲線。
-
-可再補一個簡短 robustness table：基準 `(1,2,1)`，逐一將 IDE 改 2、assembly 改 1 或 3、support 改 2，以及共同 `(2,2,2)`／`(5,5,5)`。這幾個對照優先檢查最薄弱的外推，避免只報選中 operating point 的排名。
-
-Replay 時保持 recorded answers 和以秒表示的 latency 不變，改事件時間軸；或使用現有 scorer 的等價 latency scaling `c_f=Δ_recorded/Δ_f*`，重新計算 arrival order、acceptance 和 horizon clipping。不能直接從舊 accuracy 用比例換算。這依賴原本的 open-loop、tick-valued state 與 latency 對 request rate 不變的假設；不能將 replay 當成已量測新負載下的服務表現。
-
-## 7. 哪些說法已足夠、哪些仍需補證據
-
-| 擬採說法 | 查核判斷 |
+| Claim | Assessment |
 |---|---|
-| 不同互動情境對 latency 的要求不同，無需全部固定 2 s。 | **支持。** |
-| 在宣告的 family reference points 評估後等權平均。 | **方法成立。** 同時交代各點、權重和 replay 假設。 |
-| 現有文獻直接量出我們各 family 最適合的 Δ。 | **不支持。** 最關鍵的 latency-to-cadence mapping 尚未校準。 |
-| 1／2／1 s 是文獻啟發、事先宣告的 benchmark 設定。 | **可辯護，但外推強度不一。** Support 最需保留語氣。 |
-| 這些數字是 human tolerance P50 或無損等待門檻。 | **不支持。** |
-| 3–5 s 可以一律視為合理的寬鬆主要設定。 | **不支持。** 可以作共同慢端的敏感度比較。 |
+| Different interactions need not share a universal two-second latency requirement. | Supported. |
+| Declared family points can be evaluated and averaged equally. | Coherent method with explicit points, weights, and replay assumptions. |
+| The reviewed papers directly identify optimal SDB update intervals. | Unsupported; latency-to-cadence mapping is uncalibrated. |
+| (1,2,1) is a literature-informed candidate benchmark setting. | Defensible proposal with unequal extrapolation strength, especially weak for support. |
+| The values are human-tolerance P50s or no-impact thresholds. | Unsupported. |
+| 3–5 s is a universally reasonable primary setting. | Unsupported; usable as sensitivity conditions. |
 
-若要把「候選 operating points」提升成「經驗校準的 reference intervals」，最有價值的補充是：量測真實 IDE action-card、assembly evidence、support desktop、presenter control 的 evidence arrival／reference-change 分布，並在相應 UI 上操弄決策延遲。事件節奏與可容忍延遲應分開估計；才有可對應的 P50／P90 和效能或體驗曲線。
-
-本次文獻結果足以支持先討論 `(1,2,1)` 的 family-specific reporting 方案；尚不足以把這三個精確秒數寫成文獻已確立的任務標準。
+To turn candidate points into empirically calibrated intervals, measure evidence-arrival and reference-change distributions for the actual IDE action card, assembly station, support desktop, and presenter UI, then manipulate decision delay in those interfaces. Estimate event cadence and tolerated response delay separately. The reviewed evidence motivates discussing candidate family points; it does not establish exact seconds as task standards.

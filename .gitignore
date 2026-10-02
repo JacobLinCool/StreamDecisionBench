@@ -263,6 +263,7 @@ cython_debug/
 # Local caches, editing notes and tool leftovers.
 .cache/
 *.shadow.md
+*.zh-tw.md
 .chart-data-*/
 /docs/figures/node_modules/
 # Secrets: only the template is versioned.

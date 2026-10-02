@@ -9,7 +9,7 @@ Completed 4 of 4 settings; each completed setting covers all 8 scenarios and 480
 | [Laya multilingual](laya-multilingual/REPORT.md) | 0.21 | 0.21 | 0.068 / 0.132 | 0 |
 | [DJev / DiffusionGemma 26B-A4B (BF16)](djev-diffusiongemma/REPORT.md) | 20.95 | 21.88 | 0.257 / 0.403 | 0 |
 
-Regenerate all current evaluation scores with `uv run python paper/analysis/lite_reports.py`. The execution and cost records below describe the original recordings.
+Historical deployment cohort, superseded in the public leaderboard by the [same-host RTX PRO 6000 lab recordings](../pro6000-lab-20261001/README.md). The scores, execution and cost records below describe these original recordings. The current-report generator does not rebuild this cohort; use the frozen per-setting reproduction commands in its reports and write new outputs to a scratch directory.
 
 ## Measurement and interpretation
 

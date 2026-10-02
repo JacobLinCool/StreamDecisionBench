@@ -4,6 +4,7 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
+import re
 import sys
 
 import pytest
@@ -38,13 +39,13 @@ def test_negative_latency_intercept_is_preserved_but_cannot_remove_negative_dela
     assert result["network_s"]["high"] > 0
     # A zero removable delay gives exactly the original reconstructed score.
     assert result["scores"]["estimate"]["overall"]["time_accuracy"] == verified["scores"]["overall"]["time_accuracy"]
-    assert "負值不能當作可移除延遲" in "\n".join(lite_report._network_report_lines(result))
+    assert "negative latency cannot be removed" in "\n".join(lite_report._network_report_lines(result))
 
 
 def _write_recording(path, *, normalized=True):
     question = lambda values: {"type": "choice", "instructions": "Choose the specified value.", "criteria": {v: v for v in values}}
     episode = encode_scenario({
-        "episode_id": "test", "task_family": "test", "scenario_id": "test", "title": "Report fixture", "tick_seconds": 2.0,
+        "episode_id": "test", "task_family": "live_debugging", "scenario_id": "test", "title": "Report fixture", "tick_seconds": 2.0,
         "questions": {"route": question(["A", "B"]), "a": question(["yes", "no"]), "b": question(["yes", "no"])},
         "decision_spec": {"route_question": "route", "always": [], "branches": {"A": ["a"], "B": ["b"]}},
         "steps": [
@@ -112,9 +113,15 @@ def test_retry_report_uses_successful_attempts_and_separates_raw_time(tmp_path):
     output = tmp_path / "report"
     lite_report.report(data, output)
     text = (output / "REPORT.md").read_text()
-    assert "成功 attempt" in text and "原始時鐘診斷" in text
-    assert "1 個失敗 attempts／全部 4 個 attempts" in text
-    assert "1 個曾重試 requests／全部 3 個 logical requests" in text
+    assert "Successful-attempt" in text and "raw-clock diagnostics" in text
+    assert "1 failed attempts / 4 total attempts" in text
+    assert "1 retried requests / 3 logical requests" in text
+    assert not re.search(r"[\u3400-\u9fff]", text)
+    assert "[Complete scores, errors and raw-clock diagnostics](analysis.json)" in text
+    assert "metrics.json)" not in text
+    saved = deepcopy(data)
+    assert lite_report.render_report(data, output) == text
+    assert data == saved
     assert data["analysis_sources"] and data["run_sources"]
 
 
@@ -144,8 +151,12 @@ def test_compare_rejects_mixed_time_basis_and_retains_retry_denominators(tmp_pat
     comparison = lite_compare.compare(normalized, other)
     lite_compare.report(comparison, tmp_path / "comparison")
     text = (tmp_path / "comparison" / "COMPARISON.md").read_text()
-    assert "25.00%（1/4）" in text
-    assert "33.33%（1/3）" in text
+    assert "25.00% (1/4)" in text
+    assert "33.33% (1/3)" in text
+    assert not re.search(r"[\u3400-\u9fff]", text)
+    saved = deepcopy(comparison)
+    assert lite_compare.render_report(comparison, tmp_path / "comparison") == text
+    assert comparison == saved
     assert comparison["overall"]["paired_decision_counts"]["both_correct"] == 3
     jev = deepcopy(other)
     jev["config"].update(provider="typesafe", model="jev-latest", reasoning_effort=None)
@@ -252,7 +263,7 @@ def test_network_estimate_recovers_a_known_delay_and_appears_as_a_secondary_sect
     assert net["observed"]["overall"] == data["scores"]["overall"]["time_accuracy"]
     assert net["scores"]["low"]["overall"]["time_accuracy"] <= net["scores"]["high"]["overall"]["time_accuracy"] <= net["untimed_ceiling"]["overall"]
     lite_report.report(data, tmp_path / "report")
-    assert "移除網路延遲後的估計（次要）" in (tmp_path / "report" / "REPORT.md").read_text()
+    assert "Network-removed estimate (secondary)" in (tmp_path / "report" / "REPORT.md").read_text()
     raw = tmp_path / "raw"
     _write_recording(raw, normalized=False)
     assert lite_report.analyze(raw)["network_adjustment"] is None

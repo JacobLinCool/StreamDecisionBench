@@ -299,7 +299,7 @@ See [paper/README.md](paper/README.md) for details.
 |---|---|
 | `data/lite/v1/` | The benchmark: eight scenarios and a manifest with their hashes |
 | `src/streamdecisionbench/lite/` | Scenario generators, executable references, runner, scorer, merge |
-| `src/streamdecisionbench/adapters/` | Model adapters (OpenAI, TypeSafe, and legacy ones) |
+| `src/streamdecisionbench/adapters/` | Model adapters, including OpenAI, TypeSafe and native Cloudflare Workers AI |
 | `runs/lite-v1-*-retry-v1/` | The recorded passes, with raw event logs ([index](runs/README.md)) |
 | `docs/lite/` | Protocol, task rules and published results |
 | `paper/` | Paper sources and the analysis scripts behind every number and figure |
@@ -307,10 +307,9 @@ See [paper/README.md](paper/README.md) for details.
 | `tests/` | Tests (`uv run pytest`) |
 
 `lite` is the internal name of the current benchmark in paths and module names; it is not a reduced
-version. The package also keeps the earlier `sdb` CLI pipeline, described in
-[docs/LEGACY_SDB_CLI.md](docs/LEGACY_SDB_CLI.md); it is not needed to run SDB. The per-run reports
-under `docs/lite/results/` are mostly in Traditional Chinese; the protocol and the paper are the
-English references.
+version. See the [documentation index](docs/README.md) for the current protocol, task rules,
+results, research analyses and retained historical evidence. Public documentation and generated
+reports are in English. The earlier `sdb` CLI pipeline remains a separate local research artifact.
 
 ## Citation
 

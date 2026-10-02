@@ -8,7 +8,7 @@
 | [Bespoke Nimble-9B](nimble-9b/REPORT.md) | 10.42 | 22.50 | 6.162 / 41.782 | 0 |
 | [SemIf / Qwen3.5-4B (direct logits)](semif-qwen35-4b/REPORT.md) | 14.79 | 17.08 | 0.972 / 1.707 | 0 |
 
-Regenerate all current evaluation scores with `uv run python paper/analysis/lite_reports.py`. The execution and cost records below describe the original recordings.
+Historical deployment cohort, superseded in the public leaderboard by the [same-host RTX PRO 6000 lab recordings](../pro6000-lab-20261001/README.md). The scores, execution and cost records below describe these original recordings. The current-report generator does not rebuild this cohort; use the frozen per-setting reproduction commands in its reports and write new outputs to a scratch directory.
 
 ## Measurement
 

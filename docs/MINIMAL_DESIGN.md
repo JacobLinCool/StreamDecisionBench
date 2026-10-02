@@ -1,168 +1,165 @@
-# StreamDecisionBench：最小充分設計
+# StreamDecisionBench: design rationale and acceptance criteria
 
-StreamDecisionBench 評估模型能否隨情境演變，及時維持符合任務規則的下一步行動。它面向 Jev 等低延遲決策模型；「System 1」描述研究動機，不作為對模型內部認知機制的判定。
+StreamDecisionBench measures whether a model maintains an appropriate next action as a task context changes. Low-latency decision models motivate the benchmark; “System 1” is a motivation, not a diagnosis of a model's internal cognitive mechanism.
 
-本設計的測量目標是：**在相同的外生情境下，量測模型實際交付的決策能維持多久的正確性，並在完整資料上檢驗指定淺層解法能否勝任不限時的情境判斷。** 時間表現採區間平衡分數，另列整段正確時間比例。「下一步」指目前應採取的行動，不要求預測尚未觀察到的未來事件。
+The current executable contract is the [Lite protocol](lite/PROTOCOL.md). This document explains nine design conditions and a proposed shortcut-resistance audit. It does **not** claim that the development set has passed a held-out audit. The published primary score is normalized log-AUC over update intervals of 0.5–8 seconds; segment-balanced accuracy below is a design diagnostic, not the leaderboard score.
 
-求得的集合為下列九項。這裡的「最小充分」指：在本文的任務範圍與條件拆分下，九項共同支持上述測量；刪除任一項，便容許一種無法支持其中某項主張的設計。這是有範圍的不可刪減性，不是所有可能 benchmark 的最少條件數，也不保證論文品質。C4 是需要實測通過的驗收條件，其餘條件定義任務與評分契約。
+“Minimal sufficient” has a restricted meaning here: within this task scope and decomposition, the conditions jointly support the measurement, and removing any condition permits a concrete failure of one of its claims. This is not a universal minimum number of benchmark requirements, a novelty claim, or a guarantee of publication quality. C4 requires empirical acceptance; the other conditions define the task and evaluation contract.
 
-## 九項設計條件
+## Nine design conditions
 
-| 編號 | 條件 |
+| ID | Condition |
 |---|---|
-| **C1** | 每個任務必須要求模型依據給定規則選擇下一步行動。 |
-| **C2** | 每個時刻的參考輸出必須等於給定規則在當下公開狀態上唯一決定的結果。 |
-| **C3** | 正確輸出必須依賴最新觀察以外的任務情境。 |
-| **C4** | 預先指定的淺層基線不得在完整保留測試集的不限時決策評分中達到預設門檻。 |
-| **C5** | 評估資料必須包含參考輸出在 episode 內發生改變的情境。 |
-| **C6** | 觀察的釋出時間不得因模型尚未完成推理而延後。 |
-| **C7** | 模型的新輸出必須在實際交付可用結果時才開始生效。 |
-| **C8** | 已生效的輸出必須持續至另一個輸出取代它。 |
-| **C9** | 評分器必須按生效輸出偏離當時參考輸出的持續時間累計損失。 |
+| **C1** | Each task asks the model to select a next action under given rules. |
+| **C2** | At each instant, the reference action is uniquely determined by those rules and the public state available then. |
+| **C3** | The correct action depends on task context beyond the latest observation. |
+| **C4** | Prespecified shallow baselines must remain below a registered competence threshold on an untimed evaluation of the complete held-out test set. |
+| **C5** | The evaluation includes episodes in which the reference action changes. |
+| **C6** | Observation release times do not wait for model inference to finish. |
+| **C7** | A new output takes effect only when a usable result is actually delivered. |
+| **C8** | An accepted output remains in force until another accepted output replaces it. |
+| **C9** | The evaluator accumulates the duration for which the in-force output differs from the contemporaneous reference. |
 
-C1 賦予輸出「下一步行動」的任務意義；其餘條件分別約束參考值、資訊依賴、驗收、時間與評分。這樣的拆分使行動語意不會被重複藏在其他條件裡。
+C1 supplies the action semantics. The remaining conditions constrain the reference, information dependency, acceptance, clock, and scoring. Keeping these separate makes each requirement inspectable.
 
-## 測量對象與充分性
+## Measurement and sufficiency
 
-目前的介面使用文字化任務狀態，包含自然語言訊息與必要的結構化欄位；同一 episode 的外部情境事先固定。模型輸出的是當前應採取的行動建議，輸出不改寫後續情境。一次性的實際操作，例如重複寄出郵件，不應被解讀成每一刻都要重新執行的持續命令。
+The current interface presents textual task states, including natural-language messages and structured fields. An episode's external events are fixed in advance. The output recommends the action appropriate now; it neither predicts unseen events nor changes subsequent observations. A standing recommendation to send an email, for example, does not mean that the consumer sends another email every instant.
 
-令規則為 $P$，時刻 $t$ 提供的完整任務狀態為 $S(t)$，獨立判定的參考行動為：
+Let the task rules be $P$, the complete public state at time $t$ be $S(t)$, and the reference action be
 
 $$
 y^*(t)=P(S(t)).
 $$
 
-這個記號表示任務規則決定行動，不要求規則必須以程式實作。參考答案可以由可執行政策產生，也可以經由可重現的人工裁定取得。兩者都需要核對公開狀態是否真的提供了判斷依據。
+This notation does not require a programmatic rule implementation. Executable policies and reproducible human adjudication are both possible, provided the public state actually supports the judgment. C1–C3 define a checkable contextual action task, C4 tests the specified shallow methods, and C5 makes updating a substantive part of the evaluation.
 
-C1 指定答案的行動意義；C2 使每個當下的判定具有可核驗的依據；C3 使任務需要使用情境；C4 檢驗淺層方法的不限時決策成績；C5 使持續更新成為實際測量內容。
-
-對一次模型呼叫，記請求時刻為 $q_i$，可用答案為 $a_i$，交付時刻為 $c_i\ge q_i$。C6 固定世界時間，C7 決定新答案何時可以使用，C8 決定兩次交付之間正在使用的答案。以交付順序編號後：
+For request $i$, let $q_i$ be its dispatch time, $a_i$ its usable answer, and $c_i\geq q_i$ its delivery time. C6 fixes the external clock; C7 determines when an answer becomes usable; C8 determines the standing output between deliveries. After filtering by the protocol's acceptance rule and ordering accepted commits,
 
 $$
-d(t)=a_{k(t)},\qquad k(t)=\max\{i:c_i\le t\}.
+d(t)=a_{k(t)},\qquad k(t)=\max\{i:c_i\leq t\}.
 $$
 
-第一個可用答案送達前，記為未作答狀態 $\bot$，其損失為 1。「可用」指答案符合輸出格式，不表示答案正確。格式無效或逾時的回覆不替換既有決策。主協定採單一未完成請求，空閒時讀取最新已釋出的狀態；因此沒有多個請求完成順序倒置的歧義。這些介面參數須在比較模型前固定。
+Before the first accepted answer, the output is $\bot$ and incurs unit error. A usable answer meets the format contract; it need not be correct. Invalid outputs do not replace the standing decision. The current four-family harness pipelines requests with 32 workers and rejects completions older than the latest committed source state. The exact dispatch, tie-breaking, and commitment rules are fixed by the [protocol](lite/PROTOCOL.md), rather than inferred from this simplified notation.
 
-C9 隨即給出 episode 的錯誤生效時間：
+C9 gives episode error duration over horizon $T$:
 
 $$
-E=\int_0^T\mathbf 1[d(t)\ne y^*(t)]\,dt.
+E=\int_0^T\mathbf{1}[d(t)\ne y^*(t)]\,dt,
+\qquad A=1-E/T.
 $$
 
-為避免長時間的簡單區段掩蓋短暫轉折，主分數對每個最大參考行動區間的錯誤比例取等權平均：
+Partitioning at reference changes and accepted delivery times yields an exact integral of these piecewise-constant trajectories. An optional diagnostic can balance maximal constant-reference intervals $I_{e,k}$:
 
 $$
 L_e=\frac{1}{K_e}\sum_{k=1}^{K_e}
 \frac{1}{|I_{e,k}|}\int_{I_{e,k}}
-\mathbf 1[d(t)\ne y^*(t)]\,dt.
+\mathbf{1}[d(t)\ne y^*(t)]\,dt.
 $$
 
-跨 episode 平均 $1-L_e$ 得到分數；同時報告錯誤總秒數與 episode 的正確時間比例。先依參考行動取得區間 $I_{e,k}$，再以交付時刻細分各區間，即可精確計算分段常數軌跡的積分。
+This diagnostic prevents a long easy interval from dominating short transitions. The current primary score instead integrates family-balanced in-force accuracy over the registered logarithmic update-interval range. Recording-cadence reports, segment diagnostics, and untimed accuracy answer different questions and must retain their labels.
 
-這套構造足以定義一個可計算、可重現的情境決策測量。C4 通過後，才能另外宣稱指定的淺層基線在完整測試集的不限時決策評分中未達勝任門檻。這項驗收隔離決策內容，不能直接當成所有延遲設定下的時間分數上界。有限行動集仍然可以表示成分類問題；這不妨礙測量決策能力，也不構成新穎性主張。
+Transport failures are handled on a documented normalized retry timeline: the successful attempt's duration and recorded commit lag remain, while excluded failed attempts are retained in raw-clock diagnostics. This reconstruction is not a claim that the physical endpoint completed faster. Neither clock permits backdating an answer to its request time.
 
-## 必要性：逐項刪除反例
+Together, the conditions define a computable contextual decision measurement. Only a successful C4 audit supports the additional claim about the specified shallow baselines. A finite action set can still be represented as classification; that fact neither invalidates the task nor establishes novelty.
 
-以下以有限輸出值、公開規則、觀察序列、交付紀錄及評分函數為共同構件，只放寬表列條件。C1 是唯一賦予輸出「下一步行動」意義的條件，因此移除它後，其餘條件仍可作用於主題標籤。前節公式是全部條件成立後的構造，不是刪除檢驗時額外保留的公理。反例說明剩餘條件容許什麼失真，不表示採用另一種契約的研究本身沒有價值。
+## Necessity through deletion witnesses
 
-| 移除條件 | 其餘設計仍可容許的反例 | 失去的測量主張 |
+The following witnesses retain finite outputs, public rules, observations, delivery records, and an evaluator while relaxing only the indicated condition. C1 is the condition that gives the output its next-action meaning. The preceding equations describe the complete construction; they are not additional axioms silently retained in a deletion test.
+
+| Removed condition | Counterexample permitted by the remaining conditions | Lost claim |
 |---|---|---|
-| **C1** | 保留語意、情境與時間機制，但輸出改成情境的主題標籤。 | 分數可以只反映理解輸入，無法說明是否選對下一步。 |
-| **C2** | 對相同公開狀態，根據模型看不到的隱藏事實指定不同正解。 | 錯誤混入不可解的資訊缺口，無法解釋為決策失敗。 |
-| **C3** | 每則新訊息都包含獨立完整的題目，其他任務狀態永遠不影響答案。 | 可以得到有難度的串流作答任務，卻沒有情境依賴。 |
-| **C4** | 最新訊息以外的狀態欄位含有可直接查表取得答案的關鍵字。 | 情境依賴仍成立，但不限時滿分仍可由指定淺層方法取得。 |
-| **C5** | 每個 episode 的正解始終不變，只有不同 episode 的答案不同。 | 首次答對後永遠沿用即可，不需要隨情境更新決策。 |
-| **C6** | 每次模型開始計算，世界就停下來等待回覆。 | 推理時間不會造成情境過時，無法測量這種即時失敗。 |
-| **C7** | 把兩秒後才產生的答案回填到請求時刻，再維持並計算積分。 | 評分器憑空消除了交付延遲。 |
-| **C8** | 每個答案只在交付瞬間有效，隨後自動清空。 | 時間積分幾乎只計到未作答，無法測量舊決策保持與更新的後果。 |
-| **C9** | 記錄完整時間軌跡，最後卻只計每次答案是否正確。 | 相同答案錯 0.1 秒與錯 1 秒會被評成一樣。 |
+| **C1** | Keep context and timing, but output a topic label. | Correct input understanding need not imply an appropriate next action. |
+| **C2** | Give different references to the same public state using hidden facts. | Measured errors mix decision failures with unavailable information. |
+| **C3** | Every new message contains a complete independent problem. | The stream may be difficult without requiring accumulated context. |
+| **C4** | A context field exposes a keyword-to-answer lookup. | Context dependency holds, yet a specified shallow method can achieve perfect untimed accuracy. |
+| **C5** | The reference never changes within an episode. | One correct initial answer can remain appropriate indefinitely. |
+| **C6** | Pause the world whenever inference starts. | Inference cannot make a decision stale. |
+| **C7** | Backdate an answer delivered two seconds later to its dispatch time. | The evaluator erases delivery delay. |
+| **C8** | Clear an answer immediately after delivery. | Almost all integrated loss becomes unanswered time, obscuring the consequences of holding a decision. |
+| **C9** | Record the full trajectory but score only individual answers. | A wrong decision lasting 0.1 seconds and one lasting 1 second can receive the same score. |
 
-這些反例建立的是本文固定範圍下的刪除不可省略性。C4 的必要性來自「指定淺層方法不能勝任情境判斷」這項研究要求；若只想算時間正確率，C4 可以移除，但研究主張也必須相應縮小。C8 則對應已選定的持續決策系統；有明確到期時間的決策是另一種可成立的任務。
+These witnesses establish scoped irreducibility, not the inferiority of other research contracts. C4 can be omitted when the claim is limited to timed accuracy. C8 describes the chosen standing-decision interface; decisions with explicit expiry can support a different valid task.
 
-### 一段足以區分評估方式的軌跡
+### A trajectory that separates answer accuracy from duration
 
-假設初始決策 A 已送達，參考行動在第 1 秒改為 B、第 2 秒改回 A：
+Suppose A is initially in force, the reference changes to B at one second, and changes back to A at two seconds.
 
-| 時間區間 | 參考行動 | 生效決策 | 錯誤時間 |
-|---|---|---|---|
-| 0–1 秒 | A | A | 0 秒 |
-| 1–1.8 秒 | B | A | 0.8 秒 |
-| 1.8–2 秒 | B | B | 0 秒 |
-| 2–2.2 秒 | A | B | 0.2 秒 |
-| 2.2–3 秒 | A | A | 0 秒 |
+| Interval (s) | Reference | In-force decision | Error duration (s) |
+|---|---|---|---:|
+| 0–1 | A | A | 0 |
+| 1–1.8 | B | A | 0.8 |
+| 1.8–2 | B | B | 0 |
+| 2–2.2 | A | B | 0.2 |
+| 2.2–3 | A | A | 0 |
 
-模型對第 1 秒與第 2 秒的輸入都答對了，兩次交付時的答案也都正確，最後答案同樣正確；然而三秒內共有一秒使用錯誤決策，正確時間比例為 66.7%。這個例子顯示 C6–C9 各自的作用，並不假設既有研究只使用最終答案評分。
+The model answers both changed states correctly, both answers are correct when delivered, and the final answer is correct. Nevertheless, one of the three seconds uses an incorrect standing decision: in-force accuracy is 66.7%. This illustrates C6–C9 without assuming that prior work scores only final answers.
 
-## 情境與淺層解法的驗收
+## Auditing contextual dependence and shallow methods
 
-### C3：證明任務確實依賴情境
+### C3: demonstrate contextual dependence
 
-使用相同規則、候選行動與最新訊息，改變相關任務狀態，檢查正解是否改變。這裡的「任務情境」指同一規則下的流程進度或已成立條件。例如，同樣收到「請幫我重設」，尚未完成驗證與已完成驗證應要求不同的下一步。這是 C3 的驗證方式，不是額外一條必須採用的資料生成方法。
+Hold the rules, choices, and latest message fixed while changing relevant task state. For example, the same request to reset an account should require different actions before and after identity verification. This is a way to verify C3, not an additional mandatory generation method.
 
-這類配對可以給出有限範圍內的形式證明。令 $\phi(x)$ 是不含任務情境的公開輸入，包括固定規則、候選行動與最新訊息。對每組具有相同 $\phi(x)$ 的樣本，以 $n_{g,a}$ 表示正解為語意行動 $a$ 的數量。任何只使用 $\phi(x)$ 的確定性預測器，其最高準確率為：
+Let $\phi(x)$ expose the fixed rules, choices, and latest message but omit the relevant context. Within each group $g$ having identical $\phi(x)$, let $n_{g,a}$ count examples whose semantic reference action is $a$. A deterministic predictor restricted to $\phi(x)$ has maximum accuracy
 
 $$
 U_\phi=\frac{\sum_g\max_a n_{g,a}}{\sum_g\sum_a n_{g,a}}.
 $$
 
-兩個等權案例若具有相同 $\phi(x)$ 卻要求不同動作，上限就是 50%；隨機預測器的期望準確率也受相同上限約束。這個結論涵蓋只讀最新訊息的分類器與 similarity 方法，並限於這個配對測試切片。配對識別碼、順序及選項編碼不可洩漏答案；必須以語意行動對齊標籤，並確保受限預測器沒有其他情境管道。
+Two equally weighted cases with identical restricted inputs and different actions yield a 50% bound, also bounding expected randomized accuracy. This applies to the controlled slice, not the whole dataset. Pair identifiers, ordering, option encodings, and other channels must not leak the omitted context; labels must align by semantic action.
 
-### C4：排除完整輸入上的指定淺層解法
+### C4: test prespecified shallow methods on complete inputs
 
-完整輸入上的檢索器可以讀到任務狀態，因此不能套用上述 50% 上限。對這類方法，需要獨立測試。
+A retriever that sees the full state is not subject to the preceding restricted-input bound. Its performance requires a separate empirical audit. Fix the baseline set $B$ before sealing the test set, covering lexical matching, BM25 or literal nearest neighbors, embedding nearest neighbors over full inputs, and formatting or fixed-label cues. Record model versions, accessible fields, retrieval corpus, and tuning. Exclude test scenarios and their variants from the retrieval corpus. Efficient solvers that genuinely parse state and execute the policy are valid competitors.
 
-基線集合 $B$ 在測試集封存前固定，至少涵蓋詞彙匹配、BM25／字面近鄰、完整輸入的 embedding 近鄰，以及資料格式或固定標籤線索。模型版本、可讀欄位、檢索庫與調參程序都必須列明；檢索庫不得包含測試情境或其配對變體。真正解析狀態並執行政策的高效率求解器是合法參賽方法，不因使用規則程式而被當成捷徑。
+Split by base scenario, keeping paraphrases and counterfactual variants together. Evaluate the complete held-out test set rather than a selected difficult slice. The original C4 proposal uses an untimed, reference-interval-balanced state accuracy $A_b$, averaged across episodes. That acceptance diagnostic is distinct from the current log-AUC leaderboard and its separately reported untimed state accuracy.
 
-以基礎情境切分開發與測試資料，讓同一情境的改寫及反事實版本留在同一側。C4 驗收覆蓋完整保留測試集，不能只挑選一小部分困難配對題。在每個公開狀態上取得基線答案，忽略作答耗時，以各參考區間的狀態準確率等權平均，再跨 episode 平均，得到不限時分數 $A_b$；這與主分數使用相同的參考區間權重，但直接評該狀態的答案。
-
-預先設定勝任門檻 $\tau$，並以基礎情境及其所有變體為群組估計不確定性。測試前須登錄群組重抽樣或區間估計程序，以及多重比較控制方法；式中的 $\operatorname{UCB}^{\mathrm{sim}}_{95\%}$ 指對整個固定基線集合具有同時覆蓋率的單側上界。通過標準為：
+Register a competence threshold $\tau$, grouped uncertainty procedure, and multiple-comparison control before testing. A proposed acceptance condition is
 
 $$
-\max_{b\in B}\operatorname{UCB}^{\mathrm{sim}}_{95\%}(A_b)<\tau.
+\max_{b\in B}\operatorname{UCB}^{\mathrm{sim}}_{95\%}(A_b)<\tau,
 $$
 
-$\tau$ 是資料發布前必須登錄的研究參數，依任務可接受的準確度設定於機會水準與 1 之間；不存在可從「decision」一詞推導出的通用數值。尚未設定門檻或尚未完成測試時，C4 視為未驗收。若基線通過勝任門檻，應縮小論文主張或重建失效情境，而不是刪掉該基線。各基線的實際時間分數仍須另行報告；不限時分數不保證是其時間分數上界。
+where the upper bounds have simultaneous coverage over the fixed baseline set. No universal threshold follows from the word “decision.” Without a registered threshold and completed test, C4 remains unverified. If a baseline reaches the threshold, narrow the claim or repair the deficient task construction; do not remove the baseline. Report its actual timed performance separately: an old answer can become correct again, so untimed state accuracy is not a universal upper bound on every timed trajectory.
 
-改寫對照、單一事實修改及無關更新都可以用於這個驗收。等義改寫若改變關鍵證據出現的時間，就不能直接要求整條參考軌跡不變。這些是控制語意與時間的建構方法，沒有必要分別升格成不可替代的核心條件。
+Paraphrases, single-fact changes, and irrelevant updates can support this audit. A paraphrase that changes when evidence arrives need not preserve the entire reference trajectory. These are useful controls rather than additional irreducible conditions. The current eight development scenarios and single-pass model results do not establish held-out shortcut resistance.
 
-## 文獻對照與 reviewer 可檢查的區別
+## Relationship to prior evaluation contracts
 
-以下比較已核對的原文評估契約。未在所讀協定中找到某項測量，不等於證明作者的整個系統不具備該能力。比較支持本文的具體定位，不支持全球首次或整體優於既有 benchmark 的主張。
+The [literature catalog](LITERATURE.md) provides the wider bounded reading set. These comparisons concern the cited evaluation contracts; absence of a measure in those sections is not evidence that an author's entire system lacks the corresponding capability.
 
-| 工作 | 原文已建立的能力或測量 | 本設計採取的具體區別 |
+| Work | Established contract | Specific relationship to SDB |
 |---|---|---|
-| **Incremental processors**，§3.1、§4.1–4.2 | 保留最新輸出、對照中間階段 gold、測量正確性與修訂；主要分析假設計算延遲可忽略。[原文](https://aclanthology.org/2011.dnd-2.10.pdf) | 承接持續輸出的評估基礎，將實測交付時間作用到下一步行動的生效軌跡；C7 是不可回填答案的關鍵。 |
-| **Belief-R／DeltaLogic**，分別 §3–5／§2–3 | 以新增前提或受控編輯評估更新與維持；DeltaLogic 聚焦單步修訂。[Belief-R](https://aclanthology.org/2024.emnlp-main.586.pdf)、[DeltaLogic](https://arxiv.org/pdf/2604.02733) | 承認更新／維持對照已有先例；此處量測更新答案交付前，舊行動持續不適當的時間。 |
-| **CoPE**，§3–4 | 依給定政策進行內容標記，並以矛盾配對訓練政策解讀。[原文](https://arxiv.org/html/2512.18027) | 依規則輸出有限標籤已有直接先例；本設計的區別需要 C5–C9 的持續情境與交付評分，不能只靠「decision」名稱。 |
-| **Gaia2**，§3、§4.3、§5.2、B.2.1 | 非同步事件、write-action 的因果及時間窗口驗證、default／instant 延遲分析。[原文](https://arxiv.org/html/2602.11964v1) | Gaia2 的 action trajectory verifier 與此處逐時刻指定行動、累計偏離時間的契約不同；「即時」與「移除延遲」本身都有先例。 |
-| **Win Fast or Lose Slow／STAR**，分別 §3.1–3.3／§3–4、Appendix C | 推理期間世界變化，以交付後的收益或策略表現衡量行動；既有行動具有延續效果。[Win Fast](https://proceedings.neurips.cc/paper_files/paper/2025/file/ddaec864ba433e8889ab08dcf5c26e55-Paper-Conference.pdf)、[STAR](https://arxiv.org/pdf/2603.09337) | 固定外部情境與指定政策，使每段時間有可直接判定的參考行動；評價的是遵循政策的時間，並不涵蓋完整策略控制。 |
-| **ProActor**，§3.2、Appendix C | 每個對話回合的 action readiness 及有效機會區間。[原文](https://aclanthology.org/2026.acl-long.832.pdf) | 將模型耗時轉換成舊決策繼續生效的物理時間損失；所比較的 ProActor 協定以對話回合衡量 readiness。 |
-| **StreamingBench**，§4.1、Appendix A.2 | Proactive Output 透過逐秒 polling 評估第一次觸發與參考時刻的差距。[已核對的 arXiv 協定](https://arxiv.org/html/2411.03628) | 此處評估持續生效的行動在交付間隔內是否適當；一次觸發的時間命中並不給出這個量。 |
-| **ReactiveBench／Never Stop Thinking**，§2–3、Appendix B、G | partial-input 事件、interrupt/resume、可驗證完成條件與提前工具呼叫。[原文](https://arxiv.org/html/2609.17416v1) | 本文的比較對象是其已定義的完成及時機分數；SDB 明確建立 C7–C9 的交付、保持與錯誤時長契約。 |
-| **TicToc**，§3–4 | 以對話時間間隔的變化評估是否重新查詢資訊。[原文](https://aclanthology.org/2026.findings-acl.1848.pdf) | 它研究資訊刷新判斷；此處研究已提供新證據後，適當行動何時實際生效。 |
-| **Age of Incorrect Information**，§II、Eq.2–4 | 討論時間平均 mismatch，並以 AoII 進一步考慮錯誤延續的代價。[原文](https://arxiv.org/pdf/2012.13214) | C9 採用已有的時間誤差思想；研究貢獻在語言情境決策的任務與驗證，不在宣稱發明時間積分或 AoII。 |
+| [Incremental processors](https://aclanthology.org/2011.dnd-2.10.pdf), §§3.1, 6.3 | Latest-output storage, intermediate correctness and revision, and timed consumer polling. | Holding the latest output has precedent. SDB applies measured delivery times to standing next-action decisions. |
+| [Belief-R](https://aclanthology.org/2024.emnlp-main.586.pdf) / [DeltaLogic](https://arxiv.org/pdf/2604.02733) | Updating or preserving conclusions under added premises or controlled edits. | SDB measures how long an old action remains inappropriate before its replacement arrives. |
+| [CoPE](https://arxiv.org/html/2512.18027) | Policy-conditioned finite labels and contrastive policy interpretation. | Action terminology alone is not a distinction; SDB needs the changing-context and delivery contract in C5–C9. |
+| [Gaia2](https://arxiv.org/html/2602.11964v1) | Asynchronous events and a write-action trajectory verifier checking causal and temporal constraints, with default/instant latency analysis. | Its action verification differs from a continuously prescribed action and integrated mismatch duration. Real-time events and latency ablations already have precedent. |
+| [Win Fast or Lose Slow](https://proceedings.neurips.cc/paper_files/paper/2025/file/ddaec864ba433e8889ab08dcf5c26e55-Paper-Conference.pdf) / [STAR](https://arxiv.org/pdf/2603.09337) | Evolving environments and reward or strategic performance after delayed actions. | SDB fixes external events and scores time spent following a specified policy, rather than complete strategic control. |
+| [ProActor](https://aclanthology.org/2026.acl-long.832.pdf) | Action readiness and valid opportunity intervals measured in dialogue turns. | SDB converts delivery delay into physical time spent holding an inappropriate decision. |
+| [StreamingBench](https://arxiv.org/html/2411.03628) | Proactive-output first-trigger timing under per-second polling. | First-trigger timing does not by itself measure a standing action between deliveries. |
+| [ReactiveBench / Never Stop Thinking](https://arxiv.org/html/2609.17416v1) | Partial-input events, interruption/resumption, verifiable completion, anticipation, and time-to-first-response measurements in seconds. | Seconds-based timing is shared prior art. SDB explicitly measures delivery, holding, and mismatch duration. |
+| [TicToc](https://aclanthology.org/2026.findings-acl.1848.pdf) | Whether elapsed conversational time warrants refreshing information. | SDB asks when an action based on already released evidence actually takes effect. |
+| [Age of Incorrect Information](https://arxiv.org/pdf/2012.13214) | Time-average mismatch and age-weighted costs of persistent error. | Integrated mismatch has precedent. SDB's error duration is not itself the age-weighted AoII quantity. |
 
-最直觀的比較問題是：**相同的逐狀態正確答案，因交付時刻不同，是否會在兩次回覆之間留下不同長度的錯誤決策？** 本文以指定政策直接標出這段損失，並用 C3–C4 檢查選擇行動是否真的需要任務情境。這個比較不依賴輸入 modality 的差異。
+An inspectable distinction is whether identical per-state answers, delivered at different times, leave different amounts of incorrect standing-decision time. SDB labels that interval directly under a prescribed policy. This distinction does not depend on input modality and does not support a global-first claim.
 
-## 每項條件對應的 reviewer 問題
+## Evidence needed for each condition
 
-下表的文獻名稱對應前節原文連結；回答須以列出的證據為基礎，實測尚未通過時不能把要求寫成發現。
+| Condition | Evidence a reviewer can inspect |
+|---|---|
+| C1 | Concrete examples connecting task rules to next actions; acknowledgment that finite actions can be encoded as classification. |
+| C2 | Rule/reference consistency checks and release times of decisive evidence. |
+| C3 | Controlled context pairs and the restricted-input predictor bound, with leakage checks. |
+| C4 | Complete held-out baseline results, registered threshold, and uncertainty procedure. |
+| C5 | Reference transitions and dwell-time distributions. |
+| C6 | Release logs showing that inference does not pause external events. |
+| C7 | Dispatch, receipt, and commit records, plus checks against backdating. |
+| C8 | Standing-output traces between accepted commits and the consumer contract. |
+| C9 | Exact integral checks, identical-answer/different-delivery controls, and justification of the task's time scale. |
 
-| 條件與提問 | 回答及與文獻的關係 | 必須提供的證據 |
-|---|---|---|
-| **C1：「改叫 action 就不是分類了嗎？」** | 有限行動仍可表示成分類；CoPE 已研究依政策輸出標籤。C1 只界定輸出的任務意義，新意要由完整測量支持。 | 從任務規則到下一步行動的具體案例。 |
-| **C2：「你怎麼知道當時真的有這個正解？」** | Incremental processors 已區分各階段的 gold。這裡須證明規則與公開狀態足以支持當下判定。 | 規則與標註的一致性審查，以及關鍵證據的公開時刻。 |
-| **C3：「只讀最新一句話是否就夠了？」** | Belief-R 研究新增前提對既有結論的作用；此處固定新訊息，直接驗證既有任務狀態是否改變行動。 | 配對情境及受限輸入預測器的準確率上限。 |
-| **C4：「embedding similarity 能不能取得一樣的成績？」** | CoPE 也表明有限標籤可以承載政策理解；因此不能從輸出格式或方法名稱推論能力，必須比較實際基線。 | 完整測試集的不限時基線結果、門檻及不確定性。 |
-| **C5：「為什麼需要一段持續過程？」** | Belief-R／DeltaLogic 的局部修訂可獨立測量；本研究需要在同一 episode 中觀察原決策失效後的更新。 | 參考軌跡的轉折位置及持續時間分布。 |
-| **C6：「現有即時 benchmark 不就有了嗎？」** | Gaia2、Win Fast 和 STAR 已有環境與推理非同步；這是共享設定，本文的區別在後續生效與時間損失契約。 | 事件釋出紀錄，以及推理期間事件仍按時出現的驗證。 |
-| **C7：「有 timestamp 就算測到 latency 了嗎？」** | ProActor 的回合 readiness 與 StreamingBench 的觸發時刻不直接給出推理交付後的生效軌跡。 | 請求與可用答案的交付紀錄，以及禁止回填的評分檢查。 |
-| **C8：「舊答案為何要一直有效？」** | Incremental processing 已有保留最新輸出的設定；我們選擇的是持續行動建議介面，不將它宣稱為所有即時系統的共通規則。 | 兩次交付之間的輸出紀錄及預期消費端行為。 |
-| **C9：「這只是舊的時間誤差指標吧？」** | 時間平均 mismatch 已有 AoII 文獻脈絡；貢獻在語言情境行動的任務與驗證。決策仍正確時，經過時間本身不產生錯誤損失。 | 積分實作核對、同答案不同交付時間的對照，以及任務時間尺度的依據。 |
+## Connection to the implementation
 
-## 與目前實作的銜接
+The Lite evaluator computes exact piecewise-constant duration rather than the retired tick-sampled prototype's approximation. The [protocol](lite/PROTOCOL.md), task definitions, frozen runs, and [results index](lite/results/README.md) are the authoritative implementation evidence. This rationale does not supersede their versioned contracts.
 
-本文件是設計與驗收契約，沒有宣告目前資料已通過 C4。現有 `docs/legacy/SPEC.md`（§2.3，僅存於本機、不進版控）的 replay 以 tick 邊界取樣；若要主張 C9 的精確錯誤持續時間，需要依參考轉折與實際交付時刻積分，或明確將現有分數標示為離散近似。
-
-可執行 gold、改寫與最小事實變體仍可作為目前的建構方法。固定輸出的零延遲重播可作為附加分析；它識別的是給定答案紀錄下的延遲作用。有記憶的模型若會因跳過狀態而改變後續答案，重用舊答案的 replay 就需要額外驗證，不能直接當成該模型的完整線上反事實。
+Retiming fixed recorded answers can isolate the effect of delivery delay under the declared replay assumptions. It does not establish the complete online counterfactual for a memoryful model whose future answers would change after skipped or reordered states. New data, new clocks, new acceptance rules, and new online runs require separately identified evidence.

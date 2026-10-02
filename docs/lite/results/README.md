@@ -2,13 +2,23 @@
 
 ## Current four-family evaluation
 
-See [the log-AUC results](four-family/README.md): normalized area under in-force accuracy over a common 0.5–8 s range, giving equal weight to equal multiplicative ranges and to each family. All API recordings used a 2 s cadence. For Luna low, Luna none, Terra low, Terra none and Jev, a separate presenter pass contributes 120 responses per setting, merged with the unchanged original 360; Astra low recorded all 480 in one session. The paper reports these 480-state evaluations, aggregate and family curves, and sensitivity to the integration bounds and weights.
+The combined public leaderboard contains **17 settings: eight hosted APIs and nine same-host open-weight settings**. Its primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights within each family and equal family weights. All recordings use a 2 s cadence and cover eight scenarios and 480 states per complete setting.
 
-The per-run reports (`REPORT.md`, `COMPARISON.md`) are written in Traditional Chinese, apart from the English log-AUC summary that opens each four-family report; [the protocol](../PROTOCOL.md) and the paper are the English references.
+- [Hosted API results](four-family/README.md): Luna low/none, Terra low/none, Astra low, Jev, Cloudflare Clef and Clef Flash.
+- [RTX PRO 6000 lab results](pro6000-lab-20261001/README.md): nine open-weight settings on the same lab host.
+- [Combined leaderboard and interval figures](../../figures/README.md).
+
+The manuscript retains six hosted settings plus the nine lab settings; the two Cloudflare settings extend the public leaderboard. Luna, Terra and Jev combine the unchanged original 360 responses with separate 120-response presenter passes. Astra, Clef and Clef Flash each recorded all 480 states in one session.
+
+Per-setting reports are English. Their opening summaries use log-AUC; recording-cadence diagnostics, raw-clock results and secondary network estimates retain separate labels. See the [protocol](../PROTOCOL.md) for clock and interpretation rules. Reproduce current reports with `uv run python paper/analysis/lite_reports.py`, without model calls.
+
+## Earlier open-weight deployments
+
+The [RunPod RTX PRO 6000 cohort](runpod-openweight-20260930/README.md) and [RunPod L40S cohort](runpod-openweight-20260930-round2/README.md) preserve deployment and native-runtime evidence. Their public leaderboard entries were superseded by the lab cohort. Retain their hardware labels and original measurements; they do not supply additional settings to the current leaderboard.
 
 ## Original three-family recordings
 
-The per-model reports and comparisons in this section are frozen as written on 2026-09-28 (their run paths were later made relative). Re-running `scripts/lite/lite_report.py` or `lite_compare.py` into these folders would rewrite their headings and recorded sources, so write new reports to a scratch folder.
+These reports describe the original recordings from 2026-09-28. Their prose has been translated to English; frozen runs and saved analysis values are unchanged. Re-analysis may update code provenance, so write new historical diagnostics to a scratch directory rather than overwriting the saved analysis.
 
 Data: the build `60f6a877…` (tick-based time, now `data/legacy/lite-v1-60f6a877/`, local only), whose six episodes are unchanged in the current `data/lite/v1` (`fdfdd55d…`); the presenter recordings and current four-family evaluation are available in [four-family](four-family/README.md). Protocol
 `retry_excluded_successful_attempt_v1`, one pass per setting, recorded back to back on 2026-09-28 (UTC). Time scores use the reconstructed
@@ -23,42 +33,13 @@ timeline that excludes transport retries.
 | Jev (`jev-latest`, served `jev-1.13.0`) | 60.83% | 58.26% | 60.14% (60.01–60.22%) | 0.19 (0.17–0.19) | 0.24 / 0.36 | [report](jev-latest/REPORT.md), [vs Luna](jev-latest/COMPARISON.md) |
 
 All five runs had 0 failed attempts out of 360. The network-removed column is a secondary estimate that bounds the
-network effect from above (see [the protocol](../PROTOCOL.md)); correct duration stays the primary score. Adjacent
+network effect from above (see [the protocol](../PROTOCOL.md)); correct duration is the main fixed-cadence diagnostic for these historical recordings. The current leaderboard uses four-family log-AUC. Adjacent
 states are dependent and each setting has one recording, so differences describe these runs only.
 
-## Legacy
+### Recording contract history
 
-The `legacy/` folders below are kept locally and are not versioned, so the paths below exist only in the original working copy.
-
-`legacy/lite-v1-8ecaffa7/` (local only): the five retry-protocol runs on the previous build (hash
-`8ecaffa7…`), which had the same events and reference answers but wrote times in seconds. Their summary:
-
-| Model | Effective decision (untimed) | Correct duration | Correct duration, network removed (range) | Estimated network (s) | Latency p50 / p95 (s) | Report (in `legacy/lite-v1-8ecaffa7/`, local only) |
-|---|---:|---:|---:|---:|---:|---|
-| GPT-5.6-Luna low | 87.50% | 52.93% | 62.31% (56.13–65.33%) | 0.62 (0.22–0.81) | 1.97 / 3.15 | `gpt-5.6-luna-low/REPORT.md` |
-| GPT-5.6-Luna none | 39.72% | 30.29% | 37.42% (35.68–37.54%) | 1.12 (0.85–1.14) | 1.32 / 1.87 | `gpt-5.6-luna-none/REPORT.md`, `gpt-5.6-luna-none/COMPARISON.md` (vs Luna low) |
-| GPT-5.6-Terra low | 93.33% | 58.75% | 65.80% (64.92–67.47%) | 0.41 (0.36–0.51) | 1.85 / 2.85 | `gpt-5.6-terra-low/REPORT.md`, `gpt-5.6-terra-low/COMPARISON.md` (vs Luna) |
-| GPT-5.6-Terra none | 78.06% | 57.06% | 72.63% (69.73–73.56%) | 1.12 (0.91–1.19) | 1.39 / 1.86 | `gpt-5.6-terra-none/REPORT.md`, `gpt-5.6-terra-none/COMPARISON.md` (vs Terra low) |
-| Jev (`jev-latest`, served `jev-1.13.0`) | 51.39% | 49.21% | 50.73% (50.67–50.79%) | 0.18 (0.17–0.18) | 0.22 / 0.33 | `jev-latest/REPORT.md`, `jev-latest/COMPARISON.md` (vs Luna) |
-
-All five runs had 0 failed attempts out of 360. The two `none` settings use reasoning effort `none` (no reasoning tokens); their output length is almost constant, so the non-token remainder also absorbs fixed server time and some requests are clamped at receipt (reported in each REPORT). The network-removed column is a
-secondary estimate: the time before each response is received is modelled as
-network + prefill (proportional to input tokens) + decode (proportional to output
-tokens, for text-generating models), and the per-run remainder that does not
-scale with tokens is removed as network. It is estimated from the fast envelope
-of each run's own requests; the range is a block-bootstrap interval. The
-remainder can include fixed server time, so the column bounds the network effect
-from above. Correct duration stays the primary score.
-
-Adjacent states are dependent and each model has one recording, so differences
-describe these runs only. Jev's first attempt stopped at `lite_assembly_a` t15
-when a response's `choice` was not its highest reported probability; the contract
-check now allows one reporting step (0.01) for rounded near-ties, and the run
-above is the rerun. Luna and Terra were not rerun.
-
-
-`legacy/lite-v1-b03d8c9d/` (local only; comparison in `legacy/lite-v1-b03d8c9d/gpt-5.6-terra-low/COMPARISON.md`):
-GPT-5.6-Luna low and GPT-5.6-Terra low on the earlier v1 build (hash
-`b03d8c9d…`, before two rule sentences were clarified), under the original
-physical wall-clock protocol without retries. Not comparable with the current
-results.
+On the preceding seconds-written build (`8ecaffa7…`), Jev's first attempt stopped at `lite_assembly_a` t15
+when a response's committed choice was not its highest reported probability. The contract now allows one
+reporting step (0.01) for rounded near-ties. That first pass and the rerun remain local historical evidence;
+their older scores are not current leaderboard entries. This history is retained because the manuscript's
+provenance audit checks the recorded stop location and the reporting tolerance.

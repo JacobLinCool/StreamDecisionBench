@@ -1,36 +1,38 @@
-# SDB Lite 對照：gpt-5.6-terra low 與 gpt-5.6-terra none
+# SDB comparison: gpt-5.6-terra low and gpt-5.6-terra none
 
-比較同一凍結資料的 6 個情境、360 個相同狀態。兩份紀錄均以目前的計分程式從各自的原始事件重算；逐情境資料與除模型身分（provider、模型、reasoning effort）外的執行設定相同。兩次執行的程式版本分別記錄於對照 JSON。
+6 scenarios and 360 matching states from the same frozen dataset. Both analyses re-score their original events. Episodes and execution settings match except model identity (provider, model and reasoning effort). The comparison JSON retains each recording's source versions.
 
-主比較採排除連線重試的重建時間軸：成功 attempt 由證據釋出時刻起算，保留後處理耗時；失敗 attempts、重試等待與派送排隊不計入。原始時鐘另列診斷，不能與歷史原始時鐘主分數混比。
+The comparison uses reconstructed timelines excluding transport retries: successful-attempt durations start at evidence release and retain postprocessing time. Failed attempts, retry waits and dispatch queueing are excluded. Raw-clock diagnostics use a different time basis.
 
-下表的「基準」為 **gpt-5.6-terra low**；「比較」為 **gpt-5.6-terra none**。
+All duration scores below use the recording cadence; the public leaderboard uses log-AUC over 0.5–8 s.
 
-整體不計延遲正確率的差值為 **-14.72 個百分點**，正確持續時間比例的差值為 **+7.06 個百分點**，皆以比較模型減基準模型計算。家族與整體分數按情境等權重。完整差值保留於對照 JSON。
+Baseline: **gpt-5.6-terra low**. Candidate: **gpt-5.6-terra none**.
 
-## 整體與家族
+Overall candidate minus baseline: **-14.72 percentage points** untimed and **+7.06 percentage points** in-force accuracy. Family and overall scores give scenarios equal weight. The JSON retains all differences.
 
-| 範圍 | 基準：不計延遲 | 比較：不計延遲 | 基準：正確時間 | 比較：正確時間 |
+## Overall and families
+
+| Scope | Baseline untimed | Candidate untimed | Baseline in-force | Candidate in-force |
 |---|---:|---:|---:|---:|
-| 整體 | 95.00% | 80.28% | 50.36% | 57.42% |
-| IDE 除錯 | 99.17% | 72.50% | 48.18% | 55.58% |
-| 裝配流程 | 92.50% | 76.67% | 47.97% | 54.55% |
-| 客服流程 | 93.33% | 91.67% | 54.92% | 62.12% |
+| Overall | 95.00% | 80.28% | 50.36% | 57.42% |
+| IDE debugging | 99.17% | 72.50% | 48.18% | 55.58% |
+| Assembly | 92.50% | 76.67% | 47.97% | 54.55% |
+| Support | 93.33% | 91.67% | 54.92% | 62.12% |
 
-## 移除網路延遲後的估計（次要）
+## Network-removed estimate (secondary)
 
-各自以本次紀錄估計網路延遲（不隨 token 變化的時間，取快速請求的下緣），再從每個回覆扣除後重播；估計網路：基準 0.520 秒（0.414–0.642），比較 1.214 秒（0.937–1.304）。括號為 bootstrap 範圍；主分數與上表不變。
+Estimate the token-independent latency from each recording's fast envelope, subtract it from each response and replay. This assumes network + prefill + decode where applicable; the remainder can include fixed service time, so it is an upper bound on the network effect. Baseline network estimate 0.520 s (0.414–0.642); candidate 1.214 s (0.937–1.304). Parentheses show bootstrap ranges. Primary scores remain unchanged.
 
-| 範圍 | 基準：移除網路 | 比較：移除網路 | 差值（估計） | 範圍重疊 |
+| Scope | Baseline network removed | Candidate network removed | Estimated difference | Ranges overlap |
 |---|---:|---:|---:|---|
-| 整體 | 58.79%（57.07%–60.79%） | 74.14%（70.28%–75.36%） | +15.35 個百分點 | 否 |
-| IDE 除錯 | 56.79%（55.03%–58.85%） | 67.21%（64.55%–68.10%） | +10.43 個百分點 | 否 |
-| 裝配流程 | 56.11%（54.44%–58.05%） | 71.58%（67.76%–72.79%） | +15.47 個百分點 | 否 |
-| 客服流程 | 63.46%（61.73%–65.46%） | 83.62%（78.53%–85.18%） | +20.16 個百分點 | 否 |
+| Overall | 58.79% (57.07%–60.79%) | 74.14% (70.28%–75.36%) | +15.35 pp | No |
+| IDE debugging | 56.79% (55.03%–58.85%) | 67.21% (64.55%–68.10%) | +10.43 pp | No |
+| Assembly | 56.11% (54.44%–58.05%) | 71.58% (67.76%–72.79%) | +15.47 pp | No |
+| Support | 63.46% (61.73%–65.46%) | 83.62% (78.53%–85.18%) | +20.16 pp | No |
 
-## 相同情境
+## Matching scenarios
 
-| 範圍 | 基準：不計延遲 | 比較：不計延遲 | 基準：正確時間 | 比較：正確時間 |
+| Scope | Baseline untimed | Candidate untimed | Baseline in-force | Candidate in-force |
 |---|---:|---:|---:|---:|
 | lite_debugging_a | 100.00% | 76.67% | 48.11% | 59.09% |
 | lite_debugging_b | 98.33% | 68.33% | 48.25% | 52.06% |
@@ -39,56 +41,56 @@
 | lite_support_a | 95.00% | 88.33% | 54.32% | 62.64% |
 | lite_support_b | 91.67% | 95.00% | 55.53% | 61.61% |
 
-## 回應延遲
+## Response latency
 
-各範圍只使用最終成功 attempt 的耗時，不包含失敗與重試等待。分位數直接由該範圍全部請求計算，不是各情境分位數的平均。單位為秒；含該次本機 client 與正常網路時間。
+Only final successful-attempt durations are used; failures and retry waits are excluded. Quantiles use all requests in each scope, rather than averaging scenario quantiles. Units are seconds and include client processing and the recorded service/network path.
 
-| 範圍 | 基準 p50 / p95 | 比較 p50 / p95 |
+| Scope | Baseline p50 / p95 | Candidate p50 / p95 |
 |---|---:|---:|
-| 整體 | 2.39 / 3.79 | 1.52 / 2.15 |
-| IDE 除錯 | 2.50 / 4.45 | 1.54 / 2.08 |
-| 裝配流程 | 2.62 / 3.72 | 1.55 / 2.34 |
-| 客服流程 | 2.17 / 2.93 | 1.48 / 2.15 |
+| Overall | 2.39 / 3.79 | 1.52 / 2.15 |
+| IDE debugging | 2.50 / 4.45 | 1.54 / 2.08 |
+| Assembly | 2.62 / 3.72 | 1.55 / 2.34 |
+| Support | 2.17 / 2.93 | 1.48 / 2.15 |
 
-## 同一狀態的有效決策配對
+## Paired decisions on identical states
 
-以下比較忽略交付時間的有效決策，保留模型自己選擇的分支；未使用的答案不影響此判定。四欄互斥且涵蓋全部狀態，僅描述這次紀錄的配對數量，不將相鄰狀態視為獨立樣本。
+Untimed comparisons retain each model's own route; inactive answers do not affect correctness. The four columns partition all states. Adjacent states are dependent.
 
-| 範圍 | 兩者皆對 | 只有基準對 | 只有比較對 | 兩者皆錯 |
+| Scope | Both correct | Only baseline correct | Only candidate correct | Both wrong |
 |---|---:|---:|---:|---:|
-| 整體 | 285 | 57 | 4 | 14 |
-| IDE 除錯 | 87 | 32 | 0 | 1 |
-| 裝配流程 | 92 | 19 | 0 | 9 |
-| 客服流程 | 106 | 6 | 4 | 4 |
+| Overall | 285 | 57 | 4 | 14 |
+| IDE debugging | 87 | 32 | 0 | 1 |
+| Assembly | 92 | 19 | 0 | 9 |
+| Support | 106 | 6 | 4 | 4 |
 
-## 連線可靠性與原始時鐘
+## Transport reliability and raw clock
 
-Attempt 錯誤率的分母是所有實際 attempts（包含最終成功）；logical 重試率的分母是所有釋出狀態。原始時鐘診斷保留失敗、等待與實際交付順序，和主比較使用不同時間基準。
+Attempt error rates divide by all physical attempts, including final successes. Logical retry rates divide by all released states. Raw-clock diagnostics retain failures, waits and actual delivery order.
 
-| 指標 | 基準 | 比較 |
+| Metric | Baseline | Candidate |
 |---|---:|---:|
-| Attempt 錯誤率 | 0.00%（0/360） | 0.00%（0/360） |
-| Logical 重試率 | 0.00%（0/360） | 0.00%（0/360） |
-| 原始正確時間 | 50.35% | 57.41% |
-| 原始 request p50 / p95（秒） | 2.39 / 3.79 | 1.52 / 2.15 |
+| Attempt error rate | 0.00% (0/360) | 0.00% (0/360) |
+| Logical retry rate | 0.00% (0/360) | 0.00% (0/360) |
+| Raw in-force accuracy | 50.35% | 57.41% |
+| Raw request p50 / p95 (s) | 2.39 / 3.79 | 1.52 / 2.15 |
 
-## 執行紀錄與解讀
+## Execution and interpretation
 
-- 協議：retry_excluded_successful_attempt_v1；workers：32；timeout：20 秒；SDK retries：0。
-- gpt-5.6-terra low：失敗請求 0，接受更新 346。
-- gpt-5.6-terra none：失敗請求 0，接受更新 358。
-- API 回傳模型：{"gpt-5.6-terra": 360}；{"gpt-5.6-terra": 360}。
+- Protocol: retry_excluded_successful_attempt_v1; workers: 32; timeout: 20 s; SDK retries: 0.
+- gpt-5.6-terra low: 0 failed requests, 346 accepted updates.
+- gpt-5.6-terra none: 0 failed requests, 358 accepted updates.
+- Served model names: {"gpt-5.6-terra": 360}; {"gpt-5.6-terra": 360}.
 
-每個模型在每個情境只有一次紀錄。這些差異不代表統計顯著性、跨情境族群的穩定排序，或模型速度的因果效果。兩次執行發生於不同時間，服務端與網路條件可能不同。時間分數同時取決於答案、交付延遲、更新接受規則和參考狀態持續時間。不計延遲分數使用同一批回覆，沒有另外查詢模型，也沒有依此比較修改題目。
+One recording per model and scenario. Differences do not establish significance, stable rankings or causal effects of model speed. Recordings occurred at different times and may have different service and network conditions. In-force accuracy depends jointly on answers, delays, acceptance and reference dwell times. Untimed scores use the same responses, without additional calls or question edits.
 
-## 可重現檔案
+## Reproduction files
 
-- [比較模型的完整單輪報告](REPORT.md)
-- [gpt-5.6-terra low 原始執行](../../../../runs/lite-v1-gpt-5.6-terra-low-retry-v1/run.json)
-- [gpt-5.6-terra none 原始執行](../../../../runs/lite-v1-gpt-5.6-terra-none-retry-v1/run.json)
-- [完整對照資料](comparison.json)
+- [Candidate recording report](REPORT.md)
+- [gpt-5.6-terra low frozen run](../../../../runs/lite-v1-gpt-5.6-terra-low-retry-v1/run.json)
+- [gpt-5.6-terra none frozen run](../../../../runs/lite-v1-gpt-5.6-terra-none-retry-v1/run.json)
+- [Complete comparison data](comparison.json)
 
-在專案根目錄重算：
+Reproduce from the repository root:
 
 ```sh
 uv run python scripts/lite/lite_compare.py --baseline runs/lite-v1-gpt-5.6-terra-low-retry-v1 --candidate runs/lite-v1-gpt-5.6-terra-none-retry-v1 --out docs/lite/results/gpt-5.6-terra-none

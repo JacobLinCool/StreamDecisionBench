@@ -1,14 +1,12 @@
 # Assembly reference-interval evidence
 
-## Analysis plan
+## Scope and definitions
 
-- Paper set (locked): Chen et al. (2017), DOI 10.1145/3132211.3134458; Olguín Muñoz et al. (2021), DOI 10.1371/journal.pone.0248690.
-- Goal: assess the numerical evidence relevant to an assembly family reference interval between 1 and 5 seconds.
-- Research question: what do 600 ms, 2.7 s, 1.65 s, and 3 s measure, and can they justify a 2-second environment interval?
-- Comparison dimensions: task, latency manipulation/measurement, human outcome, percentile meaning, and transfer to synthetic event cadence.
-- Required depth: original-source methods and results, with figure/table verification where numerical interpretation depends on them.
-- Deliverable: evidence record and explicit inference about candidate intervals.
-- Focus: empirical latency bounds versus task execution time and environment update frequency.
+Source audit dated 2026-09-29, supporting the [historical reference-interval proposal](README.md).
+This record compares Chen et al. (2017) and Olguín Muñoz et al. (2021): what their 600 ms,
+2.7 s, 1.65 s and 3 s quantities measure, and how far they can justify a candidate two-second
+environment interval. Task, delay definition, human outcome, percentile meaning and transfer to
+synthetic event cadence are assessed separately. The proposal is not the current primary evaluation policy.
 
 ## Original-source records
 

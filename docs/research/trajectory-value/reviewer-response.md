@@ -1,6 +1,6 @@
 # Response: information beyond an accuracy–latency product
 
-The scalar approximation is useful for the isolated components in our recordings. We have added two analyses that identify information lost by those marginal summaries, using all existing recordings without further model queries.
+The scalar approximation is useful for the isolated components in our recordings. We have added two analyses that identify information lost by those marginal summaries, using all six hosted manuscript settings without further model queries. The later Cloudflare leaderboard settings are outside this analysis's frozen scope.
 
 First, we assign each state to its nearest actual change of the composed reference and report error rates with denominators. Within one tick of a change, Luna low makes 51 errors in 400 states (12.75%), versus 3 in 80 (3.75%) farther away; Terra low makes 21 errors in 400 states (5.25%), versus 1 in 80 (1.25%) farther away. Luna none gives 56.50% versus 55.00%, so we describe this as setting-dependent concentration rather than a universal result. Initial availability is excluded; each state is counted once, and signed offsets and family breakdowns are provided. This finding uses temporal position, which untimed accuracy and median latency do not retain.
 

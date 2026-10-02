@@ -1,7 +1,8 @@
 # What the trajectory adds beyond accuracy and latency summaries
 
 Reproduce from the repository root: `uv run --group paper python paper/analysis/lite_trajectory_value.py`.
-No API calls. All six settings, eight frozen scenarios and all five Jev/GPT pairs are included.
+No API calls. All six hosted manuscript settings, eight frozen scenarios and all five Jev/GPT pairs are included.
+The later Cloudflare leaderboard settings are outside this analysis's frozen scope.
 
 ## Errors relative to reference transitions
 

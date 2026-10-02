@@ -12,7 +12,9 @@ tick every `tick_seconds` = 2 s, spanning 120 seconds, and the same recorded
 answers and latencies can be evaluated at any other tick duration. There are 480
 states in one pass; related states within a scenario are not independent samples.
 
-The current build is `data/lite/v1` (dataset hash `fdfdd55d…`). Six settings have one complete eight-scenario pass each: GPT-5.6-Luna and GPT-5.6-Terra at reasoning effort low and none, GPT-6-Astra at low (the model does not accept none), and Jev (`jev-latest`). For all settings except Astra low, the first six scenarios were recorded on 2026-09-28 (UTC) using build `60f6a877…` (kept as a local archive in `data/legacy/lite-v1-60f6a877/`, not versioned). Those scenarios are byte-identical in the current build, as the versioned files show: `dataset_manifest.hashes` in `runs/lite-v1-<setting>-retry-v1/run.json` equal the `hashes` of `data/lite/v1/manifest.json` for all six scenarios. The two presenter scenarios were recorded separately on 2026-09-29 (UTC) and merged after checking configuration and provenance. Astra low recorded all eight scenarios in one session on 2026-09-29 16:51–17:07 (UTC) on the current build. The earlier build `8ecaffa7…` wrote times in seconds; its runs are summarized in [results](results/README.md#legacy) and kept locally, not versioned.
+The current build is `data/lite/v1` (dataset hash `fdfdd55d…`). The public leaderboard includes eight hosted API settings and nine same-host open-weight settings, each covering all eight scenarios and 480 states; see the [results index](results/README.md). The manuscript retains six hosted settings: GPT-5.6-Luna and GPT-5.6-Terra at reasoning effort low and none, GPT-6-Astra at low (the model does not accept none), and Jev (`jev-latest`). Cloudflare Clef and Clef Flash are additional public leaderboard entries.
+
+For Luna, Terra and Jev, the first six scenarios were recorded on 2026-09-28 (UTC) using build `60f6a877…`. Their frozen episode hashes match the corresponding scenarios in the current build. The two presenter scenarios were recorded separately on 2026-09-29 (UTC) and merged after configuration and provenance checks. Astra low recorded all eight scenarios in one session on 2026-09-29; Clef and Clef Flash each recorded a complete eight-scenario pass on 2026-10-02. The current open-weight cohort was recorded on the same RTX PRO 6000 lab host on 2026-10-01. These are descriptive single-pass deployment measurements, not controlled hardware comparisons.
 
 This build clarifies two public rule sentences of an earlier v1 build
 (`b03d8c9d…`, kept as a local archive in `data/legacy/lite-v1-b03d8c9d/`, not versioned): in debugging, `*` in
@@ -94,7 +96,10 @@ existing run directory.
 
 ## Scores and interpretation
 
-The primary measure is correct decision duration divided by observed duration.
+The underlying measure is correct decision duration divided by observed duration.
+The primary leaderboard summary integrates this accuracy over update intervals;
+see [integrated evaluation](#integrated-evaluation-across-time-scales). Fixed-cadence
+and segment-balanced scores are diagnostics.
 In the current protocol it is computed on a reconstructed timeline that excludes
 retry and dispatch-queue delays. For each logical request, its reconstructed
 arrival is its actual evidence release plus the final successful attempt's
