@@ -179,7 +179,8 @@ def write_index() -> None:
         "[Evaluation policy](../../../../paper/analysis/evaluation_policy.json). "
         "Regenerate: `uv run python paper/analysis/lite_reports.py`.", ""]
     (index_dir / "README.md").write_text("\n".join(lines))
-    for cohort in sorted({Path(spec["run"]).parts[0] for spec in local_policy["settings"]}):
+    for cohort in sorted({Path(run).parts[0] for spec in local_policy["settings"]
+                          for run in [spec["run"], *spec.get("repeats", [])]}):
         refresh_cohort_summary(ROOT / "docs/lite/results" / cohort)
 
 
@@ -200,7 +201,8 @@ def main():
         write_setting(HOSTED_LABELS[name], folder, run)
     local_policy = json.loads((ROOT / "paper/analysis/openweight_policy.json").read_text())
     for spec in local_policy["settings"]:
-        write_setting(spec["label"], spec["run"].replace("/runs/", "/"), spec["run"])
+        for run in [spec["run"], *spec.get("repeats", [])]:
+            write_setting(spec["label"], run.replace("/runs/", "/"), run)
     write_index()
 
 

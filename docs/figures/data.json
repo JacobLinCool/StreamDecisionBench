@@ -3305,12 +3305,12 @@
   },
   "summary": {
     "path": "docs/research/openweight-hybrids/analysis.json",
-    "sha256": "32796dc57af214f7a5832b42377aef86f148fc47e97d22ba9f8f5af9e66ef1a0"
+    "sha256": "2be4b746f416690d534b6a845b639db248f5640d14e6c3aea9d38ea32480f39c"
   },
   "sources_sha256": {
     "docs/figures/prepare.py": "494f5522c9f60d2e2b16018f93220a68d85a98ba82ec4645f8581bd8961b6f53",
     "paper/analysis/leaderboard_models.py": "59dd400b281b7423a505aa77a7f533401fe5db2aff0cd8b68eaf93246b2edec8",
-    "paper/analysis/lite_openweight.py": "4d668eb8666122cbb9dfc3763379b25e72278314d5a7dfba8df1658028a667f1",
+    "paper/analysis/lite_openweight.py": "625cebfebe58c03be7ad50fda23555e8da89517fccc5935d08577e629d08c30f",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616"
   }

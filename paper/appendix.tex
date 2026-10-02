@@ -742,13 +742,30 @@ Family weights and bounds match Equation~\eqref{eq:macro}.
 \label{app:openweight}
 
 \paragraph{Settings and measurement.}
-We record \OwNumSettingsWord{} completed settings on the same frozen dataset, at the same 2\,s cadence with 32 workers and serial scenarios; each covers all \NumStates{} states once with zero failed model attempts.
+We record \OwNumSettingsWord{} completed settings on the same frozen dataset, at the same 2\,s cadence with 32 workers and serial scenarios; each pass covers all \NumStates{} states once with zero failed model attempts.
 Every setting runs on one RTX PRO 6000 Blackwell Server Edition GPU (96\,GB).
 All use BF16 backbones and native decision readouts. The benchmark and model share a host, so latency includes tokenization, runtime queueing and complete-decision inference, with no internet round trip.
 Download, initialization, input audits and three unrelated synthetic warmups precede measurement.
 These are measurements of the configured deployments: differences with hosted APIs do not isolate architecture speed.
 
 \FloatBarrier
+\begin{table*}[t]
+  \centering
+  \small
+  \begin{tabular}{lrrrrrrr}
+    \toprule
+    & \multicolumn{5}{c}{Log-AUC over 0.5--8\,s (\%)} & \multicolumn{2}{c}{Untimed (\%)} \\
+    \cmidrule(lr){2-6}\cmidrule(lr){7-8}
+    Setting & Pass 1 & Pass 2 & Pass 3 & Mean & Range & Mean & Range \\
+    \midrule
+    \TabOpenweightRepeats
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Repeated passes leave the self-hosted comparison unchanged.}
+  Three passes of each setting with the same GPU and configuration; pass 1 is used everywhere else. Range is the maximum minus the minimum over passes.}
+  \label{tab:openweight-repeats}
+\end{table*}
+
 \begin{table*}[t]
   \centering
   \small
@@ -791,6 +808,11 @@ Nimble instead falls from \OwNimbleUntimed\% untimed to \OwNimbleAuc\% log-AUC, 
 Exact composed decisions require all reference-active fields to agree; low composed accuracy is a result for this decision contract, not a claim about general language ability.
 The accompanying analysis retains the six time classes by scenario and family for every setting.
 
+\paragraph{Repeated passes.}
+We record two further passes of every setting with the same GPU, configuration, checkpoints and dependency sets (Table~\ref{tab:openweight-repeats}); all other tables, figures and compositions use the first pass.
+Across the three passes, a setting's log-AUC varies by at most \OwRepeatMaxAucRange{} points and its untimed accuracy by at most \OwRepeatMaxUntimedRange{} points. Every pass orders the self-hosted settings the same way, although Kev-4B and DJev stay within one point of each other, and every Kev-27B pass stays above Jev's hosted pass (\OwKevTwentySevenRepeatMeanAuc\% on average).
+Differences between passes come from measured latency and from occasional changes in committed answers.
+
 \paragraph{Counterfactual composition.}
 We pair every completed self-hosted setting with Terra none, the GPT setting with the highest standalone log-AUC in the existing recordings, applying all three rules from Appendix~\ref{app:composition} unchanged.
 Table~\ref{tab:openweight-hybrids} reports every pair and rule; none is excluded based on its outcome.
@@ -803,7 +825,7 @@ These interleaved exposure durations determine the composed score; neither faste
 Standalone measurements retain their original release clocks; joint applications use common nominal releases and preserve every recorded successful-attempt duration plus commit lag.
 The maximum standalone difference between these clocks is \OwNominalGap{} points at the fixed 2\,s interval, across all \OwTotalSettingsWord{} settings; replay on each original clock reproduces every correctness and six-part time partition.
 All areas use the same exact crossing-based integration as Appendix~\ref{app:composition}.
-The fixed-delay replay assumes latency is unchanged when the interval changes; components were recorded separately, and shared-resource contention, joint deployment performance and repeated-pass stability remain unmeasured.
+The fixed-delay replay assumes latency is unchanged when the interval changes; components were recorded separately, and shared-resource contention, joint deployment performance and the stability of compositions across passes remain unmeasured.
 
 \FloatBarrier
 \section{Reproducibility}

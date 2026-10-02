@@ -101,7 +101,8 @@ even though its recorded median latency exceeds Terra none's.
 
 [Complete local/policy matrix, curves and provenance](docs/research/openweight-hybrids/README.md);
 [all five Jev/GPT pairs and three arbitration policies](docs/research/trajectory-value/README.md).
-Each setting has one pass and adjacent states are dependent; differences do not establish stable rankings.
+Hosted settings have one pass; self-hosted settings have three, of which every other analysis uses the first.
+Adjacent states are dependent; differences do not establish stable rankings.
 
 Regenerate the verified summary, paper tables and composition curves without model calls:
 

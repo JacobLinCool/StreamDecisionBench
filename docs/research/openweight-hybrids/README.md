@@ -80,7 +80,7 @@ Original-clock replay reproduces correctness and all six time classes in 136 set
 The largest nominal/original-clock difference at 2 s is 0.017328 percentage points.
 The log integral is analytical between every release/arrival crossing; a third interior point checks each affine piece.
 Published standalone aggregates and family partitions are checked against independently recomputed areas.
-The observations cover one pass per setting on synthetic development scenarios. Retiming assumes fixed
+Compositions use the first of three passes per setting on synthetic development scenarios. Retiming assumes fixed
 service latency; hardware normalization, joint contention, repeated-run stability and generative Qwen
 performance are outside the measurements. Sol-2B had no executable public native runtime and receives no score.
 
