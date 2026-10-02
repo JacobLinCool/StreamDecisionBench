@@ -9,8 +9,8 @@ station, codes and utterances are new.
 
 Story: the board is flashed before the cell carrier arrives; a lead's clean
 re-measurement withdraws a tab escalation; repeated isolation failures stay
-repairs, then a quality ticket holds the pack and is later reopened over a
-wrong label; after release a carrier reseat voids both welds and the isolation
+repairs, then a quality ticket holds the pack, closes, and is reopened over an
+unsigned incident report just before a wrong label is scanned; after release a carrier reseat voids both welds and the isolation
 evidence, so the missing weld targets are completed one at a time around a
 wrong-version flash (a known firmware defect that stays repairable while the
 operator is back at weld) and a tab cut-in.

@@ -103,7 +103,7 @@ def test_lower_endpoint_and_lead_presence_counterfactuals(episode):
     assert reference(state)["route"] == "advance"  # Without the lead, no escalation survives W1=0.28.
 
 
-def test_repeated_isolation_failures_stay_repairs_under_a_ticket(episode):
+def test_repeated_isolation_failures_stay_repairs_before_a_ticket_holds(episode):
     steps = episode["steps"]
     assert decision(episode, 19) == {"route": "repair", "stage": "isolation", "target": "isolation", "method": "replace_insulator"}
     # A second isolation failure is still a repair: only W1 and W2 can escalate.

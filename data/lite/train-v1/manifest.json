@@ -1,0 +1,182 @@
+{
+  "schema_version": "sdb-lite/0.1",
+  "split": "train",
+  "use": "training only; never part of an evaluation score",
+  "episodes": [
+    {
+      "episode_id": "train_debugging_c",
+      "questions": 7,
+      "steps": 60,
+      "duration_s": 120.0,
+      "decision_transitions": 25,
+      "routes_seen": [
+        "control",
+        "delegate",
+        "inspect",
+        "ready",
+        "rerun",
+        "wait"
+      ],
+      "routes_unseen": [],
+      "public_hash": "ba9862ae8514c786fd57b2a4ffc460c6cb33b1bc5d30cfc16bba6436223dba1a"
+    },
+    {
+      "episode_id": "train_debugging_d",
+      "questions": 7,
+      "steps": 60,
+      "duration_s": 120.0,
+      "decision_transitions": 24,
+      "routes_seen": [
+        "control",
+        "delegate",
+        "inspect",
+        "ready",
+        "rerun",
+        "wait"
+      ],
+      "routes_unseen": [],
+      "public_hash": "b4b507bbbb4a06ec0a37258f6a0c80266578d1a2c29585211196ec1061dd73c0"
+    },
+    {
+      "episode_id": "train_assembly_c",
+      "questions": 6,
+      "steps": 60,
+      "duration_s": 120.0,
+      "decision_transitions": 23,
+      "routes_seen": [
+        "advance",
+        "escalate",
+        "handoff",
+        "hold",
+        "release",
+        "repair",
+        "wait"
+      ],
+      "routes_unseen": [],
+      "public_hash": "6ac50bc4b581dd1edc538e3d52a1996ea3ff27b4132080221600d1fb3049bc11"
+    },
+    {
+      "episode_id": "train_assembly_d",
+      "questions": 6,
+      "steps": 60,
+      "duration_s": 120.0,
+      "decision_transitions": 25,
+      "routes_seen": [
+        "advance",
+        "escalate",
+        "handoff",
+        "hold",
+        "release",
+        "repair",
+        "wait"
+      ],
+      "routes_unseen": [],
+      "public_hash": "ff39143c6a89512bef930a9570a79881b195f0e4fbb21e4b5077434c4aa23bc0"
+    },
+    {
+      "episode_id": "train_support_c",
+      "questions": 7,
+      "steps": 60,
+      "duration_s": 120.0,
+      "decision_transitions": 22,
+      "routes_seen": [
+        "baggage",
+        "closed",
+        "hold_return",
+        "hold_wait",
+        "rebook",
+        "refund"
+      ],
+      "routes_unseen": [],
+      "public_hash": "453b0460fe44291c6dac402c65e1073b0533143e5a42b6a1fa95aeb5553b817d"
+    },
+    {
+      "episode_id": "train_support_d",
+      "questions": 8,
+      "steps": 60,
+      "duration_s": 120.0,
+      "decision_transitions": 31,
+      "routes_seen": [
+        "closed",
+        "hold_return",
+        "hold_wait",
+        "meter",
+        "outage",
+        "plan"
+      ],
+      "routes_unseen": [],
+      "public_hash": "33b1f67d51b1cd49d73aa61f4857064ff47d37825aeec8b8338d6e05ada9251b"
+    },
+    {
+      "episode_id": "train_presenter_c",
+      "questions": 6,
+      "steps": 60,
+      "duration_s": 120.0,
+      "decision_transitions": 27,
+      "routes_seen": [
+        "clip",
+        "closed",
+        "questions",
+        "talk"
+      ],
+      "routes_unseen": [],
+      "public_hash": "6b876c14ff73db94035075165c76a9ba99751a8212d1d576bd4d05802fc6cfd3"
+    },
+    {
+      "episode_id": "train_presenter_d",
+      "questions": 6,
+      "steps": 60,
+      "duration_s": 120.0,
+      "decision_transitions": 39,
+      "routes_seen": [
+        "clip",
+        "closed",
+        "questions",
+        "talk"
+      ],
+      "routes_unseen": [],
+      "public_hash": "5597427b118feaa79036e5c53be8698382bd8e34a8b24f51044ef53693197c3f"
+    }
+  ],
+  "hashes": {
+    "train_debugging_c": "67fd6d2ad81d8aa38c1972d0847b368be5d9666fee36fc541a6bdb2bb205c6b8",
+    "train_debugging_d": "9cc33e98461ad37361ef28a6db2dfe2d5e3d1cfb117d834c2cdf1c3aab83de14",
+    "train_assembly_c": "574995441b770eec1393c70a81382272d4fc52725c6fe5848ae99544c1ae555a",
+    "train_assembly_d": "3df5084f672ec823909488c1c7073d91ad71b3c1b9a692849272cbbcce2154ac",
+    "train_support_c": "79587b191f5fb8b0f01c391ba4d4d457a3b078b0a9bf4bd5cba7101c754a75b1",
+    "train_support_d": "6447198ec20674ee8466007c70d25b63b49b4dc2cd665bb8dbb5c440ac3db814",
+    "train_presenter_c": "8f1134aaee085ec296e176ed18d6958af52b1a745b41332f53ce7c2a116f392f",
+    "train_presenter_d": "19f0c53f22658a1bdd6c4336ad7095ef33a34b356d25bedac3c2700470009447"
+  },
+  "generator_sources": {
+    "adapters/llm.py": "14a64eb0c3ee6b6b7d755ea55bd52cb87aaa56356c800a740fe71a4b79fa8ae2",
+    "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+    "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+    "lite/__main__.py": "d2a7a8b23921fb20c4f1b1421a58839473377f241996761b748e717c7d319ea5",
+    "lite/core.py": "f7947e8956c0e838139d69e6e38cf5401ca4f5a07f497d48cef4404603367b4a",
+    "lite/interval_scoring.py": "ce3eda9c2fe2efcd84b75a02ce329e8fc7bf7f21b9abd65e65fd10bf3d9a6eb3",
+    "lite/reference_scoring.py": "14036a3799c453fef6c19baca3935f30d63f01aec6241cf785235eb966cd969d",
+    "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+    "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+    "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+    "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+    "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+    "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+    "lite/tasks/presenter.py": "2148486ab6339d73b41d9d30259d0301352809b3ac1320eb3f60c4128f67d0c3",
+    "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8",
+    "lite/training/__init__.py": "e5ab43d8639309be47a923ac271f6db34f6f27751a9c7029cacc9ade1f8a09e4",
+    "lite/training/__main__.py": "463c3c7b77982af340fd732aa1d8d6f102bbc7beac98d7fbc4983ff84e908623",
+    "lite/training/assembly_c.py": "344c03c19ffaa95494c98a4f2ea8cdc5ab5435a27974af109ebebd3875e674e3",
+    "lite/training/assembly_d.py": "7eb515283fa2822b10f6d1915c966422ad3e64a82783f04acbe9b5da8dd04c97",
+    "lite/training/audit.py": "67970136412b46fa1e55d596fda2d13e911113fc6c5a69fc429a9f096ceb70fe",
+    "lite/training/debugging_c.py": "7a66ef283af4e7a74dfe7bd88b89927c71018d208e6768d37df977a865ac4347",
+    "lite/training/debugging_d.py": "38c5069c240704fbf0b997ea90fdf2e7ab5e68db0e2d384f0a0e080dfe80753e",
+    "lite/training/presenter_c.py": "e83f2af14005feb44b10e48c577c7fa1a8b08d60784f3ae15d34ac1132188fb0",
+    "lite/training/presenter_d.py": "60c31377056f78da97cdc963cee07f1e9194faf8eefe80e275e13d5fd9142093",
+    "lite/training/support_c.py": "97e5d0aed22b60befc65b3a5b88340500ecab69bfb12c53c72990ecaf0d8a105",
+    "lite/training/support_d.py": "a4e66b2986dbeffb26e812b7b7b122256765e7c94e8c5158a889661f82084364"
+  },
+  "reference_validation": "public-only executable reference agreement; not independent human adjudication",
+  "leakage_audit": "no evaluation state, sentence, six-word run or identifier outside the families' published rules (streamdecisionbench.lite.training.audit)",
+  "dataset_hash": "00bc46f6994bd2d4f08eca909f50b797f5604fe512bbe3bc10ff147bf18d9762"
+}

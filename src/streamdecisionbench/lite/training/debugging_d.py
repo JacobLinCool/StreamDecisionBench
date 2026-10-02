@@ -25,7 +25,8 @@ to the serial team by the last matching owners rule; a negation, a question
 and a wrong-team commitment leave delegation active until a teammate says they
 have messaged the right team about that run. The serial team's fix arrives by
 ``git pull`` together with a lock-file bump, which forces the full suite; it
-passes, so the change is ready, until an unsaved edit to gust.rs is reverted.
+passes, so the change is ready; an unsaved edit to gust.rs turns the card back
+to wait until it is reverted, which restores ready.
 """
 
 from __future__ import annotations

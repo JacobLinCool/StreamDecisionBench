@@ -66,6 +66,8 @@ def test_leakage_audit_rejects_copied_evaluation_content(training, evaluation):
     step = variant["steps"][-1]
     step["state"]["note"] = "Ask about src/refunds/grace.ts later."
     assert any("evaluation identifier" in i for i in leakage([variant], evaluation))
+    step["state"]["note"] = "Keep the scratch notes.md open."
+    assert any("evaluation identifier 'notes.md'" in i for i in leakage([variant], evaluation))
     step["state"]["note"] = "She said it: the decoder keeps one running hypothesis today."
     assert any("shares" in i for i in leakage([variant], evaluation))
 

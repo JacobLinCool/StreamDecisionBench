@@ -4,7 +4,8 @@ A family's published rules (``rules`` and ``policy`` fields) are the task
 specification and may be shared. Everything else in a state is instance
 content: names, identifiers, utterances, decks, logs, file paths and messages.
 Training content must not repeat an evaluation state, an evaluation sentence,
-a six-word run of evaluation text, or an evaluation identifier.
+a six-word run of evaluation text, or an evaluation identifier (paths, @teams,
+file names, codes with digits, codes such as ST-A).
 """
 
 from __future__ import annotations
@@ -27,7 +28,7 @@ TEMPLATES = [
     r"compilation failed; 0 tests executed", r"running", r"test-runner --reporter=json",
     r"\$ test-runner; collecting tests",
 ]
-IDENTIFIER = re.compile(r"@[\w-]+|[\w.-]*/[\w./-]+|[A-Za-z][\w-]*\d[\w-]*|[A-Z]{1,4}-[A-Z0-9]+")
+IDENTIFIER = re.compile(r"@[\w-]+|[\w.-]*/[\w./-]+|[A-Za-z][\w-]*\d[\w-]*|[A-Z]{1,4}-[A-Z0-9]+|[\w-]+\.[A-Za-z]{1,5}\b")
 GENERIC_IDENTIFIERS = {"J1", "J2", "P1", "P2"}
 
 
