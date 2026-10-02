@@ -16,7 +16,7 @@ numbers spelled out, so there is no sentence or word splitting.
 
 Design: commands are log phrases that equal one command phrase of their role
 once filler words are removed wherever they stand. The scene replays the log
-in seq order: a film accepts only 'stop the film'; a staff pause drops the
+in seq order: of the guide's commands a film accepts only 'stop the film'; a staff pause drops the
 guide's commands for good and resumes the remembered scene unchanged; the end
 of the tour is final. The caption strip gives live turns priority (guide, then
 visitor, then film), else keeps the latest finished one. The guide prompt uses
@@ -91,8 +91,8 @@ RULES = [
     "the move's ended tick the arrival tick; 'start the film' gives film when the current stop's film is true; "
     "'any questions' gives questions and makes its ended tick the questions opening; 'that concludes our tour' "
     "gives finished. In questions, a move to another stop works as in at_stop and gives at_stop; 'thank you for "
-    "your questions' gives at_stop; 'that concludes our tour' gives finished. In film only 'stop the film' acts, "
-    "giving at_stop. The staff's 'pause the tour' in at_stop, film or questions gives paused and remembers that "
+    "your questions' gives at_stop; 'that concludes our tour' gives finished. In film, of the guide's commands "
+    "only 'stop the film' acts, giving at_stop. The staff's 'pause the tour' in at_stop, film or questions gives paused and remembers that "
     "scene; 'resume the tour' in paused brings the remembered scene back with the same stop, arrival tick and "
     "questions opening. In paused the guide's commands are dropped, and in finished every command is. Any other "
     "command is dropped as well, including a move to the current stop (the arrival tick stays). A dropped "
@@ -265,8 +265,8 @@ def _questions(stops: list[dict]) -> dict[str, Any]:
     return {
         "scene": _choice(
             "Which scene is the tour in? Replay the command phrases of asr.log in seq order, starting from at_stop "
-            "at stop 1; live hypotheses never count. A film accepts only 'stop the film', a staff pause drops the "
-            "guide's commands until the staff resume the tour, and after finished nothing acts.",
+            "at stop 1; live hypotheses never count. Of the guide's commands a film accepts only 'stop the film'; a "
+            "staff pause (also during a film) drops the guide's commands until the staff resume the tour, and after finished nothing acts.",
             at_stop="Guide presenting at the current stop", film="Film running at the current stop",
             questions="Visitors' questions open", paused="Tour halted by staff", finished="Tour over"),
         "stop": _choice(
@@ -336,7 +336,7 @@ SETTING = (
     "Odile Brennan, the curator, guides the group on foot; every stop has its own screen, and two stops can show "
     "a short film. Visitors wear handsets that relay the guide's headset or a film's soundtrack, a caption strip "
     "above the gallery carries the speech, and one roving microphone is passed around the group. Kwame Osei, the "
-    "duty manager, and the front desk share the staff radio, and the duty manager can halt the walk over it. The "
+    "duty manager, and the front desk share the staff radio, and a pause or resume phrase from anyone on that radio halts or restarts the walk. The "
     "tour controller reads the recogniser's output for all four roles and drives the screens, films, handsets, "
     "caption strip and the guide's wrist display."
 )
