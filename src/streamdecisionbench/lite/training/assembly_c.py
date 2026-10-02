@@ -6,14 +6,19 @@ a pump-body scan, press-fit forces at two bearings, a camera check of the shaft
 seal's lip orientation, a pressure-decay leak test and a flow test. Every gold
 answer is computed by ``reference`` from the public state alone.
 
-Story: a front bearing pressed before any body scan (missing intake), a body
-with transposed digits, a NO_READ during bearing work, a front bearing that
-escalates on two high forces and is withdrawn by a passing press before anyone
-arrives, two quality notifications closed in reverse order during an advance, a
-leak that brings the hydraulics lead in, a notification she opens while present
-and that outlasts her badge-out, a neighbouring unit's flow reading, and a
-post-release rear-bearing recall whose swap leaves the rear press missing and
-a seal refitted the wrong way round.
+Story: the first body scan shows the wrong casting variant and the assembler
+presses the front bearing into it anyway (an earlier-stage defect outlives the
+stage move); the right body then makes that press obsolete. A NO_READ during
+bearing work, a front bearing that escalates on two high forces and is withdrawn
+by a passing press before anyone arrives, two quality notifications closed in
+reverse order during an advance, a leak that brings the hydraulics lead in, a
+notification she opens while present and that outlasts her badge-out, and a
+neighbouring unit's flow reading follow. After release a rear-bearing recall
+swap is followed by a rushed leak test that skips the rear press
+(complete_missing from the pressure stage); the late press advances straight
+past the finished seal stage, and a camera check after it finds the seal lip
+flipped before the final retests. Every repair or escalation target belongs to
+the current stage or an earlier one.
 """
 
 from __future__ import annotations
@@ -220,10 +225,9 @@ def _schedule() -> dict[int, list[dict[str, Any]]]:
         return {"kind": kind, **values}
 
     return {
-        # t0 is quiet: no productive record yet.
-        1: [e("press", target="front_bearing", value=4.1)],
-        2: [e("speech", speaker="assembler", text="No need to scan the body, that bin only ever holds our castings.")],
-        3: [e("scan", target="body", code="PB-64S")],
+        0: [e("scan", target="body", code="PB-46L")],
+        1: [e("speech", speaker="assembler", text="That is the L casting, but the bores match, so I will press it anyway.")],
+        2: [e("press", target="front_bearing", value=4.1)],
         5: [e("scan", target="body", code="PB-46S")],
         7: [e("press", target="rear_bearing", value=5.3)],
         9: [e("press", target="rear_bearing", value=6.0)],
@@ -252,11 +256,14 @@ def _schedule() -> dict[int, list[dict[str, Any]]]:
         45: [e("flow", value=18.5)],
         46: [e("speech", speaker="quality_inspector", text="Rear bearings from that lot are recalled; swap this one before it is crated.")],
         48: [e("bearing_swap", target="rear_bearing")],
-        50: [e("seal_cam", orientation="air_side", confidence=0.84)],
+        49: [e("speech", speaker="assembler", text="Courier is due within the hour, so the leak rig goes on before the rear press.")],
+        50: [e("pressure_decay", value=0.7)],
         52: [e("press", target="rear_bearing", value=6.5)],
-        54: [e("seal_cam", orientation="pressure_side", confidence=0.90)],
-        55: [e("pressure_decay", value=0.6, station="HYD-5")],
-        57: [e("pressure_decay", value=0.8)],
+        53: [e("speech", speaker="assembler", text="That rear press felt rough near the shaft, so the camera gets another look.")],
+        54: [e("seal_cam", orientation="air_side", confidence=0.84)],
+        56: [e("seal_cam", orientation="pressure_side", confidence=0.90)],
+        57: [e("pressure_decay", value=0.6, station="HYD-5")],
+        58: [e("pressure_decay", value=0.8)],
         59: [e("flow", value=19.2)],
     }
 
