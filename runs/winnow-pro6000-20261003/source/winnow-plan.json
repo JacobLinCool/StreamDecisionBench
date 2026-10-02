@@ -1,0 +1,27 @@
+{
+  "experiment_id": "winnow-pro6000-20261003",
+  "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
+  "upstream_commit": "77d14580c6732ca2f3745750c1dc1fd446d8bcee",
+  "passes": 3,
+  "context": 32768,
+  "decision_parallel": 4,
+  "kv_cache": "f16",
+  "settings": [
+    {
+      "id": "winnow-12b",
+      "model": "EldanRing/Winnow-12B",
+      "revision": "b6ac22b0d51b69b18200acacb3fbdd98073fffe8",
+      "file": "Winnow-12B-BF16.gguf",
+      "sha256": "10e6b41e00a3fc6668b53a92fb5d9c85179f47145e0786e7a3bc7b5b09ba8968",
+      "temperature": 1.0
+    },
+    {
+      "id": "winnow-e4b",
+      "model": "EldanRing/Winnow-E4B",
+      "revision": "1b257e8fa80b270a62338362a8b35e37f7890273",
+      "file": "Winnow-E4B-BF16.gguf",
+      "sha256": "53c3e504c061f6a7ce84cb6240d427ac6c630850a2cf93f3c2ee980c8136e7e7",
+      "temperature": 1.3331553765162731
+    }
+  ]
+}

@@ -59,7 +59,7 @@ def test_input_audit_issues_cannot_be_published(tmp_path, monkeypatch):
     path.write_text(json.dumps({"dataset_hash": "dataset", "settings": {
         "fixture": {"model_revision": "revision", "states": 480, "question_rows": 3120,
                     "issues": ["truncated option"], "max_sequence_tokens": 10}}}))
-    run = {"frozen": {"dataset_manifest": {"dataset_hash": "dataset"}, "config": {"model_revision": "revision"}}}
+    run = {"frozen": {"dataset_manifest": {"dataset_hash": "dataset"}, "config": {"provider": "fixture", "model_revision": "revision"}}}
     monkeypatch.setattr(analysis, "ROOT", tmp_path)
     with pytest.raises(ValueError, match="invalid input audit"):
         analysis.verify_audit(spec, run)

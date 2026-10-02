@@ -2,15 +2,25 @@
 
 ## Current four-family evaluation
 
-The combined public leaderboard contains **17 settings: eight hosted APIs and nine same-host open-weight settings**. Its primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights within each family and equal family weights. All recordings use a 2 s cadence and cover eight scenarios and 480 states per complete setting.
+The combined public leaderboard contains **19 settings: eight hosted APIs and eleven self-hosted open-weight settings**. Its primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights within each family and equal family weights. All recordings use a 2 s cadence and cover eight scenarios and 480 states per complete setting.
 
 - [Hosted API results](four-family/README.md): Luna low/none, Terra low/none, Astra low, Jev, Cloudflare Clef and Clef Flash.
 - [RTX PRO 6000 lab results](pro6000-lab-20261001/README.md): nine open-weight settings on the same lab host.
+- [Winnow RunPod RTX PRO 6000 results](winnow-pro6000-20261003/README.md): Winnow-12B and Winnow-E4B, three passes each.
 - [Combined leaderboard and interval figures](../../figures/README.md).
 
-The manuscript retains six hosted settings plus the nine lab settings; the two Cloudflare settings extend the public leaderboard. Luna, Terra and Jev combine the unchanged original 360 responses with separate 120-response presenter passes. Astra, Clef and Clef Flash each recorded all 480 states in one session.
+The manuscript retains six hosted settings plus the nine lab settings; the two Cloudflare and two Winnow settings extend the public leaderboard. Luna, Terra and Jev combine the unchanged original 360 responses with separate 120-response presenter passes. Astra, Clef and Clef Flash each recorded all 480 states in one session.
 
 Per-setting reports are English. Their opening summaries use log-AUC; recording-cadence diagnostics, raw-clock results and secondary network estimates retain separate labels. See the [protocol](../PROTOCOL.md) for clock and interpretation rules. Reproduce current reports with `uv run python paper/analysis/lite_reports.py`, without model calls.
+
+## Winnow repeated measurements
+
+[Winnow-12B and Winnow-E4B on RunPod RTX PRO 6000](winnow-pro6000-20261003/README.md)
+records three fresh-server BF16 passes per model on the same frozen 480-state
+dataset. All six passes completed with no failed attempts. The cohort report
+contains per-pass scores, three-pass means and variation, latency, pinned runtime
+and weight provenance, and recorded error examples. Reproduce it with
+`uv run python scripts/runpod/winnow_report.py`.
 
 ## Earlier open-weight deployments
 

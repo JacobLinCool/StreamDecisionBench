@@ -17,6 +17,7 @@ import numpy as np
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "scripts/runpod"))
 
 from leaderboard_models import HOSTED_LABELS, HOSTED_MODELS
 from lite_numbers import FAMILIES, MODELS, fixed
@@ -24,6 +25,7 @@ from lite_trajectory_value import LABELS, POLICY_MACROS, integrate
 from streamdecisionbench.lite.__main__ import rescore_run
 from streamdecisionbench.lite.core import digest
 from trajectory_replay import METRICS, PARTITION, aggregate, evaluate, prepare
+from winnow_report import validate as validate_winnow
 
 POLICY_PATH = ROOT / "paper/analysis/openweight_policy.json"
 OUT = ROOT / "docs/research/openweight-hybrids"
@@ -64,6 +66,14 @@ def verified_run(path: Path) -> tuple[dict, dict]:
 def verify_audit(spec: dict, run: dict) -> dict:
     path = ROOT / "runs" / spec["audit"]
     audit = json.loads(path.read_text())
+    if run["frozen"]["config"]["provider"] == "winnow":
+        folder = ROOT / "runs" / spec["run"]
+        cohort = folder.parent.parent
+        plan = json.loads((cohort / "source/winnow-plan.json").read_text())
+        setting = next(s for s in plan["settings"] if s["id"] == folder.name)
+        validate_winnow(folder, cohort, plan, setting)
+        return {"path": str(path.relative_to(ROOT)), "sha256": sha(path),
+                "requests": audit["requests"], "issues": len(audit["issues"])}
     if audit["dataset_hash"] != run["frozen"]["dataset_manifest"]["dataset_hash"]:
         raise ValueError(f"{spec['name']}: audit dataset mismatch")
     if "audit_setting" in spec:
@@ -130,7 +140,7 @@ def analyze_pass(policy):
     gaps = {}
     for name, run in runs.items():
         spec = next((s for s in policy["settings"] if s["name"] == name), None)
-        report_dir = report_names[name] if spec is None else spec["run"].replace("/runs/", "/")
+        report_dir = report_names[name] if spec is None else spec.get("report", spec["run"].replace("/runs/", "/"))
         report_path = ROOT / "docs/lite/results" / report_dir / "analysis.json"
         report = json.loads(report_path.read_text())
         if report["events_sha256"] != run["frozen"]["events_sha256"]:
@@ -153,7 +163,7 @@ def analyze_pass(policy):
         if "audit" in spec:
             provenance[name]["input_audit"] = verify_audit(spec, run)
         cohort = (ROOT / "runs" / spec["run"]).parent.parent
-        source_path = cohort / "source-provenance.json"
+        source_path = ROOT / "runs" / spec["native_sources"] if "native_sources" in spec else cohort / "source-provenance.json"
         provenance[name]["native_sources"] = {"path": str(source_path.relative_to(ROOT)),
             "sha256": sha(source_path), "revisions": json.loads(source_path.read_text())}
         if "prepared_checkpoint" in run["frozen"]["config"]:
@@ -210,7 +220,7 @@ def analyze_pass(policy):
         "paper/analysis/figstyle.py", "src/streamdecisionbench/lite/__main__.py",
         "src/streamdecisionbench/lite/core.py", "src/streamdecisionbench/lite/scoring.py",
         "src/streamdecisionbench/lite/retry_scoring.py", "src/streamdecisionbench/lite/interval_scoring.py",
-        "docs/research/trajectory-value/analysis.json"]
+        "docs/research/trajectory-value/analysis.json", "scripts/runpod/winnow_report.py"]
     data["sources_sha256"] = {p: sha(ROOT / p) for p in sources}
     return data
 
@@ -244,9 +254,13 @@ def analyze():
         settings = []
         for spec in policy["settings"]:
             folder = [spec["run"], *spec["repeats"]][index]
-            current = {k: v for k, v in spec.items() if k != "repeats"}
+            current = {k: v for k, v in spec.items() if k not in {"repeats", "reports", "audits"}}
             current["run"] = folder
-            if "audit" in current and "audit_setting" not in current:
+            if "reports" in spec:
+                current["report"] = spec["reports"][index]
+            if "audits" in spec:
+                current["audit"] = spec["audits"][index]
+            elif "audit" in current and "audit_setting" not in current:
                 current["audit"] = str(Path(folder).parent.parent / Path(spec["audit"]).name)
             settings.append(current)
         passes.append(analyze_pass({**policy, "settings": settings}))
@@ -305,6 +319,8 @@ def hybrid_summary(data):
 
 
 def render_results(data):
+    improved = ["Jev"] + [row["spec"]["label"] for name, row in data["standalone"].items()
+        if data["systems"][name]["freshest"]["integrated"]["overall"]["accuracy"] > data["controls"]["TerraNone"]["overall"]["accuracy"]]
     lines = ["## Results", "", "One hosted pass and three self-hosted passes per setting, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s",
         "time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights",
         "within each family and then equal family weights. Interval evaluations retain the recorded answers",
@@ -318,20 +334,23 @@ def render_results(data):
         lines.append(f"| {row['label']} | `{row['model']}` | {100*row['accuracy']:.2f} | {100*row['untimed']:.2f} | {row['median_s']:.3f} |")
     lines += ["", "[Family scores and hosted reports](docs/lite/results/four-family/README.md).", "",
         "### Self-hosted open-weight settings", "", *standalone_table(data), "",
-        f"All {len(data['standalone'])} settings use BF16 backbones and native decision readouts on one RTX PRO 6000. Benchmark and",
+        f"All {len(data['standalone'])} settings use BF16 backbones and native decision readouts, each on one RTX PRO 6000. Benchmark and",
         "model run on the same GPU host; latency includes request processing, runtime queueing and inference, and excludes",
         "download, initialization and warmup. These rows describe the measured deployment: the self-hosted settings",
         "and hosted APIs are not a controlled hardware comparison.", "",
         "Nimble scores each field sequentially with its full prompt; its latency covers the complete decision",
         "request. The Qwen row uses SemIf's direct option logits with thinking disabled; it is not an evaluation",
         "of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/results/pro6000-lab-20261001/README.md).", "",
+        "Winnow-12B and Winnow-E4B were measured on RunPod; the other nine self-hosted settings used the lab host.",
+        "Winnow uses the native CUDA runtime with BF16 GGUF weights and F16 KV cache.",
+        "[Winnow deployment, calibration and three-pass results](docs/lite/results/winnow-pro6000-20261003/README.md).", "",
         "### Provisional decisions with corrections", "", *hybrid_summary(data), "",
         "Both components receive each state. A provisional answer never moves the active source backward;",
         "the correction wins equal-source ties and, under the **freshest-source** rule used above, cannot",
         "overwrite a newer source. These are counterfactual compositions of independent recordings on",
         "common nominal releases, retaining original measured latencies. Each self-hosted pass is paired with the same",
         "hosted recording before averaging. Joint deployment contention is unmeasured.", "",
-        "The Jev and Kev-27B pairings improve on Terra none alone, while the other self-hosted components reduce",
+        f"The {', '.join(improved)} pairings improve on Terra none alone, while the other self-hosted components reduce",
         "accuracy: an incorrect answer for a newer state can displace a still-correct correction. Speed alone",
         "does not determine whether composition helps. Nimble occupies the provisional slot in this analysis",
         "even though its recorded median latency exceeds Terra none's.", "",
@@ -379,6 +398,10 @@ def render_report(data):
 
 
 def write_tex(data):
+    manuscript = set(data["policy"]["manuscript_settings"])
+    if not manuscript <= data["standalone"].keys():
+        raise ValueError("Missing manuscript self-hosted setting")
+    data = {**data, "standalone": {name: row for name, row in data["standalone"].items() if name in manuscript}}
     numbers = ["% Generated by paper/analysis/lite_openweight.py; do not edit."]
     def add(name, value, source):
         numbers.extend([f"% docs/research/openweight-hybrids/analysis.json: {source}", f"\\newcommand{{\\Ow{name}}}{{{value}}}"])

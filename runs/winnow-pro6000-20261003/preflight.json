@@ -1,0 +1,9 @@
+{
+  "pod_id": "5axbdi8k41d6am",
+  "deletion_verified": true,
+  "deleted_at_utc": "2026-10-02T18:32:48.869629+00:00",
+  "estimated_gpu_charge_usd": 0.407550945725,
+  "gpu_hourly_usd": 2.09,
+  "benchmark_status": "failed",
+  "reason": "Startup residency audit required load diagnostics suppressed by upstream default verbosity; no benchmark requests recorded."
+}

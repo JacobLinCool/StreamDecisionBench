@@ -1,0 +1,92 @@
+[
+  {
+    "family": "live_debugging",
+    "episode_id": "lite_debugging_a",
+    "t": 0,
+    "reference_decision": {
+      "route": "wait",
+      "process": "running",
+      "target_result": "original_error"
+    },
+    "predicted_decision": {
+      "route": "ready",
+      "process": "running",
+      "target_result": "original_error"
+    },
+    "wrong_active_questions": [
+      "route"
+    ],
+    "reference_evidence": [
+      "clock advanced to 0; cursor moved to line 30; no relevant event"
+    ]
+  },
+  {
+    "family": "procedural_coaching",
+    "episode_id": "lite_assembly_a",
+    "t": 1,
+    "reference_decision": {
+      "route": "advance",
+      "stage": "intake",
+      "next_step": "seal"
+    },
+    "predicted_decision": {
+      "route": "repair",
+      "stage": "intake",
+      "target": "gasket",
+      "method": "fit_gasket"
+    },
+    "wrong_active_questions": [
+      "route"
+    ],
+    "reference_evidence": [
+      "a-1-heartbeat"
+    ]
+  },
+  {
+    "family": "support_call_assist",
+    "episode_id": "lite_support_a",
+    "t": 29,
+    "reference_decision": {
+      "route": "hold",
+      "recorder": "record",
+      "hold_action": "wait"
+    },
+    "predicted_decision": {
+      "route": "hold",
+      "recorder": "record",
+      "hold_action": "return_customer"
+    },
+    "wrong_active_questions": [
+      "hold_action"
+    ],
+    "reference_evidence": [
+      "telephony.status=hold",
+      "The complete public workflow rules are in prepared.rules.",
+      "Customer u27-Customer: Check my router first; we can come back to the line fault."
+    ]
+  },
+  {
+    "family": "presenter_voice_control",
+    "episode_id": "lite_presenter_a",
+    "t": 7,
+    "reference_decision": {
+      "mode": "talk",
+      "slide": "s6",
+      "captions": "presenter",
+      "host_cue": "listen"
+    },
+    "predicted_decision": {
+      "mode": "talk",
+      "slide": "s7",
+      "captions": "presenter",
+      "host_cue": "listen"
+    },
+    "wrong_active_questions": [
+      "slide"
+    ],
+    "reference_evidence": [
+      "The complete public rules are in prepared.rules.",
+      "Presenter p5 (final): Next slide shows the demo, but first one more number."
+    ]
+  }
+]

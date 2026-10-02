@@ -14,6 +14,7 @@
   --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
   --s5: #e87ba4; --s6: #008300; --s7: #4a3aa7; --s8: #e34948; --s0: #8a8984;
   --s9: #e27602; --s10: #d94a21;
+  --s11: #087f8c;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -23,6 +24,7 @@
     --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
     --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767; --s0: #7c7b75;
     --s9: #f49b3e; --s10: #ef7958;
+    --s11: #48b9c5;
   }
 }
 * { box-sizing: border-box; }
@@ -151,6 +153,7 @@ const STYLE = {
   Jev: [1, "solid"], Terra: [2, "solid"], TerraNone: [2, "dashed"], Luna: [3, "solid"], LunaNone: [3, "dashed"],
   Astra: [4, "solid"], KevTwentySeven: [5, "solid"], KevNine: [5, "dashed"], Kev: [5, "dotted"],
   Clef: [9, "solid"], ClefFlash: [10, "solid"],
+  Winnow12B: [11, "solid"], WinnowE4B: [11, "dashed"],
   DJev: [6, "solid"], QwenLogits: [7, "solid"], Nimble: [8, "solid"],
   LayaEnglish: [0, "solid"], LayaTyped: [0, "dashed"], LayaMultilingual: [0, "dotted"],
 };
@@ -324,7 +327,7 @@ function notes() {
     "The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights within each family and then equal family weights. Each doubling of the interval receives equal weight.",
     "Interval evaluations keep the recorded answers and latencies; they assume service latency does not change with the request rate.",
     "Hosted API latency includes the remote service and the internet round trip from the benchmark client. Self-hosted settings run benchmark and model on the same RTX PRO 6000 host; the two groups are not a controlled hardware comparison.",
-    "Qwen3.5-4B uses direct option logits with thinking disabled; Bespoke Nimble-9B scores each field sequentially. Self-hosted scores and latency quantiles are means of per-pass values; hosted results use one pass. Adjacent states are dependent, so small differences do not establish stable rankings.",
+    "Qwen3.5-4B uses direct option logits with thinking disabled; Bespoke Nimble-9B scores each field sequentially. Winnow uses the native CUDA runtime on RunPod RTX PRO 6000; the other self-hosted settings use the lab RTX PRO 6000. Self-hosted scores and latency quantiles are means of per-pass values; hosted results use one pass. Adjacent states are dependent, so small differences do not establish stable rankings.",
     `Leaderboard values for custom ranges integrate the published ${D.intervals_s.length}-point curves (trapezoidal on the log axis); over 0.5–8 s this agrees with the exact primary score within ${D.sampled_auc_max_deviation_pct < 0.001 ? "0.001" : D.sampled_auc_max_deviation_pct.toFixed(3)} points.`,
   ];
   document.getElementById("notes").innerHTML = items.map((t) => `<li>${t}</li>`).join("");

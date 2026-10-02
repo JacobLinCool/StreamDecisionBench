@@ -91,6 +91,34 @@ def test_self_hosted_exports_use_all_three_passes(tmp_path):
                 [sum(values) / 3 for values in zip(*curves, strict=True)])
 
 
+@pytest.mark.parametrize("name", ["Winnow12B", "WinnowE4B"])
+def test_winnow_exports_match_independently_verified_three_pass_report(name, tmp_path):
+    data = site_build.build(tmp_path)
+    row = next(row for row in data["settings"] if row["id"] == name)
+    report = json.loads((ROOT / "docs/lite/results/winnow-pro6000-20261003/results.json").read_text())
+    expected = next(value for value in report["aggregate"] if value["model"] == "EldanRing/" + row["label"])
+    assert row["passes"] == expected["passes"] == 3
+    # The leaderboard uses analytic integration; run reports use converged
+    # trapezoidal quadrature. Apply the benchmark's existing integration tolerance.
+    policy = json.loads((ROOT / "paper/analysis/evaluation_policy.json").read_text())
+    assert row["log_auc_pct"] == pytest.approx(
+        expected["log_auc_pct_mean"], abs=100 * policy["integration"]["tolerance"], rel=0)
+    assert row["untimed_pct"] == pytest.approx(expected["untimed_accuracy_pct_mean"], abs=1e-9)
+    source = json.loads(figure_data.OUT.read_text())
+    assert len(source["provenance"][name]) == 3
+
+
+@pytest.mark.parametrize("missing", ["Winnow12B", "WinnowE4B"])
+def test_omitting_completed_winnow_recording_cannot_publish(missing, tmp_path, monkeypatch):
+    summary = json.loads(figure_data.SUMMARY.read_text())
+    del summary["standalone"][missing]
+    path = tmp_path / "analysis.json"
+    path.write_text(json.dumps(summary))
+    monkeypatch.setattr(figure_data, "SUMMARY", path)
+    with pytest.raises(ValueError, match="every registered"):
+        figure_data.build()
+
+
 def test_generated_markdown_tables_have_consistent_columns():
     from lite_openweight import render_report, render_results
     summary = json.loads(figure_data.SUMMARY.read_text())

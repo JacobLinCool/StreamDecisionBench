@@ -1244,6 +1244,184 @@
       "report": "docs/lite/results/four-family/gpt-6-astra-low/analysis.json"
     },
     {
+      "id": "Winnow12B",
+      "label": "Winnow-12B",
+      "deployment": "self-hosted",
+      "passes": 3,
+      "latency_s": {
+        "p50": 0.32778024991663796,
+        "p95": 0.4534610250188657,
+        "max": 0.523139670646439
+      },
+      "log_auc_pct": 43.14762972694582,
+      "untimed_pct": 46.458333333333336,
+      "accuracy_pct": [
+        36.67193184933554,
+        36.83647796483903,
+        37.000557988873275,
+        37.16303757898511,
+        37.32272586699022,
+        37.47967080578807,
+        37.63391952447602,
+        37.785518342501746,
+        37.934512783572536,
+        38.08094758932566,
+        38.22486673276379,
+        38.36631343145978,
+        38.50533016053442,
+        38.641958665411366,
+        38.77623997435286,
+        38.90821441078018,
+        39.03792160538236,
+        39.165400508016894,
+        39.290689399406055,
+        39.413825902632226,
+        39.534846994435746,
+        39.65378901631866,
+        39.77068768545784,
+        39.885578105430326,
+        39.998494776754804,
+        40.10947160725167,
+        40.218541922225256,
+        40.325738474471116,
+        40.431093454111384,
+        40.53463849826113,
+        40.636404700528814,
+        40.73642262035319,
+        40.83472229218024,
+        40.9313332344821,
+        41.02628445862124,
+        41.119604477562284,
+        41.21132131443415,
+        41.301462510945264,
+        41.390055135653874,
+        41.4771257920967,
+        41.56270062677756,
+        41.646805337019025,
+        41.729465178679014,
+        41.81070497373493,
+        41.890549117737486,
+        41.96902158713641,
+        42.04614594648038,
+        42.12194535549325,
+        42.196442576028645,
+        42.269659978905196,
+        42.34161955062427,
+        42.41234289997226,
+        42.48185126450959,
+        42.550165516948056,
+        42.6173061714188,
+        42.68329338963247,
+        42.74814698693355,
+        42.81188643825082,
+        42.8745308839454,
+        42.936099135558486,
+        42.99660968146024,
+        43.05608069240171,
+        43.11453002697128,
+        43.171975236957536,
+        43.22843357261978,
+        43.283921987868204,
+        43.338457145355,
+        43.392055421477934,
+        43.44473291129806,
+        43.49650543337294,
+        43.54738853450677,
+        43.59739749441897,
+        43.64654733033249,
+        43.69485280148343,
+        43.742328413553,
+        43.78898842302352,
+        43.834846841459445,
+        43.879917439715,
+        43.92421375206931,
+        43.96774908029072,
+        44.01053649763116,
+        44.05258885275189,
+        44.09391877358188,
+        44.134538671109844,
+        44.17446074311111,
+        44.21369697781057,
+        44.25225915748256,
+        44.290158861989,
+        44.327407472256695,
+        44.364016173694964,
+        44.3999959595545,
+        44.4353576342285,
+        44.47011181649716,
+        44.5042689427164,
+        44.53783926995178,
+        44.5708328790586,
+        44.60325967770915,
+        44.63512940336778,
+        44.66645162621508,
+        44.69723575202162,
+        44.727491024972494,
+        44.757226530443226,
+        44.78645119772801,
+        44.81517380272115,
+        44.843402970552255,
+        44.87114717817648,
+        44.89841475691988,
+        44.92521389498134,
+        44.951552639891396,
+        44.977438900928846,
+        45.002880451495756,
+        45.02788493145186,
+        45.05245984940862,
+        45.07661258498408,
+        45.10035039101887,
+        45.123680395754135,
+        45.1466096049721,
+        45.16914490409987,
+        45.19129306027703,
+        45.21306072438773,
+        45.234454433057955,
+        45.234454433057955,
+        45.25548061061831,
+        45.27614557103332,
+        45.29645551979729,
+        45.31641655579793,
+        45.336034673147665,
+        45.355315762983665,
+        45.37426561523687,
+        45.39288992037072,
+        45.41119427108986,
+        45.429184164019624,
+        45.44686500135662,
+        45.464242092490956,
+        45.48132065560058,
+        45.49810581921825,
+        45.51460262377167,
+        45.530816023096946,
+        45.546750885926265,
+        45.56241199734991,
+        45.57780406025318,
+        45.59293169672862,
+        45.60779944946398,
+        45.62241178310638,
+        45.63677308560294,
+        45.650887669518504,
+        45.664759773330616,
+        45.678393562702304,
+        45.69179313173304,
+        45.70496250418808,
+        45.71790563470679,
+        45.73062640999026,
+        45.7431286499683,
+        45.75541610894668,
+        45.76749247673442,
+        45.779361379751805,
+        45.79102638211943,
+        45.802490986728415,
+        45.813758636292306,
+        45.82483271438089,
+        45.83571654643624,
+        45.84641340077134
+      ],
+      "report": "docs/research/openweight-hybrids/README.md"
+    },
+    {
       "id": "Clef",
       "label": "Clef",
       "deployment": "hosted",
@@ -2310,6 +2488,184 @@
         21.313066938863695
       ],
       "report": "docs/lite/results/four-family/clef-flash/analysis.json"
+    },
+    {
+      "id": "WinnowE4B",
+      "label": "Winnow-E4B",
+      "deployment": "self-hosted",
+      "passes": 3,
+      "latency_s": {
+        "p50": 0.1703412140098711,
+        "p95": 0.23463039756752546,
+        "max": 0.2700013577317198
+      },
+      "log_auc_pct": 18.97131224448046,
+      "untimed_pct": 19.791666666666664,
+      "accuracy_pct": [
+        17.365492054137434,
+        17.407172593360578,
+        17.448137085867543,
+        17.48839783291235,
+        17.52796692442081,
+        17.566856242621036,
+        17.605077465611604,
+        17.642642070868327,
+        17.679561338690856,
+        17.715846355590045,
+        17.751508017617127,
+        17.786557033635706,
+        17.821003928537504,
+        17.854859046402925,
+        17.888132553607225,
+        17.920834441873463,
+        17.952974531272844,
+        17.98456247317364,
+        18.015607753139395,
+        18.046119693777342,
+        18.076107457537912,
+        18.1055800494661,
+        18.134546319905645,
+        18.163014967156666,
+        18.190994540087683,
+        18.218493440702787,
+        18.24551992666467,
+        18.27208211377429,
+        18.29818797840804,
+        18.323845359912923,
+        18.349061962960654,
+        18.373845359861317,
+        18.398202992837195,
+        18.4221421762577,
+        18.44567009883572,
+        18.46879382578639,
+        18.491520300948636,
+        18.51385634887041,
+        18.535808676858032,
+        18.557383876990286,
+        18.578588428098,
+        18.599428697709573,
+        18.619910943963056,
+        18.64004131748546,
+        18.65982586323969,
+        18.6792705223398,
+        18.69838113383508,
+        18.717163436463448,
+        18.73562307037471,
+        18.753765578824304,
+        18.771596409837844,
+        18.789120917847136,
+        18.806344365298035,
+        18.82327192423075,
+        18.839908677832895,
+        18.856259621966018,
+        18.872329666665706,
+        18.888123637616104,
+        18.90364627759898,
+        18.918902247917956,
+        18.933896129798242,
+        18.948632425762334,
+        18.963115560982104,
+        18.977349884607616,
+        18.991339671073124,
+        19.00508912138068,
+        19.018602364361612,
+        19.031883457916425,
+        19.0449363902333,
+        19.057765080985742,
+        19.07037338250961,
+        19.08276508095994,
+        19.09494389744788,
+        19.106913489158135,
+        19.11867745044714,
+        19.130239313922477,
+        19.1416025515036,
+        19.152770575464487,
+        19.163746739458297,
+        19.17453433952442,
+        19.18513661507828,
+        19.19555674988407,
+        19.20579787301081,
+        19.215863059772012,
+        19.22575533264913,
+        19.235477662199184,
+        19.24503296794682,
+        19.254424119261007,
+        19.263653936216638,
+        19.272725190441435,
+        19.281640605948205,
+        19.29040285995285,
+        19.2990145836783,
+        19.30747836314466,
+        19.315796739945732,
+        19.32397221201229,
+        19.332007234362134,
+        19.339904219837333,
+        19.347665539828775,
+        19.35529352498826,
+        19.362790465928402,
+        19.370158613910448,
+        19.377400181520333,
+        19.384517343333087,
+        19.391512236565845,
+        19.398386961719623,
+        19.40514358321009,
+        19.411784129987495,
+        19.41831059614593,
+        19.424724941522154,
+        19.431029092284092,
+        19.437224941509253,
+        19.443314349753223,
+        19.449299145608347,
+        19.455181126252853,
+        19.460962057990518,
+        19.466643676781082,
+        19.472227688761524,
+        19.47771577075843,
+        19.483109570791495,
+        19.488410708568424,
+        19.488410708568424,
+        19.49362077597132,
+        19.498741337534682,
+        19.503773930915287,
+        19.50872006735385,
+        19.513581232128875,
+        19.518358885002694,
+        19.523054460659786,
+        19.5276693691376,
+        19.532204996249998,
+        19.536662704003387,
+        19.54104383100571,
+        19.545349692868434,
+        19.549581582601615,
+        19.553740771002147,
+        19.557828507035428,
+        19.56184601821035,
+        19.565794510947946,
+        19.569675170943672,
+        19.57348916352341,
+        19.577237633993484,
+        19.580921707984512,
+        19.58454249178945,
+        19.588101072695828,
+        19.5915985193122,
+        19.59503588188909,
+        19.59841419263433,
+        19.60173446602303,
+        19.604997699102253,
+        19.608204871790356,
+        19.611356947171323,
+        19.614454871783906,
+        19.617499575905896,
+        19.620491973833456,
+        19.62343296415571,
+        19.62632343002454,
+        19.62916423941982,
+        19.631956245410045,
+        19.6347002864085,
+        19.63739718642503,
+        19.640047755313496
+      ],
+      "report": "docs/research/openweight-hybrids/README.md"
     },
     {
       "id": "QwenLogits",
@@ -4373,16 +4729,356 @@
           "sha256": "ce2ce9b2a86d338a79e845ed0c554f3a675d61afca0f12da2fd3ac363c7aa5d0"
         }
       }
+    ],
+    "Winnow12B": [
+      {
+        "run": "runs/winnow-pro6000-20261003/pass1/winnow-12b",
+        "sha256": {
+          "run.json": "fd00d6aaa0a3c800f8c59ce9efa35a3f63cfcb8499b86ab5bf5da6cf1d9d8ff3",
+          "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+          "events.jsonl": "8d1dec89681bbbcd571cd1c1ee076312c0c476e38d6882f306a752ea1aa002d5"
+        },
+        "published_report": {
+          "path": "docs/lite/results/winnow-pro6000-20261003/winnow-12b-pass1/analysis.json",
+          "sha256": "35c3ace30a0aa27f4ef5b6efd28fd5730d624989e7582b2565520e37881cf782"
+        },
+        "input_audit": {
+          "path": "runs/winnow-pro6000-20261003/pass1/winnow-12b.input-audit.json",
+          "sha256": "3043338243b2074034b6f844ac797d945afb8dabd5309499c78e9fb2ec0ed427",
+          "requests": 480,
+          "issues": 0
+        },
+        "native_sources": {
+          "path": "runs/winnow-pro6000-20261003/source-provenance.json",
+          "sha256": "d5ba1d74aff5951099856e0a0d4a83dad0cbdc921a2ea93fab9e66e715d1f073",
+          "revisions": {
+            "plan": {
+              "experiment_id": "winnow-pro6000-20261003",
+              "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
+              "upstream_commit": "77d14580c6732ca2f3745750c1dc1fd446d8bcee",
+              "passes": 3,
+              "context": 32768,
+              "decision_parallel": 4,
+              "kv_cache": "f16",
+              "settings": [
+                {
+                  "id": "winnow-12b",
+                  "model": "EldanRing/Winnow-12B",
+                  "revision": "b6ac22b0d51b69b18200acacb3fbdd98073fffe8",
+                  "file": "Winnow-12B-BF16.gguf",
+                  "sha256": "10e6b41e00a3fc6668b53a92fb5d9c85179f47145e0786e7a3bc7b5b09ba8968",
+                  "temperature": 1.0
+                },
+                {
+                  "id": "winnow-e4b",
+                  "model": "EldanRing/Winnow-E4B",
+                  "revision": "1b257e8fa80b270a62338362a8b35e37f7890273",
+                  "file": "Winnow-E4B-BF16.gguf",
+                  "sha256": "53c3e504c061f6a7ce84cb6240d427ac6c630850a2cf93f3c2ee980c8136e7e7",
+                  "temperature": 1.3331553765162731
+                }
+              ]
+            },
+            "source_sha256": {
+              "winnow_record.py": "8b81454a2f120f8c620da625983938a7c16e022122726db45ddbb9f7c723f062",
+              "winnow_cohort.py": "87cfaa68de42920a2cbd20db1eefc2b69b797da53aaba3330dbbb3604050b72c",
+              "winnow-plan.json": "d9237222395a3e659da4a314817d03834e1629ed6dbd5fe26c54031f827e12fa"
+            }
+          }
+        }
+      },
+      {
+        "run": "runs/winnow-pro6000-20261003/pass2/winnow-12b",
+        "sha256": {
+          "run.json": "0cdc6bc72dec684c1502dadc0b6b55463ba2a4a9286d32c6c7557811a12cfff6",
+          "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+          "events.jsonl": "0e99ac73828a7d28919a4a78e2eeb9f68c8e09ff958de2b190a9a08799630dc4"
+        },
+        "published_report": {
+          "path": "docs/lite/results/winnow-pro6000-20261003/winnow-12b-pass2/analysis.json",
+          "sha256": "6bee7e18ba8ab5783100065a24269f50f2f5b5bd6ad90de9c0dd8c45d54d7beb"
+        },
+        "input_audit": {
+          "path": "runs/winnow-pro6000-20261003/pass2/winnow-12b.input-audit.json",
+          "sha256": "3043338243b2074034b6f844ac797d945afb8dabd5309499c78e9fb2ec0ed427",
+          "requests": 480,
+          "issues": 0
+        },
+        "native_sources": {
+          "path": "runs/winnow-pro6000-20261003/source-provenance.json",
+          "sha256": "d5ba1d74aff5951099856e0a0d4a83dad0cbdc921a2ea93fab9e66e715d1f073",
+          "revisions": {
+            "plan": {
+              "experiment_id": "winnow-pro6000-20261003",
+              "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
+              "upstream_commit": "77d14580c6732ca2f3745750c1dc1fd446d8bcee",
+              "passes": 3,
+              "context": 32768,
+              "decision_parallel": 4,
+              "kv_cache": "f16",
+              "settings": [
+                {
+                  "id": "winnow-12b",
+                  "model": "EldanRing/Winnow-12B",
+                  "revision": "b6ac22b0d51b69b18200acacb3fbdd98073fffe8",
+                  "file": "Winnow-12B-BF16.gguf",
+                  "sha256": "10e6b41e00a3fc6668b53a92fb5d9c85179f47145e0786e7a3bc7b5b09ba8968",
+                  "temperature": 1.0
+                },
+                {
+                  "id": "winnow-e4b",
+                  "model": "EldanRing/Winnow-E4B",
+                  "revision": "1b257e8fa80b270a62338362a8b35e37f7890273",
+                  "file": "Winnow-E4B-BF16.gguf",
+                  "sha256": "53c3e504c061f6a7ce84cb6240d427ac6c630850a2cf93f3c2ee980c8136e7e7",
+                  "temperature": 1.3331553765162731
+                }
+              ]
+            },
+            "source_sha256": {
+              "winnow_record.py": "8b81454a2f120f8c620da625983938a7c16e022122726db45ddbb9f7c723f062",
+              "winnow_cohort.py": "87cfaa68de42920a2cbd20db1eefc2b69b797da53aaba3330dbbb3604050b72c",
+              "winnow-plan.json": "d9237222395a3e659da4a314817d03834e1629ed6dbd5fe26c54031f827e12fa"
+            }
+          }
+        }
+      },
+      {
+        "run": "runs/winnow-pro6000-20261003/pass3/winnow-12b",
+        "sha256": {
+          "run.json": "e0c59cd5bc31cbb8bea14016fce13f9eb52fe925dc02be2671a8aa26a10d0318",
+          "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+          "events.jsonl": "87c43dd88b692d8b4c43af11548f16f1fd8091858d6242f7b3f07fba998eeb4e"
+        },
+        "published_report": {
+          "path": "docs/lite/results/winnow-pro6000-20261003/winnow-12b-pass3/analysis.json",
+          "sha256": "b78682d40b286f09c099d3819d2ce3f944f4d1c69b840662f500eebf91cb9701"
+        },
+        "input_audit": {
+          "path": "runs/winnow-pro6000-20261003/pass3/winnow-12b.input-audit.json",
+          "sha256": "3043338243b2074034b6f844ac797d945afb8dabd5309499c78e9fb2ec0ed427",
+          "requests": 480,
+          "issues": 0
+        },
+        "native_sources": {
+          "path": "runs/winnow-pro6000-20261003/source-provenance.json",
+          "sha256": "d5ba1d74aff5951099856e0a0d4a83dad0cbdc921a2ea93fab9e66e715d1f073",
+          "revisions": {
+            "plan": {
+              "experiment_id": "winnow-pro6000-20261003",
+              "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
+              "upstream_commit": "77d14580c6732ca2f3745750c1dc1fd446d8bcee",
+              "passes": 3,
+              "context": 32768,
+              "decision_parallel": 4,
+              "kv_cache": "f16",
+              "settings": [
+                {
+                  "id": "winnow-12b",
+                  "model": "EldanRing/Winnow-12B",
+                  "revision": "b6ac22b0d51b69b18200acacb3fbdd98073fffe8",
+                  "file": "Winnow-12B-BF16.gguf",
+                  "sha256": "10e6b41e00a3fc6668b53a92fb5d9c85179f47145e0786e7a3bc7b5b09ba8968",
+                  "temperature": 1.0
+                },
+                {
+                  "id": "winnow-e4b",
+                  "model": "EldanRing/Winnow-E4B",
+                  "revision": "1b257e8fa80b270a62338362a8b35e37f7890273",
+                  "file": "Winnow-E4B-BF16.gguf",
+                  "sha256": "53c3e504c061f6a7ce84cb6240d427ac6c630850a2cf93f3c2ee980c8136e7e7",
+                  "temperature": 1.3331553765162731
+                }
+              ]
+            },
+            "source_sha256": {
+              "winnow_record.py": "8b81454a2f120f8c620da625983938a7c16e022122726db45ddbb9f7c723f062",
+              "winnow_cohort.py": "87cfaa68de42920a2cbd20db1eefc2b69b797da53aaba3330dbbb3604050b72c",
+              "winnow-plan.json": "d9237222395a3e659da4a314817d03834e1629ed6dbd5fe26c54031f827e12fa"
+            }
+          }
+        }
+      }
+    ],
+    "WinnowE4B": [
+      {
+        "run": "runs/winnow-pro6000-20261003/pass1/winnow-e4b",
+        "sha256": {
+          "run.json": "de300becdf7481517ad88958bd20789fdcc0051d50833ae3fe229bfe6f0df596",
+          "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+          "events.jsonl": "19816af493c8ff0095c3e0c76a9460249029a80410d879f3593cab462b4a9ff6"
+        },
+        "published_report": {
+          "path": "docs/lite/results/winnow-pro6000-20261003/winnow-e4b-pass1/analysis.json",
+          "sha256": "eda1a3b16a34304ac8b4106f9c496301b6a66d29425fefda9544b9cafb23e841"
+        },
+        "input_audit": {
+          "path": "runs/winnow-pro6000-20261003/pass1/winnow-e4b.input-audit.json",
+          "sha256": "396925623ab5e4f9df62f670c653392904efa8c3bbf1e6ac04b8e588d7f442ce",
+          "requests": 480,
+          "issues": 0
+        },
+        "native_sources": {
+          "path": "runs/winnow-pro6000-20261003/source-provenance.json",
+          "sha256": "d5ba1d74aff5951099856e0a0d4a83dad0cbdc921a2ea93fab9e66e715d1f073",
+          "revisions": {
+            "plan": {
+              "experiment_id": "winnow-pro6000-20261003",
+              "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
+              "upstream_commit": "77d14580c6732ca2f3745750c1dc1fd446d8bcee",
+              "passes": 3,
+              "context": 32768,
+              "decision_parallel": 4,
+              "kv_cache": "f16",
+              "settings": [
+                {
+                  "id": "winnow-12b",
+                  "model": "EldanRing/Winnow-12B",
+                  "revision": "b6ac22b0d51b69b18200acacb3fbdd98073fffe8",
+                  "file": "Winnow-12B-BF16.gguf",
+                  "sha256": "10e6b41e00a3fc6668b53a92fb5d9c85179f47145e0786e7a3bc7b5b09ba8968",
+                  "temperature": 1.0
+                },
+                {
+                  "id": "winnow-e4b",
+                  "model": "EldanRing/Winnow-E4B",
+                  "revision": "1b257e8fa80b270a62338362a8b35e37f7890273",
+                  "file": "Winnow-E4B-BF16.gguf",
+                  "sha256": "53c3e504c061f6a7ce84cb6240d427ac6c630850a2cf93f3c2ee980c8136e7e7",
+                  "temperature": 1.3331553765162731
+                }
+              ]
+            },
+            "source_sha256": {
+              "winnow_record.py": "8b81454a2f120f8c620da625983938a7c16e022122726db45ddbb9f7c723f062",
+              "winnow_cohort.py": "87cfaa68de42920a2cbd20db1eefc2b69b797da53aaba3330dbbb3604050b72c",
+              "winnow-plan.json": "d9237222395a3e659da4a314817d03834e1629ed6dbd5fe26c54031f827e12fa"
+            }
+          }
+        }
+      },
+      {
+        "run": "runs/winnow-pro6000-20261003/pass2/winnow-e4b",
+        "sha256": {
+          "run.json": "b9496bfd3b9599066b31ef13814f8327f0d075f2e9e583d96557cff2b0d9894e",
+          "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+          "events.jsonl": "fba8926e55e9b8ff64cac9ba90b5514facb5b2ce59ce52f46c27ce36d12de4ca"
+        },
+        "published_report": {
+          "path": "docs/lite/results/winnow-pro6000-20261003/winnow-e4b-pass2/analysis.json",
+          "sha256": "3c74ee340065c70e167a0a404eb55aa791d84c1489a55b67147bce5248cdf027"
+        },
+        "input_audit": {
+          "path": "runs/winnow-pro6000-20261003/pass2/winnow-e4b.input-audit.json",
+          "sha256": "396925623ab5e4f9df62f670c653392904efa8c3bbf1e6ac04b8e588d7f442ce",
+          "requests": 480,
+          "issues": 0
+        },
+        "native_sources": {
+          "path": "runs/winnow-pro6000-20261003/source-provenance.json",
+          "sha256": "d5ba1d74aff5951099856e0a0d4a83dad0cbdc921a2ea93fab9e66e715d1f073",
+          "revisions": {
+            "plan": {
+              "experiment_id": "winnow-pro6000-20261003",
+              "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
+              "upstream_commit": "77d14580c6732ca2f3745750c1dc1fd446d8bcee",
+              "passes": 3,
+              "context": 32768,
+              "decision_parallel": 4,
+              "kv_cache": "f16",
+              "settings": [
+                {
+                  "id": "winnow-12b",
+                  "model": "EldanRing/Winnow-12B",
+                  "revision": "b6ac22b0d51b69b18200acacb3fbdd98073fffe8",
+                  "file": "Winnow-12B-BF16.gguf",
+                  "sha256": "10e6b41e00a3fc6668b53a92fb5d9c85179f47145e0786e7a3bc7b5b09ba8968",
+                  "temperature": 1.0
+                },
+                {
+                  "id": "winnow-e4b",
+                  "model": "EldanRing/Winnow-E4B",
+                  "revision": "1b257e8fa80b270a62338362a8b35e37f7890273",
+                  "file": "Winnow-E4B-BF16.gguf",
+                  "sha256": "53c3e504c061f6a7ce84cb6240d427ac6c630850a2cf93f3c2ee980c8136e7e7",
+                  "temperature": 1.3331553765162731
+                }
+              ]
+            },
+            "source_sha256": {
+              "winnow_record.py": "8b81454a2f120f8c620da625983938a7c16e022122726db45ddbb9f7c723f062",
+              "winnow_cohort.py": "87cfaa68de42920a2cbd20db1eefc2b69b797da53aaba3330dbbb3604050b72c",
+              "winnow-plan.json": "d9237222395a3e659da4a314817d03834e1629ed6dbd5fe26c54031f827e12fa"
+            }
+          }
+        }
+      },
+      {
+        "run": "runs/winnow-pro6000-20261003/pass3/winnow-e4b",
+        "sha256": {
+          "run.json": "ea086cbb80535a7c3e1db82e3d51653c9d0ad6f7954b30ab1c50ff11cb6abad0",
+          "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+          "events.jsonl": "75a7cb096541fc0b91df9f56b73bcdca1d358a9fc9d399a06389f6d794186417"
+        },
+        "published_report": {
+          "path": "docs/lite/results/winnow-pro6000-20261003/winnow-e4b-pass3/analysis.json",
+          "sha256": "0ab00a853c5cd8c4da64e5a41ff925c37ab2e07afaa4054f2a7fb06943bc15b7"
+        },
+        "input_audit": {
+          "path": "runs/winnow-pro6000-20261003/pass3/winnow-e4b.input-audit.json",
+          "sha256": "396925623ab5e4f9df62f670c653392904efa8c3bbf1e6ac04b8e588d7f442ce",
+          "requests": 480,
+          "issues": 0
+        },
+        "native_sources": {
+          "path": "runs/winnow-pro6000-20261003/source-provenance.json",
+          "sha256": "d5ba1d74aff5951099856e0a0d4a83dad0cbdc921a2ea93fab9e66e715d1f073",
+          "revisions": {
+            "plan": {
+              "experiment_id": "winnow-pro6000-20261003",
+              "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
+              "upstream_commit": "77d14580c6732ca2f3745750c1dc1fd446d8bcee",
+              "passes": 3,
+              "context": 32768,
+              "decision_parallel": 4,
+              "kv_cache": "f16",
+              "settings": [
+                {
+                  "id": "winnow-12b",
+                  "model": "EldanRing/Winnow-12B",
+                  "revision": "b6ac22b0d51b69b18200acacb3fbdd98073fffe8",
+                  "file": "Winnow-12B-BF16.gguf",
+                  "sha256": "10e6b41e00a3fc6668b53a92fb5d9c85179f47145e0786e7a3bc7b5b09ba8968",
+                  "temperature": 1.0
+                },
+                {
+                  "id": "winnow-e4b",
+                  "model": "EldanRing/Winnow-E4B",
+                  "revision": "1b257e8fa80b270a62338362a8b35e37f7890273",
+                  "file": "Winnow-E4B-BF16.gguf",
+                  "sha256": "53c3e504c061f6a7ce84cb6240d427ac6c630850a2cf93f3c2ee980c8136e7e7",
+                  "temperature": 1.3331553765162731
+                }
+              ]
+            },
+            "source_sha256": {
+              "winnow_record.py": "8b81454a2f120f8c620da625983938a7c16e022122726db45ddbb9f7c723f062",
+              "winnow_cohort.py": "87cfaa68de42920a2cbd20db1eefc2b69b797da53aaba3330dbbb3604050b72c",
+              "winnow-plan.json": "d9237222395a3e659da4a314817d03834e1629ed6dbd5fe26c54031f827e12fa"
+            }
+          }
+        }
+      }
     ]
   },
   "summary": {
     "path": "docs/research/openweight-hybrids/analysis.json",
-    "sha256": "2f0f30d124d9738a3427f3f169968a2099e77bfb72114fc7cfa6f6a0eb832d91"
+    "sha256": "98faded6613681943bae1666e22e3deef9a3af1c30bc2ecb3880b8c4bb0283f9"
   },
   "sources_sha256": {
     "docs/figures/prepare.py": "2a8fc232cfd7dac35f6b9d19b6d0c4e878c2038a98ddbe0d2b12a56548692292",
     "paper/analysis/leaderboard_models.py": "59dd400b281b7423a505aa77a7f533401fe5db2aff0cd8b68eaf93246b2edec8",
-    "paper/analysis/lite_openweight.py": "3258b4ec2d450bd25533aa83f435d8f6c37ba93bdf67372584196a4efc5f2606",
+    "paper/analysis/lite_openweight.py": "3395ce63478f04cc16054930a378ec0107e79884be3c9a52e6331caf95655ace",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616"
   }

@@ -63,8 +63,10 @@ Latency includes the remote service and internet round trip from the benchmark c
 | Kev-27B | 62.15 | 72.64 | 0.529 / 0.903 | RTX PRO 6000 (96 GB) |
 | Bespoke Nimble-9B | 14.43 | 22.36 | 1.711 / 12.122 | RTX PRO 6000 (96 GB) |
 | Qwen3.5-4B direct-logit | 15.61 | 17.71 | 0.777 / 1.254 | RTX PRO 6000 (96 GB) |
+| Winnow-12B | 43.15 | 46.46 | 0.328 / 0.453 | RTX PRO 6000 (96 GB; RunPod) |
+| Winnow-E4B | 18.97 | 19.79 | 0.170 / 0.235 | RTX PRO 6000 (96 GB; RunPod) |
 
-All 9 settings use BF16 backbones and native decision readouts on one RTX PRO 6000. Benchmark and
+All 11 settings use BF16 backbones and native decision readouts, each on one RTX PRO 6000. Benchmark and
 model run on the same GPU host; latency includes request processing, runtime queueing and inference, and excludes
 download, initialization and warmup. These rows describe the measured deployment: the self-hosted settings
 and hosted APIs are not a controlled hardware comparison.
@@ -72,6 +74,10 @@ and hosted APIs are not a controlled hardware comparison.
 Nimble scores each field sequentially with its full prompt; its latency covers the complete decision
 request. The Qwen row uses SemIf's direct option logits with thinking disabled; it is not an evaluation
 of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/results/pro6000-lab-20261001/README.md).
+
+Winnow-12B and Winnow-E4B were measured on RunPod; the other nine self-hosted settings used the lab host.
+Winnow uses the native CUDA runtime with BF16 GGUF weights and F16 KV cache.
+[Winnow deployment, calibration and three-pass results](docs/lite/results/winnow-pro6000-20261003/README.md).
 
 ### Provisional decisions with corrections
 
@@ -88,6 +94,8 @@ of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/resu
 | Kev-27B + Terra none | 66.76 |
 | Bespoke Nimble-9B + Terra none | 53.41 |
 | Qwen3.5-4B direct-logit + Terra none | 46.22 |
+| Winnow-12B + Terra none | 56.09 |
+| Winnow-E4B + Terra none | 39.52 |
 
 Both components receive each state. A provisional answer never moves the active source backward;
 the correction wins equal-source ties and, under the **freshest-source** rule used above, cannot
@@ -95,7 +103,7 @@ overwrite a newer source. These are counterfactual compositions of independent r
 common nominal releases, retaining original measured latencies. Each self-hosted pass is paired with the same
 hosted recording before averaging. Joint deployment contention is unmeasured.
 
-The Jev and Kev-27B pairings improve on Terra none alone, while the other self-hosted components reduce
+The Jev, Kev-27B, Winnow-12B pairings improve on Terra none alone, while the other self-hosted components reduce
 accuracy: an incorrect answer for a newer state can displace a still-correct correction. Speed alone
 does not determine whether composition helps. Nimble occupies the provisional slot in this analysis
 even though its recorded median latency exceeds Terra none's.

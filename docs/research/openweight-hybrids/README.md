@@ -18,6 +18,8 @@ Self-hosted results and curves average three passes; latency summaries average p
 | Kev-27B | 62.15 | 72.64 | 0.529 / 0.903 | RTX PRO 6000 (96 GB) |
 | Bespoke Nimble-9B | 14.43 | 22.36 | 1.711 / 12.122 | RTX PRO 6000 (96 GB) |
 | Qwen3.5-4B direct-logit | 15.61 | 17.71 | 0.777 / 1.254 | RTX PRO 6000 (96 GB) |
+| Winnow-12B | 43.15 | 46.46 | 0.328 / 0.453 | RTX PRO 6000 (96 GB; RunPod) |
+| Winnow-E4B | 18.97 | 19.79 | 0.170 / 0.235 | RTX PRO 6000 (96 GB; RunPod) |
 
 ## Pair selection and acceptance
 
@@ -42,6 +44,8 @@ not a faster component in these recordings.
 | Kev-27B + Terra none | 66.76 |
 | Bespoke Nimble-9B + Terra none | 53.41 |
 | Qwen3.5-4B direct-logit + Terra none | 46.22 |
+| Winnow-12B + Terra none | 56.09 |
+| Winnow-E4B + Terra none | 39.52 |
 
 ## Complete local/policy matrix
 
@@ -74,10 +78,16 @@ not a faster component in these recordings.
 | Qwen3.5-4B direct-logit | Freshest source | 46.22 | 1.43 | 48.58 | 57.25 |
 | Qwen3.5-4B direct-logit | One-tick lag | 46.96 | 1.16 | 48.70 | 63.60 |
 | Qwen3.5-4B direct-logit | Late override | 46.93 | 1.16 | 48.70 | 63.80 |
+| Winnow-12B | Freshest source | 56.09 | 0.01 | 56.73 | 38.17 |
+| Winnow-12B | One-tick lag | 56.43 | 0.01 | 56.60 | 50.98 |
+| Winnow-12B | Late override | 55.80 | 0.01 | 56.60 | 54.10 |
+| Winnow-E4B | Freshest source | 39.52 | 0.01 | 37.36 | 34.14 |
+| Winnow-E4B | One-tick lag | 43.51 | 0.00 | 38.06 | 47.25 |
+| Winnow-E4B | Late override | 43.85 | 0.00 | 38.06 | 52.48 |
 
 ## Verification and scope
 
-Original-clock replay reproduces correctness and all six time classes in 408 setting/scenario checks.
+Original-clock replay reproduces correctness and all six time classes in 456 setting/scenario checks.
 The largest nominal/original-clock difference at 2 s is 0.017328 percentage points.
 The log integral is analytical between every release/arrival crossing; a third interior point checks each affine piece.
 Published standalone aggregates and family partitions are checked against independently recomputed areas.

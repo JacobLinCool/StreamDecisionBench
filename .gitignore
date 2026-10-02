@@ -286,3 +286,25 @@ CLAUDE.local.md
 
 # Results site build output (site/build.py)
 _site/
+# Winnow repeated BF16 evidence; infrastructure logs and credentials remain local.
+!/runs/winnow-pro6000-20261003/
+/runs/winnow-pro6000-20261003/*
+!/runs/winnow-pro6000-20261003/pass*/
+/runs/winnow-pro6000-20261003/pass*/*
+!/runs/winnow-pro6000-20261003/pass*/*.input-audit.json
+!/runs/winnow-pro6000-20261003/pass*/winnow-*/
+/runs/winnow-pro6000-20261003/pass*/winnow-*/*
+!/runs/winnow-pro6000-20261003/pass*/winnow-*/run.json
+!/runs/winnow-pro6000-20261003/pass*/winnow-*/episodes.json
+!/runs/winnow-pro6000-20261003/pass*/winnow-*/events.jsonl
+!/runs/winnow-pro6000-20261003/source/
+!/runs/winnow-pro6000-20261003/source-provenance.json
+!/runs/winnow-pro6000-20261003/bench-requirements.txt
+!/runs/winnow-pro6000-20261003/deployment.tar.gz
+!/runs/winnow-pro6000-20261003/nvidia-smi.txt
+!/runs/winnow-pro6000-20261003/upstream.tar.gz
+!/runs/winnow-pro6000-20261003/archives.json
+!/runs/winnow-pro6000-20261003/preflight.json
+!/runs/winnow-pro6000-20261003/cleanup.json
+/output/winnow-pro6000-20261003.tar.gz
+/output/winnow-pro6000-20261003.tar.gz.sha256

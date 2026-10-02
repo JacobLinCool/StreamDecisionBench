@@ -16,11 +16,15 @@ these files byte for byte.
 | `lite-v1-clef-four-family-retry-v1/` | Cloudflare-hosted Clef through its native Workers AI decision API, recorded 2026-10-02 in one session on the same `fdfdd55d…` build and retry protocol. All 480 requests succeeded with no failed attempts or retries. Report: `docs/lite/results/four-family/clef/`. |
 | `lite-v1-clef-flash-four-family-retry-v1/` | Cloudflare-hosted Clef Flash through the same native API, recorded 2026-10-02 in one session with identical data, source versions and execution settings except the model selector. All 480 requests succeeded; two timeout attempts recovered through the declared retry policy. Report: `docs/lite/results/four-family/clef-flash/`. |
 | `pro6000-lab-20261001/runs/<setting>/` | Current self-hosted cohort: nine native BF16 settings on the same RTX PRO 6000 lab host (96 GB), recorded 2026-10-01, with 480 states each. Supersedes the two RunPod cohorts in the public leaderboard. [Settings and deployment details](../docs/lite/results/pro6000-lab-20261001/README.md). |
+| `winnow-pro6000-20261003/pass{1,2,3}/{winnow-12b,winnow-e4b}/` | Three BF16 passes per Winnow model on one RunPod RTX PRO 6000 Blackwell Server (96 GB), with a fresh native server per pass. All 2,880 requests succeeded without retries. [Repeated measurements and provenance](../docs/lite/results/winnow-pro6000-20261003/README.md). |
 | `runpod-openweight-20260930/runs/{laya-english,laya-typed-decisions,laya-multilingual,djev-diffusiongemma}/` | Four self-hosted BF16 settings on RTX PRO 6000 Blackwell Server (96 GB); each has the same eight frozen scenarios and 480 requests, recorded on 2026-09-30. |
 | `runpod-openweight-20260930-round2/runs/{kev-4b,nimble-9b,semif-qwen35-4b}/` | Three self-hosted BF16 native settings on L40S (48 GB), recorded on 2026-09-30; Qwen is a direct-logit baseline. |
 
 Each hosted folder holds `run.json` (configuration, dataset hash, recording times, `events_sha256`), `episodes.json` (the frozen scenarios), `events.jsonl` (every release, request attempt and response; hashed byte for byte, see `.gitattributes`), `metrics.json` and `raw_wallclock_metrics.json`; the part folders and single-session Astra, Clef and Clef Flash folders also keep per-scenario score files (`<episode>.json`, `<episode>.raw_wallclock.json`).
 
 The self-hosted folders expose only `run.json`, `episodes.json` and `events.jsonl`. Their cohorts also expose input audits, native source revisions, prepared weight/config hashes and dependency versions through exact `.gitignore` allowlists. Raw logs and model weights remain local. Recompute from a clone with `uv run --group paper python paper/analysis/lite_openweight.py`; this needs no GPU or API key. Original events and configurations are unchanged.
+
+The Winnow cohort additionally preserves frozen source archives and recorder snapshots.
+Recompute its reports with `uv run python scripts/runpod/winnow_report.py`.
 
 A new pass needs a fresh `--out` folder (`run` refuses an existing one). Name it outside the `lite-v1-*-retry-v1` pattern unless it should be versioned.

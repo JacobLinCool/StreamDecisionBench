@@ -1,0 +1,98 @@
+{
+  "complete_passes": 6,
+  "expected_passes": 6,
+  "results": [
+    {
+      "setting": "winnow-12b-pass1",
+      "model": "EldanRing/Winnow-12B",
+      "pass": 1,
+      "requests": 480,
+      "log_auc_pct": 43.14511648151078,
+      "untimed_accuracy_pct": 46.4583333333335,
+      "latency_p50_s": 0.32548337895423174,
+      "latency_p95_s": 0.4553097256692124,
+      "failed_attempts": 0,
+      "events_sha256": "8d1dec89681bbbcd571cd1c1ee076312c0c476e38d6882f306a752ea1aa002d5"
+    },
+    {
+      "setting": "winnow-e4b-pass1",
+      "model": "EldanRing/Winnow-E4B",
+      "pass": 1,
+      "requests": 480,
+      "log_auc_pct": 18.962176233453892,
+      "untimed_accuracy_pct": 19.791666666666632,
+      "latency_p50_s": 0.17052263370715082,
+      "latency_p95_s": 0.2375228327233344,
+      "failed_attempts": 0,
+      "events_sha256": "19816af493c8ff0095c3e0c76a9460249029a80410d879f3593cab462b4a9ff6"
+    },
+    {
+      "setting": "winnow-12b-pass2",
+      "model": "EldanRing/Winnow-12B",
+      "pass": 2,
+      "requests": 480,
+      "log_auc_pct": 43.137823327719595,
+      "untimed_accuracy_pct": 46.4583333333335,
+      "latency_p50_s": 0.3315174689050764,
+      "latency_p95_s": 0.45480760456994174,
+      "failed_attempts": 0,
+      "events_sha256": "0e99ac73828a7d28919a4a78e2eeb9f68c8e09ff958de2b190a9a08799630dc4"
+    },
+    {
+      "setting": "winnow-e4b-pass2",
+      "model": "EldanRing/Winnow-E4B",
+      "pass": 2,
+      "requests": 480,
+      "log_auc_pct": 18.973492186976053,
+      "untimed_accuracy_pct": 19.791666666666632,
+      "latency_p50_s": 0.1711964043788612,
+      "latency_p95_s": 0.23460552166216073,
+      "failed_attempts": 0,
+      "events_sha256": "fba8926e55e9b8ff64cac9ba90b5514facb5b2ce59ce52f46c27ce36d12de4ca"
+    },
+    {
+      "setting": "winnow-12b-pass3",
+      "model": "EldanRing/Winnow-12B",
+      "pass": 3,
+      "requests": 480,
+      "log_auc_pct": 43.15985399805713,
+      "untimed_accuracy_pct": 46.4583333333335,
+      "latency_p50_s": 0.3263399018906057,
+      "latency_p95_s": 0.4502657448174431,
+      "failed_attempts": 0,
+      "events_sha256": "87c43dd88b692d8b4c43af11548f16f1fd8091858d6242f7b3f07fba998eeb4e"
+    },
+    {
+      "setting": "winnow-e4b-pass3",
+      "model": "EldanRing/Winnow-E4B",
+      "pass": 3,
+      "requests": 480,
+      "log_auc_pct": 18.978244256023064,
+      "untimed_accuracy_pct": 19.791666666666632,
+      "latency_p50_s": 0.16930460394360125,
+      "latency_p95_s": 0.23176283831708128,
+      "failed_attempts": 0,
+      "events_sha256": "75a7cb096541fc0b91df9f56b73bcdca1d358a9fc9d399a06389f6d794186417"
+    }
+  ],
+  "aggregate": [
+    {
+      "model": "EldanRing/Winnow-12B",
+      "passes": 3,
+      "log_auc_pct_mean": 43.147597935762505,
+      "untimed_accuracy_pct_mean": 46.4583333333335,
+      "log_auc_pct_sd": 0.011223004066774045,
+      "log_auc_pct_min": 43.137823327719595,
+      "log_auc_pct_max": 43.15985399805713
+    },
+    {
+      "model": "EldanRing/Winnow-E4B",
+      "passes": 3,
+      "log_auc_pct_mean": 18.971304225484335,
+      "untimed_accuracy_pct_mean": 19.791666666666632,
+      "log_auc_pct_sd": 0.008254436318597461,
+      "log_auc_pct_min": 18.962176233453892,
+      "log_auc_pct_max": 18.978244256023064
+    }
+  ]
+}

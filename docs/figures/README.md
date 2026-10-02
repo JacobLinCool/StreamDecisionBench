@@ -1,8 +1,8 @@
 # StreamDecisionBench README figures
 
-These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all seventeen
-completed single-model settings: eight hosted APIs and nine self-hosted open-weight settings,
-including Cloudflare Clef and Clef Flash.
+These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all nineteen
+completed single-model settings: eight hosted APIs and eleven self-hosted open-weight settings,
+including Cloudflare Clef and Clef Flash, Winnow-12B and Winnow-E4B.
 Bars start at zero and rank settings by normalized log-AUC over 0.5–8 seconds.
 
 The second figure plots **in-force accuracy against the time-step interval**, on a logarithmic
@@ -13,7 +13,8 @@ latencies and commit lag. Scenarios receive equal weights within each family, th
 equal weights. Primary areas come from the verified published analyses, independently of the display grid.
 
 Hosted settings have one recorded pass; self-hosted scores and curves average three passes. Retiming assumes latency remains fixed when request rates
-change. Hosted API and same-host GPU latency describe different deployments; these figures do
+change. Winnow uses RunPod RTX PRO 6000; the other self-hosted settings use the lab RTX PRO 6000.
+Hosted API and same-host GPU latency describe different deployments; these figures do
 not isolate architecture speed. Qwen uses direct option logits, and Nimble processes fields sequentially.
 
 Regenerate from the repository root, using Python 3.12/3.13, uv and Node.js:
