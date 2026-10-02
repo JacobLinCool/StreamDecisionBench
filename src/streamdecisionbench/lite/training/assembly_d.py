@@ -9,9 +9,11 @@ station, codes and utterances are new.
 
 Story: the board is flashed before the cell carrier arrives; a lead's clean
 re-measurement withdraws a tab escalation; repeated isolation failures stay
-repairs under a quality ticket that is later reopened; after release a carrier
-reseat voids both welds and the isolation evidence, so the missing weld targets
-are completed one at a time around a wrong-version reflash and a tab cut-in.
+repairs, then a quality ticket holds the pack and is later reopened over a
+wrong label; after release a carrier reseat voids both welds and the isolation
+evidence, so the missing weld targets are completed one at a time around a
+wrong-version flash (a known firmware defect that stays repairable while the
+operator is back at weld) and a tab cut-in.
 """
 
 from __future__ import annotations
@@ -26,7 +28,9 @@ SCENARIO_ID = "assembly_d"
 WORKFLOW = "battery_pack"
 STATION = "PK-4"
 OTHER_STATION = "PK-9"
-NEIGHBOUR_SERIAL = "EB-5326"  # The pack being built at the neighbouring bay.
+# The pack built at the neighbouring PK-9 bay; late in the episode it is parked
+# on PK-4's conveyor (under PK-4's camera) while PK-9 clears a jam.
+NEIGHBOUR_SERIAL = "EB-5326"
 TICKET = "QIR-3086"
 WELD_TARGETS = ("W1", "W2")
 
@@ -60,7 +64,9 @@ INSTRUCTION = {
         "repeated failure.",
         "firmware: BMS flash records (flash) move to firmware. The latest flash "
         "version must equal the order firmware version; a different version -> "
-        "reflash. No other record invalidates a flash.",
+        "reflash. No other record invalidates a flash. A wrong-version flash "
+        "stays a known firmware defect (reflash) until a later flash matches, "
+        "even while the current stage is an earlier one.",
         "isolation: isolation meter readings (isolation) move to isolation. The "
         "latest reading must be strictly later than every carrier scan, "
         "tab_resistance reading, tab replacement and flash record, and at least "
@@ -73,10 +79,15 @@ INSTRUCTION = {
         "order tape count, both strictly later than the newest isolation reading. "
         "Incorrect label -> relabel; incorrect count -> correct_tape. A label "
         "scan or seal-tape count at or before the newest isolation reading is "
-        "missing, not incorrect. "
-        "complete_missing selects the missing stage's first target, in target "
-        "order, without a current passing record. All conditions are stated in "
-        "this instruction; no outside battery or electrical knowledge is needed.",
+        "missing, not incorrect.",
+        "A known defect (a current record with a wrong value, such as a "
+        "wrong-version flash) is selected in stage order even when its stage "
+        "comes after the current stage; \"incomplete future stages are not "
+        "defects\" covers only future stages whose required records are missing "
+        "or outdated. complete_missing selects the missing stage's first target, "
+        "in target order, without a current passing record. All conditions are "
+        "stated in this instruction; no outside battery or electrical knowledge "
+        "is needed.",
     ],
 }
 
@@ -249,8 +260,8 @@ def _schedule() -> dict[int, list[dict[str, Any]]]:
         2: [e("scan", target="carrier", code="HC-48B")],
         4: [e("scan", target="carrier", code="HC-36B")],
         6: [e("probe", target="W1")],
-        7: [e("tab_resistance", target="W1", value=0.17)],
-        9: [e("tab_resistance", target="W1", value=0.39)],
+        7: [e("tab_resistance", target="W1", value=0.38)],
+        9: [e("tab_resistance", target="W1", value=0.41)],
         12: [e("badge", direction="in")],
         13: [e("speech", speaker="battery_lead", text="Cleaned the probe tips; measuring tab one again before anyone rewelds it.")],
         14: [e("tab_resistance", target="W1", value=0.28)],
@@ -261,28 +272,31 @@ def _schedule() -> dict[int, list[dict[str, Any]]]:
         20: [e("speech", speaker="operator", text="Swapping in a thicker insulator sheet before the next megaohm test.")],
         21: [e("isolation", value=46.5)],
         22: [e("quality_ticket", ticket=TICKET, status="open")],
-        24: [e("isolation", value=57.3)],
+        24: [e("isolation", value=50.0)],
         26: [e("quality_ticket", ticket=TICKET, status="closed")],
         28: [e("tape_count", value=4, confidence=0.57)],
         29: [e("tape_count", value=3, confidence=0.86)],
-        31: [e("scan", target="label", code="EB-6042")],
-        33: [e("scan", target="label", code="EB-5318")],
-        34: [e("speech", speaker="quality_inspector", text="The insulator incident report still lacks my signature, so I am reopening it briefly.")],
-        35: [e("quality_ticket", ticket=TICKET, status="open")],
-        37: [e("quality_ticket", ticket=TICKET, status="closed")],
+        30: [e("speech", speaker="quality_inspector", text="The insulator incident report still lacks my signature, so I am reopening it briefly.")],
+        31: [e("quality_ticket", ticket=TICKET, status="open")],
+        32: [e("scan", target="label", code="EB-6042")],
+        34: [e("quality_ticket", ticket=TICKET, status="closed")],
+        36: [e("scan", target="label", code="EB-5318")],
         38: [e("badge", direction="in", station=OTHER_STATION, serial=NEIGHBOUR_SERIAL)],
-        39: [e("speech", speaker="operator", text="Carrier clamp sprang open and tugged the board lead; reseating the carrier and scanning it again.")],
+        39: [e("speech", speaker="operator", text="Carrier clamp sprang open and tugged the board harness; reseating the carrier and scanning it again.")],
         40: [e("scan", target="carrier", code="NO_READ")],
         41: [e("scan", target="carrier", code="HC-36B")],
+        # The PK-9 programming bench, still on the old image, logs a flash under this unit's serial.
+        42: [e("flash", version="2.3.9", station=OTHER_STATION)],
         43: [e("isolation", value=61.0)],
         45: [e("tab_resistance", target="W1", value=0.31)],
         46: [e("flash", version="2.3.9")],
-        48: [e("tab_resistance", target="W2", value=0.49)],
-        49: [e("speech", speaker="operator", text="Tab two looks scorched, so I am cutting in a fresh nickel strip.")],
+        48: [e("tab_resistance", target="W2", value=0.26)],
+        49: [e("speech", speaker="operator", text="The strip on tab two is cracked along its edge, so I am cutting in a fresh nickel strip.")],
         50: [e("replace_tab", target="W2")],
         52: [e("tab_resistance", target="W2", value=0.45)],
+        53: [e("speech", speaker="operator", text="PK-9 has a jammed conveyor, so their pack is parked on ours for a few minutes.")],
         54: [e("flash", version="2.4.1")],
-        55: [e("isolation", value=50.0)],
+        55: [e("isolation", value=54.2)],
         56: [e("probe", target="W2")],
         57: [e("scan", target="label", code="EB-5318"), e("tape_count", value=2, confidence=0.80)],
         58: [e("tape_count", value=3, confidence=0.89, serial=NEIGHBOUR_SERIAL)],

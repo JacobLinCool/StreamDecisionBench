@@ -84,7 +84,8 @@ def test_early_flash_counts_once_the_carrier_is_right(episode):
 def test_weld_escalation_is_withdrawn_by_a_passing_remeasurement(episode):
     steps = episode["steps"]
     assert decision(episode, 6) == {"route": "wait", "stage": "weld"}  # Probe moves the stage only.
-    assert decision(episode, 7) == {"route": "repair", "stage": "weld", "target": "W1", "method": "inspect_weld"}
+    assert decision(episode, 7) == {"route": "repair", "stage": "weld", "target": "W1", "method": "reweld"}  # 0.38 > 0.35.
+    # A second above-range W1 reading since the carrier scan, and it is the latest: escalate.
     assert decision(episode, 9) == {"route": "escalate", "stage": "weld", "target": "W1", "destination": "battery_lead"}
     assert decision(episode, 12) == {"route": "handoff", "stage": "weld", "destination": "battery_lead"}
     assert all(steps[t]["gold"] == steps[12]["gold"] for t in range(13, 17))  # The present lead dominates.
@@ -110,7 +111,11 @@ def test_repeated_isolation_failures_stay_repairs_under_a_ticket(episode):
     # The ticket opens while no lead is badged in.
     assert decision(episode, 22) == {"route": "hold", "stage": "isolation", "destination": "quality_desk"}
     assert steps[24]["gold"] == steps[22]["gold"]  # A passing reading cannot lift the hold.
+    # Closing the ticket shows the t24 reading: exactly the 50.0 minimum, which passes.
     assert decision(episode, 26) == {"route": "advance", "stage": "isolation", "next_step": "pack"}
+    state = state_at(episode, 26)
+    record(state, 24, "isolation")["value"] = 49.9
+    assert (reference(state)["target"], reference(state)["method"]) == ("isolation", "replace_insulator")
 
 
 def test_pack_check_reopened_ticket_and_other_station_badge(episode):
@@ -119,14 +124,16 @@ def test_pack_check_reopened_ticket_and_other_station_badge(episode):
     state = state_at(episode, 28)
     record(state, 28, "tape_count")["confidence"] = 0.8
     assert (reference(state)["route"], reference(state)["method"]) == ("repair", "correct_tape")
+    # The label is still missing at the current stage: wait, not repair.
     assert decision(episode, 29) == {"route": "wait", "stage": "pack"}
-    assert decision(episode, 31) == {"route": "repair", "stage": "pack", "target": "label", "method": "relabel"}
-    assert decision(episode, 33) == {"route": "release", "stage": "pack", "destination": "aging_rack"}
-    assert steps[34]["gold"] == steps[33]["gold"]  # Speech about reopening is not a ticket record.
+    assert steps[30]["gold"] == steps[29]["gold"]  # Speech about reopening is not a ticket record.
     # The latest record of the same ticket identifier reopens it.
-    assert decision(episode, 35) == {"route": "hold", "stage": "pack", "destination": "quality_desk"}
-    assert steps[37]["gold"] == steps[33]["gold"]
-    assert steps[38]["gold"] == steps[37]["gold"]  # Badge at another station, for another pack.
+    assert decision(episode, 31) == {"route": "hold", "stage": "pack", "destination": "quality_desk"}
+    assert steps[32]["gold"] == steps[31]["gold"]  # A wrong label under the open ticket is still a hold.
+    # Closing the ticket surfaces the pending label defect.
+    assert decision(episode, 34) == {"route": "repair", "stage": "pack", "target": "label", "method": "relabel"}
+    assert decision(episode, 36) == {"route": "release", "stage": "pack", "destination": "aging_rack"}
+    assert steps[38]["gold"] == steps[36]["gold"]  # Badge at another station, for another pack.
     state = state_at(episode, 38)
     badge = record(state, 38, "badge")
     badge.update(station=state["station"], serial=state["order"]["serial"])
@@ -135,7 +142,7 @@ def test_pack_check_reopened_ticket_and_other_station_badge(episode):
 
 def test_no_read_after_a_correct_scan_neither_counts_nor_erases(episode):
     steps = episode["steps"]
-    assert steps[39]["gold"] == steps[40]["gold"] == steps[37]["gold"]
+    assert steps[39]["gold"] == steps[40]["gold"] == steps[36]["gold"]
     state = state_at(episode, 40)
     record(state, 40, "scan", target="carrier")["code"] = "HC-00X"  # As if it were a readable wrong carrier.
     result = reference(state)
@@ -144,6 +151,12 @@ def test_no_read_after_a_correct_scan_neither_counts_nor_erases(episode):
 
 def test_carrier_reseat_voids_welds_and_missing_targets_are_taken_in_order(episode):
     assert decision(episode, 41) == {"route": "advance", "stage": "intake", "next_step": "weld"}
+    # A wrong-version flash logged at another station under this serial changes nothing.
+    assert episode["steps"][42]["gold"] == episode["steps"][41]["gold"]
+    state = state_at(episode, 42)
+    record(state, 42, "flash")["station"] = state["station"]
+    assert compose(episode["decision_spec"], reference(state)) == {
+        "route": "repair", "stage": "firmware", "target": "W1", "method": "complete_missing"}
     # A fresh isolation reading cannot stand in for the voided welds: W1 comes first.
     assert decision(episode, 43) == {"route": "repair", "stage": "isolation", "target": "W1", "method": "complete_missing"}
     # Weld is now the current stage, so W2 still missing is not a defect.
@@ -151,12 +164,19 @@ def test_carrier_reseat_voids_welds_and_missing_targets_are_taken_in_order(episo
     # Missing W2 (weld) outranks the known firmware defect from the wrong-version flash.
     assert decision(episode, 46) == {"route": "repair", "stage": "firmware", "target": "W2", "method": "complete_missing"}
     # Only one W2 failure since the reseat: repair, not escalate.
-    assert decision(episode, 48) == {"route": "repair", "stage": "weld", "target": "W2", "method": "reweld"}
+    assert decision(episode, 48) == {"route": "repair", "stage": "weld", "target": "W2", "method": "inspect_weld"}
     # The tab replacement removes the failing W2 reading, leaving the firmware defect first.
+    # Firmware comes after the current weld stage, but the workflow rules state that a
+    # wrong-version flash stays a known defect (reflash) even while the current stage is an
+    # earlier one; "incomplete future stages are not defects" covers only missing/outdated records.
+    rules = " ".join(episode["steps"][50]["state"]["work_instruction"]["rules"])
+    assert "even while the current stage is an earlier one" in rules
+    assert "covers only future stages whose required records are missing or outdated" in rules
     assert decision(episode, 50) == {"route": "repair", "stage": "weld", "target": "bms", "method": "reflash"}
     assert episode["steps"][52]["gold"] == episode["steps"][50]["gold"]  # W2 = 0.45 passes at the upper endpoint.
+    assert episode["steps"][53]["gold"] == episode["steps"][52]["gold"]  # Speech about the parked neighbour pack.
     assert decision(episode, 54) == {"route": "advance", "stage": "firmware", "next_step": "isolation"}
-    assert decision(episode, 55) == {"route": "advance", "stage": "isolation", "next_step": "pack"}  # 50.0 passes.
+    assert decision(episode, 55) == {"route": "advance", "stage": "isolation", "next_step": "pack"}
     # A probe contact moves the stage back but does not outdate isolation.
     assert decision(episode, 56) == {"route": "advance", "stage": "weld", "next_step": "pack"}
 
@@ -186,7 +206,7 @@ def test_endpoint_and_probe_counterfactuals(episode):
 
 def test_stale_pack_records_are_missing_not_incorrect(episode):
     state = state_at(episode, 55)
-    record(state, 33, "scan", target="label")["code"] = "EB-6042"
+    record(state, 36, "scan", target="label")["code"] = "EB-6042"
     record(state, 29, "tape_count")["value"] = 5
     assert compose(episode["decision_spec"], reference(state)) == {"route": "advance", "stage": "isolation", "next_step": "pack"}
 
@@ -206,7 +226,7 @@ def test_public_order_and_private_fields(episode):
     state = state_at(episode, 50)
     state["order"]["firmware_version"] = "2.3.9"
     assert compose(episode["decision_spec"], reference(state)) == {"route": "wait", "stage": "weld"}
-    state = state_at(episode, 33)
+    state = state_at(episode, 36)
     state["gold"] = {"route": "hold"}
     state["hidden"] = {"desired_route": "hold"}
     assert reference(state)["route"] == "release"
