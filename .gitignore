@@ -142,9 +142,6 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
-
 # mypy
 .mypy_cache/
 .dmypy.json
@@ -285,3 +282,6 @@ CLAUDE.local.md
 .idea/
 *.swp
 *~
+
+# Results site build output (site/build.py)
+_site/

@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StreamDecisionBench Results</title>
+<meta name="description" content="StreamDecisionBench (SDB): in-force and untimed accuracy of language-model decision components on evolving language streams.">
+<script src="https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f6f5f2; --surface: #fcfcfb; --border: #e3e1dc; --grid: #ecebe7;
+  --text: #0b0b0b; --text-2: #52514e; --text-3: #75746f; --accent: #2a78d6;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --s5: #e87ba4; --s6: #008300; --s7: #4a3aa7; --s8: #e34948; --s0: #8a8984;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121211; --surface: #1a1a19; --border: #2f2f2c; --grid: #2a2a28;
+    --text: #ffffff; --text-2: #c3c2b7; --text-3: #9a998f; --accent: #3987e5;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+    --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767; --s0: #7c7b75;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+main { max-width: 1080px; margin: 0 auto; padding: 40px 16px 64px; }
+header h1 { font-size: 30px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.01em; }
+header .tagline { font-size: 18px; color: var(--text-2); margin: 0 0 16px; }
+header p { max-width: 760px; color: var(--text-2); margin: 0 0 12px; }
+.links { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; }
+a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
+section.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 20px; margin-top: 24px; }
+.card h2 { font-size: 19px; margin: 0 0 4px; }
+.card .sub { color: var(--text-2); font-size: 14px; margin: 0 0 14px; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-bottom: 12px; }
+.label { font-size: 13px; color: var(--text-3); margin-right: 6px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.seg button, .btn { font: inherit; font-size: 13px; padding: 6px 12px; border: 0; background: transparent;
+  color: var(--text-2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--text); color: var(--surface); }
+.btn { border: 1px solid var(--border); border-radius: 8px; }
+.btn:hover, .seg button:hover:not([aria-pressed="true"]) { background: var(--grid); }
+select { font: inherit; font-size: 13px; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
+.chip { display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 13px; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--text-3); cursor: pointer; }
+.chip[aria-pressed="true"] { color: var(--text); border-color: var(--text-3); }
+.chip svg { flex: none; }
+.chip[aria-pressed="false"] svg { opacity: .35; }
+.group-title { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-3); margin: 8px 0 2px; }
+.chart { width: 100%; }
+#board { height: 520px; } #curves { height: 470px; }
+.note { font-size: 13px; color: var(--text-3); margin: 8px 0 0; }
+details { margin-top: 12px; } summary { cursor: pointer; font-size: 14px; color: var(--text-2); }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; margin-top: 10px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; border-bottom: 1px solid var(--grid); text-align: right; white-space: nowrap; }
+th:nth-child(-n+3), td:nth-child(-n+3) { text-align: left; }
+th { color: var(--text-3); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+ul.notes { color: var(--text-2); font-size: 14px; padding-left: 20px; margin: 8px 0 0; }
+ul.notes li { margin: 4px 0; }
+footer { color: var(--text-3); font-size: 13px; margin-top: 32px; }
+@media (max-width: 640px) {
+  header h1 { font-size: 24px; } #board { height: 560px; } #curves { height: 380px; }
+  section.card { padding: 14px; }
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>StreamDecisionBench (SDB)</h1>
+  <p class="tagline">Evaluating decisions in force on evolving language streams</p>
+  <p>Language models increasingly run inside applications that keep applying their latest decision while the world changes.
+  SDB scores the <strong>decision in force</strong> at every instant: an answer that is correct for the state the model saw can arrive
+  late and stay in force after the right decision has changed. Untimed accuracy counts it as correct; the application does not.</p>
+  <div class="links">
+    <a href="https://github.com/JacobLinCool/StreamDecisionBench">GitHub repository</a>
+    <a href="https://github.com/JacobLinCool/StreamDecisionBench#evaluate-your-model">Evaluate your model</a>
+    <a href="data.json">Download data (JSON)</a>
+  </div>
+</header>
+
+<section class="card" aria-labelledby="board-title">
+  <h2 id="board-title">Leaderboard</h2>
+  <p class="sub" id="board-sub"></p>
+  <div class="controls">
+    <span><span class="label">Metric</span>
+      <span class="seg" role="group" aria-label="Leaderboard metric">
+        <button type="button" data-metric="inforce" aria-pressed="true">In-force accuracy</button>
+        <button type="button" data-metric="untimed" aria-pressed="false">Untimed accuracy</button>
+      </span></span>
+  </div>
+  <div id="board" class="chart" role="img" aria-label="Leaderboard bar chart"></div>
+  <details>
+    <summary>Table view</summary>
+    <div class="table-wrap"><table id="board-table"></table></div>
+  </details>
+</section>
+
+<section class="card" aria-labelledby="curve-title">
+  <h2 id="curve-title">In-force accuracy across update intervals</h2>
+  <p class="sub">Each curve replays one recorded pass at update intervals from 0.5 to 8 s, keeping every recorded answer and latency.
+  The selected range also sets the in-force leaderboard above.</p>
+  <div class="controls">
+    <span><span class="label">From</span><select id="range-lo" aria-label="Range start"></select></span>
+    <span><span class="label">to</span><select id="range-hi" aria-label="Range end"></select></span>
+    <span class="seg" role="group" aria-label="Range presets">
+      <button type="button" data-preset="0.5,8">0.5–8 s</button>
+      <button type="button" data-preset="0.5,2">0.5–2 s</button>
+      <button type="button" data-preset="2,8">2–8 s</button>
+    </span>
+  </div>
+  <div class="controls">
+    <span class="label">Models</span>
+    <button type="button" class="btn" data-select="all">All</button>
+    <button type="button" class="btn" data-select="hosted">Hosted APIs</button>
+    <button type="button" class="btn" data-select="self-hosted">Self-hosted</button>
+    <button type="button" class="btn" data-select="top">Top 5</button>
+    <button type="button" class="btn" data-select="none">None</button>
+  </div>
+  <div class="group-title">Hosted APIs</div>
+  <div class="chips" id="chips-hosted"></div>
+  <div class="group-title">Self-hosted open-weight (one RTX PRO 6000)</div>
+  <div class="chips" id="chips-self-hosted"></div>
+  <div id="curves" class="chart" role="img" aria-label="In-force accuracy curves"></div>
+</section>
+
+<section class="card" aria-labelledby="notes-title">
+  <h2 id="notes-title">How to read these results</h2>
+  <ul class="notes" id="notes"></ul>
+</section>
+
+<footer>
+  StreamDecisionBench · MIT License · cite via <a href="https://github.com/JacobLinCool/StreamDecisionBench/blob/main/CITATION.cff">CITATION.cff</a>
+  <span id="source"></span>
+</footer>
+</main>
+
+<script>
+const STYLE = {
+  Jev: [1, "solid"], Terra: [2, "solid"], TerraNone: [2, "dashed"], Luna: [3, "solid"], LunaNone: [3, "dashed"],
+  Astra: [4, "solid"], KevTwentySeven: [5, "solid"], KevNine: [5, "dashed"], Kev: [5, "dotted"],
+  DJev: [6, "solid"], QwenLogits: [7, "solid"], Nimble: [8, "solid"],
+  LayaEnglish: [0, "solid"], LayaTyped: [0, "dashed"], LayaMultilingual: [0, "dotted"],
+};
+const DASH = { solid: "", dashed: "6 4", dotted: "2 3" };
+const state = { metric: "inforce", lo: 0.5, hi: 8, selected: new Set() };
+let D, board, curves;
+
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const color = (id) => css(`--s${(STYLE[id] || [0])[0]}`);
+const fmtS = (x) => (x < 1 ? x.toFixed(2) : x.toFixed(x < 4 ? 2 : 1)).replace(/\.?0+$/, "") + " s";
+const pct = (x) => x.toFixed(2);
+
+function aucOver(curve, lo, hi) {
+  const xs = D.intervals_s;
+  if (Math.abs(lo - 0.5) < 1e-9 && Math.abs(hi - 8) < 1e-9) return null;
+  let area = 0;
+  for (let i = 0; i + 1 < xs.length; i++) {
+    const a = Math.max(xs[i], lo), b = Math.min(xs[i + 1], hi);
+    if (b <= a) continue;
+    const f = (x) => curve[i] + (curve[i + 1] - curve[i]) * (Math.log(x / xs[i]) / Math.log(xs[i + 1] / xs[i]));
+    area += Math.log(b / a) * (f(a) + f(b)) / 2;
+  }
+  return area / Math.log(hi / lo);
+}
+const inforce = (s) => aucOver(s.curve_pct, state.lo, state.hi) ?? s.log_auc_pct;
+const value = (s) => (state.metric === "inforce" ? inforce(s) : s.untimed_pct);
+const isPrimary = () => Math.abs(state.lo - 0.5) < 1e-9 && Math.abs(state.hi - 8) < 1e-9;
+
+function renderBoard() {
+  const rows = [...D.settings].sort((a, b) => value(b) - value(a));
+  const text = css("--text"), text2 = css("--text-2"), text3 = css("--text-3"), grid = css("--grid");
+  const range = `${fmtS(state.lo).replace(" s", "")}–${fmtS(state.hi)}`;
+  document.getElementById("board-sub").textContent = state.metric === "inforce"
+    ? `Normalized log-AUC of in-force accuracy over ${range}${isPrimary() ? " (primary score)" : " (computed from the published curves)"}. Ranked high to low.`
+    : "Untimed accuracy: the share of states whose answer is correct, ignoring when it arrives. Ranked high to low.";
+  const ordered = rows.slice().reverse();
+  board.setOption({
+    animationDuration: 300,
+    grid: { left: 8, right: 64, top: 8, bottom: 28, containLabel: true },
+    tooltip: {
+      trigger: "item", confine: true,
+      formatter: (p) => {
+        const s = ordered[p.dataIndex];
+        return `<b>${s.label}</b> · ${s.deployment}<br>In-force log-AUC ${range}: <b>${pct(inforce(s))}%</b>` +
+          `<br>Untimed accuracy: <b>${pct(s.untimed_pct)}%</b><br>Median / p95 latency: ${s.p50_s.toFixed(3)} / ${s.p95_s.toFixed(3)} s`;
+      },
+    },
+    xAxis: { type: "value", min: 0, max: 100, axisLabel: { color: text3, formatter: "{value}%" },
+      splitLine: { lineStyle: { color: grid } } },
+    yAxis: { type: "category", data: ordered.map((s) => s.id), axisTick: { show: false },
+      axisLine: { lineStyle: { color: grid } },
+      axisLabel: { formatter: (id) => { const s = D.settings.find((x) => x.id === id);
+          return `{name|${s.label}}  {tag|${s.deployment === "hosted" ? "API" : "GPU"}}`; },
+        rich: { name: { color: text, fontSize: 13 }, tag: { color: text3, fontSize: 11 } } } },
+    series: [{ type: "bar", barMaxWidth: 18,
+      data: ordered.map((s) => ({ value: value(s), itemStyle: { color: color(s.id), borderRadius: [0, 4, 4, 0] } })),
+      label: { show: true, position: "right", color: text2, fontSize: 12, formatter: (p) => pct(p.value) } }],
+  }, true);
+  const t = document.getElementById("board-table");
+  t.innerHTML = `<thead><tr><th>#</th><th>Setting</th><th>Deployment</th><th>In-force log-AUC ${range} (%)</th>` +
+    `<th>Untimed (%)</th><th>Median latency (s)</th><th>p95 latency (s)</th></tr></thead><tbody>` +
+    rows.map((s, i) => `<tr><td>${i + 1}</td><td>${s.label}</td><td>${s.deployment}</td><td>${pct(inforce(s))}</td>` +
+      `<td>${pct(s.untimed_pct)}</td><td>${s.p50_s.toFixed(3)}</td><td>${s.p95_s.toFixed(3)}</td></tr>`).join("") + "</tbody>";
+}
+
+function renderCurves() {
+  const text2 = css("--text-2"), text3 = css("--text-3"), grid = css("--grid"), surface = css("--surface");
+  const xs = D.intervals_s;
+  const chosen = D.settings.filter((s) => state.selected.has(s.id));
+  const label = chosen.length <= 4;
+  curves.setOption({
+    animationDuration: 300,
+    grid: { left: 8, right: label ? 110 : 24, top: 16, bottom: 36, containLabel: true },
+    tooltip: { trigger: "axis", confine: true, axisPointer: { type: "line", lineStyle: { color: text3 } },
+      formatter: (ps) => {
+        const x = ps[0].value[0];
+        const rows = ps.slice().sort((a, b) => b.value[1] - a.value[1]).map((p) =>
+          `${p.marker}${p.seriesName}: <b>${p.value[1].toFixed(1)}%</b>`);
+        return `Update interval ${x.toFixed(2)} s<br>${rows.join("<br>")}`;
+      } },
+    xAxis: { type: "log", logBase: 2, min: state.lo, max: state.hi, name: "Update interval (s, log scale)",
+      nameLocation: "middle", nameGap: 26, nameTextStyle: { color: text3 },
+      axisLabel: { color: text3, formatter: (v) => fmtS(v).replace(" s", "") },
+      axisLine: { lineStyle: { color: grid } }, splitLine: { show: true, lineStyle: { color: grid } } },
+    yAxis: { type: "value", min: 0, max: 100, axisLabel: { color: text3, formatter: "{value}%" },
+      splitLine: { lineStyle: { color: grid } } },
+    series: chosen.map((s) => ({
+      name: s.label, type: "line", showSymbol: false, smooth: false,
+      lineStyle: { width: 2, type: STYLE[s.id][1], color: color(s.id) }, itemStyle: { color: color(s.id) },
+      emphasis: { focus: "series" },
+      endLabel: { show: label, formatter: "{a}", color: text2, fontSize: 12 },
+      data: xs.map((x, i) => [x, s.curve_pct[i]]).filter(([x]) => x >= state.lo - 1e-9 && x <= state.hi + 1e-9),
+    })),
+    graphic: chosen.length ? [] : [{ type: "text", left: "center", top: "middle",
+      style: { text: "Select at least one model", fill: text3, fontSize: 14 } }],
+  }, true);
+  for (const chip of document.querySelectorAll(".chip"))
+    chip.setAttribute("aria-pressed", String(state.selected.has(chip.dataset.id)));
+}
+
+function swatch(id) {
+  const [, dash] = STYLE[id];
+  return `<svg width="22" height="8" aria-hidden="true"><line x1="1" y1="4" x2="21" y2="4" stroke="${color(id)}"` +
+    ` stroke-width="2.5" stroke-dasharray="${DASH[dash]}" stroke-linecap="round"/></svg>`;
+}
+
+function buildChips() {
+  for (const dep of ["hosted", "self-hosted"]) {
+    const box = document.getElementById(`chips-${dep}`);
+    box.innerHTML = D.settings.filter((s) => s.deployment === dep).map((s) =>
+      `<button type="button" class="chip" data-id="${s.id}" aria-pressed="false">${swatch(s.id)}${s.label}</button>`).join("");
+  }
+}
+
+function buildRange() {
+  const ticks = [0.5, 0.71, 1, 1.41, 2, 2.83, 4, 5.66, 8].map((t) => D.intervals_s.reduce((a, b) =>
+    Math.abs(Math.log(b / t)) < Math.abs(Math.log(a / t)) ? b : a));
+  const fill = (el, pick) => { el.innerHTML = ticks.map((t) =>
+    `<option value="${t}"${Math.abs(t - pick) < 1e-9 ? " selected" : ""}>${fmtS(t)}</option>`).join(""); };
+  const lo = document.getElementById("range-lo"), hi = document.getElementById("range-hi");
+  fill(lo, state.lo); fill(hi, state.hi);
+  const sync = (e) => {
+    let a = +lo.value, b = +hi.value;
+    if (b <= a) { if (e.target === lo) b = ticks[Math.min(ticks.indexOf(a) + 1, ticks.length - 1)]; else a = ticks[Math.max(ticks.indexOf(b) - 1, 0)]; }
+    if (b <= a) { a = ticks[0]; b = ticks[ticks.length - 1]; }
+    setRange(a, b);
+  };
+  lo.addEventListener("change", sync); hi.addEventListener("change", sync);
+  window.setRange = (a, b) => {
+    state.lo = a; state.hi = b; fill(lo, a); fill(hi, b);
+    for (const btn of document.querySelectorAll("[data-preset]")) {
+      const [pa, pb] = btn.dataset.preset.split(",").map(Number);
+      btn.setAttribute("aria-pressed", String(Math.abs(pa - a) < 0.01 && Math.abs(pb - b) < 0.01));
+    }
+    renderCurves(); renderBoard();
+  };
+  for (const btn of document.querySelectorAll("[data-preset]"))
+    btn.addEventListener("click", () => { const [a, b] = btn.dataset.preset.split(",").map(Number);
+      setRange(ticks.find((t) => Math.abs(t - a) < 0.01), ticks.find((t) => Math.abs(t - b) < 0.01)); });
+}
+
+function wire() {
+  for (const btn of document.querySelectorAll("[data-metric]"))
+    btn.addEventListener("click", () => {
+      state.metric = btn.dataset.metric;
+      for (const b of document.querySelectorAll("[data-metric]")) b.setAttribute("aria-pressed", String(b === btn));
+      renderBoard();
+    });
+  document.querySelectorAll(".chips").forEach((box) => box.addEventListener("click", (e) => {
+    const chip = e.target.closest(".chip"); if (!chip) return;
+    const id = chip.dataset.id;
+    state.selected.has(id) ? state.selected.delete(id) : state.selected.add(id);
+    renderCurves();
+  }));
+  for (const btn of document.querySelectorAll("[data-select]"))
+    btn.addEventListener("click", () => {
+      const k = btn.dataset.select;
+      const ranked = [...D.settings].sort((a, b) => inforce(b) - inforce(a));
+      const ids = k === "all" ? D.settings : k === "none" ? [] : k === "top" ? ranked.slice(0, 5)
+        : D.settings.filter((s) => s.deployment === k);
+      state.selected = new Set(ids.map((s) => s.id));
+      renderCurves();
+    });
+  window.addEventListener("resize", () => { board.resize(); curves.resize(); });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { buildChips(); renderBoard(); renderCurves(); });
+}
+
+function notes() {
+  const items = [
+    `One recorded pass per setting over all ${D.states} states (${D.scenarios} scenarios in ${D.families} families), recorded at a ${D.recording_interval_s} s time-step interval.`,
+    "The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights within each family and then equal family weights. Each doubling of the interval receives equal weight.",
+    "Interval evaluations keep the recorded answers and latencies; they assume service latency does not change with the request rate.",
+    "Hosted API latency includes the remote service and the internet round trip from the benchmark client. Self-hosted settings run benchmark and model on the same RTX PRO 6000 host; the two groups are not a controlled hardware comparison.",
+    "Qwen3.5-4B uses direct option logits with thinking disabled; Bespoke Nimble-9B scores each field sequentially. Each setting has one pass and adjacent states are dependent, so small differences do not establish stable rankings.",
+    `Leaderboard values for custom ranges integrate the published ${D.intervals_s.length}-point curves (trapezoidal on the log axis); over 0.5–8 s this agrees with the exact primary score within ${D.sampled_auc_max_deviation_pct < 0.001 ? "0.001" : D.sampled_auc_max_deviation_pct.toFixed(3)} points.`,
+  ];
+  document.getElementById("notes").innerHTML = items.map((t) => `<li>${t}</li>`).join("");
+  if (D.source && D.source.commit)
+    document.getElementById("source").innerHTML = ` · data from <a href="https://github.com/JacobLinCool/StreamDecisionBench/tree/${D.source.commit}/${D.source.path}">${D.source.commit.slice(0, 7)}</a>`;
+}
+
+(async () => {
+  D = await (await fetch("data.json")).json();
+  board = echarts.init(document.getElementById("board"), null, { renderer: "svg" });
+  curves = echarts.init(document.getElementById("curves"), null, { renderer: "svg" });
+  state.selected = new Set(D.settings.filter((s) => s.deployment === "hosted").map((s) => s.id));
+  buildChips(); buildRange(); wire(); notes();
+  setRange(state.lo, state.hi);
+})();
+</script>
+</body>
+</html>
