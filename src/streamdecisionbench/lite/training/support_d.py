@@ -63,8 +63,8 @@ RULES = [
     "utterance contains several counted phrases of the same kind (request, meter, site, count, agreement or "
     "register), the one appearing last in that utterance counts. For each kind the latest counted utterance "
     "wins, and a choice persists until a later counted phrase of that kind replaces it.",
-    "Route priority: telephony ended -> closed; a hold whose elapsed time (clock.now - telephony.since) is "
-    ">= hold_check_ticks -> hold_return (equality counts); any shorter hold -> hold_wait; otherwise the latest counted request "
+    "Route priority: telephony ended -> closed; telephony on hold (telephony.status hold) whose elapsed time (clock.now - "
+    "telephony.since) is >= hold_check_ticks -> hold_return (equality counts); any shorter telephony hold -> hold_wait; otherwise the latest counted request "
     "phrase decides: 'submit my electricity reading' or 'submit my gas reading' -> meter; 'set up an "
     "instalment plan' or 'back to the instalment plan' -> plan; 'report a power cut at home' or 'report a "
     "power cut at the cottage' -> outage. Default meter. Agreement, instalment counts, register statements, "

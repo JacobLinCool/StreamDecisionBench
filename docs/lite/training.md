@@ -1,6 +1,6 @@
 # Training split
 
-`data/lite/train-v1/` (dataset hash `00bc46f6…`, 8 scenarios, 480 states) holds further scenarios of the four task families for training decision
+`data/lite/train-v1/` (dataset hash `50d2ee35…`, 8 scenarios, 480 states) holds further scenarios of the four task families for training decision
 components. They are **never part of an evaluation score**: the benchmark remains the eight
 scenarios of `data/lite/v1/` (dataset hash `fdfdd55d…`), whose files and hashes this split does not
 change.

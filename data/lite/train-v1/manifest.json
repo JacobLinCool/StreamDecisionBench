@@ -21,7 +21,7 @@
         "wait_ci"
       ],
       "routes_unseen": [],
-      "public_hash": "90587df468cccd0704aaa37a4897f1e85e6b24da77d37f6e4f4300608b658817"
+      "public_hash": "6290c5511ffaa3d58a277a01ad6fa85376b7ff85dfd66b8807361316191a7213"
     },
     {
       "episode_id": "train_debugging_d",
@@ -110,7 +110,7 @@
         "plan"
       ],
       "routes_unseen": [],
-      "public_hash": "df877121c99691c2cfc0784efe73515a83d2dedf9e00628efd08165a88b98e60"
+      "public_hash": "392686084718d8b99d6ff494b1fecf214266b6a45df5679d187fae0e7d233a52"
     },
     {
       "episode_id": "train_presenter_c",
@@ -126,7 +126,7 @@
         "poll"
       ],
       "routes_unseen": [],
-      "public_hash": "3748a9dc512b7ebe0e1369fe75c494216c996e394251d42de9182a95e7b2f1e6"
+      "public_hash": "cc9bf18e281b43ea1eda0b4081f41dfc8c11f204b13d7e700983024fd2aae60d"
     },
     {
       "episode_id": "train_presenter_d",
@@ -142,18 +142,18 @@
         "questions"
       ],
       "routes_unseen": [],
-      "public_hash": "0b162299c94600225c626c15692dd53990c7cf0c46110c64b96f64d1e1c5ccac"
+      "public_hash": "01a936e1c5e2d37fd98b71f59820e61fb09e4714c7e2ac9f58f863317a955015"
     }
   ],
   "hashes": {
-    "train_debugging_c": "3f48cb16410f912c8c4f9b69382e4a1721d14975c166c6271f9756e109d712dc",
+    "train_debugging_c": "ff7f4d41a9fdd058041bf17f79d6c38ebab7756185a853c0ddfbb72534c0b7af",
     "train_debugging_d": "6c96e412bddd37e64ee43efbad6c7e89c0d6fac839e0b7be3c7c8ab0583a5281",
     "train_assembly_c": "574995441b770eec1393c70a81382272d4fc52725c6fe5848ae99544c1ae555a",
     "train_assembly_d": "3df5084f672ec823909488c1c7073d91ad71b3c1b9a692849272cbbcce2154ac",
     "train_support_c": "1873ba8be74fa16a48478937ca65d5355ef9bbb38bf26e1c2394727a186670d1",
-    "train_support_d": "a1db19dcef84e4de4db33d28046f6b23aceea97c7b721de89b33defee6d39696",
-    "train_presenter_c": "edbe507d94658a4cdea7248e8579499d29a77b71f7146abdb14d083fb0a5a484",
-    "train_presenter_d": "a92072db9394f75e7a386ed06d804c741d07dd5d0880cf10daf5d2b4251bc12e"
+    "train_support_d": "4a7568d75573dc465143721eb21b90d91adf5ae682ed2a39fd7b2cb222706eb7",
+    "train_presenter_c": "9567782a76ff9f50efc0e7e0595eee829181056500267e5dc869470863a28d8e",
+    "train_presenter_d": "e33b7dc6556199baa1399541d25c04cae1a68354d042b70391788a304e5d310f"
   },
   "generator_sources": {
     "adapters/llm.py": "14a64eb0c3ee6b6b7d755ea55bd52cb87aaa56356c800a740fe71a4b79fa8ae2",
@@ -176,14 +176,14 @@
     "lite/training/assembly_c.py": "344c03c19ffaa95494c98a4f2ea8cdc5ab5435a27974af109ebebd3875e674e3",
     "lite/training/assembly_d.py": "7eb515283fa2822b10f6d1915c966422ad3e64a82783f04acbe9b5da8dd04c97",
     "lite/training/audit.py": "d93824567b57bcfa509d8b9f9238863d1d1896e6197971518c21620469e2e8ac",
-    "lite/training/debugging_c.py": "382ba937fa53bdec65da6513803bcee3f8778f45770556176861df190c00e22c",
+    "lite/training/debugging_c.py": "4e45fbe0a4a8d302c3946d4d6de81e86ba63ad2e37f39897c60ba3da4ff59260",
     "lite/training/debugging_d.py": "449cc947f349f7d0468e9766f332556252ec8b788dcbbf63d67d7645f2be28a1",
-    "lite/training/presenter_c.py": "d11fc16bae444225f59fd6e9ebb40ed15cc2db5eabf863867b015ff0d2ef8079",
-    "lite/training/presenter_d.py": "b9e3da267dd9d7464fa3ffecbef75b721634fd9b61061acc122a115681f0c7d4",
+    "lite/training/presenter_c.py": "455441b04229a3c8211808ac4204a559e80ea65f6da7d73204e36ac98aa3f0e8",
+    "lite/training/presenter_d.py": "d5354ae573d628128b7e989eea745af81b9085142b6aa783ec5995c661496211",
     "lite/training/support_c.py": "d616621b4774c2c99569d67fde3efadda1425ef1f888e1b0036d28dcdb57eea6",
-    "lite/training/support_d.py": "ca690320a0e52fa2947ddd6b0e1eb81fcb990b43fb8a2dcef1a6d93285661213"
+    "lite/training/support_d.py": "7b65c11400d097b8c85011647711f0c4d35e4c586f24688afb49a3b473b8f34a"
   },
   "reference_validation": "public-only executable reference agreement; not independent human adjudication",
   "leakage_audit": "no evaluation state, sentence, six-word run or identifier outside the families' published rules (streamdecisionbench.lite.training.audit)",
-  "dataset_hash": "bc76643a389fff09a60e45355ee3f01ddc7b0c51f2994ec907d4f09b3643e1cd"
+  "dataset_hash": "50d2ee35d89442b36abab49ffba2372e375c1c59524e4e56089d99f561183979"
 }

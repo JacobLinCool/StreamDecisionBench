@@ -16,8 +16,9 @@ numbers spelled out, so there is no sentence or word splitting.
 
 Design: commands are log phrases that equal one command phrase of their role
 once filler words are removed wherever they stand. The scene replays the log
-in seq order: of the guide's commands a film accepts only 'stop the film'; a staff pause drops the
-guide's commands for good and resumes the remembered scene unchanged; the end
+in seq order: of the guide's commands a film accepts only 'stop the film'; a staff pause (also during
+a film) drops the guide's commands for good, and the staff resume brings back the remembered scene
+unchanged; the end
 of the tour is final. The caption strip gives live turns priority (guide, then
 visitor, then film), else keeps the latest finished one. The guide prompt uses
 the dwell time since arrival and a wrap-up tick (reaching counts). The screen
@@ -336,7 +337,7 @@ SETTING = (
     "Odile Brennan, the curator, guides the group on foot; every stop has its own screen, and two stops can show "
     "a short film. Visitors wear handsets that relay the guide's headset or a film's soundtrack, a caption strip "
     "above the gallery carries the speech, and one roving microphone is passed around the group. Kwame Osei, the "
-    "duty manager, and the front desk share the staff radio, and a pause or resume phrase from anyone on that radio halts or restarts the walk. The "
+    "duty manager, and the front desk share the staff radio, and either of them can pause the tour over it and later resume it where it stopped (the rules give the exact phrases). The "
     "tour controller reads the recogniser's output for all four roles and drives the screens, films, handsets, "
     "caption strip and the guide's wrist display."
 )

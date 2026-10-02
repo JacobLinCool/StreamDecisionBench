@@ -50,9 +50,10 @@ RULES = [
     "tick t; it keeps all history and holds nothing later than now. Answers are recomputed only when a new "
     "state is published.",
     "Commits: commits lists every pushed commit in push order, and pull_request.head_commit is the sha of "
-    "the newest one. Only the head commit is current; every job attempt and every approval tied to an older "
-    "commit is stale: an older-commit attempt is never a current attempt and serves only as evidence under "
-    "the flaky-test rule, and an older-commit approval is a stale approval (see Reviews). "
+    "the newest one. Only the head commit is current. A job attempt on an older commit is never a current "
+    "attempt; it matters only as evidence under the Flaky tests rule. An approval given on an older commit is "
+    "never a current approval; a reviewer whose standing is such an approval has a stale approval (see "
+    "Reviews). "
     "pull_request.files_changed lists, in order, every file the pull request changes "
     "relative to its base branch.",
     "CI records: ci.jobs lists every job attempt in creation order. An attempt has a job name, a stage "
@@ -67,7 +68,7 @@ RULES = [
     "Required jobs: only jobs named in ci.required count. Any other job (such as an optional benchmark) "
     "never affects a badge or the card, whatever its status or however long it has been queued. The current "
     "attempt of a required job is its attempt on the head commit with the highest attempt number; attempts "
-    "on older commits are never current, whatever their status (they matter only as flakiness evidence).",
+    "on older commits are never current, whatever their status (they matter only as evidence under the Flaky tests rule).",
     "ci_badge: stale if no required job has an attempt on the head commit yet; otherwise red if the current "
     "attempt of some required job failed; otherwise green if the current attempt of every required job "
     "passed; otherwise pending (some current attempt is queued or running, or some required job has no "
