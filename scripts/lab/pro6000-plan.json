@@ -1,0 +1,20 @@
+{
+  "experiment_id": "pro6000-lab-20261001",
+  "dataset_sha256": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af",
+  "settings": [
+    {"id": "kev-9b", "backend": "kev", "model": "jaredpalmer/kev-9b",
+     "revision": "b5d8c18e44c60888d138b65cb6507ff0a5a448a0",
+     "base_model": "Qwen/Qwen3.5-9B-Base", "base_revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"},
+    {"id": "kev-27b", "backend": "kev", "model": "jaredpalmer/kev-27b",
+     "revision": "ef78cc8a34d5f426fb229c52089db189218cfe5c",
+     "base_model": "Qwen/Qwen3.8-27B", "base_revision": "1d4bf0f2"},
+    {"id": "kev-4b", "backend": "kev", "model": "jaredpalmer/kev-4b",
+     "revision": "139fdd94f1b6a6ad80cc15e08fcb99cac885a101",
+     "base_model": "Qwen/Qwen3.5-4B-Base", "base_revision": "1001bb4d"},
+    {"id": "nimble-9b", "backend": "nimble", "model": "bespokelabs/Bespoke-Nimble-9B",
+     "revision": "bd792f44ec8e265be861bfcdf4e05967ffe0e858",
+     "base_model": "Qwen/Qwen3.5-9B", "base_revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"},
+    {"id": "semif-qwen35-4b", "backend": "semif", "model": "Qwen/Qwen3.5-4B",
+     "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"}
+  ]
+}

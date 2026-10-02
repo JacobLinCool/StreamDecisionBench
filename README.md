@@ -52,23 +52,24 @@ Latency includes the remote service and internet round trip from the benchmark c
 
 | Setting | Log-AUC 0.5–8 s (%) | Untimed (%) | p50 / p95 (s) | GPU; same-host latency |
 |---|---:|---:|---:|---|
-| [Laya English](docs/lite/results/runpod-openweight-20260930/laya-english/REPORT.md) | 0.42 | 0.42 | 0.126 / 0.240 | RTX PRO 6000 (96 GB) |
-| [Laya typed-decisions](docs/lite/results/runpod-openweight-20260930/laya-typed-decisions/REPORT.md) | 1.46 | 1.46 | 0.129 / 0.235 | RTX PRO 6000 (96 GB) |
-| [Laya multilingual](docs/lite/results/runpod-openweight-20260930/laya-multilingual/REPORT.md) | 0.21 | 0.21 | 0.068 / 0.132 | RTX PRO 6000 (96 GB) |
-| [DJev / DiffusionGemma](docs/lite/results/runpod-openweight-20260930/djev-diffusiongemma/REPORT.md) | 20.95 | 21.88 | 0.257 / 0.403 | RTX PRO 6000 (96 GB) |
-| [Kev-4B](docs/lite/results/runpod-openweight-20260930-round2/kev-4b/REPORT.md) | 20.91 | 21.46 | 0.160 / 0.261 | L40S (48 GB) |
-| [Bespoke Nimble-9B](docs/lite/results/runpod-openweight-20260930-round2/nimble-9b/REPORT.md) | 10.42 | 22.50 | 6.162 / 41.782 | L40S (48 GB) |
-| [Qwen3.5-4B direct-logit](docs/lite/results/runpod-openweight-20260930-round2/semif-qwen35-4b/REPORT.md) | 14.79 | 17.08 | 0.972 / 1.707 | L40S (48 GB) |
+| [Laya English](docs/lite/results/pro6000-lab-20261001/laya-english/REPORT.md) | 0.42 | 0.42 | 0.144 / 0.256 | RTX PRO 6000 (96 GB) |
+| [Laya typed-decisions](docs/lite/results/pro6000-lab-20261001/laya-typed-decisions/REPORT.md) | 1.46 | 1.46 | 0.144 / 0.257 | RTX PRO 6000 (96 GB) |
+| [Laya multilingual](docs/lite/results/pro6000-lab-20261001/laya-multilingual/REPORT.md) | 0.21 | 0.21 | 0.084 / 0.156 | RTX PRO 6000 (96 GB) |
+| [DJev / DiffusionGemma](docs/lite/results/pro6000-lab-20261001/djev-diffusiongemma/REPORT.md) | 20.61 | 22.92 | 0.565 / 0.675 | RTX PRO 6000 (96 GB) |
+| [Kev-4B](docs/lite/results/pro6000-lab-20261001/kev-4b/REPORT.md) | 21.20 | 22.08 | 0.231 / 0.337 | RTX PRO 6000 (96 GB) |
+| [Kev-9B](docs/lite/results/pro6000-lab-20261001/kev-9b/REPORT.md) | 29.27 | 30.42 | 0.229 / 0.368 | RTX PRO 6000 (96 GB) |
+| [Kev-27B](docs/lite/results/pro6000-lab-20261001/kev-27b/REPORT.md) | 61.97 | 72.50 | 0.538 / 0.916 | RTX PRO 6000 (96 GB) |
+| [Bespoke Nimble-9B](docs/lite/results/pro6000-lab-20261001/nimble-9b/REPORT.md) | 14.72 | 22.50 | 1.618 / 13.372 | RTX PRO 6000 (96 GB) |
+| [Qwen3.5-4B direct-logit](docs/lite/results/pro6000-lab-20261001/semif-qwen35-4b/REPORT.md) | 15.46 | 17.71 | 0.817 / 1.338 | RTX PRO 6000 (96 GB) |
 
-All seven settings use BF16 backbones and native decision readouts. Benchmark and model run on the
-same GPU host; latency includes request processing, runtime queueing and inference, and excludes
-download, initialization and warmup. These rows describe the measured deployments: the GPU cohorts
+All 9 settings use BF16 backbones and native decision readouts on one RTX PRO 6000. Benchmark and
+model run on the same GPU host; latency includes request processing, runtime queueing and inference, and excludes
+download, initialization and warmup. These rows describe the measured deployment: the self-hosted settings
 and hosted APIs are not a controlled hardware comparison.
 
 Nimble scores each field sequentially with its full prompt; its latency covers the complete decision
 request. The Qwen row uses SemIf's direct option logits with thinking disabled; it is not an evaluation
-of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/results/runpod-openweight-20260930/README.md)
-and [L40S cohort](docs/lite/results/runpod-openweight-20260930-round2/README.md).
+of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/results/pro6000-lab-20261001/README.md).
 
 ### Provisional decisions with corrections
 
@@ -76,20 +77,22 @@ and [L40S cohort](docs/lite/results/runpod-openweight-20260930-round2/README.md)
 |---|---:|
 | Terra none alone | 54.11 |
 | Jev + Terra none | 66.21 |
-| Laya English + Terra none | 27.27 |
-| Laya typed-decisions + Terra none | 27.77 |
-| Laya multilingual + Terra none | 26.22 |
-| DJev / DiffusionGemma + Terra none | 42.07 |
-| Kev-4B + Terra none | 41.05 |
-| Bespoke Nimble-9B + Terra none | 54.08 |
-| Qwen3.5-4B direct-logit + Terra none | 48.73 |
+| Laya English + Terra none | 27.32 |
+| Laya typed-decisions + Terra none | 27.99 |
+| Laya multilingual + Terra none | 26.43 |
+| DJev / DiffusionGemma + Terra none | 44.90 |
+| Kev-4B + Terra none | 41.89 |
+| Kev-9B + Terra none | 46.89 |
+| Kev-27B + Terra none | 66.52 |
+| Bespoke Nimble-9B + Terra none | 53.46 |
+| Qwen3.5-4B direct-logit + Terra none | 46.91 |
 
 Both components receive each state. A provisional answer never moves the active source backward;
 the correction wins equal-source ties and, under the **freshest-source** rule used above, cannot
 overwrite a newer source. These are counterfactual compositions of independent recordings on
 common nominal releases, retaining original measured latencies. Joint deployment contention is unmeasured.
 
-The Jev pairing improves on Terra none alone, while several faster self-hosted components reduce
+The Jev and Kev-27B pairings improve on Terra none alone, while the other self-hosted components reduce
 accuracy: an incorrect answer for a newer state can displace a still-correct correction. Speed alone
 does not determine whether composition helps. Nimble occupies the provisional slot in this analysis
 even though its recorded median latency exceeds Terra none's.

@@ -17,14 +17,14 @@ const HEIGHT = 834;
 const names = {
   Jev: 'Jev', TerraNone: 'GPT-5.6-Terra · none', Terra: 'GPT-5.6-Terra · low',
   Luna: 'GPT-5.6-Luna · low', Astra: 'GPT-6-Astra · low', LunaNone: 'GPT-5.6-Luna · none',
-  DJev: 'DJev / DiffusionGemma', Kev: 'Kev-4B', QwenLogits: 'Qwen3.5-4B · direct logits',
+  DJev: 'DJev / DiffusionGemma', Kev: 'Kev-4B', KevNine: 'Kev-9B', KevTwentySeven: 'Kev-27B', QwenLogits: 'Qwen3.5-4B · direct logits',
   Nimble: 'Bespoke Nimble-9B', LayaTyped: 'Laya · typed decisions',
   LayaEnglish: 'Laya · English', LayaMultilingual: 'Laya · multilingual',
 };
 const colors = {
   Jev: '#0F766E', TerraNone: '#2563EB', Terra: '#6387CA',
   Luna: '#7C3AED', Astra: '#475569', LunaNone: '#A17CC5',
-  DJev: '#B45309', Kev: '#CA8A04', QwenLogits: '#BE185D', Nimble: '#60813B',
+  DJev: '#B45309', Kev: '#CA8A04', KevNine: '#0891B2', KevTwentySeven: '#DC2626', QwenLogits: '#BE185D', Nimble: '#60813B',
   LayaTyped: '#8A9CAF', LayaEnglish: '#64748B', LayaMultilingual: '#334155',
 };
 
@@ -32,12 +32,12 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-assert(data.series.length === 13 && new Set(data.series.map(row => row.id)).size === 13,
-  'All thirteen distinct settings must be rendered');
+assert(data.series.length === 15 && new Set(data.series.map(row => row.id)).size === 15,
+  'All fifteen distinct settings must be rendered');
 assert(data.series.filter(row => row.deployment === 'hosted').length === 6,
   'Six hosted settings are required');
-assert(data.series.filter(row => row.deployment === 'self-hosted').length === 7,
-  'Seven self-hosted settings are required');
+assert(data.series.filter(row => row.deployment === 'self-hosted').length === 9,
+  'Nine self-hosted settings are required');
 assert(data.intervals_s[0] === 0.5 && data.intervals_s.at(-1) === 8, 'Interval range must be 0.5–8 s');
 for (const [path, expected] of Object.entries(data.sources_sha256)) {
   const hash = createHash('sha256').update(readFileSync(new URL(path, root))).digest('hex');
@@ -73,7 +73,7 @@ function base(subtitle, description) {
         style: { fill: '#FFFFFF', stroke: '#DCE4EE', lineWidth: 1 } },
       text(43, 121, description, 16),
       text(989, 45, '6 CLOUD API', 14, MUTED, 700),
-      text(989, 70, '7 SELF-HOSTED', 14, MUTED, 700),
+      text(989, 70, '9 SELF-HOSTED', 14, MUTED, 700),
     ],
   };
 }
@@ -176,7 +176,7 @@ function save(name, option, description) {
     svg = svg.replace(/<svg\b/, '<svg role="img" aria-labelledby="chart-title chart-description"')
       .replace(/(<svg\b[^>]*>)/,
         `$1\n<title id="chart-title">StreamDecisionBench — ${description}</title>\n`
-        + '<desc id="chart-description">Thirteen single-model settings, six cloud APIs and seven self-hosted open-weight settings. '
+        + '<desc id="chart-description">Fifteen single-model settings, six cloud APIs and nine self-hosted open-weight settings. '
         + 'Normalized log-AUC over update intervals of 0.5–8 seconds; one recorded pass per setting.</desc>');
     assert(!svg.includes('NaN'), `${name}: invalid SVG geometry`);
     writeFileSync(new URL(name, directory), svg + '\n');

@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 import threading
@@ -88,7 +89,7 @@ def main():
         "workers": 32, "episode_concurrency": 1, "request_timeout_s": 90.0,
         "max_attempts": 3, "retry_delay_s": 0.5, "sdk_retries": 0,
         "custom_endpoint": args.backend == "djev",
-        "measurement_location": "RunPod; benchmark and model on the same GPU host",
+        "measurement_location": os.environ.get("SDB_MEASUREMENT_LOCATION", "RunPod; benchmark and model on the same GPU host"),
         "untimed": "one final successful response per state; failed transport attempts excluded from model timing",
         "adapter_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     }

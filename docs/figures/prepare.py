@@ -29,8 +29,8 @@ def build() -> dict:
             raise ValueError(f"Stale analysis source: {filename}; regenerate the analysis first")
     specs = summary["policy"]["settings"]
     names = [*summary["hosted"], *summary["standalone"]]
-    if len(names) != 13 or len(set(names)) != 13:
-        raise ValueError("The leaderboard requires all six hosted and seven self-hosted settings")
+    if len(names) != 15 or len(set(names)) != 15:
+        raise ValueError("The leaderboard requires all six hosted and nine self-hosted settings")
     runs, reports, provenance = {}, {}, {}
     for name in names:
         source = summary["provenance"][name]

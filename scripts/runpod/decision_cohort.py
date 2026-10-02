@@ -42,14 +42,20 @@ def bounded_run(command, log, timeout, *, cwd=None, env=None):
 def prepare(setting):
     from huggingface_hub import snapshot_download
     import torch
-    destination = Path("/opt/sdb-models") / setting["id"]
+    destination = Path(os.environ.get("SDB_MODELS", "/opt/sdb-models")) / setting["id"]
     destination.mkdir(parents=True, exist_ok=True)
     snapshot = Path(snapshot_download(setting["model"], revision=setting["revision"],
                                      ignore_patterns=["*.msgpack", "*.h5", "*.bin", "assets/*"]))
     base = None
     if setting["backend"] == "kev":
-        base = snapshot_download(setting["base_model"], revision=setting["base_revision"],
-                                 ignore_patterns=["*.msgpack", "*.h5", "*.bin"])
+        from kev.checkpoint import Checkpoint
+        # Fetch exactly the base Kev loads offline; a full-weight checkpoint only needs its tokenizer.
+        checkpoint = Checkpoint(str(snapshot))
+        meta = checkpoint.meta
+        if meta.base != setting["base_model"] or not meta.base_revision.startswith(setting["base_revision"]):
+            raise ValueError("Kev base identity differs from plan")
+        base = snapshot_download(meta.base, revision=meta.base_revision,
+                                 ignore_patterns=["*.msgpack", "*.h5", "*.bin"] + (["*.safetensors"] if checkpoint.full else []))
         model_path = snapshot
     elif setting["backend"] == "nimble":
         from transformers import AutoTokenizer, Qwen3_5ForConditionalGeneration
