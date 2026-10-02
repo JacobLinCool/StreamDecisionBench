@@ -91,7 +91,7 @@ If any check fails, the script lists every failure and does not publish new numb
 - Differences between models are named so the value is nonnegative, for example `\LunaMinusJevInForce`. If the data change which model is ahead, the macro name changes and the paper fails to compile. The primary score is identified by the `Auc` suffix; `InForce` denotes the fixed 2 s diagnostic.
 - Load `generated/numbers.tex` before `generated/tables.tex`. The paper defines the model labels, such as `\LunaLabel`, before loading the tables.
 - The inputs are `data/lite/v1` (dataset hash `fdfdd55d…`), `runs/lite-v1-*-retry-v1/` and `docs/lite/results/*/`. Number and figure generation treat these inputs as read only; `lite_reports.py` rebuilds the published analyses from the frozen recordings.
-- Each model has one recorded pass, so the text describes differences without significance tests or ranking claims. Network-removed scores always appear with their range and the assumption behind them. Timing ceilings and delay scaling are labelled as counterfactual replays.
+- Hosted settings have one recorded pass; self-hosted results average three independently evaluated passes, including compositions with the same hosted recording. Latency summaries average per-pass quantiles. Comparisons remain descriptive. Network-removed scores always appear with their range and the assumption behind them. Timing ceilings and delay scaling are labelled as counterfactual replays.
 - The validity audit was run by LLM agents. It is not human validation.
 
 

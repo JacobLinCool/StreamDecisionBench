@@ -12,7 +12,7 @@ without smoothing. All settings retain their original recorded release clocks, s
 latencies and commit lag. Scenarios receive equal weights within each family, then families receive
 equal weights. Primary areas come from the verified published analyses, independently of the display grid.
 
-Each setting has one recorded pass. Retiming assumes latency remains fixed when request rates
+Hosted settings have one recorded pass; self-hosted scores and curves average three passes. Retiming assumes latency remains fixed when request rates
 change. Hosted API and same-host GPU latency describe different deployments; these figures do
 not isolate architecture speed. Qwen uses direct option logits, and Nimble processes fields sequentially.
 

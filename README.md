@@ -24,7 +24,7 @@ normalized log-AUC. [Figure data and regeneration](docs/figures/README.md).
 <!-- BEGIN GENERATED SDB RESULTS -->
 ## Results
 
-One recorded pass per setting over all 480 states (8 scenarios in 4 families), recorded at a 2 s
+One hosted pass and three self-hosted passes per setting, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s
 time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights
 within each family and then equal family weights. Interval evaluations retain the recorded answers
 and latencies; they assume service latency does not change with the request rate.
@@ -52,17 +52,17 @@ Latency includes the remote service and internet round trip from the benchmark c
 
 ### Self-hosted open-weight settings
 
-| Setting | Log-AUC 0.5–8 s (%) | Untimed (%) | p50 / p95 (s) | GPU; same-host latency |
+| Setting | Mean log-AUC 0.5–8 s (%) | Mean untimed (%) | Mean p50 / p95 (s) | GPU; same-host latency |
 |---|---:|---:|---:|---|
-| [Laya English](docs/lite/results/pro6000-lab-20261001/laya-english/REPORT.md) | 0.42 | 0.42 | 0.144 / 0.256 | RTX PRO 6000 (96 GB) |
-| [Laya typed-decisions](docs/lite/results/pro6000-lab-20261001/laya-typed-decisions/REPORT.md) | 1.46 | 1.46 | 0.144 / 0.257 | RTX PRO 6000 (96 GB) |
-| [Laya multilingual](docs/lite/results/pro6000-lab-20261001/laya-multilingual/REPORT.md) | 0.21 | 0.21 | 0.084 / 0.156 | RTX PRO 6000 (96 GB) |
-| [DJev / DiffusionGemma](docs/lite/results/pro6000-lab-20261001/djev-diffusiongemma/REPORT.md) | 20.61 | 22.92 | 0.565 / 0.675 | RTX PRO 6000 (96 GB) |
-| [Kev-4B](docs/lite/results/pro6000-lab-20261001/kev-4b/REPORT.md) | 21.20 | 22.08 | 0.231 / 0.337 | RTX PRO 6000 (96 GB) |
-| [Kev-9B](docs/lite/results/pro6000-lab-20261001/kev-9b/REPORT.md) | 29.27 | 30.42 | 0.229 / 0.368 | RTX PRO 6000 (96 GB) |
-| [Kev-27B](docs/lite/results/pro6000-lab-20261001/kev-27b/REPORT.md) | 61.97 | 72.50 | 0.538 / 0.916 | RTX PRO 6000 (96 GB) |
-| [Bespoke Nimble-9B](docs/lite/results/pro6000-lab-20261001/nimble-9b/REPORT.md) | 14.72 | 22.50 | 1.618 / 13.372 | RTX PRO 6000 (96 GB) |
-| [Qwen3.5-4B direct-logit](docs/lite/results/pro6000-lab-20261001/semif-qwen35-4b/REPORT.md) | 15.46 | 17.71 | 0.817 / 1.338 | RTX PRO 6000 (96 GB) |
+| Laya English | 0.42 | 0.42 | 0.144 / 0.256 | RTX PRO 6000 (96 GB) |
+| Laya typed-decisions | 1.46 | 1.46 | 0.143 / 0.254 | RTX PRO 6000 (96 GB) |
+| Laya multilingual | 0.21 | 0.21 | 0.084 / 0.154 | RTX PRO 6000 (96 GB) |
+| DJev / DiffusionGemma | 20.89 | 23.13 | 0.549 / 0.650 | RTX PRO 6000 (96 GB) |
+| Kev-4B | 21.22 | 22.08 | 0.223 / 0.328 | RTX PRO 6000 (96 GB) |
+| Kev-9B | 28.76 | 29.86 | 0.229 / 0.369 | RTX PRO 6000 (96 GB) |
+| Kev-27B | 62.15 | 72.64 | 0.529 / 0.903 | RTX PRO 6000 (96 GB) |
+| Bespoke Nimble-9B | 14.43 | 22.36 | 1.711 / 12.122 | RTX PRO 6000 (96 GB) |
+| Qwen3.5-4B direct-logit | 15.61 | 17.71 | 0.777 / 1.254 | RTX PRO 6000 (96 GB) |
 
 All 9 settings use BF16 backbones and native decision readouts on one RTX PRO 6000. Benchmark and
 model run on the same GPU host; latency includes request processing, runtime queueing and inference, and excludes
@@ -79,20 +79,21 @@ of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/resu
 |---|---:|
 | Terra none alone | 54.11 |
 | Jev + Terra none | 66.21 |
-| Laya English + Terra none | 27.32 |
-| Laya typed-decisions + Terra none | 27.99 |
-| Laya multilingual + Terra none | 26.43 |
-| DJev / DiffusionGemma + Terra none | 44.90 |
-| Kev-4B + Terra none | 41.89 |
-| Kev-9B + Terra none | 46.89 |
-| Kev-27B + Terra none | 66.52 |
-| Bespoke Nimble-9B + Terra none | 53.46 |
-| Qwen3.5-4B direct-logit + Terra none | 46.91 |
+| Laya English + Terra none | 27.31 |
+| Laya typed-decisions + Terra none | 27.97 |
+| Laya multilingual + Terra none | 26.44 |
+| DJev / DiffusionGemma + Terra none | 44.74 |
+| Kev-4B + Terra none | 41.84 |
+| Kev-9B + Terra none | 46.61 |
+| Kev-27B + Terra none | 66.76 |
+| Bespoke Nimble-9B + Terra none | 53.41 |
+| Qwen3.5-4B direct-logit + Terra none | 46.22 |
 
 Both components receive each state. A provisional answer never moves the active source backward;
 the correction wins equal-source ties and, under the **freshest-source** rule used above, cannot
 overwrite a newer source. These are counterfactual compositions of independent recordings on
-common nominal releases, retaining original measured latencies. Joint deployment contention is unmeasured.
+common nominal releases, retaining original measured latencies. Each self-hosted pass is paired with the same
+hosted recording before averaging. Joint deployment contention is unmeasured.
 
 The Jev and Kev-27B pairings improve on Terra none alone, while the other self-hosted components reduce
 accuracy: an incorrect answer for a newer state can displace a still-correct correction. Speed alone
@@ -101,7 +102,7 @@ even though its recorded median latency exceeds Terra none's.
 
 [Complete local/policy matrix, curves and provenance](docs/research/openweight-hybrids/README.md);
 [all five Jev/GPT pairs and three arbitration policies](docs/research/trajectory-value/README.md).
-Hosted settings have one pass; self-hosted settings have three, of which every other analysis uses the first.
+Self-hosted values are means over three passes; latency summaries are means of per-pass quantiles. Hosted values use one pass.
 Adjacent states are dependent; differences do not establish stable rankings.
 
 Regenerate the verified summary, paper tables and composition curves without model calls:

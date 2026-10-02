@@ -131,7 +131,7 @@ Our contributions are:\footnote{Code, data, recordings and reproducible analysis
 \begin{itemize}[leftmargin=*,itemsep=1pt,topsep=2pt]
 \item \textbf{Evaluation and decomposition.} In-force accuracy of the branch-composed decision, an exact partition of error time, and a factorization into oracle timing and current-source judgment, with an integrated score that weights equal multiplicative time-scale ranges equally (\S\ref{sec:method}).
 \item \textbf{Benchmark.} \NumScenarios{} controlled timelines in \NumFamilies{} families (\NumStates{} states, \AnswersPerPass{} state--question pairs, \TransitionsTotal{} reference transitions), with executable public rules and a blind LLM-agent audit of the original six scenarios (\S\ref{sec:lite}).
-\item \textbf{Measurement.} One recorded pass for each of \OwTotalSettingsWord{} hosted and self-hosted settings: the decomposition identifies latency and judgment limits, while curves and composition replays expose changes in system comparisons across time scales (\S\ref{sec:results}).
+\item \textbf{Measurement.} Measurements of \OwTotalSettingsWord{} hosted and self-hosted settings: the decomposition identifies latency and judgment limits, while curves and composition replays expose changes in system comparisons across time scales (\S\ref{sec:results}).
 \end{itemize}
 
 % ---------------------------------------------------------------------------
@@ -333,7 +333,7 @@ Appendix~\ref{app:protocol} records session and reliability details. For hosted 
 \textbf{RQ3}: How do the comparisons change across time scales and task families?
 
 \paragraph{Reporting.}
-Each hosted setting has one pass and each self-hosted setting three (Appendix~\ref{app:openweight}); adjacent states are dependent, so comparisons are descriptive. The primary score uses Equation~\eqref{eq:macro}, retaining recorded answers and latencies; Appendix~\ref{app:intervals} varies bounds and weighting. Fixed-interval analyses are labelled explicitly.
+We report means over three recorded passes for self-hosted settings and one pass for hosted settings (Appendix~\ref{app:openweight}); adjacent states are dependent, so comparisons are descriptive. The primary score uses Equation~\eqref{eq:macro}, retaining recorded answers and latencies; Appendix~\ref{app:intervals} varies bounds and weighting. Fixed-interval analyses are labelled explicitly.
 
 
 % ---------------------------------------------------------------------------
@@ -370,8 +370,8 @@ A shorter response helps only if the decision remains accurate enough.
 We replay every Jev/GPT pair, dispatching both at each state and allowing the slower answer to correct the faster answer for that state.
 At 2\,s, Jev plus Terra low attains \TrajTerraFreshestTwo\% when slow answers cannot regress the active source, but \TrajTerraArrivalTwo\% when they may overwrite newer fast answers: composition changes from improving on Jev alone (\TrajJevTwo\%) to reducing accuracy, with identical component answers, latency distributions and reference transitions.
 Jev plus Terra none with the freshness rule attains \OwJevTerraNoneAuc\% log-AUC, against \OwTerraNoneAuc\% for Terra none alone and \TrajJevAuc\% for Jev alone.
-With the same correction model and rule, DJev and Kev-4B give \OwDJevFreshestAuc\% and \OwKevFreshestAuc\%, despite median latencies of \OwDJevMedian\,s and \OwKevMedian\,s: their untimed decision accuracies are \OwDJevUntimed\% and \OwKevUntimed\%.
-Kev-27B is untimed-correct at \OwKevTwentySevenUntimed\% of states; alone it reaches \OwKevTwentySevenAuc\% log-AUC (\OwKevTwentySevenRepeatMeanAuc\% over three passes) at a median latency of \OwKevTwentySevenMedian\,s, above Jev, and with Terra none corrections \OwKevTwentySevenFreshestAuc\%, the highest evaluated system in this recording.
+With the same correction model and rule, DJev and Kev-4B give \OwDJevFreshestAuc\% and \OwKevFreshestAuc\%, despite mean per-pass median latencies of \OwDJevMedian\,s and \OwKevMedian\,s: their untimed decision accuracies are \OwDJevUntimed\% and \OwKevUntimed\%.
+Kev-27B is untimed-correct at \OwKevTwentySevenUntimed\% of states; alone it reaches \OwKevTwentySevenAuc\% log-AUC at a mean per-pass median latency of \OwKevTwentySevenMedian\,s, above Jev, and with Terra none corrections \OwKevTwentySevenFreshestAuc\%, the highest evaluated mean.
 A wrong provisional answer for a newer state can displace a still-correct earlier decision; speed helps composition only where judgment survives.
 Marginal accuracy and latency summaries omit which component remains in force and for how long; the exact factorization still holds with the composed path's $U_{\mathrm{cur}}$.
 These are counterfactual combinations of separate recordings on common nominal releases; Appendices~\ref{app:composition} and~\ref{app:openweight} report all evaluated pairs and rules. Joint contention is unmeasured.
