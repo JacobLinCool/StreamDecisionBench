@@ -67,3 +67,40 @@ def test_public_extension_keeps_manuscript_setting_count(tmp_path, monkeypatch):
     write_tex(summary)
     numbers = (output / "openweight_numbers.tex").read_text()
     assert r"\newcommand{\OwTotalSettingsWord}{fifteen}" in numbers
+
+
+def test_self_hosted_exports_use_all_three_passes(tmp_path):
+    summary = json.loads(figure_data.SUMMARY.read_text())
+    site = site_build.build(tmp_path)
+    exported = {row["id"]: row for row in site["settings"]}
+    for name, result in summary["standalone"].items():
+        passes = result["passes"]
+        assert len(passes) == exported[name]["passes"] == 3
+        assert len({p["provenance"]["run"] for p in passes}) == 3
+        assert exported[name]["log_auc_pct"] == pytest.approx(
+            100 * sum(p["integrated"]["overall"]["accuracy"] for p in passes) / 3)
+        assert exported[name]["untimed_pct"] == pytest.approx(100 * sum(p["untimed"] for p in passes) / 3)
+        for q in ("p50", "p95"):
+            assert exported[name][q + "_s"] == pytest.approx(sum(p["latency_s"][q] for p in passes) / 3)
+        for system in summary["systems"][name].values():
+            areas = [p["integrated"]["overall"]["accuracy"] for p in system["passes"]]
+            assert system["integrated"]["overall"]["accuracy"] == pytest.approx(sum(areas) / 3)
+            assert system["auc_range"] == pytest.approx(max(areas) - min(areas))
+            curves = [p["integrated"]["curve"]["accuracy"] for p in system["passes"]]
+            assert system["integrated"]["curve"]["accuracy"] == pytest.approx(
+                [sum(values) / 3 for values in zip(*curves, strict=True)])
+
+
+def test_generated_markdown_tables_have_consistent_columns():
+    from lite_openweight import render_report, render_results
+    summary = json.loads(figure_data.SUMMARY.read_text())
+    for text in (render_results(summary), render_report(summary)):
+        columns = None
+        for line in text.splitlines():
+            if not line.startswith("|"):
+                columns = None
+                continue
+            count = len(line.split("|"))
+            if columns is None:
+                columns = count
+            assert count == columns

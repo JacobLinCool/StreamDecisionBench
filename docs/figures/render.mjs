@@ -182,7 +182,7 @@ function save(name, option, description) {
       .replace(/(<svg\b[^>]*>)/,
         `$1\n<title id="chart-title">StreamDecisionBench — ${description}</title>\n`
         + `<desc id="chart-description">${ids.size} single-model settings, ${hostedCount} cloud APIs and ${localCount} self-hosted open-weight settings. `
-        + 'Normalized log-AUC over update intervals of 0.5–8 seconds; one recorded pass per setting.</desc>');
+        + 'Normalized log-AUC over update intervals of 0.5–8 seconds; one pass per hosted setting and means of three passes per self-hosted setting.</desc>');
     assert(!svg.includes('NaN'), `${name}: invalid SVG geometry`);
     writeFileSync(new URL(name, directory), svg + '\n');
     console.log(`Rendered ${fileURLToPath(new URL(name, directory))}`);

@@ -5,18 +5,19 @@ Reproduce: `uv run --group paper python paper/analysis/lite_openweight.py`.
 All primary values are normalized log-AUC over 0.5–8 s, equally averaged over scenarios within each
 family and then families. Standalone measurements retain their original release clocks; compositions
 use common nominal releases. Every recorded successful-attempt duration plus commit lag is retained.
+Self-hosted results and curves average three passes; latency summaries average per-pass quantiles.
 
-| Setting | Log-AUC 0.5–8 s (%) | Untimed (%) | p50 / p95 (s) | GPU; same-host latency |
+| Setting | Mean log-AUC 0.5–8 s (%) | Mean untimed (%) | Mean p50 / p95 (s) | GPU; same-host latency |
 |---|---:|---:|---:|---|
-| [Laya English](../../../docs/lite/results/pro6000-lab-20261001/laya-english/REPORT.md) | 0.42 | 0.42 | 0.144 / 0.256 | RTX PRO 6000 (96 GB) |
-| [Laya typed-decisions](../../../docs/lite/results/pro6000-lab-20261001/laya-typed-decisions/REPORT.md) | 1.46 | 1.46 | 0.144 / 0.257 | RTX PRO 6000 (96 GB) |
-| [Laya multilingual](../../../docs/lite/results/pro6000-lab-20261001/laya-multilingual/REPORT.md) | 0.21 | 0.21 | 0.084 / 0.156 | RTX PRO 6000 (96 GB) |
-| [DJev / DiffusionGemma](../../../docs/lite/results/pro6000-lab-20261001/djev-diffusiongemma/REPORT.md) | 20.61 | 22.92 | 0.565 / 0.675 | RTX PRO 6000 (96 GB) |
-| [Kev-4B](../../../docs/lite/results/pro6000-lab-20261001/kev-4b/REPORT.md) | 21.20 | 22.08 | 0.231 / 0.337 | RTX PRO 6000 (96 GB) |
-| [Kev-9B](../../../docs/lite/results/pro6000-lab-20261001/kev-9b/REPORT.md) | 29.27 | 30.42 | 0.229 / 0.368 | RTX PRO 6000 (96 GB) |
-| [Kev-27B](../../../docs/lite/results/pro6000-lab-20261001/kev-27b/REPORT.md) | 61.97 | 72.50 | 0.538 / 0.916 | RTX PRO 6000 (96 GB) |
-| [Bespoke Nimble-9B](../../../docs/lite/results/pro6000-lab-20261001/nimble-9b/REPORT.md) | 14.72 | 22.50 | 1.618 / 13.372 | RTX PRO 6000 (96 GB) |
-| [Qwen3.5-4B direct-logit](../../../docs/lite/results/pro6000-lab-20261001/semif-qwen35-4b/REPORT.md) | 15.46 | 17.71 | 0.817 / 1.338 | RTX PRO 6000 (96 GB) |
+| Laya English | 0.42 | 0.42 | 0.144 / 0.256 | RTX PRO 6000 (96 GB) |
+| Laya typed-decisions | 1.46 | 1.46 | 0.143 / 0.254 | RTX PRO 6000 (96 GB) |
+| Laya multilingual | 0.21 | 0.21 | 0.084 / 0.154 | RTX PRO 6000 (96 GB) |
+| DJev / DiffusionGemma | 20.89 | 23.13 | 0.549 / 0.650 | RTX PRO 6000 (96 GB) |
+| Kev-4B | 21.22 | 22.08 | 0.223 / 0.328 | RTX PRO 6000 (96 GB) |
+| Kev-9B | 28.76 | 29.86 | 0.229 / 0.369 | RTX PRO 6000 (96 GB) |
+| Kev-27B | 62.15 | 72.64 | 0.529 / 0.903 | RTX PRO 6000 (96 GB) |
+| Bespoke Nimble-9B | 14.43 | 22.36 | 1.711 / 12.122 | RTX PRO 6000 (96 GB) |
+| Qwen3.5-4B direct-logit | 15.61 | 17.71 | 0.777 / 1.254 | RTX PRO 6000 (96 GB) |
 
 ## Pair selection and acceptance
 
@@ -32,56 +33,56 @@ not a faster component in these recordings.
 |---|---:|
 | Terra none alone | 54.11 |
 | Jev + Terra none | 66.21 |
-| Laya English + Terra none | 27.32 |
-| Laya typed-decisions + Terra none | 27.99 |
-| Laya multilingual + Terra none | 26.43 |
-| DJev / DiffusionGemma + Terra none | 44.90 |
-| Kev-4B + Terra none | 41.89 |
-| Kev-9B + Terra none | 46.89 |
-| Kev-27B + Terra none | 66.52 |
-| Bespoke Nimble-9B + Terra none | 53.46 |
-| Qwen3.5-4B direct-logit + Terra none | 46.91 |
+| Laya English + Terra none | 27.31 |
+| Laya typed-decisions + Terra none | 27.97 |
+| Laya multilingual + Terra none | 26.44 |
+| DJev / DiffusionGemma + Terra none | 44.74 |
+| Kev-4B + Terra none | 41.84 |
+| Kev-9B + Terra none | 46.61 |
+| Kev-27B + Terra none | 66.76 |
+| Bespoke Nimble-9B + Terra none | 53.41 |
+| Qwen3.5-4B direct-logit + Terra none | 46.22 |
 
 ## Complete local/policy matrix
 
-| Provisional setting | Arbitration | Log-AUC 0.5–8 s (%) | Fixed 2 s A (%) | Correction time share, log-weighted (%) |
-|---|---|---:|---:|---:|
-| Laya English | Freshest source | 27.32 | 24.14 | 33.74 |
-| Laya English | One-tick lag | 33.63 | 25.41 | 46.88 |
-| Laya English | Late override | 34.86 | 25.41 | 52.34 |
-| Laya typed-decisions | Freshest source | 27.99 | 24.79 | 33.74 |
-| Laya typed-decisions | One-tick lag | 34.16 | 26.06 | 46.88 |
-| Laya typed-decisions | Late override | 35.36 | 26.06 | 52.34 |
-| Laya multilingual | Freshest source | 26.43 | 22.39 | 32.40 |
-| Laya multilingual | One-tick lag | 33.17 | 23.66 | 45.59 |
-| Laya multilingual | Late override | 34.67 | 23.66 | 51.83 |
-| DJev / DiffusionGemma | Freshest source | 44.90 | 46.70 | 46.47 |
-| DJev / DiffusionGemma | One-tick lag | 46.39 | 46.80 | 57.37 |
-| DJev / DiffusionGemma | Late override | 46.36 | 46.80 | 58.15 |
-| Kev-4B | Freshest source | 41.89 | 40.85 | 36.19 |
-| Kev-4B | One-tick lag | 45.06 | 40.87 | 49.17 |
-| Kev-4B | Late override | 45.14 | 40.87 | 53.29 |
-| Kev-9B | Freshest source | 46.89 | 45.90 | 36.24 |
-| Kev-9B | One-tick lag | 49.01 | 45.88 | 49.20 |
-| Kev-9B | Late override | 48.80 | 45.88 | 53.33 |
-| Kev-27B | Freshest source | 66.52 | 69.71 | 47.56 |
-| Kev-27B | One-tick lag | 64.64 | 69.58 | 57.44 |
-| Kev-27B | Late override | 64.28 | 69.58 | 58.46 |
-| Bespoke Nimble-9B | Freshest source | 53.46 | 58.57 | 90.16 |
-| Bespoke Nimble-9B | One-tick lag | 53.48 | 58.57 | 90.35 |
-| Bespoke Nimble-9B | Late override | 53.48 | 58.57 | 90.35 |
-| Qwen3.5-4B direct-logit | Freshest source | 46.91 | 49.48 | 59.82 |
-| Qwen3.5-4B direct-logit | One-tick lag | 47.52 | 49.59 | 65.32 |
-| Qwen3.5-4B direct-logit | Late override | 47.50 | 49.59 | 65.47 |
+| Provisional setting | Arbitration | Mean log-AUC 0.5–8 s (%) | Range (points) | Mean fixed 2 s A (%) | Mean correction time share, log-weighted (%) |
+|---|---|---:|---:|---:|---:|
+| Laya English | Freshest source | 27.31 | 0.02 | 24.12 | 33.73 |
+| Laya English | One-tick lag | 33.63 | 0.01 | 25.39 | 46.86 |
+| Laya English | Late override | 34.86 | 0.00 | 25.39 | 52.33 |
+| Laya typed-decisions | Freshest source | 27.97 | 0.03 | 24.75 | 33.72 |
+| Laya typed-decisions | One-tick lag | 34.16 | 0.01 | 26.02 | 46.85 |
+| Laya typed-decisions | Late override | 35.35 | 0.01 | 26.02 | 52.33 |
+| Laya multilingual | Freshest source | 26.44 | 0.07 | 22.40 | 32.41 |
+| Laya multilingual | One-tick lag | 33.18 | 0.09 | 23.67 | 45.60 |
+| Laya multilingual | Late override | 34.68 | 0.07 | 23.67 | 51.84 |
+| DJev / DiffusionGemma | Freshest source | 44.74 | 0.54 | 46.38 | 45.36 |
+| DJev / DiffusionGemma | One-tick lag | 46.28 | 0.43 | 46.47 | 56.61 |
+| DJev / DiffusionGemma | Late override | 46.26 | 0.41 | 46.47 | 57.50 |
+| Kev-4B | Freshest source | 41.84 | 0.07 | 40.74 | 35.96 |
+| Kev-4B | One-tick lag | 45.06 | 0.02 | 40.77 | 48.96 |
+| Kev-4B | Late override | 45.15 | 0.02 | 40.77 | 53.19 |
+| Kev-9B | Freshest source | 46.61 | 0.46 | 45.63 | 36.27 |
+| Kev-9B | One-tick lag | 48.78 | 0.40 | 45.61 | 49.24 |
+| Kev-9B | Late override | 48.58 | 0.39 | 45.61 | 53.34 |
+| Kev-27B | Freshest source | 66.76 | 0.42 | 70.00 | 47.09 |
+| Kev-27B | One-tick lag | 64.86 | 0.38 | 69.87 | 57.11 |
+| Kev-27B | Late override | 64.47 | 0.34 | 69.87 | 58.20 |
+| Bespoke Nimble-9B | Freshest source | 53.41 | 0.51 | 58.53 | 90.23 |
+| Bespoke Nimble-9B | One-tick lag | 53.44 | 0.49 | 58.53 | 90.45 |
+| Bespoke Nimble-9B | Late override | 53.44 | 0.49 | 58.53 | 90.45 |
+| Qwen3.5-4B direct-logit | Freshest source | 46.22 | 1.43 | 48.58 | 57.25 |
+| Qwen3.5-4B direct-logit | One-tick lag | 46.96 | 1.16 | 48.70 | 63.60 |
+| Qwen3.5-4B direct-logit | Late override | 46.93 | 1.16 | 48.70 | 63.80 |
 
 ## Verification and scope
 
-Original-clock replay reproduces correctness and all six time classes in 136 setting/scenario checks.
+Original-clock replay reproduces correctness and all six time classes in 408 setting/scenario checks.
 The largest nominal/original-clock difference at 2 s is 0.017328 percentage points.
 The log integral is analytical between every release/arrival crossing; a third interior point checks each affine piece.
 Published standalone aggregates and family partitions are checked against independently recomputed areas.
-The observations cover one pass per setting on synthetic development scenarios. Retiming assumes fixed
-service latency; hardware normalization, joint contention, repeated-run stability and generative Qwen
+Compositions average three self-hosted passes, each paired with the same hosted recording. Retiming assumes fixed
+service latency; hardware normalization, joint contention, variability across hosted passes and generative Qwen
 performance are outside the measurements. Sol-2B had no executable public native runtime and receives no score.
 
 [analysis.json](analysis.json) includes all scenario/family partitions, full curves, raw event and input-audit

@@ -29,9 +29,9 @@ def build(out: Path) -> dict:
     for series in figures["series"]:
         curve = [series["accuracy_pct"][i] for i in keep]
         deviation = max(deviation, abs(log_auc(intervals, curve) - series["log_auc_pct"]))
-        latency = json.loads((ROOT / series["report"]).read_text())["latency_s"]
+        latency = series["latency_s"]
         settings.append({
-            "id": series["id"], "label": series["label"], "deployment": series["deployment"],
+            "passes": series["passes"], "id": series["id"], "label": series["label"], "deployment": series["deployment"],
             "log_auc_pct": series["log_auc_pct"], "untimed_pct": series["untimed_pct"],
             "p50_s": latency["p50"], "p95_s": latency["p95"], "curve_pct": curve,
         })

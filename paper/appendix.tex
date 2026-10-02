@@ -717,7 +717,7 @@ The exact identity in Equation~\eqref{eq:factor} continues to hold because selec
   \small
   \begin{tabular}{llrr}
     \toprule
-    Setting & GPU & p50 (s) & p95 (s) \\
+    Setting & GPU & Mean p50 (s) & Mean p95 (s) \\
     \midrule
     \TabOpenweightLatency
     \bottomrule
@@ -742,13 +742,30 @@ Family weights and bounds match Equation~\eqref{eq:macro}.
 \label{app:openweight}
 
 \paragraph{Settings and measurement.}
-We record \OwNumSettingsWord{} completed settings on the same frozen dataset, at the same 2\,s cadence with 32 workers and serial scenarios; each covers all \NumStates{} states once with zero failed model attempts.
+We record \OwNumSettingsWord{} completed settings on the same frozen dataset, at the same 2\,s cadence with 32 workers and serial scenarios; each pass covers all \NumStates{} states once with zero failed model attempts.
 Every setting runs on one RTX PRO 6000 Blackwell Server Edition GPU (96\,GB).
 All use BF16 backbones and native decision readouts. The benchmark and model share a host, so latency includes tokenization, runtime queueing and complete-decision inference, with no internet round trip.
 Download, initialization, input audits and three unrelated synthetic warmups precede measurement.
 These are measurements of the configured deployments: differences with hosted APIs do not isolate architecture speed.
 
 \FloatBarrier
+\begin{table*}[t]
+  \centering
+  \small
+  \begin{tabular}{lrrrrrrr}
+    \toprule
+    & \multicolumn{5}{c}{Log-AUC over 0.5--8\,s (\%)} & \multicolumn{2}{c}{Untimed (\%)} \\
+    \cmidrule(lr){2-6}\cmidrule(lr){7-8}
+    Setting & Pass 1 & Pass 2 & Pass 3 & Mean & Range & Mean & Range \\
+    \midrule
+    \TabOpenweightRepeats
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Repeated passes leave the self-hosted comparison unchanged.}
+  Three passes of each setting with the same GPU and configuration. Range is the maximum minus the minimum over passes.}
+  \label{tab:openweight-repeats}
+\end{table*}
+
 \begin{table*}[t]
   \centering
   \small
@@ -760,7 +777,7 @@ These are measurements of the configured deployments: differences with hosted AP
     \bottomrule
   \end{tabular}
   \caption{\textbf{Correction rules and provisional judgment jointly determine composition.}
-  All local settings paired with Terra none; normalized log-AUC over 0.5--8\,s (\%).}
+  All local settings paired with Terra none; mean (range) of normalized log-AUC over 0.5--8\,s (\%).}
   \label{tab:openweight-hybrids}
 \end{table*}
 
@@ -786,14 +803,19 @@ Sol-2B has no executable public native runtime at the inspected revisions, so no
 \paragraph{Judgment and timing.}
 Tables~\ref{tab:openweight-families} and~\ref{tab:openweight-latency} separate untimed decision accuracy from the measured deployment path.
 DJev and Kev-4B obtain \OwDJevUntimed\% and \OwKevUntimed\% untimed accuracy, with log-AUC of \OwDJevAuc\% and \OwKevAuc\%; most of their loss is already present with timing ignored.
-Larger Kev checkpoints raise untimed accuracy to \OwKevNineUntimed\% (Kev-9B) and \OwKevTwentySevenUntimed\% (Kev-27B); Kev-27B keeps \OwKevTwentySevenAuc\% log-AUC at p95 latency \OwKevTwentySevenTail\,s, so judgment still accounts for most of its loss.
-Nimble instead falls from \OwNimbleUntimed\% untimed to \OwNimbleAuc\% log-AUC, with p95 latency \OwNimbleTail\,s, so timing is a substantial additional limitation of this runtime.
+Larger Kev checkpoints raise untimed accuracy to \OwKevNineUntimed\% (Kev-9B) and \OwKevTwentySevenUntimed\% (Kev-27B); Kev-27B keeps \OwKevTwentySevenAuc\% log-AUC at mean per-pass p95 latency \OwKevTwentySevenTail\,s, so judgment still accounts for most of its loss.
+Nimble instead falls from \OwNimbleUntimed\% untimed to \OwNimbleAuc\% log-AUC, with mean per-pass p95 latency \OwNimbleTail\,s, so timing is a substantial additional limitation of this runtime.
 Exact composed decisions require all reference-active fields to agree; low composed accuracy is a result for this decision contract, not a claim about general language ability.
 The accompanying analysis retains the six time classes by scenario and family for every setting.
 
+\paragraph{Repeated passes.}
+We record three passes of each setting with the same GPU, configuration, checkpoints and dependency sets (Table~\ref{tab:openweight-repeats}). Self-hosted results and curves are equal means of independently evaluated passes; latency summaries average the per-pass quantiles.
+Across the three passes, a setting's log-AUC varies by at most \OwRepeatMaxAucRange{} points and its untimed accuracy by at most \OwRepeatMaxUntimedRange{} points. Every pass orders the self-hosted settings the same way, although Kev-4B and DJev stay within one point of each other, and every Kev-27B pass stays above Jev's hosted pass (\OwKevTwentySevenAuc\% on average).
+Differences between passes come from measured latency and from occasional changes in committed answers.
+
 \paragraph{Counterfactual composition.}
-We pair every completed self-hosted setting with Terra none, the GPT setting with the highest standalone log-AUC in the existing recordings, applying all three rules from Appendix~\ref{app:composition} unchanged.
-Table~\ref{tab:openweight-hybrids} reports every pair and rule; none is excluded based on its outcome.
+We pair each of the three passes of every self-hosted setting with the same Terra none recording, the GPT setting with the highest standalone log-AUC in the existing recordings, applying all three rules from Appendix~\ref{app:composition} unchanged.
+Table~\ref{tab:openweight-hybrids} reports the mean and range for every pair and rule; none is excluded based on its outcome. Curves average the three replayed trajectories at each interval. The variation reflects self-hosted passes with the hosted component fixed.
 Nimble occupies the provisional slot as a control even though its median latency exceeds Terra none's.
 Under freshest-source arbitration, Jev plus Terra none reaches \OwJevTerraNoneAuc\%, while DJev, Kev-4B and Qwen direct-logit plus Terra none give \OwDJevFreshestAuc\%, \OwKevFreshestAuc\% and \OwQwenLogitsFreshestAuc\%, against \OwTerraNoneAuc\% for Terra none alone (Figure~\ref{fig:openweight-hybrids}).
 Kev-27B plus Terra none reaches \OwKevTwentySevenFreshestAuc\%, above both Kev-27B alone (\OwKevTwentySevenAuc\%) and Jev plus Terra none; Kev-9B plus Terra none gives \OwKevNineFreshestAuc\%.
@@ -803,14 +825,14 @@ These interleaved exposure durations determine the composed score; neither faste
 Standalone measurements retain their original release clocks; joint applications use common nominal releases and preserve every recorded successful-attempt duration plus commit lag.
 The maximum standalone difference between these clocks is \OwNominalGap{} points at the fixed 2\,s interval, across all \OwTotalSettingsWord{} settings; replay on each original clock reproduces every correctness and six-part time partition.
 All areas use the same exact crossing-based integration as Appendix~\ref{app:composition}.
-The fixed-delay replay assumes latency is unchanged when the interval changes; components were recorded separately, and shared-resource contention, joint deployment performance and repeated-pass stability remain unmeasured.
+The fixed-delay replay assumes latency is unchanged when the interval changes; components were recorded separately, and shared-resource contention, joint deployment performance and variability across hosted passes remain unmeasured.
 
 \FloatBarrier
 \section{Reproducibility}
 \label{app:repro}
 
 \paragraph{Accompanying materials.}
-The accompanying materials, provided as supplementary material, contain the frozen dataset (\texttt{data/lite/v1}, dataset hash beginning \texttt{\DatasetHashShort}), the task generators and executable references, the runner and scorer, the recorded pass of every setting with its complete event log, the audit record, and the scripts that produce every number, table and figure in this paper.
+The accompanying materials, provided as supplementary material, contain the frozen dataset (\texttt{data/lite/v1}, dataset hash beginning \texttt{\DatasetHashShort}), the task generators and executable references, the runner and scorer, all recorded passes with their complete event logs, the audit record, and the scripts that produce every number, table and figure in this paper.
 Code and data are released under the MIT license and are intended for evaluating decision components; the synthetic scenarios and their rules are not a policy for any real deployment.
 The event logs have SHA-256 digests beginning \texttt{\LunaEventsHash} and \texttt{\LunaNoneEventsHash} (Luna, low and none), \texttt{\TerraEventsHash} and \texttt{\TerraNoneEventsHash} (Terra), \texttt{\AstraEventsHash} (Astra) and \texttt{\JevEventsHash} (Jev).
 Every number, table and figure in the paper is regenerated from these logs without any model call; regeneration verifies that recomputed scores match the published analyses and that the executable reference reproduces all \NumStates{} stored answers. The independent audit remains limited to its original six-scenario scope.

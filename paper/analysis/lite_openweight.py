@@ -115,8 +115,7 @@ def compare_published(result, report, name, tolerance):
                 raise ValueError(f"{name}/{scope}/{metric}: published AUC disagrees")
 
 
-def analyze():
-    policy = json.loads(POLICY_PATH.read_text())
+def analyze_pass(policy):
     auc_policy = json.loads((ROOT / "paper/analysis/evaluation_policy.json").read_text())
     paths = {name: ROOT / "runs" / folder for name, _, folder in HOSTED_MODELS}
     paths.update({spec["name"]: ROOT / "runs" / spec["run"] for spec in policy["settings"]})
@@ -216,13 +215,81 @@ def analyze():
     return data
 
 
-def standalone_table(data, prefix=""):
-    lines = ["| Setting | Log-AUC 0.5–8 s (%) | Untimed (%) | p50 / p95 (s) | GPU; same-host latency |",
+def mean_evaluations(values):
+    """Average evaluated fractions, preserving scenario identity and equal pass weight."""
+    rows = []
+    for group in zip(*(v["per_episode"] for v in values), strict=True):
+        identity = (group[0]["episode_id"], group[0]["task_family"])
+        if any((r["episode_id"], r["task_family"]) != identity for r in group):
+            raise ValueError("Passes have different scenario ordering")
+        rows.append({"episode_id": identity[0], "task_family": identity[1],
+                     **{k: float(np.mean([r[k] for r in group])) for k in METRICS}})
+    result = aggregate(rows)
+    if "curve" in values[0]:
+        grid = values[0]["curve"]["intervals_s"]
+        if any(v["curve"]["intervals_s"] != grid for v in values):
+            raise ValueError("Passes have different display grids")
+        result["curve"] = {"intervals_s": grid,
+            "accuracy": np.mean([v["curve"]["accuracy"] for v in values], axis=0).tolist()}
+        result["integration"] = {"method": "equal_mean_of_independently_integrated_passes"}
+    return result
+
+
+def analyze():
+    policy = json.loads(POLICY_PATH.read_text())
+    if any(len(s["repeats"]) != 2 for s in policy["settings"]):
+        raise ValueError("Every self-hosted setting requires exactly three passes")
+    passes = []
+    for index in range(3):
+        settings = []
+        for spec in policy["settings"]:
+            folder = [spec["run"], *spec["repeats"]][index]
+            current = {k: v for k, v in spec.items() if k != "repeats"}
+            current["run"] = folder
+            if "audit" in current and "audit_setting" not in current:
+                current["audit"] = str(Path(folder).parent.parent / Path(spec["audit"]).name)
+            settings.append(current)
+        passes.append(analyze_pass({**policy, "settings": settings}))
+    data = {**passes[0], "policy": policy, "standalone": {}, "systems": {},
+            "provenance": {name: passes[0]["provenance"][name] for name in passes[0]["hosted"]}}
+    data["aggregation"] = {"self_hosted_passes": 3, "hosted_passes": 1,
+        "method": "equal mean of per-pass metrics; latency quantiles computed within each pass",
+        "composition": "each self-hosted pass paired with the same hosted recording"}
+    for spec in policy["settings"]:
+        name = spec["name"]
+        rows = [p["standalone"][name] for p in passes]
+        configs = [r["config"] for r in rows]
+        for config in configs[1:]:
+            for key in ("model", "model_revision", "prepared_checkpoint"):
+                if config.get(key) != configs[0].get(key):
+                    raise ValueError(f"{name}: passes use different {key}")
+        records = [{**row, "provenance": p["provenance"][name]} for p, row in zip(passes, rows, strict=True)]
+        data["standalone"][name] = {"spec": spec, "passes": records,
+            "integrated": mean_evaluations([r["integrated"] for r in rows]),
+            "untimed": float(np.mean([r["untimed"] for r in rows])),
+            "latency_s": {k: float(np.mean([r["latency_s"][k] for r in rows])) for k in rows[0]["latency_s"]}}
+        data["systems"][name] = {}
+        for arbitration in policy["policies"]:
+            systems = [p["systems"][name][arbitration] for p in passes]
+            aucs = [r["integrated"]["overall"]["accuracy"] for r in systems]
+            data["systems"][name][arbitration] = {
+                "integrated": mean_evaluations([r["integrated"] for r in systems]),
+                "fixed_two": mean_evaluations([r["fixed_two"] for r in systems]),
+                "auc_range": max(aucs) - min(aucs), "passes": systems}
+    gaps = {name: max(p["verification"]["nominal_recorded_gaps_points"][name] for p in passes)
+            for name in passes[0]["provenance"]}
+    data["verification"] = {"passes": [p["verification"] for p in passes],
+        "standalone_partition_checks": sum(p["verification"]["standalone_partition_checks"] for p in passes),
+        "nominal_recorded_gaps_points": gaps, "max_nominal_recorded_gap_points": max(gaps.values())}
+    return data
+
+
+def standalone_table(data):
+    lines = ["| Setting | Mean log-AUC 0.5–8 s (%) | Mean untimed (%) | Mean p50 / p95 (s) | GPU; same-host latency |",
              "|---|---:|---:|---:|---|"]
     for name, row in data["standalone"].items():
         spec = row["spec"]
-        report = spec["run"].replace("/runs/", "/")
-        lines.append(f"| [{spec['label']}]({prefix}docs/lite/results/{report}/REPORT.md) | "
+        lines.append(f"| {spec['label']} | "
             f"{100*row['integrated']['overall']['accuracy']:.2f} | {100*row['untimed']:.2f} | "
             f"{row['latency_s']['p50']:.3f} / {row['latency_s']['p95']:.3f} | {spec['gpu']} |")
     return lines
@@ -238,7 +305,7 @@ def hybrid_summary(data):
 
 
 def render_results(data):
-    lines = ["## Results", "", "One recorded pass per setting over all 480 states (8 scenarios in 4 families), recorded at a 2 s",
+    lines = ["## Results", "", "One hosted pass and three self-hosted passes per setting, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s",
         "time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights",
         "within each family and then equal family weights. Interval evaluations retain the recorded answers",
         "and latencies; they assume service latency does not change with the request rate.", "",
@@ -262,14 +329,16 @@ def render_results(data):
         "Both components receive each state. A provisional answer never moves the active source backward;",
         "the correction wins equal-source ties and, under the **freshest-source** rule used above, cannot",
         "overwrite a newer source. These are counterfactual compositions of independent recordings on",
-        "common nominal releases, retaining original measured latencies. Joint deployment contention is unmeasured.", "",
+        "common nominal releases, retaining original measured latencies. Each self-hosted pass is paired with the same",
+        "hosted recording before averaging. Joint deployment contention is unmeasured.", "",
         "The Jev and Kev-27B pairings improve on Terra none alone, while the other self-hosted components reduce",
         "accuracy: an incorrect answer for a newer state can displace a still-correct correction. Speed alone",
         "does not determine whether composition helps. Nimble occupies the provisional slot in this analysis",
         "even though its recorded median latency exceeds Terra none's.", "",
         "[Complete local/policy matrix, curves and provenance](docs/research/openweight-hybrids/README.md);",
         "[all five Jev/GPT pairs and three arbitration policies](docs/research/trajectory-value/README.md).",
-        "Each setting has one pass and adjacent states are dependent; differences do not establish stable rankings.", "",
+        "Self-hosted values are means over three passes; latency summaries are means of per-pass quantiles. Hosted values use one pass.",
+        "Adjacent states are dependent; differences do not establish stable rankings.", "",
         "Regenerate the verified summary, paper tables and composition curves without model calls:", "",
         "```bash", "uv run --group paper python paper/analysis/lite_openweight.py", "```"]
     return "\n".join(lines)
@@ -280,28 +349,29 @@ def render_report(data):
         "Reproduce: `uv run --group paper python paper/analysis/lite_openweight.py`.", "",
         "All primary values are normalized log-AUC over 0.5–8 s, equally averaged over scenarios within each",
         "family and then families. Standalone measurements retain their original release clocks; compositions",
-        "use common nominal releases. Every recorded successful-attempt duration plus commit lag is retained.", "",
-        *standalone_table(data, "../../../"), "", "## Pair selection and acceptance", "", data["policy"]["selection"], "",
+        "use common nominal releases. Every recorded successful-attempt duration plus commit lag is retained.",
+        "Self-hosted results and curves average three passes; latency summaries average per-pass quantiles.", "",
+        *standalone_table(data), "", "## Pair selection and acceptance", "", data["policy"]["selection"], "",
         "The provisional component never regresses the active source; Terra none wins equal-source ties.",
         "Its correction may regress by zero ticks (freshest), one tick (one-tick lag), or without a cross-component",
         "bound (late override). Each component maintains its own source high-water mark even on rejected",
         "deliveries. No rule consults references or output correctness. Nimble is a provisional-role control,",
         "not a faster component in these recordings.", "", *hybrid_summary(data), "",
         "## Complete local/policy matrix", "",
-        "| Provisional setting | Arbitration | Log-AUC 0.5–8 s (%) | Fixed 2 s A (%) | Correction time share, log-weighted (%) |",
-        "|---|---|---:|---:|---:|"]
+        "| Provisional setting | Arbitration | Mean log-AUC 0.5–8 s (%) | Range (points) | Mean fixed 2 s A (%) | Mean correction time share, log-weighted (%) |",
+        "|---|---|---:|---:|---:|---:|"]
     for name, policies in data["systems"].items():
         for policy, row in policies.items():
             integrated = row["integrated"]["overall"]
             lines.append(f"| {data['standalone'][name]['spec']['label']} | {LABELS[policy]} | "
-                f"{100*integrated['accuracy']:.2f} | {100*row['fixed_two']['overall']['accuracy']:.2f} | {100*integrated['slow_share']:.2f} |")
+                f"{100*integrated['accuracy']:.2f} | {100*row['auc_range']:.2f} | {100*row['fixed_two']['overall']['accuracy']:.2f} | {100*integrated['slow_share']:.2f} |")
     lines += ["", "## Verification and scope", "",
         f"Original-clock replay reproduces correctness and all six time classes in {data['verification']['standalone_partition_checks']} setting/scenario checks.",
         f"The largest nominal/original-clock difference at 2 s is {data['verification']['max_nominal_recorded_gap_points']:.6f} percentage points.",
         "The log integral is analytical between every release/arrival crossing; a third interior point checks each affine piece.",
         "Published standalone aggregates and family partitions are checked against independently recomputed areas.",
-        "The observations cover one pass per setting on synthetic development scenarios. Retiming assumes fixed",
-        "service latency; hardware normalization, joint contention, repeated-run stability and generative Qwen",
+        "Compositions average three self-hosted passes, each paired with the same hosted recording. Retiming assumes fixed",
+        "service latency; hardware normalization, joint contention, variability across hosted passes and generative Qwen",
         "performance are outside the measurements. Sol-2B had no executable public native runtime and receives no score.", "",
         "[analysis.json](analysis.json) includes all scenario/family partitions, full curves, raw event and input-audit",
         "hashes, execution configuration and analysis-source hashes. Original recording files are unchanged."]
@@ -327,8 +397,14 @@ def write_tex(data):
             add(name + prefix + "Auc", pct(row["integrated"]["by_family"][family]["accuracy"]), f"standalone.{name}.integrated.by_family.{family}")
         for policy, result in data["systems"][name].items():
             add(name + POLICY_MACROS[policy] + "Auc", pct(result["integrated"]["overall"]["accuracy"]), f"systems.{name}.{policy}.integrated.overall.accuracy")
+            add(name + POLICY_MACROS[policy] + "Range", pct(result["auc_range"]), f"systems.{name}.{policy}.auc_range")
     for name, row in data["controls"].items():
         add(name + "Auc", pct(row["overall"]["accuracy"]), f"controls.{name}.overall.accuracy")
+    passes = {name: [(r["integrated"]["overall"]["accuracy"], r["untimed"]) for r in row["passes"]]
+              for name, row in data["standalone"].items()}
+    spread = {name: [max(v) - min(v) for v in zip(*p)] for name, p in passes.items()}
+    add("RepeatMaxAucRange", pct(max(s[0] for s in spread.values())), "standalone.*.passes")
+    add("RepeatMaxUntimedRange", pct(max(s[1] for s in spread.values())), "standalone.*.passes")
     (ROOT / "paper/generated/openweight_numbers.tex").write_text("\n".join(numbers) + "\n")
     tables = ["% Generated by paper/analysis/lite_openweight.py; do not edit."]
     def table(command, rows):
@@ -339,8 +415,14 @@ def write_tex(data):
     table("TabOpenweightLatency", [" & ".join([row["spec"]["label"], row["spec"]["gpu"],
         f"\\Ow{name}Median", f"\\Ow{name}Tail"]) + r" \\" for name, row in data["standalone"].items()])
     table("TabOpenweightHybrids", [" & ".join([row["spec"]["label"],
-        *[f"\\Ow{name}{POLICY_MACROS[p]}Auc" for p in data["policy"]["policies"]]]) + r" \\"
+        *[f"\\Ow{name}{POLICY_MACROS[p]}Auc~(\\Ow{name}{POLICY_MACROS[p]}Range)" for p in data["policy"]["policies"]]]) + r" \\"
         for name, row in data["standalone"].items()])
+    rows = []
+    for name, row in data["standalone"].items():
+        aucs, untimed = zip(*passes[name])
+        rows.append(" & ".join([row["spec"]["label"], *[pct(a) for a in aucs], pct(np.mean(aucs)),
+            pct(max(aucs) - min(aucs)), pct(np.mean(untimed)), pct(max(untimed) - min(untimed))]) + r" \\")
+    table("TabOpenweightRepeats", rows)
     (ROOT / "paper/generated/openweight_tables.tex").write_text("\n".join(tables) + "\n")
 
 

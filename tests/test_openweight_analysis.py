@@ -87,3 +87,35 @@ def test_original_clock_replay_checks_all_six_time_classes():
     own, gap = analysis.verify_standalone(scenarios, "Kev", run)
     assert own[0].releases_s != scenarios[0].releases_s
     assert gap >= 0
+
+
+def test_pass_mean_preserves_evaluated_trajectory_and_partition():
+    # Average evaluated fractions and curves without mutating per-pass evidence.
+    from trajectory_replay import aggregate, METRICS, PARTITION
+    values = []
+    for accuracy in (.2, .8, .5):
+        row = {k: 0.0 for k in METRICS}
+        row.update(episode_id="scenario", task_family="family", accuracy=accuracy,
+                   judgment=1 - accuracy, current_correct=accuracy)
+        value = aggregate([row])
+        value["curve"] = {"intervals_s": [.5, 8.], "accuracy": [accuracy, accuracy]}
+        values.append(value)
+    result = analysis.mean_evaluations(values)
+    assert result["overall"]["accuracy"] == pytest.approx(.5)
+    assert result["curve"]["accuracy"] == pytest.approx([.5, .5])
+    assert sum(result["overall"][k] for k in PARTITION) == pytest.approx(1)
+    assert values[0]["overall"]["accuracy"] == .2
+
+
+def test_pass_mean_rejects_misaligned_scenarios_and_curves():
+    from trajectory_replay import aggregate, METRICS
+    value = aggregate([{**dict.fromkeys(METRICS, 0.0), "episode_id": "a", "task_family": "family"}])
+    value["curve"] = {"intervals_s": [.5, 8.], "accuracy": [0., 0.]}
+    other = deepcopy(value)
+    other["per_episode"][0]["episode_id"] = "b"
+    with pytest.raises(ValueError, match="scenario ordering"):
+        analysis.mean_evaluations([value, other])
+    other = deepcopy(value)
+    other["curve"]["intervals_s"] = [1., 8.]
+    with pytest.raises(ValueError, match="display grids"):
+        analysis.mean_evaluations([value, other])
