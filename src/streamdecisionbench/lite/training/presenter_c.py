@@ -62,9 +62,9 @@ MODERATOR_PHRASES = {("open", "the", "poll"): "open_poll", ("close", "the", "pol
 RULES = [
     "Time and channels. now, session.ends_at and every segment's start and end are ticks of two seconds; "
     "snapshot number t appears at tick t, and the inputs stay as they are until the next snapshot. asr.segments "
-    "keeps every speech segment the recogniser has produced since tick 0, in seg_id order; segments are numbered by "
-    "onset, so start never decreases along the list (two segments may begin in the "
-    "same tick). channel is lecturer (the lecturer's headset), moderator (the moderator's handheld microphone), "
+    "keeps every speech segment the recogniser has produced since tick 0, in seg_id order; segments are "
+    "numbered by onset, so start never decreases along the list (two segments may begin in the same tick). "
+    "channel is lecturer (the lecturer's headset), moderator (the moderator's handheld microphone), "
     "room (the ceiling microphones over the seats) or media (the soundtrack of a playing clip). start is the "
     "segment's first tick of speech and end its latest tick of speech so far, with start <= end <= now.",
     "Stable and unstable segments. A segment whose stable is false is a working guess of the recogniser: at "
@@ -137,9 +137,9 @@ RULES = [
     "this field counts, never remarks about time): none once the lecture has ended; otherwise overtime when "
     "now >= ends_at; otherwise wrap_up when now >= ends_at - controller.warning_ticks; otherwise none. Both "
     "comparisons count equality.",
-    "Decision. stage_mode is the route; projected_slide, recording_light and timer_cue apply in every mode; lecture adds "
-    "pointer, media adds media_state, poll adds poll_panel, and break and ended add nothing. Every answer "
-    "outside the active branch is none.",
+    "Decision. stage_mode is the route; projected_slide, recording_light and timer_cue apply in every mode; "
+    "lecture adds pointer, media adds media_state, poll adds poll_panel, and break and ended add nothing. Every "
+    "answer outside the active branch is none.",
 ]
 
 SETTING = (
