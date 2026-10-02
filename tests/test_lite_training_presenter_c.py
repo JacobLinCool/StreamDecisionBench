@@ -1,15 +1,18 @@
-"""Public-evidence checks for the presenter_c training variant (marine-acoustics guest lecture)."""
+"""Public-evidence checks for the presenter_c training variant (wake-word lecture console)."""
 
 from copy import deepcopy
+import inspect
 import re
 
 import pytest
 
 from streamdecisionbench.lite.core import compose, encode_scenario, validate_episode
-from streamdecisionbench.lite.tasks import presenter
 from streamdecisionbench.lite.training import presenter_c
-from streamdecisionbench.lite.training.audit import check_module, leakage
+from streamdecisionbench.lite.training.audit import (
+    MAX_LAYOUT_OVERLAP, check_module, eval_scenarios, layout_overlap, leakage, spec_overlap)
 from streamdecisionbench.lite.training.presenter_c import reference, scenarios
+
+CHANNELS = {"lecturer", "moderator", "room", "media"}
 
 
 @pytest.fixture(scope="module")
@@ -30,328 +33,721 @@ def _decision(episode, tick):
     return compose(episode["decision_spec"], _gold(episode, tick))
 
 
-def _add(state, text, speaker="Presenter", *, final=True, at=None, final_at=None):
-    """Add (or replace, by onset) one utterance in a copied state and return the reference answers."""
-    now = state["clock"]["now"]
-    at = now if at is None else at
-    state["transcript"] = [u for u in state["transcript"] if u["at"] != at]
-    state["transcript"].append({"utterance_id": "counterfactual", "at": at, "speaker": speaker, "text": text,
-                                "final": final, "final_at": (now if final_at is None else final_at) if final else None})
-    state["transcript"].sort(key=lambda u: u["at"])
+def _segment(state, seg_id):
+    return next(s for s in state["asr"]["segments"] if s["seg_id"] == seg_id)
+
+
+def _add(state, text, channel="lecturer", *, stable=True, start=None, end=None, conf=None):
+    """Append one new segment (newest seg_id) to a copied state and return the reference answers.
+
+    The appended segment keeps the published conventions: it begins no earlier than any listed segment, it
+    ends by now, and its channel has no unstable segment (which would then no longer be that channel's newest).
+    """
+    segments = state["asr"]["segments"]
+    end = state["now"] if end is None else end
+    start = end if start is None else start
+    assert start <= end <= state["now"]
+    assert all(s["start"] <= start for s in segments)
+    assert all(s["stable"] for s in segments if s["channel"] == channel)
+    words = [{"w": w, "conf": 0.95} for w in text.split(" ")]
+    for index, value in (conf or {}).items():
+        words[index]["conf"] = value
+    seg_id = max((s["seg_id"] for s in segments), default=0) + 1
+    segments.append({"seg_id": seg_id, "channel": channel, "start": start, "end": end, "stable": stable,
+                     "words": words})
     return reference(state)
 
 
-def _retext(state, utterance_id, text):
-    """Replace the text of one existing utterance in a copied state and return the reference answers."""
-    for u in state["transcript"]:
-        if u["utterance_id"] == utterance_id:
-            u["text"] = text
-    return reference(state)
+def _stabilise(segment, low=None):
+    """Turn a hypothesis stable with confident words, except the positions given in low."""
+    segment["stable"] = True
+    for index, word in enumerate(segment["words"]):
+        word["conf"] = (low or {}).get(index, 0.9)
 
 
-def test_scenario_identity_and_shared_specification(episode):
-    assert (episode["episode_id"], episode["scenario_id"], episode["task_family"]) == (
-        "train_presenter_c", "presenter_c", "presenter_voice_control")
+def _reading(word):
+    return "".join(ch for ch in word.lower() if ch.isalnum())
+
+
+# ---------------------------------------------------------------- structure and conventions
+
+def test_schema_causality_and_public_reference(episode):
+    assert episode["episode_id"] == "train_presenter_c"
+    assert episode["task_family"] == "presenter_voice_control"
+    assert episode["scenario_id"] == "presenter_c"
     assert episode["tick_seconds"] == 2.0 and len(episode["steps"]) == 60
-    assert presenter_c.reference is presenter.reference
-    deck = episode["steps"][0]["state"]["deck"]
-    assert episode["questions"] == presenter._questions(deck)
-    assert episode["decision_spec"] == presenter.SPEC
-    for step in episode["steps"]:
-        assert step["state"]["prepared"]["rules"] == presenter.RULES
-    titles = {s["title"] for s in presenter.scenarios()}
-    assert episode["title"] not in titles
-
-
-def test_schema_and_public_reference(episode):
-    assert len(episode["questions"]) == 6
+    assert set(episode["questions"]) == {"stage_mode", "projected_slide", "recording_light", "timer_cue", "pointer",
+                                         "media_state", "poll_panel"}
+    first = episode["steps"][0]["state"]
     for tick, step in enumerate(episode["steps"]):
-        assert step["t"] == tick
-        assert step["state"]["clock"]["now"] == tick
-        assert {"gold", "hidden", "answer"}.isdisjoint(step["state"])
+        state = step["state"]
+        assert step["t"] == tick and state["now"] == tick
+        assert set(state) == {"controller", "session", "slides", "asr", "now"}
+        assert state["controller"] == first["controller"] and state["slides"] == first["slides"]
         assert step["evidence"] and all(isinstance(e, str) and e for e in step["evidence"])
-        assert reference(deepcopy(step["state"])) == step["gold"]
+        assert reference(deepcopy(state)) == step["gold"]
         for question, value in step["gold"].items():
             assert value in episode["questions"][question]["criteria"]
 
 
-def test_encodes_validates_and_passes_the_training_audit(episode):
-    summary = validate_episode(encode_scenario(episode))
-    assert summary["routes_unseen"] == []
-    assert 18 <= summary["decision_transitions"] <= 28
-    assert leakage([episode]) == []
-    assert check_module(presenter_c)["episodes"][0]["episode_id"] == "train_presenter_c"
+def test_rules_are_the_only_spec_field_and_the_module_is_self_contained(episode):
+    rules = episode["steps"][0]["state"]["controller"]["rules"]
+    assert isinstance(rules, list) and all(isinstance(r, str) and r for r in rules)
+    source = inspect.getsource(presenter_c)
+    assert "lite.tasks" not in source and "import presenter" not in source
 
 
-def test_transcript_follows_the_published_asr_conventions(episode):
-    finals, identity, overlap = {}, {}, False
+def test_asr_segments_follow_the_published_conventions(episode):
+    identity, frozen, previous, overlap, same_start = {}, {}, [], False, False
     for step in episode["steps"]:
-        now, lines = step["state"]["clock"]["now"], step["state"]["transcript"]
-        assert [u["at"] for u in lines] == sorted({u["at"] for u in lines})
-        for u in lines:
-            assert u["at"] <= now
-            assert identity.setdefault(u["utterance_id"], (u["at"], u["speaker"])) == (u["at"], u["speaker"])
-            if u["final"]:
-                assert u["at"] <= u["final_at"] <= now and '"' not in u["text"] and re.search(r"\w", u["text"])
-                assert finals.setdefault(u["utterance_id"], u) == u
+        now, segments = step["state"]["now"], step["state"]["asr"]["segments"]
+        ids = [s["seg_id"] for s in segments]
+        assert ids == sorted(set(ids))
+        starts = [s["start"] for s in segments]
+        assert starts == sorted(starts)
+        same_start |= len(set(starts)) < len(starts)
+        assert set(previous) <= set(ids)  # history is kept: no segment is withdrawn
+        previous = ids
+        for s in segments:
+            assert s["channel"] in CHANNELS
+            assert s["start"] <= s["end"] <= now
+            assert identity.setdefault(s["seg_id"], (s["channel"], s["start"])) == (s["channel"], s["start"])
+            assert s["words"] and all(0 <= w["conf"] <= 1 and _reading(w["w"]) for w in s["words"])
+            # At most three words a second: a segment's span of ticks (two seconds each) bounds its length.
+            assert len(s["words"]) <= 6 * (s["end"] - s["start"] + 1), s
+            if s["stable"]:
+                assert frozen.setdefault(s["seg_id"], s) == s  # a stable segment never changes again
             else:
-                assert u["final_at"] is None and re.fullmatch(r"[a-z ]+", u["text"])
-                assert u["utterance_id"] not in finals
-        for speaker in {u["speaker"] for u in lines}:
-            own = [u for u in lines if u["speaker"] == speaker]
-            partials = [u for u in own if not u["final"]]
-            assert len(partials) <= 1 and (not partials or partials[0] is own[-1])
-        assert set(identity) == {u["utterance_id"] for u in lines}
-        overlap |= sum(not u["final"] for u in lines) > 1
-    assert overlap
-    assert all(u["final"] for u in episode["steps"][-1]["state"]["transcript"])
+                assert s["seg_id"] not in frozen
+                assert all(re.fullmatch(r"[a-z]+", w["w"]) for w in s["words"])
+        for channel in CHANNELS:
+            own = [s for s in segments if s["channel"] == channel]
+            unstable = [s for s in own if not s["stable"]]
+            assert len(unstable) <= 1 and (not unstable or unstable[0] is own[-1])
+        overlap |= sum(not s["stable"] for s in segments) > 1
+    assert overlap and same_start
+    assert all(s["stable"] for s in episode["steps"][-1]["state"]["asr"]["segments"])
 
 
-SMALL = "one two three four five six seven eight nine".split()
-LARGE = ("ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty thirty forty "
-         "fifty sixty seventy eighty ninety hundred thousand").split()
+def test_stable_words_clear_the_threshold_unless_set_low_on_purpose(episode):
+    state = episode["steps"][-1]["state"]
+    threshold = state["controller"]["min_confidence"]
+    low = {(s["seg_id"], i, w["conf"]) for s in state["asr"]["segments"] for i, w in enumerate(s["words"])
+           if w["conf"] < threshold}
+    assert low == {(6, 4, 0.84)}
+    exact = {(s["seg_id"], i) for s in state["asr"]["segments"] for i, w in enumerate(s["words"])
+             if w["conf"] == threshold}
+    assert exact == {(30, 4)}
 
 
-def test_finals_write_slide_numbers_and_large_numbers_as_digits(episode):
-    lines = episode["steps"][-1]["state"]["transcript"]
-    for u in lines:
-        words = presenter._words(u["text"])
-        if u["final"]:
-            assert not set(words) & set(LARGE), u["text"]
-            assert not any(a == "slide" and b in SMALL for a, b in zip(words, words[1:])), u["text"]
-            assert not re.search(r"\b[0-9]\b", u["text"].replace("slide 6", "").replace("slide 13", "")), u["text"]
-    partials = {u["utterance_id"]: u["text"] for s in episode["steps"] for u in s["state"]["transcript"] if not u["final"]}
-    assert partials["p0"] == "this tag rode on a sperm whale for fourteen hours"
-    assert partials["p15"] == "go to slide six"
+def test_deck_follows_the_published_conventions(episode):
+    slides = episode["steps"][0]["state"]["slides"]
+    titles = slides["titles"]
+    assert list(titles) == [str(n) for n in range(1, slides["count"] + 1)]
+    assert len(set(titles.values())) == len(titles)
+    for title in titles.values():
+        assert re.fullmatch(r"[a-z]+( [a-z]+)*", title)
+        assert not title.startswith("the ") and not title.endswith(" please") and title != "please"
+    assert set(slides["media"]) <= set(range(1, slides["count"] + 1))
+    assert set(slides["unpublished"]) <= set(range(1, slides["count"] + 1))
+    criteria = episode["questions"]["projected_slide"]["criteria"]
+    assert set(criteria) == {f"slide_{n}" for n in range(1, slides["count"] + 1)}
 
 
-def test_deck_names_are_distinct_plain_new_and_never_end_in_slide(episode):
-    deck = episode["steps"][0]["state"]["deck"]
-    names = [s["name"] for s in deck["slides"]]
-    assert 11 <= len(names) <= 14 and len(set(names)) == len(names)
-    assert all(re.fullmatch(r"[a-z ]+", n) and not n.endswith("slide") for n in names)
-    assert [s["n"] for s in deck["slides"] if s["clip"]] == [4, 9]
-    eval_decks = [s["steps"][0]["state"]["deck"] for s in presenter.scenarios()]
-    assert not set(names) & {s["name"] for d in eval_decks for s in d["slides"]}
-    assert deck["start_slide"] == 4 and deck["start_slide"] not in {d["start_slide"] for d in eval_decks}
-    assert all(step["state"]["deck"] == deck for step in episode["steps"])
+def test_encoded_episode_is_valid_with_no_leakage_and_its_own_specification(episode):
+    summary = validate_episode(encode_scenario(episode))
+    assert summary["decision_transitions"] == 30
+    assert summary["routes_seen"] == ["break", "ended", "lecture", "media", "poll"]
+    assert summary["routes_unseen"] == []
+    assert leakage([episode]) == []
+    assert spec_overlap([episode]) == []
+    assert layout_overlap(episode) <= MAX_LAYOUT_OVERLAP
+    check_module(presenter_c)
 
 
-KEY_TICKS = {
-    0: {"mode": "talk", "slide": "s4", "captions": "presenter", "host_cue": "listen"},
-    2: {"mode": "talk", "slide": "s4", "captions": "presenter", "host_cue": "listen"},
-    3: {"mode": "clip", "slide": "s4", "captions": "presenter", "clip_state": "play"},
-    4: {"mode": "clip", "slide": "s4", "captions": "clip", "clip_state": "play"},
-    5: {"mode": "clip", "slide": "s4", "captions": "presenter", "clip_state": "pause"},
-    6: {"mode": "clip", "slide": "s4", "captions": "presenter", "clip_state": "play"},
-    7: {"mode": "clip", "slide": "s4", "captions": "presenter", "clip_state": "play"},
-    8: {"mode": "clip", "slide": "s4", "captions": "presenter", "clip_state": "pause"},
-    9: {"mode": "clip", "slide": "s4", "captions": "presenter", "clip_state": "pause"},
-    12: {"mode": "clip", "slide": "s4", "captions": "presenter", "clip_state": "play"},
-    13: {"mode": "clip", "slide": "s4", "captions": "presenter", "clip_state": "play"},
-    14: {"mode": "talk", "slide": "s4", "captions": "presenter", "host_cue": "listen"},
-    15: {"mode": "talk", "slide": "s4", "captions": "presenter", "host_cue": "listen"},
-    16: {"mode": "talk", "slide": "s6", "captions": "presenter", "host_cue": "listen"},
-    19: {"mode": "talk", "slide": "s6", "captions": "presenter", "host_cue": "listen"},
-    20: {"mode": "talk", "slide": "s6", "captions": "presenter", "host_cue": "listen"},
-    22: {"mode": "talk", "slide": "s9", "captions": "presenter", "host_cue": "listen"},
-    23: {"mode": "clip", "slide": "s9", "captions": "presenter", "clip_state": "play"},
-    26: {"mode": "talk", "slide": "s10", "captions": "presenter", "host_cue": "listen"},
-    29: {"mode": "talk", "slide": "s10", "captions": "host", "host_cue": "listen"},
-    30: {"mode": "questions", "slide": "s10", "captions": "host", "question_card": "waiting", "host_cue": "listen"},
-    32: {"mode": "questions", "slide": "s10", "captions": "audience", "question_card": "listening", "host_cue": "listen"},
-    34: {"mode": "questions", "slide": "s10", "captions": "audience", "question_card": "repeat", "host_cue": "listen"},
-    35: {"mode": "questions", "slide": "s10", "captions": "presenter", "question_card": "repeat", "host_cue": "listen"},
-    37: {"mode": "questions", "slide": "s9", "captions": "presenter", "question_card": "repeat", "host_cue": "listen"},
-    38: {"mode": "questions", "slide": "s9", "captions": "presenter", "question_card": "repeat", "host_cue": "listen"},
-    39: {"mode": "questions", "slide": "s9", "captions": "presenter", "question_card": "answer", "host_cue": "listen"},
-    42: {"mode": "questions", "slide": "s9", "captions": "audience", "question_card": "answer", "host_cue": "listen"},
-    43: {"mode": "talk", "slide": "s9", "captions": "presenter", "host_cue": "listen"},
-    45: {"mode": "talk", "slide": "s11", "captions": "presenter", "host_cue": "listen"},
-    46: {"mode": "talk", "slide": "s11", "captions": "presenter", "host_cue": "listen"},
-    47: {"mode": "talk", "slide": "s11", "captions": "presenter", "host_cue": "stand_by"},
-    48: {"mode": "talk", "slide": "s11", "captions": "presenter", "host_cue": "listen"},
-    49: {"mode": "talk", "slide": "s11", "captions": "presenter", "host_cue": "stand_by"},
-    51: {"mode": "talk", "slide": "s11", "captions": "presenter", "host_cue": "stand_by"},
-    52: {"mode": "talk", "slide": "s11", "captions": "host", "host_cue": "listen"},
-    53: {"mode": "closed", "slide": "s11", "captions": "host"},
-    55: {"mode": "closed", "slide": "s11", "captions": "host"},
-    56: {"mode": "closed", "slide": "s13", "captions": "presenter"},
-    57: {"mode": "closed", "slide": "s13", "captions": "presenter"},
-    59: {"mode": "closed", "slide": "s13", "captions": "presenter"},
-}
+def test_questions_and_option_sets_are_the_variants_own(episode):
+    family = [s for s in eval_scenarios() if s["task_family"] == episode["task_family"]]
+    assert family
+    for scenario in family:
+        assert not set(scenario["questions"]) & set(episode["questions"])
+        for question in scenario["questions"].values():
+            labels = set(question["criteria"].values())
+            for ours in episode["questions"].values():
+                assert labels != set(ours["criteria"].values())
+                assert not any(label.endswith("mode inactive") for label in ours["criteria"].values())
 
 
-@pytest.mark.parametrize("tick", sorted(KEY_TICKS))
-def test_key_ticks_of_the_lecture(episode, tick):
-    assert _decision(episode, tick) == KEY_TICKS[tick]
+def test_every_non_slide_value_is_reached_as_gold(episode):
+    for question, spec in episode["questions"].items():
+        seen = {step["gold"][question] for step in episode["steps"]}
+        if question == "projected_slide":
+            assert seen == {f"slide_{n}" for n in (1, 2, 3, 4, 6, 8, 9, 10)}
+        else:
+            assert seen == set(spec["criteria"]), question
 
 
-def test_inactive_branch_answers_are_none(episode):
+def test_inactive_branch_answers_are_none_and_every_question_is_used(episode):
+    spec = episode["decision_spec"]
+    used = {spec["route_question"], *spec["always"], *(q for b in spec["branches"].values() for q in b)}
+    assert used == set(episode["questions"])
     for step in episode["steps"]:
-        gold = step["gold"]
-        if gold["mode"] != "clip":
-            assert gold["clip_state"] == "none"
-        if gold["mode"] != "questions":
-            assert gold["question_card"] == "none"
-        if gold["mode"] not in {"talk", "questions"}:
-            assert gold["host_cue"] == "none"
+        active = set(compose(spec, step["gold"]))
+        for question, value in step["gold"].items():
+            if question not in active:
+                assert value == "none", (step["t"], question)
 
 
-def test_partial_commands_wait_for_the_final(episode):
-    transcript = lambda t: {u["utterance_id"]: u for u in episode["steps"][t]["state"]["transcript"]}
-    assert transcript(2)["p2"]["text"] == "play the video" and _gold(episode, 2)["mode"] == "talk"
-    assert transcript(15)["p15"]["text"] == "go to slide six" and _gold(episode, 15)["slide"] == "s4"
-    assert transcript(13)["p13"]["text"] == "close the video" and _gold(episode, 13)["mode"] == "clip"
-    assert transcript(29)["h29"]["text"] == "lets take questions" and _gold(episode, 29)["mode"] == "talk"
-    # The Host's partial is already a whole thanks command (lead-in, phrase, first name); only its final closes.
-    deck = episode["steps"][0]["state"]["deck"]
-    assert transcript(52)["h52"]["text"] == "right lets thank tamsin"
-    assert presenter._command(transcript(52)["h52"]["text"], deck, "Tamsin") == ("thank", None)
-    assert [_gold(episode, t)["mode"] for t in (52, 53)] == ["talk", "closed"]
-    # A whole-command partial finalised as talk never moves the slide.
-    assert transcript(19)["p19"]["text"] == "go to the spectrogram reading"
-    assert [_gold(episode, t)["slide"] for t in (19, 20, 21)] == ["s6", "s6", "s6"]
-    # A '?' echo of a command form is talk; the later sentence of the same final moves the slide.
-    assert transcript(35)["p35"]["text"] == "back to the reef chorus"
-    assert [_gold(episode, t)["slide"] for t in (35, 36, 37)] == ["s10", "s10", "s9"]
+def test_no_answer_depends_on_an_unstable_segment(episode):
+    for step in episode["steps"]:
+        state = deepcopy(step["state"])
+        state["asr"]["segments"] = [s for s in state["asr"]["segments"] if s["stable"]]
+        assert reference(state) == step["gold"], step["t"]
 
 
-def test_early_pause_needs_the_presenters_newest_partial(episode):
-    # The clip narrator's partial "pause" is not the Presenter's speech.
-    assert _gold(episode, 4)["clip_state"] == "play"
-    assert _add(_state(episode, 4), "pause", final=False, at=4)["clip_state"] == "pause"
-    # Early pause on a Presenter partial, lapsing when the hypothesis grows into talk.
-    assert [_gold(episode, t)["clip_state"] for t in (4, 5, 6, 7)] == ["play", "pause", "play", "play"]
-    assert _retext(_state(episode, 7), "p5", "Pause the video.")["clip_state"] == "pause"
-    # The final pause holds while she talks over the paused frame, until the final resume.
-    assert [_gold(episode, t)["clip_state"] for t in (8, 9, 10, 11, 12)] == ["pause"] * 4 + ["play"]
-    assert _retext(_state(episode, 12), "p12", "Okay, resume?")["clip_state"] == "pause"
-    # An Audience or Clip partial in pause form never pauses the clip.
-    assert _add(_state(episode, 7), "hold it", "Audience", final=False, at=7)["clip_state"] == "play"
-    assert _add(_state(episode, 7), "pause it there", "Clip", final=False, at=7)["clip_state"] == "play"
+# ---------------------------------------------------------------- the story
+
+def test_key_ticks(episode):
+    expected = {
+        0: {"stage_mode": "lecture", "projected_slide": "slide_1", "recording_light": "on", "timer_cue": "none",
+            "pointer": "off"},
+        2: {"projected_slide": "slide_1"},
+        3: {"projected_slide": "slide_2"},
+        6: {"projected_slide": "slide_2"},
+        7: {"projected_slide": "slide_2"},
+        8: {"projected_slide": "slide_2"},
+        9: {"projected_slide": "slide_3"},
+        12: {"pointer": "zoom"},
+        14: {"projected_slide": "slide_3", "pointer": "off"},
+        15: {"projected_slide": "slide_3"},
+        16: {"projected_slide": "slide_3"},
+        17: {"projected_slide": "slide_4", "pointer": "off"},
+        18: {"stage_mode": "media", "media_state": "playing", "pointer": "none"},
+        20: {"stage_mode": "media", "projected_slide": "slide_4"},
+        23: {"stage_mode": "poll", "poll_panel": "collecting", "media_state": "none", "projected_slide": "slide_4"},
+        25: {"poll_panel": "collecting"},
+        26: {"poll_panel": "results"},
+        27: {"stage_mode": "media", "media_state": "paused", "poll_panel": "none"},
+        28: {"media_state": "playing"},
+        30: {"stage_mode": "lecture", "projected_slide": "slide_4", "pointer": "off", "media_state": "none"},
+        31: {"projected_slide": "slide_6"},
+        32: {"pointer": "off"},
+        33: {"pointer": "off"},
+        34: {"pointer": "spotlight", "timer_cue": "none"},
+        35: {"timer_cue": "wrap_up"},
+        36: {"timer_cue": "wrap_up"},
+        37: {"timer_cue": "none"},
+        38: {"projected_slide": "slide_6", "pointer": "spotlight"},
+        39: {"projected_slide": "slide_8", "pointer": "off"},
+        42: {"stage_mode": "lecture", "recording_light": "paused"},
+        43: {"stage_mode": "media", "media_state": "playing", "recording_light": "paused"},
+        45: {"timer_cue": "none"},
+        46: {"timer_cue": "wrap_up", "stage_mode": "media"},
+        47: {"media_state": "paused"},
+        48: {"stage_mode": "lecture", "projected_slide": "slide_8", "recording_light": "paused"},
+        49: {"recording_light": "on"},
+        50: {"stage_mode": "break", "projected_slide": "slide_8", "recording_light": "paused", "pointer": "none"},
+        51: {"stage_mode": "break", "projected_slide": "slide_9", "recording_light": "paused"},
+        52: {"stage_mode": "lecture", "projected_slide": "slide_9", "recording_light": "paused", "pointer": "off"},
+        53: {"recording_light": "paused", "timer_cue": "wrap_up"},
+        54: {"recording_light": "paused", "timer_cue": "overtime"},
+        55: {"projected_slide": "slide_9", "recording_light": "on"},
+        56: {"projected_slide": "slide_10", "recording_light": "on", "pointer": "off"},
+        57: {"projected_slide": "slide_9", "recording_light": "paused", "timer_cue": "overtime"},
+        58: {"stage_mode": "ended", "recording_light": "off", "timer_cue": "none", "projected_slide": "slide_9"},
+        59: {"stage_mode": "ended", "projected_slide": "slide_9", "recording_light": "off", "pointer": "none"},
+    }
+    for tick, fields in expected.items():
+        gold = _gold(episode, tick)
+        for key, value in fields.items():
+            assert gold[key] == value, (tick, key, gold[key])
 
 
-def test_clip_rules_use_the_deck_mode_and_slide_commands(episode):
-    state = _state(episode, 3)
-    state["deck"]["start_slide"] = 5
-    assert (reference(state)["mode"], reference(state)["slide"]) == ("talk", "s5")
-    # Play only acts from talk on a clip slide or in clip mode: not in questions mode.
-    assert _add(_state(episode, 41), "Play it.")["mode"] == "questions"
-    assert _add(_state(episode, 44), "Play it.", at=44)["mode"] == "clip"
-    # A slide command in clip mode closes the clip.
-    assert (_gold(episode, 25)["mode"], _gold(episode, 26)["mode"], _gold(episode, 26)["slide"]) == ("clip", "talk", "s10")
-    assert _retext(_state(episode, 14), "p13", "Close the video?")["mode"] == "clip"
+def test_decision_holds_on_distractor_ticks(episode):
+    # Unstable command, room command, confident unstable command, low-confidence command, wake word not first,
+    # locked slide, the zoom request that runs past its phrase, the stream remark, the lecturer's moderator
+    # phrase, the moderator's lecturer phrase and a command after the end change nothing.
+    for tick in (2, 6, 7, 8, 15, 20, 32, 33, 45, 53, 59):
+        assert _decision(episode, tick) == _decision(episode, tick - 1), tick
 
 
-@pytest.mark.parametrize("text,speaker,slide", [
-    ("Go to the spectrogram reading.", "Presenter", "s7"),
-    ("Go to the spectrogram reading slide, please.", "Presenter", "s7"),
-    ("Go to the spectrogram reading.", "Host", "s6"),
-    ("Go to the spectrogram reading.", "Audience", "s6"),
-    ("Go to the spectrograms.", "Presenter", "s6"),
-    ("Go to slide 14.", "Presenter", "s6"),
-    ("So, previous slide.", "Presenter", "s5"),
-    ("Sorry, previous slide.", "Presenter", "s6"),
-])
-def test_only_whole_final_presenter_commands_move_the_slide(episode, text, speaker, slide):
-    state = _state(episode, 20)
-    if speaker == "Presenter":
-        answers = _retext(state, "p19", text)
-    else:
-        answers = _add(state, text, speaker, at=20)
-    assert answers["slide"] == slide
+# ---------------------------------------------------------------- confidence threshold
+
+def test_confidence_threshold_equality_counts(episode):
+    state = _state(episode, 8)
+    assert state["controller"]["min_confidence"] == 0.85
+    word = _segment(state, 6)["words"][4]
+    assert (word["w"], word["conf"]) == ("three.", 0.84)
+    word["conf"] = 0.85
+    assert reference(state)["projected_slide"] == "slide_3"
+    state = _state(episode, 8)
+    state["controller"]["min_confidence"] = 0.84
+    assert reference(state)["projected_slide"] == "slide_3"
+    state = _state(episode, 39)
+    word = _segment(state, 30)["words"][4]
+    assert (word["w"], word["conf"]) == ("chorus.", 0.85)
+    assert reference(state)["projected_slide"] == "slide_8"
+    word["conf"] = 0.84
+    assert reference(state)["projected_slide"] == "slide_6"
+    state = _state(episode, 39)
+    state["controller"]["min_confidence"] = 0.86
+    assert reference(state)["projected_slide"] == "slide_6"
 
 
-def test_sentence_order_and_question_marks_in_one_final(episode):
-    assert _gold(episode, 37)["slide"] == "s9"
-    assert _retext(_state(episode, 37), "p35", "Back to the reef chorus. Of course. Previous slide.")["slide"] == "s8"
-    assert _retext(_state(episode, 37), "p35", "Back to the reef chorus? Of course.")["slide"] == "s10"
+@pytest.mark.parametrize("index", [0, 1, 2, 3])
+def test_one_low_word_voids_the_whole_command_including_wake_word_and_please(episode, index):
+    state = _state(episode, 17)
+    seg = _segment(state, 13)
+    assert [w["w"] for w in seg["words"]] == ["Console,", "next", "slide,", "please."]
+    assert reference(state)["projected_slide"] == "slide_4"
+    seg["words"][index]["conf"] = 0.5
+    assert reference(state)["projected_slide"] == "slide_3"
 
 
-def test_slide_commands_apply_in_closed_mode_within_the_deck(episode):
-    assert _gold(episode, 55)["slide"] == "s11"
-    assert _gold(episode, 56)["slide"] == _gold(episode, 57)["slide"] == "s13"
-    state = _state(episode, 57)
-    assert _add(state, "Previous slide.", at=57)["slide"] == "s12"
-    assert _add(_state(episode, 59), "Play it.", at=59)["mode"] == "closed"
-    assert _add(_state(episode, 55), "Go to the acknowledgements.", "Host", at=55)["slide"] == "s11"
+# ---------------------------------------------------------------- who may command, and stability
+
+def test_room_and_media_channels_never_command(episode):
+    state = _state(episode, 6)
+    assert reference(state)["projected_slide"] == "slide_2"
+    _segment(state, 4)["channel"] = "lecturer"
+    assert reference(state)["projected_slide"] == "slide_3"
+    state = _state(episode, 22)
+    assert _add(state, "Console, stop the video.", "media")["stage_mode"] == "media"
+    assert _add(state, "Console, take a break.", "room")["stage_mode"] == "media"
+    assert _add(state, "Console, stop the video.", "lecturer")["stage_mode"] == "lecture"
 
 
-def test_session_commands_need_the_host_the_final_and_the_first_name(episode):
-    assert [_gold(episode, t)["mode"] for t in (29, 30)] == ["talk", "questions"]
-    assert _retext(_state(episode, 53), "h52", "Right, let's thank Elliot.")["mode"] == "talk"
-    assert _retext(_state(episode, 53), "h52", "Right, let's thank Tamsin Valdez.")["mode"] == "talk"
-    assert _retext(_state(episode, 53), "h52", "Right. Let's thank Tamsin.")["mode"] == "closed"
-    assert _add(_state(episode, 51), "Let's thank Tamsin.", at=51)["mode"] == "talk"
-    assert _add(_state(episode, 28), "Let's take questions from the floor.", "Audience", at=28)["mode"] == "talk"
-    # Either the Presenter or the Host can end questions; the Audience cannot.
-    assert _add(_state(episode, 42), "Okay, let's move on.", "Host", at=42)["mode"] == "talk"
-    assert _add(_state(episode, 42), "Okay, let's move on.", "Audience", at=42)["mode"] == "questions"
+def test_each_speaker_has_its_own_phrases(episode):
+    state = _state(episode, 25)
+    assert reference(state)["poll_panel"] == "collecting"
+    _segment(state, 20)["channel"] = "moderator"
+    assert reference(state)["poll_panel"] == "results"
+    state = _state(episode, 53)
+    assert reference(state)["recording_light"] == "paused"
+    _segment(state, 43)["channel"] = "lecturer"
+    assert reference(state)["recording_light"] == "on"
+    state = _state(episode, 49)
+    assert _add(state, "Console, end the lecture.", "lecturer")["stage_mode"] == "lecture"
+    assert _add(state, "Console, pause recording.", "moderator")["recording_light"] == "on"
+    assert _add(state, "Console, end the lecture.", "moderator")["stage_mode"] == "ended"
+    state = _state(episode, 11)
+    assert _add(state, "Console, next slide.", "moderator")["projected_slide"] == "slide_3"
+    assert _add(state, "Console, open the poll.", "lecturer")["stage_mode"] == "lecture"
 
 
-def _final_at(state, utterance_id, tick):
-    for u in state["transcript"]:
-        if u["utterance_id"] == utterance_id:
-            u["final_at"] = tick
-    return reference(state)["mode"]
-
-
-def test_replay_orders_commands_by_final_arrival(episode):
-    state = _state(episode, 31)
-    state["transcript"].append({"utterance_id": "p30", "at": 30, "final_at": 30, "speaker": "Presenter",
-                                "text": "Okay, let's move on.", "final": True})
-    state["transcript"].sort(key=lambda u: u["at"])
-    # Opening final at 30, move-on final at 30: same arrival, the earlier onset (the opening) applies first.
-    assert reference(state)["mode"] == "talk"
-    # Opening final only at 31: the move-on arrived first, while still in talk, and is ignored.
-    assert _final_at(state, "h29", 31) == "questions"
-    # Both at 31: tie broken by onset again, so the opening then the move-on.
-    assert _final_at(state, "p30", 31) == "talk"
-
-
-def test_question_card_needs_a_final_question_and_a_final_repetition(episode):
-    assert [_gold(episode, t)["question_card"] for t in (30, 31, 32, 33, 34, 37, 38, 39, 42)] == [
-        "waiting", "waiting", "listening", "listening", "repeat", "repeat", "repeat", "answer", "answer"]
-    assert _retext(_state(episode, 34), "a32", "Lovely recording.")["question_card"] == "answer"
-    assert _retext(_state(episode, 39), "p38", "Also, the question is where the fish calls are.")["question_card"] == "repeat"
-    assert _retext(_state(episode, 39), "p38", "Now the question is where the fish calls are.")["question_card"] == "answer"
-    assert _retext(_state(episode, 42), "a42", "Thanks, is the data online?")["question_card"] == "repeat"
-    assert _add(_state(episode, 42), "Any more questions?", "Host", at=42)["question_card"] == "answer"
-    assert _add(_state(episode, 31), "Anyone?", "Host", at=31)["question_card"] == "waiting"
-
-
-def test_stand_by_follows_current_text_until_the_host_speaks(episode):
-    assert [_gold(episode, t)["host_cue"] for t in (45, 46, 47, 48, 49, 50, 51, 52)] == [
-        "listen", "listen", "stand_by", "listen", "stand_by", "stand_by", "stand_by", "listen"]
-    # The partial's 'back to you' is a mishearing of a name; the final's 'back to Hugh' is not the hand-back words.
-    lines = {u["utterance_id"]: u for u in episode["steps"][47]["state"]["transcript"]}
-    assert lines["p46"]["text"].endswith("go back to you") and not lines["p46"]["final"]
-    assert _retext(_state(episode, 48), "p46",
-                   "The harbour master lent us his pier, so the first copies go back to you.")["host_cue"] == "stand_by"
+def test_unstable_segments_never_command_until_stable(episode):
+    state = _state(episode, 2)
+    assert not _segment(state, 2)["stable"] and reference(state)["projected_slide"] == "slide_1"
+    _stabilise(_segment(state, 2))
+    assert reference(state)["projected_slide"] == "slide_2"
     state = _state(episode, 50)
-    state["session"]["host"] = "Elliott Fairbanks"
-    assert reference(state)["host_cue"] == "listen"
-    assert _retext(_state(episode, 50), "p49", "Back to you in a minute, Elliot.")["host_cue"] == "listen"
-    assert _add(_state(episode, 51), "mm", "Audience", final=False, at=51)["host_cue"] == "stand_by"
-    assert _add(_state(episode, 51), "Back to you, Tamsin.", "Host", at=51)["host_cue"] == "listen"
-    assert _add(_state(episode, 41), "That's all. Back to you, Elliot.", at=41)["host_cue"] == "stand_by"
+    assert not _segment(state, 39)["stable"] and reference(state)["projected_slide"] == "slide_8"
+    _stabilise(_segment(state, 39))
+    assert reference(state)["projected_slide"] == "slide_9"
 
 
-def test_captions_follow_the_newest_onset(episode):
-    assert [_gold(episode, t)["captions"] for t in (3, 4, 5, 6)] == ["presenter", "clip", "presenter", "presenter"]
-    lines = {u["utterance_id"]: u for u in episode["steps"][6]["state"]["transcript"]}
-    assert lines["c4"]["final_at"] == 6 and not lines["p5"]["final"]
-    assert [_gold(episode, t)["captions"] for t in (28, 29, 31, 32, 35, 42, 43, 52, 56)] == [
-        "presenter", "host", "host", "audience", "presenter", "audience", "presenter", "host", "presenter"]
-    state = _state(episode, 0)
-    state["transcript"] = []
-    assert reference(state)["captions"] == "off"
+@pytest.mark.parametrize("tick,seg_id,lure,field,before,acted", [
+    (7, 6, ["console", "go", "to", "slide", "three"], "projected_slide", "slide_2", "slide_3"),
+    (32, 27, ["console", "zoom", "in"], "pointer", "off", "zoom"),
+])
+def test_confident_hypotheses_that_never_become_commands(episode, tick, seg_id, lure, field, before, acted):
+    # The hypothesis reads as a complete command with every word above the threshold; acting on it would be
+    # wrong, because the stable segment of the next tick is void (a word under the threshold) or longer speech.
+    state = _state(episode, tick)
+    seg = _segment(state, seg_id)
+    threshold = state["controller"]["min_confidence"]
+    assert not seg["stable"] and [_reading(w["w"]) for w in seg["words"]] == lure
+    assert all(w["conf"] >= threshold for w in seg["words"])
+    assert _gold(episode, tick)[field] == before
+    seg["stable"] = True
+    assert reference(state)[field] == acted
+    stable = _segment(_state(episode, tick + 1), seg_id)
+    assert stable["stable"] and _gold(episode, tick + 1)[field] == before
+    assert ([_reading(w["w"]) for w in stable["words"]] != lure
+            or any(w["conf"] < threshold for w in stable["words"]))
+
+
+def test_the_break_is_called_for_the_stream_and_closed_by_its_return(episode):
+    remark = _segment(_state(episode, 46), 35)
+    assert remark["channel"] == "moderator" and "break." in [w["w"] for w in remark["words"]]
+    assert [_gold(episode, t)["stage_mode"] for t in (46, 49, 50, 51, 52)] == [
+        "media", "lecture", "break", "break", "lecture"]
+    back = _segment(_state(episode, 51), 41)
+    assert (back["channel"], back["stable"], back["start"]) == ("moderator", True, 51)
+    assert _decision(episode, 51)["stage_mode"] == "break"
+
+
+def test_a_number_word_slide_command_passes(episode):
+    seg = _segment(_state(episode, 56), 46)
+    assert [_reading(w["w"]) for w in seg["words"]] == ["console", "slide", "ten"]
+    assert _gold(episode, 55)["projected_slide"] == "slide_9" and _gold(episode, 56)["projected_slide"] == "slide_10"
+    state = _state(episode, 56)
+    seg = _segment(state, 46)
+    seg["words"][2]["w"] = "tenth."
+    assert reference(state)["projected_slide"] == "slide_9"
+
+
+@pytest.mark.parametrize("text,channel,tick", [
+    ("console next slide", "lecturer", 11),
+    ("console spotlight", "lecturer", 11),
+    ("console play the video", "lecturer", 17),
+    ("console pause recording", "lecturer", 11),
+    ("console pause recording please", "lecturer", 11),
+    ("console stop the video", "lecturer", 22),
+    ("console pause the video", "lecturer", 22),
+    ("console record this slide", "lecturer", 52),
+    ("console end the lecture", "moderator", 11),
+    ("console take a break", "moderator", 22),
+    ("console resume the lecture", "moderator", 51),
+])
+def test_unstable_command_readings_change_no_answer(episode, text, channel, tick):
+    state = _state(episode, tick)
+    assert _add(state, text, channel, stable=False) == _gold(episode, tick)
+
+
+def test_wake_word_must_come_first(episode):
+    state = _state(episode, 15)
+    assert reference(state)["projected_slide"] == "slide_3"
+    _segment(state, 12)["words"].pop(0)
+    assert reference(state)["projected_slide"] == "slide_4"
+    state = _state(episode, 15)
+    state["controller"]["wake_word"] = "lectern"
+    assert reference(state)["projected_slide"] == "slide_1"
+
+
+# ---------------------------------------------------------------- grammar
+
+@pytest.mark.parametrize("text,field,value", [
+    ("Console, next slide.", "projected_slide", "slide_4"),
+    ("CONSOLE NEXT SLIDE!", "projected_slide", "slide_4"),
+    ("console next slide", "projected_slide", "slide_4"),
+    ("Console... next slide?!", "projected_slide", "slide_4"),
+    ("Console, previous slide, please.", "projected_slide", "slide_2"),
+    ("Console, slide 12.", "projected_slide", "slide_12"),
+    ("Console, slide 09.", "projected_slide", "slide_9"),
+    ("Console, go to slide nine.", "projected_slide", "slide_9"),
+    ("Console, slide twelve.", "projected_slide", "slide_12"),
+    ("Console, slide 13.", "projected_slide", "slide_3"),
+    ("Console, slide 0.", "projected_slide", "slide_3"),
+    ("Console, slide twenty.", "projected_slide", "slide_3"),
+    ("Console, slide twenty one.", "projected_slide", "slide_3"),
+    ("Console, go slide 5.", "projected_slide", "slide_3"),
+    ("Console, show quiet harbour trial.", "projected_slide", "slide_9"),
+    ("Console, show the noise budget, please.", "projected_slide", "slide_6"),
+    ("Console, show the coral reef.", "projected_slide", "slide_3"),
+    ("Console, show noise.", "projected_slide", "slide_3"),
+    ("Console, please next slide.", "projected_slide", "slide_3"),
+    ("Console, next slide, please, please.", "projected_slide", "slide_3"),
+    ("Console, next slide and zoom in.", "projected_slide", "slide_3"),
+    ("Okay console, next slide.", "projected_slide", "slide_3"),
+    ("Consoles, next slide.", "projected_slide", "slide_3"),
+    ("Console, next.", "projected_slide", "slide_3"),
+    ("Console, pause recording.", "recording_light", "paused"),
+    ("Console, pause recording, please.", "recording_light", "paused"),
+    ("Console, pause the recording.", "recording_light", "on"),
+    ("Console, stop recording.", "recording_light", "on"),
+    ("Console, zoom in.", "pointer", "zoom"),
+    ("Console, spotlight, please.", "pointer", "spotlight"),
+    ("Console, spotlight on.", "pointer", "off"),
+    ("Console, play the video.", "stage_mode", "lecture"),
+    ("Console, open the poll.", "stage_mode", "lecture"),
+])
+def test_command_grammar_on_a_lecture_slide_without_clip(episode, text, field, value):
+    state = _state(episode, 11)
+    gold = reference(state)
+    assert (gold["projected_slide"], gold["pointer"], gold["recording_light"]) == ("slide_3", "off", "on")
+    assert _add(state, text)[field] == value
+
+
+@pytest.mark.parametrize("text,light", [
+    ("Console, record this slide.", "on"),
+    ("Console, record this slide, please.", "on"),
+    ("console record this slide", "on"),
+    ("Console, record the slide.", "paused"),
+    ("Console, record slide 9.", "paused"),
+    ("Console, record this.", "paused"),
+    ("Console, record this slide now.", "paused"),
+    ("Console, resume recording.", "paused"),
+])
+def test_record_this_slide_grammar_on_the_unpublished_slide(episode, text, light):
+    state = _state(episode, 52)
+    gold = reference(state)
+    assert (gold["stage_mode"], gold["projected_slide"], gold["recording_light"]) == ("lecture", "slide_9", "paused")
+    assert _add(state, text)["recording_light"] == light
+
+
+@pytest.mark.parametrize("text,media", [
+    ("Console, pause video.", "paused"), ("Console, pause the audio.", "paused"),
+    ("Console, pause audio, please.", "paused"), ("Console, pause a video.", "playing"),
+    ("Console, pause the clip.", "playing"), ("Console, hold the video.", "playing"),
+])
+def test_clip_nouns_are_interchangeable(episode, text, media):
+    state = _state(episode, 22)
+    assert reference(state)["media_state"] == "playing"
+    assert _add(state, text)["media_state"] == media
+
+
+def test_pointer_zoom_out_and_pointer_off(episode):
+    for text in ("Console, zoom out.", "Console, pointer off."):
+        state = _state(episode, 13)
+        assert reference(state)["pointer"] == "zoom"
+        assert _add(state, text)["pointer"] == "off"
+    state = _state(episode, 37)
+    assert reference(state)["pointer"] == "spotlight"
+    assert _add(state, "Console, pointer off.")["pointer"] == "off"
+
+
+# ---------------------------------------------------------------- modes
+
+def test_slides_are_locked_outside_lecture_mode(episode):
+    state = _state(episode, 20)
+    assert reference(state)["projected_slide"] == "slide_4"
+    _segment(state, 14)["channel"] = "room"  # without the play command, the next slide command applies
+    changed = reference(state)
+    assert (changed["stage_mode"], changed["projected_slide"]) == ("lecture", "slide_5")
+    for tick in (24, 51):
+        state = _state(episode, tick)
+        before = reference(state)
+        assert _add(state, "Console, next slide.") == before
+        assert _add(state, "Console, spotlight.") == before
+    state = _state(episode, 22)
+    assert _add(state, "Console, zoom in.")["stage_mode"] == "media"
+    assert _add(state, "Console, stop the video.")["pointer"] == "off"
+
+
+def test_play_needs_a_media_slide_and_pause_or_stop_need_media_mode(episode):
+    state = _state(episode, 11)
+    assert _add(state, "Console, play the video.")["stage_mode"] == "lecture"
+    state = _state(episode, 17)
+    assert _add(state, "Console, pause the video.")["stage_mode"] == "lecture"
+    assert _add(state, "Console, stop the video.")["stage_mode"] == "lecture"
+    answers = _add(state, "Console, play the audio.")
+    assert (answers["stage_mode"], answers["media_state"]) == ("media", "playing")
+    state = _state(episode, 27)
+    assert _add(state, "Console, play the video.")["media_state"] == "playing"
+
+
+def test_pointer_resets_only_when_slide_or_mode_changes(episode):
+    state = _state(episode, 13)
+    assert reference(state)["pointer"] == "zoom"
+    assert _add(state, "Console, slide three.")["pointer"] == "zoom"
+    assert _add(state, "Console, show hydrophone moorings.")["pointer"] == "zoom"
+    assert _add(state, "Console, previous slide.")["pointer"] == "off"
+    state = _state(episode, 11)
+    _add(state, "Console, slide 12.")
+    _add(state, "Console, zoom in.")
+    answers = _add(state, "Console, next slide.")
+    assert (answers["projected_slide"], answers["pointer"]) == ("slide_12", "zoom")
+    state = _state(episode, 11)
+    _add(state, "Console, slide one.")
+    _add(state, "Console, spotlight.")
+    answers = _add(state, "Console, previous slide.")
+    assert (answers["projected_slide"], answers["pointer"]) == ("slide_1", "spotlight")
+    state = _state(episode, 13)
+    _add(state, "Console, open the poll.", "moderator")
+    answers = _add(state, "Console, resume the lecture.", "moderator")
+    assert (answers["stage_mode"], answers["projected_slide"], answers["pointer"]) == ("lecture", "slide_3", "off")
+
+
+def test_moderator_mode_commands_apply_only_in_their_modes(episode):
+    state = _state(episode, 30)
+    answers = _add(state, "Console, open the poll.", "moderator")
+    assert (answers["stage_mode"], answers["poll_panel"]) == ("poll", "collecting")
+    assert _add(state, "Console, take a break.", "moderator")["stage_mode"] == "break"
+    assert _add(state, "Console, close the poll.", "moderator")["stage_mode"] == "break"
+    assert _add(state, "Console, open the poll.", "moderator")["stage_mode"] == "break"
+    assert _add(state, "Console, take a break.", "moderator")["stage_mode"] == "break"
+    answers = _add(state, "Console, resume the lecture.", "moderator")
+    assert (answers["stage_mode"], answers["projected_slide"], answers["media_state"]) == ("lecture", "slide_4", "none")
+    assert _add(state, "Console, resume the lecture.", "moderator")["stage_mode"] == "lecture"
+    assert _add(state, "Console, close the poll.", "moderator")["stage_mode"] == "lecture"
+    state = _state(episode, 26)
+    answers = _add(state, "Console, open the poll.", "moderator")
+    assert (answers["stage_mode"], answers["poll_panel"]) == ("poll", "results")
+    state = _state(episode, 24)
+    assert _add(state, "Console, open the poll, please.", "moderator")["poll_panel"] == "collecting"
+    assert _add(state, "Console, close poll.", "moderator")["poll_panel"] == "collecting"
+    state = _state(episode, 38)
+    answers = _add(state, "Console, open the poll.", "moderator")
+    assert (answers["stage_mode"], answers["poll_panel"]) == ("poll", "collecting")
+
+
+# ---------------------------------------------------------------- held clips
+
+def test_a_poll_called_during_a_clip_holds_it_and_resuming_brings_it_back_paused(episode):
+    assert [_gold(episode, t)["media_state"] for t in (22, 23, 26, 27, 28)] == [
+        "playing", "none", "none", "paused", "playing"]
+    assert [_gold(episode, t)["stage_mode"] for t in (22, 23, 26, 27, 30)] == [
+        "media", "poll", "poll", "media", "lecture"]
+    state = _state(episode, 27)
+    _segment(state, 14)["channel"] = "room"  # no clip was open when the poll opened: resume gives lecture mode
+    answers = reference(state)  # (and the lecturer's next slide at tick 19 then applies: slide 5)
+    assert (answers["stage_mode"], answers["projected_slide"], answers["media_state"]) == ("lecture", "slide_5", "none")
+
+
+def test_a_break_holds_the_clip_too_and_only_stop_closes_it(episode):
+    state = _state(episode, 22)
+    assert _add(state, "Console, take a break.", "moderator")["stage_mode"] == "break"
+    answers = _add(state, "Console, resume the lecture.", "moderator")
+    assert (answers["stage_mode"], answers["projected_slide"], answers["media_state"]) == ("media", "slide_4", "paused")
+    assert _add(state, "Console, resume the lecture.", "moderator")["stage_mode"] == "media"
+    assert _add(state, "Console, stop the video.")["stage_mode"] == "lecture"
+    assert _add(state, "Console, take a break.", "moderator")["stage_mode"] == "break"
+    assert _add(state, "Console, resume the lecture.", "moderator")["stage_mode"] == "lecture"
+
+
+def test_a_clip_stays_held_through_a_break_called_during_the_poll(episode):
+    state = _state(episode, 26)
+    assert _add(state, "Console, take a break.", "moderator")["stage_mode"] == "break"
+    answers = _add(state, "Console, resume the lecture.", "moderator")
+    assert (answers["stage_mode"], answers["media_state"]) == ("media", "paused")
+    state = _state(episode, 22)
+    _add(state, "Console, pause the video.")
+    _add(state, "Console, open the poll.", "moderator")
+    assert _add(state, "Console, play the video.")["stage_mode"] == "poll"  # clip commands do nothing in a poll
+    answers = _add(state, "Console, resume the lecture.", "moderator")
+    assert (answers["stage_mode"], answers["media_state"]) == ("media", "paused")
+    state = _state(episode, 26)
+    assert _add(state, "Console, end the lecture.", "moderator")["stage_mode"] == "ended"
+    assert _add(state, "Console, resume the lecture.", "moderator")["stage_mode"] == "ended"
+
+
+def test_end_is_final(episode):
+    state = _state(episode, 59)
+    before = reference(state)
+    for text, channel in [("Console, resume the lecture.", "moderator"), ("Console, open the poll.", "moderator"),
+                          ("Console, resume recording.", "lecturer"), ("Console, slide 2.", "lecturer")]:
+        assert _add(state, text, channel) == before
+    state = _state(episode, 13)
+    answers = _add(state, "Console, end the lecture.", "moderator")
+    assert (answers["stage_mode"], answers["recording_light"], answers["timer_cue"]) == ("ended", "off", "none")
+
+
+# ---------------------------------------------------------------- replay order
+
+def test_a_late_stable_command_takes_effect_at_its_end(episode):
+    state = _state(episode, 51)
+    seg39, seg40 = _segment(state, 39), _segment(state, 40)
+    assert (seg39["channel"], seg39["start"], seg39["end"]) == ("lecturer", 50, 50)
+    assert (seg40["channel"], seg40["start"], seg40["end"]) == ("moderator", 50, 50)
+    assert reference(state)["projected_slide"] == "slide_9"
+    seg39["end"] = 51  # the lecturer was still speaking after the break began: the slide stays locked
+    assert reference(state)["projected_slide"] == "slide_8"
+
+
+@pytest.mark.parametrize("first,second,slide", [
+    (("Console, next slide.", "lecturer"), ("Console, take a break.", "moderator"), "slide_9"),
+    (("Console, take a break.", "moderator"), ("Console, next slide.", "lecturer"), "slide_8"),
+])
+def test_equal_ends_replay_in_seg_id_order(episode, first, second, slide):
+    state = _state(episode, 49)
+    state["now"] = 51
+    _add(state, *first, start=50, end=50)
+    answers = _add(state, *second, start=50, end=50)
+    assert (answers["stage_mode"], answers["projected_slide"]) == ("break", slide)
+
+
+# ---------------------------------------------------------------- recording
+
+def test_recording_setting_persists_across_mode_changes(episode):
+    assert [_gold(episode, t)["recording_light"] for t in range(41, 50)] == [
+        "on", "paused", "paused", "paused", "paused", "paused", "paused", "paused", "on"]
+    state = _state(episode, 44)
+    _segment(state, 32)["words"][2]["w"] = "the"  # 'Console, pause the.' is ordinary speech
+    assert reference(state)["recording_light"] == "on"
+
+
+def test_recording_setting_changes_during_a_break_and_shows_after_it(episode):
+    state = _state(episode, 30)
+    assert reference(state)["recording_light"] == "on"
+    _add(state, "Console, take a break.", "moderator")
+    assert _add(state, "Console, pause recording.")["recording_light"] == "paused"
+    answers = _add(state, "Console, resume the lecture.", "moderator")
+    assert (answers["stage_mode"], answers["recording_light"]) == ("lecture", "paused")
+
+
+def test_unpublished_slide_pauses_until_cleared_for_this_visit(episode):
+    assert [_gold(episode, t)["recording_light"] for t in range(52, 60)] == [
+        "paused", "paused", "paused", "on", "on", "paused", "off", "off"]
+    state = _state(episode, 52)
+    state["slides"]["unpublished"] = []
+    assert reference(state)["recording_light"] == "on"
+    state = _state(episode, 57)
+    state["slides"]["unpublished"] = [10]
+    assert reference(state)["recording_light"] == "on"
+    state = _state(episode, 56)
+    assert _add(state, "Console, record this slide.")["recording_light"] == "on"
+    assert _add(state, "Console, previous slide.")["recording_light"] == "paused"  # cleared slide 10, not 9
+    state = _state(episode, 49)
+    _add(state, "Console, record this slide.")
+    answers = _add(state, "Console, next slide.")
+    assert (answers["projected_slide"], answers["recording_light"]) == ("slide_9", "paused")
+    state = _state(episode, 55)
+    assert _add(state, "Console, show quiet harbour trial.")["recording_light"] == "on"  # same slide: kept
+
+
+def test_record_this_slide_leaves_the_setting_alone(episode):
+    state = _state(episode, 52)
+    _add(state, "Console, pause recording.")
+    assert _add(state, "Console, record this slide.")["recording_light"] == "paused"
+    assert _add(state, "Console, resume recording.")["recording_light"] == "on"
+    state = _state(episode, 52)
+    _add(state, "Console, record this slide.")
+    assert _add(state, "Console, pause recording.")["recording_light"] == "paused"
+
+
+def test_unpublished_slide_counts_in_lecture_and_media_mode_only(episode):
+    state = _state(episode, 52)
+    answers = _add(state, "Console, open the poll.", "moderator")
+    assert (answers["stage_mode"], answers["recording_light"]) == ("poll", "on")
+    assert _add(state, "Console, record this slide.")["recording_light"] == "on"
+    assert _add(state, "Console, resume the lecture.", "moderator")["recording_light"] == "on"
+    state = _state(episode, 52)
+    _add(state, "Console, open the poll.", "moderator")
+    assert _add(state, "Console, resume the lecture.", "moderator")["recording_light"] == "paused"
+    state = _state(episode, 22)
+    state["slides"]["unpublished"] = [4]
+    assert reference(state)["recording_light"] == "paused"
+    state = _state(episode, 24)
+    state["slides"]["unpublished"] = [4]
+    assert reference(state)["recording_light"] == "on"
+
+
+# ---------------------------------------------------------------- timer
+
+def test_timer_thresholds_count_equality(episode):
+    state = _state(episode, 34)
+    assert reference(state)["timer_cue"] == "none"
+    state["now"] = 35
+    assert reference(state)["timer_cue"] == "wrap_up"
+    state = _state(episode, 35)
+    state["session"]["ends_at"] = 44
+    assert reference(state)["timer_cue"] == "none"
+    state = _state(episode, 35)
+    state["controller"]["warning_ticks"] = 7
+    assert reference(state)["timer_cue"] == "none"
+    state = _state(episode, 53)
+    assert reference(state)["timer_cue"] == "wrap_up"
+    state["now"] = 54
+    assert reference(state)["timer_cue"] == "overtime"
+    state = _state(episode, 54)
+    state["session"]["ends_at"] = 55
+    assert reference(state)["timer_cue"] == "wrap_up"
+
+
+def test_only_the_ends_at_field_moves_the_schedule(episode):
+    assert episode["steps"][36]["state"]["session"]["ends_at"] == 43
+    assert episode["steps"][37]["state"]["session"]["ends_at"] == 54
+    state = _state(episode, 37)
+    state["session"]["ends_at"] = 43
+    assert reference(state)["timer_cue"] == "wrap_up"
+    state = _state(episode, 38)
+    assert _add(state, "We are nearly out of time, so let's be quick.", "moderator")["timer_cue"] == "none"
+    state = _state(episode, 34)
+    assert _add(state, "We have run over.", "moderator")["timer_cue"] == "none"
 
 
 def test_reference_is_pure(episode):
-    for tick in (5, 37, 50):
-        state = _state(episode, tick)
-        before = deepcopy(state)
-        reference(state)
-        assert state == before
+    state = _state(episode, 51)
+    before = deepcopy(state)
+    reference(state)
+    assert state == before
