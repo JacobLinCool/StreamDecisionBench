@@ -68,6 +68,27 @@ def test_identity_and_new_specification(episode):
             assert all(question["criteria"] != q["criteria"] for q in other["questions"].values())
 
 
+def test_option_texts_agree_with_the_numbered_rules(episode):
+    criteria = episode["questions"]["next_action"]["criteria"]
+    share, wait = criteria["share_results"], criteria["wait"]
+    rules = " ".join(debugging_d.RULES)
+    assert ("notebook.shared_at is null or some tracked cell has an executed_at later than shared_at "
+            "-> share_results") in rules
+    assert "never shared" in share and "has started since" in share and "later than shared_at" in share
+    assert "no tracked cell has started since" not in share
+    assert "memory under 90%" in wait and "no tracked cell started later than shared_at" in wait
+    assert "memory is under 90%" in criteria["interrupt_kernel"] and "not restarting" in criteria["restart_kernel"]
+    for step in episode["steps"]:  # the option texts hold wherever gold picks them
+        state, gold = step["state"], step["gold"]
+        shared = state["notebook"]["shared_at"]
+        tracked = [row for row in state["notebook"]["cells"] if debugging_d._tracked(row)]
+        unshared = shared is None or any(row["executed_at"] > shared for row in tracked)
+        if gold["next_action"] == "share_results":
+            assert unshared and gold["freshness_badge"] == "fresh"
+        if gold["next_action"] == "wait" and state["kernel"]["status"] == "idle":
+            assert not unshared and gold["freshness_badge"] == "fresh"
+
+
 def test_kernel_timer_is_a_budget_not_a_silence_clock():
     text = " ".join(debugging_d.RULES).lower()
     assert "silence" not in text and "silent" not in text
@@ -198,10 +219,15 @@ def test_story_is_internally_consistent(episode):
     # Every table name a cell reads appears in its source.
     for row in final["notebook"]["cells"]:
         assert all(name in row["source"] for name in row["reads"])
-    # The widening comment matches the edit, which was part of the run it started.
+    # The widening comment matches the edit, which was captured by the run it started; outputs computed
+    # before it cover the earlier twelve-hour window (30 buoys, one frame a minute).
     first = at(episode, 0)
-    assert first["comments"][0]["at"] == cell(first, "load_frames")["edited_at"] == -6
-    assert cell(first, "load_frames")["executed_at"] == -6
+    assert first["comments"][0]["at"] == cell(first, "load_frames")["edited_at"] == -5
+    assert "twelve hours" in first["comments"][0]["text"]
+    assert cell(first, "load_frames")["executed_at"] == -5
+    assert cell(first, "gusts")["output_rows"] == 30 * 12 * 60 and cell(first, "rollup")["output_rows"] == 30 * 12
+    assert cell(at(episode, 12), "load_frames")["output_rows"] == 30 * 6 * 60
+    assert "partition 12 of 24" in cell(at(episode, 7), "load_frames")["error"]["message"]  # half the day
     # The interrupted day-long load is narrowed before it is rerun.
     assert "hours=24" in cell(at(episode, 7), "load_frames")["source"]
     assert "hours=6" in cell(at(episode, 9), "load_frames")["source"]
@@ -215,6 +241,7 @@ def test_story_is_internally_consistent(episode):
     assert cell(final, "stations")["output_rows"] == cell(final, "summary")["output_rows"] == 27
     assert cell(final, "rollup")["output_rows"] == 27 * 6
     assert final["notebook"]["shared_at"] == 29
+    assert "3600 / 1852" in cell(final, "unit_table")["source"]  # the tightened constant
 
 
 # ---------------------------------------------------------------- key ticks of the story
@@ -222,6 +249,9 @@ def test_story_is_internally_consistent(episode):
 KEY_TICKS = {
     0: {"next_action": "wait", "kernel_badge": "busy", "freshness_badge": "stale"},
     1: {"next_action": "wait", "kernel_badge": "overrun", "freshness_badge": "stale"},
+    4: {"next_action": "wait", "kernel_badge": "overrun", "freshness_badge": "stale"},
+    5: {"next_action": "interrupt_kernel", "kernel_badge": "overrun", "freshness_badge": "stale",
+        "cell": "load_frames"},
     6: {"next_action": "interrupt_kernel", "kernel_badge": "overrun", "freshness_badge": "stale",
         "cell": "load_frames"},
     7: {"next_action": "fix_cell", "kernel_badge": "idle", "freshness_badge": "broken", "cell": "load_frames"},
@@ -249,8 +279,9 @@ KEY_TICKS = {
     50: {"next_action": "ask_data_owner", "kernel_badge": "idle", "freshness_badge": "stale", "table": FRAMES,
          "owner_team": "@buoy-ingest"},
     51: {"next_action": "run_cell", "kernel_badge": "idle", "freshness_badge": "stale", "cell": "stations"},
-    52: {"next_action": "refresh_table", "kernel_badge": "idle", "freshness_badge": "stale", "table": FRAMES},
-    53: {"next_action": "wait", "kernel_badge": "busy", "freshness_badge": "stale"},
+    52: {"next_action": "run_cell", "kernel_badge": "idle", "freshness_badge": "stale", "cell": "unit_table"},
+    53: {"next_action": "refresh_table", "kernel_badge": "idle", "freshness_badge": "stale", "table": FRAMES},
+    54: {"next_action": "wait", "kernel_badge": "busy", "freshness_badge": "stale"},
     57: {"next_action": "share_results", "kernel_badge": "idle", "freshness_badge": "fresh"},
     58: {"next_action": "ask_data_owner", "kernel_badge": "idle", "freshness_badge": "stale", "table": CALIBRATION,
          "owner_team": "@buoy-ingest"},
@@ -262,8 +293,8 @@ def test_key_ticks(episode, tick):
     assert compose(episode["decision_spec"], episode["steps"][tick]["gold"]) == KEY_TICKS[tick]
 
 
-@pytest.mark.parametrize("first,last", [(1, 5), (7, 8), (10, 12), (13, 15), (16, 17), (29, 30), (31, 32),
-                                        (35, 39), (44, 47), (48, 49), (53, 56), (58, 59)])
+@pytest.mark.parametrize("first,last", [(1, 4), (5, 6), (7, 8), (10, 12), (13, 15), (16, 17), (29, 30), (31, 32),
+                                        (35, 39), (44, 47), (48, 49), (54, 56), (58, 59)])
 def test_holds_under_distractors(episode, first, last):
     """Comments, progress output, heartbeats, memory readings, ignored edits and uncounted feeds keep the decision."""
     decisions = [compose(episode["decision_spec"], episode["steps"][t]["gold"]) for t in range(first, last + 1)]
@@ -304,23 +335,25 @@ def test_scenarios_are_fresh_and_deterministic(episode):
 def test_overrun_badge_needs_runtime_strictly_over_the_budget(episode):
     state = at(episode, 0)
     running = cell(state, "load_frames")
-    assert state["now"] - running["executed_at"] == running["budget_ticks"] == 6
+    assert state["now"] - running["executed_at"] == running["budget_ticks"] == 5
     assert reference(state)["kernel_badge"] == "busy"
-    running["budget_ticks"] = 5
+    running["budget_ticks"] = 4
     assert reference(state)["kernel_badge"] == "overrun" and action(state) == "wait"
 
 
 def test_hard_limit_interrupts_at_exactly_twice_the_budget(episode):
-    state = at(episode, 6)
+    state = at(episode, 5)
     running = cell(state, "load_frames")
-    assert state["now"] - running["executed_at"] == 2 * running["budget_ticks"]
+    assert state["now"] - running["executed_at"] == 2 * running["budget_ticks"] == 10
     answer = reference(state)
     assert (answer["next_action"], answer["kernel_badge"], answer["cell"]) == ("interrupt_kernel", "overrun", "load_frames")
-    running["executed_at"] += 1  # runtime 11
+    running["executed_at"] += 1  # runtime 9
     assert (action(state), reference(state)["kernel_badge"]) == ("wait", "overrun")
-    state = at(episode, 6)
-    cell(state, "load_frames")["budget_ticks"] = 7  # the budget a comment asked for is not in the state
+    state = at(episode, 5)
+    cell(state, "load_frames")["budget_ticks"] = 6  # a larger budget is only asked for in a comment
     assert (action(state), reference(state)["kernel_badge"]) == ("wait", "overrun")
+    state = at(episode, 6)  # past the hard limit the card stays
+    assert state["now"] - cell(state, "load_frames")["executed_at"] == 11 and action(state) == "interrupt_kernel"
 
 
 def test_output_and_heartbeats_neither_extend_nor_reset_the_budget(episode):
@@ -413,9 +446,9 @@ def test_fix_targets_the_cell_that_raised_the_error(episode):
 def test_edit_in_the_same_tick_as_the_run_start_belongs_to_that_run(episode):
     state = at(episode, 7)
     load = cell(state, "load_frames")
-    assert load["edited_at"] == load["executed_at"] == -6
+    assert load["edited_at"] == load["executed_at"] == -5
     assert (action(state), reference(state)["cell"]) == ("fix_cell", "load_frames")
-    load["edited_at"] = -5
+    load["edited_at"] = -4
     assert (action(state), reference(state)["cell"]) == ("run_cell", "load_frames")
 
 
@@ -461,9 +494,11 @@ def test_open_failure_outranks_a_behind_table_and_refresh_outranks_runs(episode)
     assert (answer["next_action"], answer["cell"]) == ("run_cell", "load_frames")
     table(state, FRAMES)["loaded_at"] = 14
     assert reference(state)["table"] == FRAMES
-    state = at(episode, 52)
-    assert cell(state, "stations")["edited_at"] > cell(state, "stations")["executed_at"]
+    state = at(episode, 53)
+    assert cell(state, "unit_table")["edited_at"] > cell(state, "unit_table")["executed_at"]
     assert (action(state), reference(state)["table"]) == ("refresh_table", FRAMES)
+    table(state, FRAMES)["source_updated_at"] = table(state, FRAMES)["loaded_at"]  # not behind, still overdue
+    assert (action(state), reference(state)["cell"]) == ("run_cell", "unit_table")
 
 
 def test_snapshot_loaded_at_the_source_update_tick_is_not_behind(episode):
@@ -475,17 +510,44 @@ def test_snapshot_loaded_at_the_source_update_tick_is_not_behind(episode):
     assert (action(state), reference(state)["table"]) == ("refresh_table", FRAMES)
 
 
-def test_staleness_through_upstream_runs_is_strict_and_transitive(episode):
+def test_staleness_through_upstream_runs_is_strict(episode):
     state = at(episode, 29)
     assert action(state) == "wait"
     cell(state, "load_frames")["executed_at"] = cell(state, "gusts")["executed_at"]
     assert action(state) == "wait"  # equal ticks never make gusts outdated
     cell(state, "load_frames")["executed_at"] += 1
     assert (action(state), reference(state)["cell"]) == ("run_cell", "gusts")
-    state = at(episode, 29)
-    cell(state, "stations")["executed_at"] = 27  # summary depends on stations only through rollup
-    answer = reference(state)
-    assert (answer["next_action"], answer["cell"]) == ("run_cell", "rollup")
+
+
+def test_runnable_needs_every_transitive_upstream_cell_current(episode):
+    # Gold at 52: rollup needs a run and both of its direct dependencies are current, but unit_table
+    # (rollup -> gusts -> helpers -> unit_table) was edited, so the bottom cell is the first runnable one.
+    state = at(episode, 52)
+    rollup = cell(state, "rollup")
+    assert rollup["executed_at"] < cell(state, "stations")["executed_at"] == 52
+    assert "unit_table" not in rollup["depends_on"] and "unit_table" in _upstream_ids(state, "rollup")
+    assert cell(state, "unit_table")["edited_at"] == 52 > cell(state, "unit_table")["executed_at"]
+    assert (action(state), reference(state)["cell"]) == ("run_cell", "unit_table")
+    assert "run rollup first" in state["comments"][-1]["text"]
+    cell(state, "unit_table")["edited_at"] = cell(state, "unit_table")["executed_at"]
+    assert (action(state), reference(state)["cell"]) == ("run_cell", "rollup")
+    # The same at 48, where unit_table sits two hops below rollup: a direct-only reading would pick rollup.
+    state = at(episode, 48)
+    cell(state, "unit_table")["edited_at"] = cell(state, "rollup")["edited_at"] = 48
+    assert (action(state), reference(state)["cell"]) == ("run_cell", "unit_table")
+
+
+def test_scratch_cells_never_count_as_dependencies(episode):
+    state = at(episode, 30)
+    assert action(state) == "wait"
+    cell(state, "summary")["depends_on"].append("explore_plot")
+    cell(state, "explore_plot")["executed_at"] = 30  # later than summary's 29, but untracked
+    assert cell(state, "explore_plot")["executed_at"] > cell(state, "summary")["executed_at"]
+    assert action(state) == "wait" and reference(state)["freshness_badge"] == "fresh"
+    cell(state, "summary")["executed_at"] = 28  # a tracked upstream (rollup, 23) still does not outdate it
+    assert action(state) == "wait"
+    cell(state, "rollup")["executed_at"] = 29
+    assert (action(state), reference(state)["cell"]) == ("run_cell", "summary")
 
 
 def test_cells_started_in_the_same_tick_do_not_outdate_each_other(episode):
@@ -498,7 +560,7 @@ def test_cells_started_in_the_same_tick_do_not_outdate_each_other(episode):
 
 def test_table_loaded_after_a_run_outdates_its_readers_strictly(episode):
     state = at(episode, 57)
-    assert table(state, FRAMES)["loaded_at"] == cell(state, "load_frames")["executed_at"] == 53
+    assert table(state, FRAMES)["loaded_at"] == cell(state, "load_frames")["executed_at"] == 54
     assert action(state) == "share_results"
     table(state, FRAMES)["loaded_at"] += 1
     assert (action(state), reference(state)["cell"]) == ("run_cell", "load_frames")
@@ -601,11 +663,10 @@ def test_sharing_is_recorded_only_by_shared_at_and_compared_strictly(episode):
     state = at(episode, 28)
     assert state["comments"][-1]["at"] == 28 and state["notebook"]["shared_at"] is None
     assert action(state) == "share_results"
-    state = at(episode, 29)
-    latest = max(row["executed_at"] for row in state["notebook"]["cells"] if row["executed_at"] is not None)
-    state["notebook"]["shared_at"] = latest
+    state = at(episode, 29)  # summary was rerun within the share tick
+    assert state["notebook"]["shared_at"] == cell(state, "summary")["executed_at"] == 29
     assert action(state) == "wait"  # an execution at the share tick is not later than the share
-    state["notebook"]["shared_at"] = latest - 1
+    state["notebook"]["shared_at"] = 28
     assert action(state) == "share_results"
     state = at(episode, 57)
     state["notebook"]["shared_at"] = max(row["executed_at"] for row in state["notebook"]["cells"]

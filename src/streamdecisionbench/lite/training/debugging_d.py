@@ -13,25 +13,30 @@ the evaluation family; every gold answer is computed by ``reference`` from the
 public state alone, and the rule text in ``rules`` states all of it.
 
 Story (north-shelf buoy gust QC notebook, Ilse and Ruairi): a frame load widened
-to a full day keeps printing partition progress, yet its runtime passes the
-cell's budget (overrun badge) and reaches twice the budget, so the card asks to
-interrupt it. The interrupted cell is an open failure until its source changes
-(the widening edit was part of that very run). Narrowed to six hours it loads,
-but the gust cell then fails with an error raised in the helpers cell above it.
-While the failure is open a feed update waits; once helpers is edited the stale
-frames snapshot is refreshed before any rerun. A run-below stops at the scratch
-plot's error (ignored by every cell rule), leaving the summary to run; the
-results are shared. Rerunning the plot pushes memory exactly to 90% of the
-limit, the kernel dies, and Restart & Run All starts the new kernel's first cell
-at its start tick; helpers fails with a NameError that needs the units cell at
-the bottom of the notebook run first, not a fix. With all cells current the
-frames feed is overdue and its owner is asked; when that team goes off shift its
-cover is asked instead. An edit to the stations cell then asks for a run ahead
-of the overdue feed, the feed resumes, the snapshot is refreshed in the same
-tick as the rerun starts, and the results are ready to share again (equality
-with the calibration cadence is not yet overdue). One tick later the
-calibration feed is overdue; its owner and that owner's cover are both away, so
-the cover's cover is asked.
+from twelve hours to the full storm day (older partitions come back from the
+archive) keeps printing partition progress, yet its runtime passes the cell's
+budget (overrun badge) and reaches twice the budget, so for two ticks the card
+asks to interrupt it. The interrupted cell is an open failure until its source
+changes (the widening edit was captured by that very run). Narrowed to six hours
+it loads, but the gust cell then fails with an error raised in the helpers cell
+above it. While the failure is open a feed update waits; once helpers is edited
+the stale frames snapshot is refreshed before any rerun. A run-below stops at the
+scratch plot's error (ignored by every cell rule), leaving the summary to run;
+the summary is rerun within the share tick and the results are shared (a start
+at the share tick is not later than the share). Rerunning the plot pushes memory
+exactly to 90% of the limit, the kernel dies, and Restart & Run All starts the
+new kernel's first cell at its start tick; helpers fails with a NameError that
+needs the units cell at the bottom of the notebook run first, not a fix. With
+all cells current the frames feed is overdue and its owner is asked; when that
+team goes off shift its cover is asked instead. An edit to the stations cell
+asks for a run ahead of the overdue feed; once stations has rerun, rollup needs
+a run, but a tightened constant in the units cell blocks it through its upstream
+chain (rollup, gusts, helpers, units), so the units cell is the first runnable
+cell although both of rollup's direct dependencies are current. The feed
+resumes, the snapshot is refreshed in the same tick as the reruns start, and the
+results are ready to share again (equality with the calibration cadence is not
+yet overdue). One tick later the calibration feed is overdue; its owner and that
+owner's cover are both away, so the cover's cover is asked.
 """
 
 from __future__ import annotations
@@ -68,8 +73,9 @@ RULES = [
     "form a cycle. reads lists the data_sources tables the cell reads.",
 
     "Cell fields: edited_at is the tick of the cell's latest source edit. executed_at is the tick at "
-    "which its latest execution STARTED, or null if it never started; an edit stamped at the same tick "
-    "as an execution start is included in that execution. budget_ticks is the run time a code cell is "
+    "which its latest execution STARTED, or null if it never started. The kernel captures a cell's "
+    "source when its execution starts, so an edit whose edited_at equals the executed_at was captured "
+    "by that execution. budget_ticks is the run time a code cell is "
     "expected to need (null for markdown). status is never_run, queued, running, ok or error; a queued "
     "cell keeps the executed_at of its previous execution. error is non-null exactly when status is "
     "error and gives type, message and raised_in_cell, the cell whose code raised the error, which can "
@@ -286,15 +292,20 @@ def _questions() -> dict[str, dict[str, Any]]:
         "next_action": choice(
             "Which action card should the notebook assistant show now? Go through the numbered next_action "
             "rules in order and take the first one that applies; comments never count.",
-            {"wait": "Show no action card: restarting, busy below the hard limit, or nothing new to do",
+            {"wait": "Show no action card: the kernel is restarting; or it is busy below the hard limit with "
+                     "memory under 90% of the limit; or nothing is left to fix, refresh, run or ask about and "
+                     "the results were shared with no tracked cell started later than shared_at",
              "run_cell": "Run the selected runnable cell",
              "fix_cell": "Fix the code of the cell that raised the open failure",
-             "interrupt_kernel": "Interrupt the running cell: its runtime reached twice its budget",
-             "restart_kernel": "Restart the kernel: it is dead or memory reached 90% of the limit",
+             "interrupt_kernel": "Interrupt the running cell: memory is under 90% of the limit and its runtime "
+                                 "reached twice its budget",
+             "restart_kernel": "Restart the kernel: it is dead, or it is not restarting and memory reached 90% "
+                               "of the limit",
              "refresh_table": "Refresh the local snapshot of the selected table",
              "ask_data_owner": "Ask the selected team why the selected table's feed is overdue",
-             "share_results": "Share the results: everything is current, no feed is behind or overdue, "
-                              "and no tracked cell has started since the results were last shared"}),
+             "share_results": "Share the results: every tracked cell is current, no counted table is behind or "
+                              "overdue, and the results were never shared or some tracked cell has started since "
+                              "they were last shared (an executed_at later than shared_at)"}),
         "kernel_badge": choice(
             "Which kernel badge is displayed now? It is always shown, whatever the action card; derive it "
             "from kernel.status and, for a busy kernel, the running cell's runtime against its budget_ticks.",
@@ -351,6 +362,8 @@ HELPERS_NEW = ("cal = read_table('ops.sensor_calibration')\n"
                "def to_knots(raw, dt):\n    return raw * KNOTS_PER_MS * cal.gain / dt if dt else float('nan')")
 PLOT_OLD = "tides = read_table('marine.tide_gauges')\nhourly.unstack(0).plot()\ntides.plot(y='tide_m')"
 PLOT_NEW = "tides = read_table('marine.tide_gauges')\nhourly.unstack(0).plot()\ntides.plot(y='level_m')"
+UNITS_OLD = "KNOTS_PER_MS = 1.943844  # metres per second to knots"
+UNITS_NEW = "KNOTS_PER_MS = 3600 / 1852  # metres per second to knots, exact"
 NOTES_OLD = "## Notes\n- Gust peaks above 60 kn go to the forecast desk."
 NOTES_NEW = NOTES_OLD + "\n- Re-check the outer-shelf buoy after its mast repair."
 
@@ -375,22 +388,22 @@ def _initial() -> dict[str, Any]:
               "morning forecast.", -60),
         _cell("setup", "code", "import pandas as pd\nfrom shelfkit import read_table", -45, budget=2,
               executed_at=-39, count=1, status="ok"),
-        _cell("load_frames", "code", FRAMES_DAY, -6, budget=6, depends_on=("setup",),
-              reads=("marine.buoy_frames",), executed_at=-6, status="running"),
+        _cell("load_frames", "code", FRAMES_DAY, -5, budget=5, depends_on=("setup",),
+              reads=("marine.buoy_frames",), executed_at=-5, status="running"),
         _cell("stations", "code", STATIONS_OLD, -44, budget=2, depends_on=("setup",),
               reads=("ref.stations",), executed_at=-33, count=5, status="ok", rows=30),
         _cell("helpers", "code", HELPERS_OLD, -43, budget=2, depends_on=("setup", "unit_table"),
               reads=("ops.sensor_calibration",), executed_at=-36, count=3, status="ok"),
         _cell("gusts", "code", "gusts = frames.assign(knots=[to_knots(r, d) for r, d in zip(frames.raw, frames.dt)])",
               -42, budget=3, depends_on=("load_frames", "helpers"), executed_at=-31, count=6, status="ok",
-              rows=43200),
+              rows=21600),
         _cell("rollup", "code", "hourly = gusts.merge(stations, on='buoy').groupby(['buoy', 'hour']).knots.max()",
-              -41, budget=2, depends_on=("gusts", "stations"), executed_at=-30, count=7, status="ok", rows=720),
+              -41, budget=2, depends_on=("gusts", "stations"), executed_at=-30, count=7, status="ok", rows=360),
         _cell("explore_plot", "code", PLOT_OLD, -29, budget=3, tags=("scratch",), depends_on=("rollup",),
               reads=("marine.tide_gauges",), executed_at=-27, count=9, status="error", error=TIDE_ERROR),
         _cell("summary", "code", "summary = hourly.groupby(level='buoy').describe()", -40, budget=2,
               depends_on=("rollup",), executed_at=-28, count=8, status="ok", rows=30),
-        _cell("unit_table", "code", "KNOTS_PER_MS = 1.943844  # metres per second to knots", -38, budget=2,
+        _cell("unit_table", "code", UNITS_OLD, -38, budget=2,
               depends_on=("setup",), executed_at=-37, count=2, status="ok"),
         _cell("notes", "markdown", NOTES_OLD, -58),
     ]
@@ -398,7 +411,7 @@ def _initial() -> dict[str, Any]:
         "now": 0,
         "rules": list(RULES),
         "notebook": {"name": NOTEBOOK, "shared_at": None, "cells": cells},
-        "kernel": {"status": "busy", "since": -6, "started_at": -40, "last_output": "partition 5 of 24 loaded",
+        "kernel": {"status": "busy", "since": -5, "started_at": -40, "last_output": "partition 4 of 24 loaded",
                    "last_output_at": -1, "heartbeat_at": 0, "memory_mb": 2380,
                    "memory_limit_mb": MEMORY_LIMIT_MB},
         "data_sources": [
@@ -418,17 +431,20 @@ def _initial() -> dict[str, Any]:
             {"team": "@station-registry", "status": "available", "cover": "@data-platform"},
             {"team": "@data-platform", "status": "available", "cover": None},
         ],
-        "comments": [{"at": -6, "author": "Ilse", "text": "Widened load_frames to a full day for the storm review."}],
+        "comments": [{"at": -5, "author": "Ilse",
+                      "text": "Widened load_frames from twelve hours to the full storm day; the older hourly "
+                              "partitions come back from the archive."}],
     }
 
 
 # Authoring witnesses for ticks whose decision turns on an ordering rule, a boundary or a distractor.
 NOTES = {
-    0: "load_frames started at -6 with budget 6: runtime 6 is exactly the budget, not over it",
-    1: "runtime 7 is more than the budget: overrun badge; the hard limit is 12",
+    0: "load_frames started at -5 with budget 5: runtime 5 is exactly the budget, not over it",
+    1: "runtime 6 is more than the budget: overrun badge; the hard limit is 10",
     2: "progress output every tick does not reset the budget",
-    6: "runtime 12 is exactly twice the budget: interrupt the running load_frames",
-    7: "the widening edit at -6 was part of the run started at -6: not outdated, so an open failure; "
+    5: "runtime 10 is exactly twice the budget: interrupt the running load_frames",
+    6: "runtime 11 is past the hard limit, still printing progress: the interrupt card stays",
+    7: "the widening edit at -5 was captured by the run started at -5: not outdated, so an open failure; "
        "fix load_frames",
     9: "load_frames edited after its failed run: outdated, so it needs a run instead of a fix; the frames "
        "snapshot loaded at the source update tick is not behind",
@@ -441,6 +457,7 @@ NOTES = {
     25: "the scratch plot's error is ignored; summary is outdated by rollup's rerun",
     27: "every tracked cell current, counted tables neither behind nor overdue, never shared",
     28: "a comment about sharing does not set notebook.shared_at",
+    29: "summary started at the share tick, which is not later than shared_at: the results count as shared",
     31: "memory exactly 3600 = 90% of 4000: restart outranks the busy kernel",
     33: "dead kernel: no cell has run in the current kernel",
     35: "Restart & Run All: setup started and finished at the new kernel's start tick 35, and load_frames "
@@ -454,9 +471,12 @@ NOTES = {
     49: "a comment says @marine-feeds is off shift, but teams still lists it as available",
     50: "@marine-feeds is now away: its cover @buoy-ingest is asked",
     51: "stations edited after its run, nothing else changed: the run card outranks the overdue feed",
-    52: "frames source updated after the snapshot: behind; refresh outranks the stations run",
-    53: "snapshot refreshed in the same tick as the rerun of load_frames starts",
-    54: "stations is quick: it starts and finishes within the tick",
+    52: "stations reran, so rollup needs a run; its direct dependencies gusts and stations are current, but "
+        "unit_table, upstream of rollup through gusts and helpers, was edited: unit_table is the first "
+        "runnable cell, whatever the comment says",
+    53: "frames source updated after the snapshot: behind; refresh outranks the pending runs",
+    54: "snapshot refreshed in the same tick as the rerun of load_frames starts; unit_table is quick: it "
+        "starts and finishes within the tick before the chain starts",
     57: "load_frames started at the refresh tick, so it is current; calibration exactly at its cadence "
         "(57 + 43 = 100): not yet overdue; results changed since the share",
     58: "calibration overdue (101 > 100); @sensor-lab and its cover @marine-feeds are away: ask @buoy-ingest",
@@ -591,18 +611,18 @@ def _build() -> dict[str, Any]:
         evidence = []
         state["now"] = tick
         # Act 1: the day-long frame load keeps printing progress but runs past its budget.
-        if tick <= 6: output(f"partition {tick + 6} of 24 loaded")
+        if tick <= 6: output(f"partition {tick + 5} of 24 loaded")
         if tick == 2: say("Ruairi", "Memory is flat at about 2.4 GB, so that load is healthy.")
         if tick == 3: memory(2410)
         if tick == 4: say("Ilse", "Could we bump its budget to 24 so the badge goes away?")
-        if tick == 5: memory(2430)
+        if tick == 6: memory(2430)
         if tick == 7:
-            interrupt("partition 13 of 24")
+            interrupt("partition 12 of 24")
             memory(2400)
         if tick == 8: say("Ruairi", "Half the day had already loaded; just rerun it unchanged.")
         if tick == 9: edit("load_frames", FRAMES_SIX)
         if tick == 10: run("load_frames", "gusts")
-        if tick == 11: output("loaded 4 of 6 hourly partitions")
+        if tick == 11: output("loaded 4 of 6 hourly partitions (recent hours, none archived)")
         if tick == 12:
             finish(rows=10800)
             memory(2650)
@@ -637,7 +657,10 @@ def _build() -> dict[str, Any]:
             finish(rows=30)
             memory(3440)
         if tick == 28: say("Ilse", "Sharing these numbers with the forecast desk now.")
-        if tick == 29: share()
+        if tick == 29:
+            run("summary")
+            finish(rows=30)
+            share()
         # Act 3: the plot exhausts memory, the kernel dies; Restart & Run All exposes the units cell.
         if tick == 30: edit("explore_plot", PLOT_NEW)
         if tick == 31:
@@ -679,22 +702,30 @@ def _build() -> dict[str, Any]:
             finish(rows=180)
             memory(2150)
         if tick == 48: finish(rows=30)
-        # Act 4: an overdue feed and its cover teams; a stations edit; the refreshed chain is ready again.
+        # Act 4: an overdue feed and its cover teams; edits to stations and to the units constant upstream
+        # of rollup; the refreshed chain is ready to share again.
         if tick == 49:
             say("Ruairi", "Marine feeds are off shift for the rest of the day, so ask @buoy-ingest.")
             edit("notes", NOTES_NEW)
         if tick == 50: team_status("@marine-feeds", "away")
         if tick == 51: edit("stations", STATIONS_NEW)
-        if tick == 52: source_update("marine.buoy_frames")
-        if tick == 53:
-            refresh("marine.buoy_frames")
-            run("load_frames", "stations", "gusts", "rollup", "summary")
-        if tick == 54:
-            finish(rows=10800)
+        if tick == 52:
+            run("stations")
             finish(rows=27)
+            edit("unit_table", UNITS_NEW)
+            say("Ruairi", "Tightened KNOTS_PER_MS; rollup sits above the units cell, so run rollup first.")
+        if tick == 53: source_update("marine.buoy_frames")
+        if tick == 54:
+            refresh("marine.buoy_frames")
+            run("unit_table")
+            finish()
+            run("load_frames", "helpers", "gusts", "rollup", "summary")
+        if tick == 55:
+            finish(rows=10800)
+            finish()
             memory(2400)
-        if tick == 55: finish(rows=10800)
         if tick == 56:
+            finish(rows=10800)
             finish(rows=162)
             memory(2600)
         if tick == 57: finish(rows=27)
