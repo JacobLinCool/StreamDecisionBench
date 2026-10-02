@@ -1,19 +1,27 @@
-"""Boundary and counterfactual checks for training variant debugging_c (Go stock-hold session)."""
+"""Public-evidence checks for training variant debugging_c (pre-merge CI and approval assistant)."""
 
 from copy import deepcopy
 import json
 
 import pytest
 
-from streamdecisionbench.lite.core import compose
-from streamdecisionbench.lite.tasks import debugging
+from streamdecisionbench.lite.core import compose, encode_scenario, validate_episode
 from streamdecisionbench.lite.training import debugging_c
-from streamdecisionbench.lite.training.audit import check_module, leakage
-from streamdecisionbench.lite.training.debugging_c import reference, scenarios
+from streamdecisionbench.lite.training.audit import (
+    MAX_LAYOUT_OVERLAP, check_module, layout_overlap, leakage, spec_overlap)
+from streamdecisionbench.lite.training.debugging_c import _glob, reference, scenarios
 
+C1, C2, C3, C4, C5, C6 = "a41c0de", "5be7d12", "c90e4f1", "e27b3a9", "7d0e5c3", "f4a8b61"
 HOLD = "internal/reserve/hold.go"
-TTL = "internal/reserve/ttl.go"
 HOLD_TEST = "internal/reserve/hold_test.go"
+MAIN = "cmd/stockhold/main.go"
+DOC = "docs/holds.md"
+SWEEP_TEST = "internal/reserve/sweep/sweep_test.go"
+TXN = "internal/storage/kvclient/txn.go"
+RENEWAL, CONFLICT = "TestRenewExtendsFromNow", "TestReserveRetriesOnConflict"
+CAP, BACKOFF = "TestReserveRetryCapHonoured", "TestTxnRetryBackoff"
+TOP_KEYS = {"now", "assistant", "pull_request", "commits", "ci", "reviews", "approval_rules", "chat"}
+FINISHED = {"passed", "failed", "cancelled"}
 
 
 @pytest.fixture(scope="module")
@@ -26,338 +34,628 @@ def at(episode, tick):
     return deepcopy(episode["steps"][tick]["state"])
 
 
+def job(state, name, commit, attempt=1):
+    return next(j for j in state["ci"]["jobs"]
+                if j["name"] == name and j["commit"] == commit and j["attempt"] == attempt)
+
+
 def decision(episode, state):
     return compose(episode["decision_spec"], reference(state))
 
 
-def test_shared_rules_are_reused_verbatim(episode):
-    assert debugging_c.reference is debugging.reference
-    assert episode["questions"] == debugging._questions([TTL, HOLD], ["@kv-storage", "@svc-foundation"])
-    for step in episode["steps"]:
-        assert step["state"]["session"]["policy"] == debugging.POLICY
+def add_review(state, reviewer, verdict, commit, when):
+    state["reviews"].append({"reviewer": reviewer, "verdict": verdict, "commit": commit, "at": when,
+                             "body": "counterfactual"})
+    state["reviews"].sort(key=lambda r: r["at"])
 
 
-def test_manifest_and_public_only_reproduction(episode):
-    assert (episode["episode_id"], episode["scenario_id"]) == ("train_debugging_c", "debugging_c")
-    assert episode["task_family"] == "live_debugging"
-    assert len(episode["questions"]) == 7
-    assert len(episode["steps"]) == 60
-    assert episode["tick_seconds"] == 2
+# ---------------------------------------------------------------------------
+# Structure, causality and stated conventions
+# ---------------------------------------------------------------------------
+
+def test_identity_and_public_reference_reproduces_every_tick(episode):
+    assert (episode["episode_id"], episode["task_family"], episode["scenario_id"]) == (
+        "train_debugging_c", "live_debugging", "debugging_c")
+    assert episode["tick_seconds"] == 2.0 and len(episode["steps"]) == 60
+    assert len(episode["questions"]) == 8
+    rules = episode["steps"][0]["state"]["assistant"]
     for tick, step in enumerate(episode["steps"]):
-        assert step["t"] == tick and step["evidence"]
-        state = json.loads(json.dumps(step["state"]))
-        assert state["clock_tick"] == tick
-        assert not {"gold", "hidden", "answer", "route"} & state.keys()
-        assert reference(state) == step["gold"]
-        assert all(row["time"] <= tick for row in state["saves"] + state["terminal"] + state["call"])
-        assert all(event["time"] <= tick for event in state["debugger"]["events"])
-        assert all(run["started"] <= tick and (run["finished"] is None or run["finished"] <= tick)
-                   for run in state["runs"])
-        assert set(step["gold"]) == set(episode["questions"])
-        for qid, value in step["gold"].items():
-            assert value in episode["questions"][qid]["criteria"]
-
-
-def test_state_schema_matches_the_evaluation_family(episode):
-    family = debugging.scenarios()[0]["steps"][0]["state"]
-    run_keys = set(family["runs"][0])
-    for step in episode["steps"]:
         state = step["state"]
-        assert set(state) == set(family)
-        for key in ("session", "editor", "debugger", "git"):
-            assert set(state[key]) == set(family[key])
-        assert all(set(run) == run_keys for run in state["runs"])
-        assert all(set(row) == {"time", "file", "diff"} for row in state["saves"])
-        assert all(set(row) == {"time", "run", "text"} for row in state["terminal"])
-        assert all(set(row) == {"time", "speaker", "text", "final"} for row in state["call"])
-        assert all(set(row) == {"test", "outcome", "message", "trace"}
-                   for run in state["runs"] for row in run["results"])
-        assert all(row["outcome"] in {"PASSED", "FAILED", "SKIPPED"}
-                   for run in state["runs"] for row in run["results"])
+        assert step["t"] == tick and state["now"] == tick
+        assert set(state) == TOP_KEYS
+        assert state["assistant"] == rules
+        assert step["evidence"] and all(isinstance(e, str) and e for e in step["evidence"])
+        assert reference(json.loads(json.dumps(state))) == step["gold"]
+        assert set(step["gold"]) == set(episode["questions"])
+        for question, value in step["gold"].items():
+            assert value in episode["questions"][question]["criteria"], (tick, question, value)
 
 
-def test_states_are_causal_and_cumulative(episode):
+def test_nothing_is_later_than_now(episode):
+    for tick, step in enumerate(episode["steps"]):
+        state = step["state"]
+        times = [c["at"] for c in state["commits"]] + [r["at"] for r in state["reviews"]]
+        times += [c["at"] for c in state["chat"]]
+        for j in state["ci"]["jobs"]:
+            times += [t for t in (j["queued_at"], j["started_at"], j["finished_at"]) if t is not None]
+        assert max(times) <= tick
+
+
+def test_history_is_cumulative(episode):
     previous = None
     for step in episode["steps"]:
         state = step["state"]
-        unfinished = [run for run in state["runs"] if run["finished"] is None]
-        assert len(unfinished) <= 1
-        assert state["debugger"]["status"] == ("running" if unfinished else "inactive")
-        runs = {run["id"]: run for run in state["runs"]}
-        for row in state["terminal"]:
-            if row["run"] is not None:
-                run = runs[row["run"]]
-                assert run["started"] <= row["time"]
-                assert run["finished"] is None or row["time"] <= run["finished"]
-        for run in state["runs"]:
-            if run["finished"] is not None:
-                assert {"time": run["finished"], "run": run["id"], "text": run["summary"]} in state["terminal"]
-                assert run["results"] or run["compiler_errors"] or run["interrupted"]
-            else:
-                assert run["results"] == [] and run["summary"] == "running"
-        assert set(state["editor"]["dirty_files"]) <= {HOLD, TTL, "docs/reservations.md", "go.mod", HOLD_TEST}
         if previous is not None:
-            assert state["session"] == previous["session"]
-            for key in ("saves", "terminal", "call"):
-                assert state[key][:len(previous[key])] == previous[key]
-            for old, new in zip(previous["runs"], state["runs"]):
-                assert old["id"] == new["id"] and old["started"] == new["started"]
-                if old["finished"] is not None:
-                    assert new == old  # a finished run never changes
+            for key in ("commits", "reviews", "chat"):
+                assert state[key][:len(previous[key])] == previous[key], key
+            files = state["pull_request"]["files_changed"]
+            assert files[:len(previous["pull_request"]["files_changed"])] == previous["pull_request"]["files_changed"]
+            jobs = state["ci"]["jobs"]
+            assert len(jobs) >= len(previous["ci"]["jobs"])
+            for old, new in zip(previous["ci"]["jobs"], jobs):
+                assert (old["name"], old["commit"], old["attempt"], old["queued_at"]) == (
+                    new["name"], new["commit"], new["attempt"], new["queued_at"])
+                if old["status"] in FINISHED:
+                    assert new == old
+                elif old["status"] == "running":
+                    assert new["started_at"] == old["started_at"] and new["status"] != "queued"
         previous = state
 
 
-KEY_TICKS = {
-    0: {"route": "wait", "process": "idle", "target_result": "original_error"},
-    1: {"route": "rerun", "process": "idle", "target_result": "original_error", "rerun_scope": "target"},
-    2: {"route": "wait", "process": "running", "target_result": "original_error"},
-    4: {"route": "inspect", "process": "idle", "target_result": "different_error", "inspect_file": TTL},
-    5: {"route": "inspect", "process": "idle", "target_result": "different_error", "inspect_file": TTL},
-    6: {"route": "wait", "process": "idle", "target_result": "different_error"},
-    8: {"route": "wait", "process": "idle", "target_result": "different_error"},
-    9: {"route": "rerun", "process": "idle", "target_result": "different_error", "rerun_scope": "module"},
-    12: {"route": "inspect", "process": "idle", "target_result": "not_run", "inspect_file": HOLD},
-    13: {"route": "inspect", "process": "idle", "target_result": "not_run", "inspect_file": HOLD},
-    17: {"route": "wait", "process": "idle", "target_result": "not_run"},
-    18: {"route": "rerun", "process": "idle", "target_result": "not_run", "rerun_scope": "module"},
-    21: {"route": "wait", "process": "running", "target_result": "not_run"},
-    24: {"route": "wait", "process": "running", "target_result": "not_run"},
-    25: {"route": "wait", "process": "stalled", "target_result": "not_run"},
-    26: {"route": "wait", "process": "running", "target_result": "not_run"},
-    29: {"route": "wait", "process": "running", "target_result": "not_run"},
-    30: {"route": "wait", "process": "stalled", "target_result": "not_run"},
-    31: {"route": "wait", "process": "stalled", "target_result": "not_run"},
-    32: {"route": "control", "process": "stalled", "target_result": "not_run", "control_action": "stop"},
-    33: {"route": "control", "process": "stalled", "target_result": "not_run", "control_action": "stop"},
-    34: {"route": "wait", "process": "idle", "target_result": "not_run"},
-    35: {"route": "rerun", "process": "idle", "target_result": "not_run", "rerun_scope": "target"},
-    38: {"route": "rerun", "process": "idle", "target_result": "passed", "rerun_scope": "module"},
-    39: {"route": "rerun", "process": "idle", "target_result": "passed", "rerun_scope": "module"},
-    40: {"route": "wait", "process": "running", "target_result": "passed"},
-    42: {"route": "delegate", "process": "idle", "target_result": "passed", "owner": "@kv-storage"},
-    47: {"route": "delegate", "process": "idle", "target_result": "passed", "owner": "@kv-storage"},
-    48: {"route": "wait", "process": "idle", "target_result": "passed"},
-    51: {"route": "wait", "process": "idle", "target_result": "passed"},
-    52: {"route": "rerun", "process": "idle", "target_result": "passed", "rerun_scope": "full"},
-    55: {"route": "ready", "process": "idle", "target_result": "passed"},
-    57: {"route": "ready", "process": "idle", "target_result": "passed"},
-    58: {"route": "wait", "process": "idle", "target_result": "passed"},
-    59: {"route": "wait", "process": "idle", "target_result": "passed"},
-}
+def test_ci_record_conventions(episode):
+    stages = {"lint": "lint", "build": "build", "unit-reserve": "unit", "unit-storage": "unit",
+              "integration-kv": "integration", "bench-holds": "unit"}
+    for step in episode["steps"]:
+        state = step["state"]
+        head = state["pull_request"]["head_commit"]
+        assert head == state["commits"][-1]["sha"]
+        assert [c["at"] for c in state["commits"]] == sorted(c["at"] for c in state["commits"])
+        push_ticks = {c["sha"]: c["at"] for c in state["commits"]}
+        order = [c["sha"] for c in state["commits"]]
+        attempts = {}
+        for j in state["ci"]["jobs"]:
+            assert j["stage"] == stages[j["name"]]
+            assert j["queued_at"] >= push_ticks[j["commit"]]
+            attempts.setdefault((j["name"], j["commit"]), []).append(j["attempt"])
+            if j["status"] == "queued":
+                assert j["started_at"] is None and j["finished_at"] is None and j["runner"] is None
+            elif j["status"] == "running":
+                assert j["started_at"] is not None and j["finished_at"] is None and j["runner"]
+                assert j["queued_at"] <= j["started_at"]
+            else:
+                assert j["status"] in FINISHED and j["finished_at"] is not None
+            if j["status"] == "cancelled":
+                # Cancelled only by a later push, at that push's tick; head attempts are never cancelled.
+                assert j["commit"] != head
+                later = order[order.index(j["commit"]) + 1]
+                assert j["finished_at"] == push_ticks[later]
+            if j["status"] == "failed" and j["stage"] in ("unit", "integration"):
+                assert j["failing_tests"]
+            if j["stage"] in ("lint", "build") or j["status"] != "failed":
+                assert j["failing_tests"] == []
+        for numbers in attempts.values():
+            assert numbers == list(range(1, len(numbers) + 1))
+        reviews = state["reviews"]
+        assert [r["at"] for r in reviews] == sorted(r["at"] for r in reviews)
+        assert len({(r["reviewer"], r["at"]) for r in reviews}) == len(reviews)
+        author = state["pull_request"]["author"]
+        assert all(set(r["approvers"]) - {author} for r in state["approval_rules"])
 
 
-@pytest.mark.parametrize("tick", sorted(KEY_TICKS))
-def test_key_ticks_of_the_story(episode, tick):
-    assert compose(episode["decision_spec"], episode["steps"][tick]["gold"]) == KEY_TICKS[tick]
+def test_unfinished_older_attempts_are_cancelled_at_each_push(episode):
+    for tick in (6, 13, 35, 43):
+        state = at(episode, tick)
+        head = state["pull_request"]["head_commit"]
+        assert all(j["status"] in FINISHED for j in state["ci"]["jobs"] if j["commit"] != head)
+    state = at(episode, 13)
+    assert job(state, "integration-kv", C3)["status"] == "cancelled"
+    assert job(state, "integration-kv", C3)["started_at"] is None
 
 
-def test_rich_dynamics_and_value_coverage(episode):
-    answers = [step["gold"] for step in episode["steps"]]
-    decisions = [compose(episode["decision_spec"], a) for a in answers]
-    changes = sum(a != b for a, b in zip(decisions, decisions[1:]))
-    assert 18 <= changes <= 26
-    assert {a["route"] for a in answers} == {"wait", "rerun", "inspect", "control", "delegate", "ready"}
-    assert {a["process"] for a in answers} == {"idle", "running", "stalled"}
-    assert {a["target_result"] for a in answers} == {"not_run", "passed", "original_error", "different_error"}
-    assert {a["rerun_scope"] for a in answers} == {"none", "target", "module", "full"}
-    assert {a["control_action"] for a in answers} == {"none", "stop"}
-    assert {a["owner"] for a in answers} == {"none", "@kv-storage"}
-    assert {a["inspect_file"] for a in answers} == {"none", TTL, HOLD}
-    assert {a["inspect_file"] for a in answers} == set(episode["questions"]["inspect_file"]["criteria"])
-    # @svc-foundation is offered only as the owner a reader gets by stopping at the internal/* rule.
-    assert set(episode["questions"]["owner"]["criteria"]) == {"none", "@kv-storage", "@svc-foundation"}
-
-
-def test_save_grace_boundary_and_earlier_writes(episode):
-    state = at(episode, 1)
-    assert decision(episode, state)["route"] == "rerun"  # exactly two ticks after the save
-    state["clock_tick"] -= 0.01
-    assert decision(episode, state)["route"] == "wait"
-    # The ttl.go write predates G40's start; moved after it, it widens the rerun to module.
-    state = at(episode, 1)
-    assert reference(state)["rerun_scope"] == "target"
-    state["saves"][0]["time"] = -5
-    assert reference(state)["rerun_scope"] == "module"
-
-
-def test_last_matching_scope_rule_decides(episode):
-    state = at(episode, 1)
-    rules = state["session"]["scope_rules"]
-    rules[0], rules[1] = rules[1], rules[0]  # the broad internal/* rule now matches hold.go last
-    assert reference(state)["rerun_scope"] == "module"
-
-
-def test_widest_scope_over_all_writes_after_the_start(episode):
-    assert reference(at(episode, 17))["route"] == "wait"  # newest relevant write is one tick old
-    state = at(episode, 18)
-    assert reference(state)["rerun_scope"] == "module"
-    state["saves"] = [row for row in state["saves"] if not (row["file"] == TTL and row["time"] == 15)]
-    assert reference(state)["rerun_scope"] == "target"  # only hold.go was written after G42 started
-    state = at(episode, 52)
-    assert reference(state)["rerun_scope"] == "full"
-    state["saves"] = [row for row in state["saves"] if row["file"] != "go.mod"]
-    assert reference(state)["rerun_scope"] == "target"
-    # The re-vendoring write matches no scope rule: it neither widens the rerun nor restarts save grace.
-    state = at(episode, 52)
-    vendor = next(row for row in state["saves"] if row["file"] == "vendor/modules.txt")
-    assert vendor["time"] == 49
-    vendor["time"] = 52
-    assert (reference(state)["route"], reference(state)["rerun_scope"]) == ("rerun", "full")
-
-
-def test_target_failing_again_selects_its_own_frame_not_skips(episode):
-    state = at(episode, 4)
-    answer = reference(state)
-    assert (answer["route"], answer["inspect_file"], answer["target_result"]) == ("inspect", TTL, "different_error")
-    # A newly failing retry test would win over the still-failing target and go to the storage team.
-    retry = state["runs"][-1]["results"][1]
-    retry.update(outcome="FAILED", message="conflict", trace=episode["steps"][42]["state"]["runs"][-1]["results"][1]["trace"])
-    assert (reference(state)["route"], reference(state)["owner"]) == ("delegate", "@kv-storage")
-    # If it had already failed in G40 it is not new, and the pinned target is selected again.
-    state["runs"][0]["results"][1] = deepcopy(retry)
-    assert (reference(state)["route"], reference(state)["inspect_file"]) == ("inspect", TTL)
-
-
-def test_first_compiler_file_not_editor_diagnostics(episode):
-    # The language server flags both files right after the ttl.go save; the rerun still comes first.
-    assert [row["file"] for row in at(episode, 7)["diagnostics"]] == [TTL, HOLD]
-    assert reference(at(episode, 9))["route"] == "rerun"
-    state = at(episode, 12)
-    assert state["diagnostics"][0]["file"] == TTL
-    answer = reference(state)
-    assert (answer["route"], answer["inspect_file"], answer["target_result"]) == ("inspect", HOLD, "not_run")
-    errors = state["runs"][-1]["compiler_errors"]
-    errors.reverse()
-    assert reference(state)["inspect_file"] == TTL
-
-
-def test_only_the_runs_own_output_resets_silence(episode):
-    state = at(episode, 25)
-    assert reference(state)["process"] == "stalled"
-    gopls = next(row for row in state["terminal"] if row["time"] == 23)
-    gopls["run"] = "G43"
-    assert reference(state)["process"] == "running"
-    # Output tagged with another run does not reset silence either.
-    state = at(episode, 32)
-    state["terminal"].append({"time": 31, "run": "G42", "text": "late log flush"})
-    assert reference(state)["control_action"] == "stop"
-    state["terminal"][-1]["run"] = "G43"
-    answer = reference(state)
-    assert (answer["route"], answer["process"]) == ("wait", "running")
-
-
-def test_stop_outranks_dirty_buffer_and_recent_write(episode):
-    state = at(episode, 32)
-    assert state["editor"]["dirty_files"] == [HOLD]
-    state["saves"].append({"time": 32, "file": HOLD, "diff": "+ // retry"})
-    answer = reference(state)
-    assert (answer["route"], answer["control_action"]) == ("control", "stop")
-    assert reference(at(episode, 31))["route"] == "wait"  # five silent ticks are not enough
-
-
-def test_interrupted_run_reruns_target_unless_a_write_followed_its_start(episode):
-    state = at(episode, 34)
-    assert reference(state)["route"] == "wait"  # the unsaved hold.go buffer blocks
-    state = at(episode, 35)
-    assert (reference(state)["route"], reference(state)["rerun_scope"]) == ("rerun", "target")
-    state["saves"].append({"time": 27, "file": HOLD_TEST, "diff": "+ t.Parallel()"})
-    assert (reference(state)["route"], reference(state)["rerun_scope"]) == ("rerun", "module")
-
-
-def test_skips_above_allowance_but_not_at_it(episode):
-    state = at(episode, 38)
-    assert (reference(state)["route"], reference(state)["rerun_scope"]) == ("rerun", "module")
-    state = at(episode, 55)
-    assert reference(state)["route"] == "ready"  # one skip equals allowed_skips
-    state["runs"][-1]["results"][-1]["outcome"] = "SKIPPED"
-    assert (reference(state)["route"], reference(state)["rerun_scope"]) == ("rerun", "module")
-
-
-def test_write_at_run_start_belongs_to_that_run(episode):
-    state = at(episode, 44)
-    assert reference(state)["route"] == "delegate"
-    save = next(row for row in state["saves"] if row["file"] == HOLD_TEST)
-    assert save["time"] == state["runs"][-1]["started"] == 40
-    save["time"] = 40.01
-    assert (reference(state)["route"], reference(state)["rerun_scope"]) == ("rerun", "module")
-
-
-def test_owner_is_last_matching_rule_on_last_project_frame(episode):
-    state = at(episode, 42)
-    assert reference(state)["owner"] == "@kv-storage"
-    owners = state["session"]["owners"]
-    state["session"]["owners"] = [rule for rule in owners if rule[1] != "@kv-storage"]
-    assert reference(state)["owner"] == "@svc-foundation"  # internal/* now matches last
-    state = at(episode, 42)
-    trace = state["runs"][-1]["results"][1]["trace"]
-    state["runs"][-1]["results"][1]["trace"] = [path for path in trace if "kvclient" not in path]
-    answer = reference(state)  # vendor and GOROOT frames are skipped; hold.go is our own
-    assert (answer["route"], answer["inspect_file"]) == ("inspect", HOLD)
-
-
-@pytest.mark.parametrize("tick", [42, 43, 44, 45, 46, 47])
-def test_non_commitments_leave_delegation_active(episode, tick):
-    answer = reference(at(episode, tick))
-    assert (answer["route"], answer["owner"]) == ("delegate", "@kv-storage")
-
-
-def test_every_partial_is_finalized_by_its_speaker(episode):
-    call = episode["steps"][-1]["state"]["call"]
-    partials = [i for i, row in enumerate(call) if not row["final"]]
-    assert partials
-    for i in partials:
-        final = call[i + 1]
-        assert final["final"] and (final["speaker"], final["text"]) == (call[i]["speaker"], call[i]["text"])
-        assert final["time"] == call[i]["time"] + 1
-    state = at(episode, 47)
-    assert state["call"][-1]["final"] is False
-    state["call"][-1]["final"] = True  # the same words, once final, end delegation
-    assert reference(state)["route"] == "wait"
-
-
-def test_positive_commitment_must_match_team_run_speaker_and_finality(episode):
-    state = at(episode, 48)
-    assert reference(state)["route"] == "wait"
-    for edit in ({"text": "I have messaged @kv-storage about G44."},
-                 {"text": "I have not messaged @kv-storage about G45."},
-                 {"text": "I have messaged @svc-foundation about G45."},
-                 {"final": False}, {"speaker": "Esme"}):
-        changed = deepcopy(state)
-        changed["call"][-1].update(edit)
-        assert (reference(changed)["route"], reference(changed)["owner"]) == ("delegate", "@kv-storage")
-
-
-def test_ready_relevance_and_commit(episode):
-    state = at(episode, 57)
-    assert reference(state)["route"] == "ready"
-    state["editor"]["dirty_files"] = ["docs/reservations.md"]
-    assert reference(state)["route"] == "ready"
-    state["editor"]["dirty_files"] = [TTL]
-    assert reference(state)["route"] == "wait"
-    state = at(episode, 58)
-    assert state["git"]["uncommitted"] == [] and reference(state)["route"] == "wait"
-    state["git"]["uncommitted"] = ["go.mod"]
-    assert reference(state)["route"] == "ready"
-
-
-def test_unfinished_results_do_not_replace_finished_badge(episode):
-    state = at(episode, 41)
-    state["runs"][-1]["results"] = [{"test": "TestHoldExpiresAfterTTL", "outcome": "FAILED",
-                                     "message": "reserved after TTL = 12, want 9", "trace": []}]
-    answer = reference(state)
-    assert (answer["route"], answer["target_result"]) == ("wait", "passed")
-    # The streamed PASS line of an interrupted run is not a result either.
-    assert reference(at(episode, 21))["target_result"] == "not_run"
-
-
-def test_module_passes_check_and_leakage_audit(episode):
-    assert leakage([episode]) == []
-    (summary,) = check_module(debugging_c)["episodes"]
+def test_encoded_episode_and_audits(episode):
+    summary = validate_episode(encode_scenario(episode))
+    assert summary["decision_transitions"] == 31
     assert summary["routes_unseen"] == []
+    assert leakage([episode]) == []
+    assert spec_overlap([episode]) == []
+    assert layout_overlap(episode) <= MAX_LAYOUT_OVERLAP
+    assert layout_overlap(episode) == 0.0
+    result = check_module(debugging_c)
+    assert result["episodes"][0]["episode_id"] == "train_debugging_c"
+
+
+def test_rules_live_in_the_state_and_own_the_specification(episode):
+    state = at(episode, 0)
+    rules = state["assistant"]["rules"]
+    assert isinstance(rules, list) and all(isinstance(r, str) for r in rules)
+    text = " ".join(rules)
+    for phrase in ("the governing rule is the one with the longest pattern", "wherever it stands in the list",
+                   "only between equally long patterns does the one listed earlier govern",
+                   "a single * matches any sequence of characters except /",
+                   "reaching the limit exactly counts", "equality counts", "assistant.bots",
+                   "commented reviews never change a standing", "when it failed does not matter",
+                   "is not flaky by that alone", "chat is informational only",
+                   "comes first in reviews", "A file that matches no rule needs no approval"):
+        assert phrase in text
+
+
+def test_inactive_branch_answers_are_none(episode):
+    spec = episode["decision_spec"]
+    for step in episode["steps"]:
+        active = set(compose(spec, step["gold"]))
+        branch = set(spec["branches"][step["gold"]["card"]])
+        for question, value in step["gold"].items():
+            if question not in active:
+                assert value == "none", (step["t"], question)
+            elif question in branch:
+                assert value != "none", (step["t"], question)
+
+
+# Options the gold never selects: the optional job and its benchmark, the bot, the author and approvers
+# without a change request as reviewers, unasked approvers, and files that are covered or need no approval
+# when reached.
+DISTRACTORS = {"job": {"bench-holds"}, "test": {"BenchmarkSweepExpired"},
+               "reviewer": {"esme", "oskar", "ingrid", "noor", "sentinel-bot"},
+               "file": {"internal/reserve/renew.go", DOC, TXN}, "approver": {"ruth", "wendell", "noor"}}
+
+
+def test_routes_badges_and_branch_values_reached(episode):
+    seen = {q: {s["gold"][q] for s in episode["steps"]} for q in episode["questions"]}
+    for question, spec in episode["questions"].items():
+        assert seen[question] == set(spec["criteria"]) - DISTRACTORS.get(question, set()), question
+    assert seen["reviewer"] == {"halvard", "ruth", "wendell", "none"}
+    assert seen["file"] == {HOLD, HOLD_TEST, MAIN, SWEEP_TEST, "none"}
+    assert seen["approver"] == {"halvard", "esme", "ingrid", "oskar", "none"}
+
+
+def test_distractor_options_are_offered(episode):
+    questions = episode["questions"]
+    assert {"bench-holds", "none"} <= set(questions["job"]["criteria"])
+    assert "BenchmarkSweepExpired" in questions["test"]["criteria"]
+    assert {"sentinel-bot", "noor"} <= set(questions["reviewer"]["criteria"])
+    assert DOC in questions["file"]["criteria"]
+
+
+def test_no_runner_runs_two_attempts_at_once(episode):
+    jobs = episode["steps"][-1]["state"]["ci"]["jobs"]
+    spans = {}
+    for j in jobs:
+        if j["runner"]:
+            end = j["finished_at"] if j["finished_at"] is not None else 60
+            spans.setdefault(j["runner"], []).append((j["started_at"], end))
+    for runner, busy in spans.items():
+        busy.sort()
+        assert all(later[0] >= earlier[1] for earlier, later in zip(busy, busy[1:])), runner
 
 
 def test_scenarios_are_fresh_and_deterministic(episode):
     other = scenarios()
     assert other == [episode]
-    other[0]["steps"][0]["state"]["runs"][0]["results"].clear()
-    assert episode["steps"][0]["state"]["runs"][0]["results"]
+    other[0]["steps"][0]["state"]["ci"]["jobs"].clear()
+    assert episode["steps"][0]["state"]["ci"]["jobs"]
+
+
+def test_reference_does_not_mutate(episode):
+    for step in episode["steps"]:
+        state = deepcopy(step["state"])
+        reference(state)
+        assert state == step["state"]
+
+
+# ---------------------------------------------------------------------------
+# Story key ticks
+# ---------------------------------------------------------------------------
+
+KEY_TICKS = {
+    0: {"card": "wait_ci", "ci_badge": "pending", "review_badge": "none"},
+    1: {"card": "investigate_test", "ci_badge": "red", "review_badge": "none", "job": "unit-reserve",
+        "test": RENEWAL},
+    2: {"card": "fix_lint", "ci_badge": "red", "review_badge": "none", "job": "lint"},
+    4: {"card": "fix_lint", "ci_badge": "red", "review_badge": "changes_requested", "job": "lint"},
+    6: {"card": "address_review", "ci_badge": "stale", "review_badge": "changes_requested",
+        "reviewer": "halvard"},
+    7: {"card": "address_review", "ci_badge": "pending", "review_badge": "changes_requested",
+        "reviewer": "halvard"},
+    10: {"card": "fix_build", "ci_badge": "red", "review_badge": "changes_requested", "job": "build"},
+    12: {"card": "fix_build", "ci_badge": "red", "review_badge": "approved", "job": "build"},
+    13: {"card": "wait_ci", "ci_badge": "stale", "review_badge": "approval_stale"},
+    14: {"card": "wait_ci", "ci_badge": "pending", "review_badge": "approval_stale"},
+    17: {"card": "wait_ci", "ci_badge": "pending", "review_badge": "approval_stale"},
+    18: {"card": "wait_ci", "ci_badge": "pending", "review_badge": "approval_stale"},
+    19: {"card": "unblock_queue", "ci_badge": "pending", "review_badge": "approval_stale",
+         "job": "unit-storage"},
+    20: {"card": "unblock_queue", "ci_badge": "pending", "review_badge": "approval_stale",
+         "job": "integration-kv"},
+    21: {"card": "wait_ci", "ci_badge": "pending", "review_badge": "approval_stale"},
+    23: {"card": "retry_flaky", "ci_badge": "red", "review_badge": "approval_stale", "job": "integration-kv",
+         "test": CONFLICT},
+    24: {"card": "wait_ci", "ci_badge": "pending", "review_badge": "approval_stale"},
+    27: {"card": "retry_flaky", "ci_badge": "red", "review_badge": "approval_stale", "job": "integration-kv",
+         "test": CONFLICT},
+    29: {"card": "wait_ci", "ci_badge": "pending", "review_badge": "approval_stale"},
+    32: {"card": "investigate_test", "ci_badge": "red", "review_badge": "approval_stale",
+         "job": "integration-kv", "test": CONFLICT},
+    35: {"card": "wait_ci", "ci_badge": "stale", "review_badge": "approval_stale"},
+    38: {"card": "investigate_test", "ci_badge": "red", "review_badge": "approval_stale",
+         "job": "integration-kv", "test": CAP},
+    39: {"card": "investigate_test", "ci_badge": "red", "review_badge": "approval_stale",
+         "job": "unit-storage", "test": BACKOFF},
+    40: {"card": "investigate_test", "ci_badge": "red", "review_badge": "approval_stale",
+         "job": "unit-storage", "test": BACKOFF},
+    41: {"card": "investigate_test", "ci_badge": "red", "review_badge": "changes_requested",
+         "job": "unit-storage", "test": BACKOFF},
+    42: {"card": "investigate_test", "ci_badge": "red", "review_badge": "changes_requested",
+         "job": "unit-storage", "test": BACKOFF},
+    43: {"card": "address_review", "ci_badge": "stale", "review_badge": "changes_requested", "reviewer": "ruth"},
+    45: {"card": "address_review", "ci_badge": "pending", "review_badge": "changes_requested", "reviewer": "ruth"},
+    46: {"card": "address_review", "ci_badge": "pending", "review_badge": "changes_requested",
+         "reviewer": "wendell"},
+    48: {"card": "wait_ci", "ci_badge": "pending", "review_badge": "approved"},
+    49: {"card": "wait_ci", "ci_badge": "pending", "review_badge": "approved"},
+    50: {"card": "request_review", "ci_badge": "green", "review_badge": "approved", "file": HOLD,
+         "approver": "halvard"},
+    51: {"card": "request_review", "ci_badge": "green", "review_badge": "approved", "file": HOLD,
+         "approver": "halvard"},
+    52: {"card": "request_review", "ci_badge": "green", "review_badge": "approved", "file": HOLD_TEST,
+         "approver": "esme"},
+    54: {"card": "request_review", "ci_badge": "green", "review_badge": "approved", "file": MAIN,
+         "approver": "ingrid"},
+    55: {"card": "request_review", "ci_badge": "green", "review_badge": "approved", "file": MAIN,
+         "approver": "ingrid"},
+    56: {"card": "request_review", "ci_badge": "green", "review_badge": "approved", "file": SWEEP_TEST,
+         "approver": "oskar"},
+    58: {"card": "merge", "ci_badge": "green", "review_badge": "approved"},
+    59: {"card": "merge", "ci_badge": "green", "review_badge": "approved"},
+}
+
+
+@pytest.mark.parametrize("tick", sorted(KEY_TICKS))
+def test_key_ticks(episode, tick):
+    assert compose(episode["decision_spec"], episode["steps"][tick]["gold"]) == KEY_TICKS[tick]
+
+
+def test_holds_under_distractors(episode):
+    """Chat claims, optional jobs, bot reviews and author comments leave the decision unchanged."""
+    gold = [compose(episode["decision_spec"], s["gold"]) for s in episode["steps"]]
+    for tick in (3, 8, 9, 11, 17, 18, 26, 34, 40, 49, 51, 53, 55, 57, 59):
+        assert gold[tick] == gold[tick - 1], tick
+
+
+# ---------------------------------------------------------------------------
+# Counterfactual edits that flip a decision for the stated reason
+# ---------------------------------------------------------------------------
+
+def test_earliest_stage_wins_over_earlier_failure_time(episode):
+    state = at(episode, 2)
+    assert decision(episode, state) == KEY_TICKS[2]
+    job(state, "lint", C2).update(status="passed", log_tail="PASS")
+    assert reference(state)["card"] == "investigate_test"
+    state = at(episode, 39)
+    job(state, "unit-storage", C5).update(status="passed", failing_tests=[])
+    answer = reference(state)
+    assert (answer["job"], answer["test"]) == ("integration-kv", CAP)
+
+
+def test_within_a_stage_ci_required_order_decides(episode):
+    state = at(episode, 39)
+    job(state, "unit-reserve", C5).update(status="failed", finished_at=39, failing_tests=[RENEWAL])
+    assert (reference(state)["job"], reference(state)["test"]) == ("unit-reserve", RENEWAL)
+    required = state["ci"]["required"]
+    required[2], required[3] = required[3], required[2]
+    assert reference(state)["job"] == "unit-storage"
+
+
+def test_queue_limit_equality(episode):
+    assert reference(at(episode, 18))["card"] == "wait_ci"
+    assert reference(at(episode, 19))["card"] == "unblock_queue"
+    state = at(episode, 18)
+    job(state, "integration-kv", C4)["queued_at"] = 13
+    assert reference(state)["card"] == "unblock_queue"
+    state = at(episode, 19)
+    job(state, "integration-kv", C4)["queued_at"] = 15
+    assert (reference(state)["card"], reference(state)["job"]) == ("unblock_queue", "unit-storage")
+    job(state, "unit-storage", C4)["queued_at"] = 15
+    assert reference(state)["card"] == "wait_ci"
+    state = at(episode, 19)
+    state["assistant"]["queue_limit"] = 6
+    assert reference(state)["card"] == "wait_ci"
+
+
+def test_stuck_queue_tie_breaks(episode):
+    state = at(episode, 19)
+    stuck = [j for j in state["ci"]["jobs"] if j["commit"] == C4 and j["status"] == "queued"]
+    assert {(j["name"], j["queued_at"]) for j in stuck} == {("unit-storage", 14), ("integration-kv", 14)}
+    assert reference(state)["job"] == "unit-storage"  # same queued_at 14: first in ci.required
+    required = state["ci"]["required"]
+    required.remove("integration-kv")
+    required.insert(0, "integration-kv")
+    assert reference(state)["job"] == "integration-kv"
+    state = at(episode, 19)
+    job(state, "integration-kv", C4)["queued_at"] = 13
+    assert reference(state)["job"] == "integration-kv"  # smaller queued_at wins over ci.required order
+    state = at(episode, 20)
+    assert job(state, "unit-storage", C4)["status"] == "running"
+    assert reference(state)["job"] == "integration-kv"
+
+
+def test_failure_outranks_a_stuck_queue(episode):
+    state = at(episode, 12)
+    assert state["now"] - job(state, "integration-kv", C3)["queued_at"] == 5
+    assert reference(state)["card"] == "fix_build"
+    job(state, "build", C3).update(status="passed", log_tail="PASS")
+    answer = reference(state)
+    assert (answer["card"], answer["job"]) == ("unblock_queue", "integration-kv")
+
+
+def test_optional_jobs_never_count(episode):
+    state = at(episode, 49)
+    bench = job(state, "bench-holds", C6)
+    assert bench["status"] == "queued" and state["now"] - bench["queued_at"] == 5
+    assert reference(state)["card"] == "wait_ci"
+    state["ci"]["required"].append("bench-holds")
+    assert (reference(state)["card"], reference(state)["job"]) == ("unblock_queue", "bench-holds")
+    state = at(episode, 17)
+    assert job(state, "bench-holds", C4)["status"] == "failed"
+    assert (reference(state)["card"], reference(state)["ci_badge"]) == ("wait_ci", "pending")
+    state["ci"]["required"].append("bench-holds")
+    assert (reference(state)["card"], reference(state)["ci_badge"]) == ("investigate_test", "red")
+
+
+def test_flaky_needs_a_later_pass_of_the_same_job_on_the_same_commit(episode):
+    assert reference(at(episode, 23))["card"] == "retry_flaky"
+    edits = {
+        "no later pass": lambda s: s["ci"]["jobs"].remove(job(s, "integration-kv", C1, 2)),
+        "pass on another commit": lambda s: job(s, "integration-kv", C1, 2).update(commit=C2, attempt=2),
+        "pass of another job": lambda s: job(s, "integration-kv", C1, 2).update(name="unit-storage",
+                                                                                stage="unit"),
+        "pass not later": lambda s: (job(s, "integration-kv", C1, 1).update(attempt=3)),
+        "later attempt failed": lambda s: job(s, "integration-kv", C1, 2).update(
+            status="failed", failing_tests=[CONFLICT]),
+    }
+    for label, edit in edits.items():
+        state = at(episode, 23)
+        edit(state)
+        answer = reference(state)
+        assert (answer["card"], answer["test"]) == ("investigate_test", CONFLICT), label
+
+
+def test_failure_on_one_commit_and_pass_on_another_is_not_flaky(episode):
+    state = at(episode, 17)
+    assert job(state, "unit-reserve", C3)["status"] == "passed"  # RENEWAL failed on C1 and C2, passed on C3
+    job(state, "unit-reserve", C4).update(status="failed", failing_tests=[RENEWAL])
+    assert (reference(state)["card"], reference(state)["test"]) == ("investigate_test", RENEWAL)
+    retry = deepcopy(job(state, "unit-reserve", C2))
+    retry.update(attempt=2, queued_at=3, started_at=3, finished_at=4, status="passed", failing_tests=[])
+    state["ci"]["jobs"].append(retry)
+    assert (reference(state)["card"], reference(state)["test"]) == ("retry_flaky", RENEWAL)
+
+
+def test_max_attempts_equality(episode):
+    state = at(episode, 32)
+    assert job(state, "integration-kv", C4, 3)["status"] == "failed"
+    assert reference(state)["card"] == "investigate_test"
+    state["assistant"]["max_attempts"] = 4
+    assert reference(state)["card"] == "retry_flaky"
+    state = at(episode, 27)
+    assert reference(state)["card"] == "retry_flaky"
+    state["assistant"]["max_attempts"] = 2
+    assert (reference(state)["card"], reference(state)["test"]) == ("investigate_test", CONFLICT)
+
+
+def test_mixed_failure_names_first_non_flaky_test(episode):
+    state = at(episode, 38)
+    assert job(state, "integration-kv", C5)["failing_tests"] == [CONFLICT, CAP]
+    assert reference(state)["test"] == CAP
+    job(state, "integration-kv", C5)["failing_tests"] = [CAP, CONFLICT]
+    assert reference(state)["test"] == CAP
+    job(state, "integration-kv", C5)["failing_tests"] = [CONFLICT]
+    assert (reference(state)["card"], reference(state)["test"]) == ("retry_flaky", CONFLICT)
+
+
+def test_highest_attempt_on_head_is_current(episode):
+    state = at(episode, 24)
+    assert job(state, "integration-kv", C4, 2)["status"] == "queued"
+    assert (reference(state)["card"], reference(state)["ci_badge"]) == ("wait_ci", "pending")
+    state["ci"]["jobs"].remove(job(state, "integration-kv", C4, 2))
+    assert (reference(state)["card"], reference(state)["ci_badge"]) == ("retry_flaky", "red")
+
+
+def test_older_commit_attempts_never_count(episode):
+    state = at(episode, 35)
+    assert job(state, "integration-kv", C4, 3)["status"] == "failed"
+    assert (reference(state)["card"], reference(state)["ci_badge"]) == ("wait_ci", "stale")
+    state["pull_request"]["head_commit"] = C4
+    assert (reference(state)["card"], reference(state)["ci_badge"]) == ("investigate_test", "red")
+
+
+def test_card_priority_between_failure_change_request_wait_and_approvals(episode):
+    state = at(episode, 41)
+    assert reference(state)["card"] == "investigate_test"  # failure outranks the change request
+    job(state, "unit-storage", C5).update(status="passed", failing_tests=[])
+    job(state, "integration-kv", C5).update(status="passed", failing_tests=[])
+    assert reference(state)["card"] == "address_review"  # change request outranks green-CI review work
+    state = at(episode, 49)
+    assert reference(state)["card"] == "wait_ci"  # pending CI outranks missing approvals
+    job(state, "integration-kv", C6).update(status="passed", finished_at=49)
+    assert (reference(state)["card"], reference(state)["file"]) == ("request_review", HOLD)
+
+
+def test_change_request_persists_until_the_same_reviewer_approves(episode):
+    state = at(episode, 43)
+    assert (reference(state)["card"], reference(state)["reviewer"]) == ("address_review", "ruth")
+    add_review(state, "ruth", "commented", C6, 43.5)
+    add_review(state, "halvard", "approved", C6, 43.6)
+    assert (reference(state)["card"], reference(state)["reviewer"]) == ("address_review", "ruth")
+    add_review(state, "ruth", "approved", C6, 43.7)
+    assert (reference(state)["card"], reference(state)["reviewer"]) == ("address_review", "wendell")
+    add_review(state, "wendell", "approved", C6, 43.8)
+    assert (reference(state)["card"], reference(state)["review_badge"]) == ("wait_ci", "approved")
+
+
+def wendell_request(state):
+    return next(r for r in state["reviews"] if r["reviewer"] == "wendell" and r["verdict"] == "changes_requested")
+
+
+def test_oldest_change_request_is_named(episode):
+    state = at(episode, 43)
+    ruth = next(r for r in state["reviews"] if r["reviewer"] == "ruth")
+    assert (ruth["at"], wendell_request(state)["at"]) == (41, 42)
+    assert reference(state)["reviewer"] == "ruth"  # older request, although wendell's is newer
+    wendell_request(state)["at"] = 40
+    state["reviews"].sort(key=lambda r: r["at"])
+    assert reference(state)["reviewer"] == "wendell"
+
+
+def test_change_requests_at_the_same_tick_follow_reviews_order(episode):
+    state = at(episode, 43)
+    wendell = wendell_request(state)
+    wendell["at"] = 41
+    assert state["reviews"].index(wendell) > [r["reviewer"] for r in state["reviews"]].index("ruth")
+    assert reference(state)["reviewer"] == "ruth"
+    state["reviews"].remove(wendell)
+    position = next(i for i, r in enumerate(state["reviews"]) if r["reviewer"] == "ruth")
+    state["reviews"].insert(position, wendell)
+    assert reference(state)["reviewer"] == "wendell"
+
+
+def test_a_change_request_outranks_a_current_approval(episode):
+    state = at(episode, 46)
+    ruth = state["reviews"][-1]
+    assert (ruth["reviewer"], ruth["verdict"], ruth["commit"]) == ("ruth", "approved", C6)
+    assert (reference(state)["review_badge"], reference(state)["reviewer"]) == ("changes_requested", "wendell")
+    state["reviews"].remove(wendell_request(state))
+    assert (reference(state)["card"], reference(state)["review_badge"]) == ("wait_ci", "approved")
+
+
+def test_bot_and_author_reviews_never_count(episode):
+    state = at(episode, 51)
+    assert state["reviews"][-1]["reviewer"] == "sentinel-bot"
+    assert reference(state)["card"] == "request_review"
+    state["assistant"]["bots"].remove("sentinel-bot")
+    assert reference(state)["card"] == "address_review"
+    state = at(episode, 50)
+    add_review(state, "noor", "approved", C6, 50.5)
+    assert (reference(state)["file"], reference(state)["approver"]) == (HOLD, "halvard")
+    state = at(episode, 6)
+    add_review(state, "noor", "changes_requested", C2, 5)
+    assert reference(state)["reviewer"] == "halvard"
+
+
+def test_commented_reviews_never_set_a_standing(episode):
+    assert reference(at(episode, 0))["review_badge"] == "none"
+    state = at(episode, 57)
+    oskar = next(r for r in state["reviews"] if r["reviewer"] == "oskar")
+    assert oskar["verdict"] == "commented"
+    assert reference(state)["approver"] == "oskar"
+    oskar["verdict"] = "approved"
+    assert reference(state)["card"] == "merge"
+
+
+def test_stale_approvals(episode):
+    state = at(episode, 58)
+    assert reference(state)["card"] == "merge"
+    oskar = state["reviews"][-1]
+    assert (oskar["reviewer"], oskar["verdict"]) == ("oskar", "approved")
+    oskar["commit"] = C5
+    answer = reference(state)
+    assert (answer["card"], answer["file"], answer["approver"], answer["review_badge"]) == (
+        "request_review", SWEEP_TEST, "oskar", "approved")
+    state = at(episode, 50)
+    halvard = [r for r in state["reviews"] if r["reviewer"] == "halvard"][-1]
+    assert (halvard["verdict"], halvard["commit"]) == ("approved", C3)
+    halvard["commit"] = C6
+    assert reference(state)["file"] == HOLD_TEST
+    state = at(episode, 13)
+    assert reference(state)["review_badge"] == "approval_stale"
+    state["pull_request"]["head_commit"] = C3
+    assert reference(state)["review_badge"] == "approved"
+
+
+def rule(state, pattern):
+    return next(r for r in state["approval_rules"] if r["pattern"] == pattern)
+
+
+def first_or_last_match(state, path, last):
+    """The rule a list-order convention would pick; used only to show that the record separates them."""
+    matching = [r for r in state["approval_rules"] if _glob(r["pattern"]).fullmatch(path)]
+    return matching[-1 if last else 0]
+
+
+def test_longest_matching_pattern_governs_wherever_it_is_listed(episode):
+    state = at(episode, 52)
+    assert (reference(state)["file"], reference(state)["approver"]) == (HOLD_TEST, "esme")
+    # hold_test.go: the 26-character test pattern (listed first) beats internal/reserve/** (19, listed later),
+    # so halvard's current approval does not cover it; a last-match convention would have picked halvard.
+    assert first_or_last_match(state, HOLD_TEST, last=True)["approvers"] == ["noor", "halvard"]
+    state["approval_rules"].reverse()
+    assert (reference(state)["file"], reference(state)["approver"]) == (HOLD_TEST, "esme")
+    state = at(episode, 56)
+    assert (reference(state)["file"], reference(state)["approver"]) == (SWEEP_TEST, "oskar")
+    # sweep_test.go: internal/reserve/sweep/** (25, listed last) beats internal/reserve/** (19, listed
+    # earlier); a first-match convention would have picked halvard, whose current approval covers it.
+    assert first_or_last_match(state, SWEEP_TEST, last=False)["approvers"] == ["noor", "halvard"]
+    state["approval_rules"].reverse()
+    assert (reference(state)["file"], reference(state)["approver"]) == (SWEEP_TEST, "oskar")
+
+
+def test_a_shorter_pattern_loses_and_list_order_breaks_only_a_length_tie(episode):
+    state = at(episode, 52)
+    rule(state, "internal/reserve/*_test.go")["pattern"] = "**/*_test.go"  # 12 characters: reserve/** governs
+    assert (reference(state)["file"], reference(state)["approver"]) == (MAIN, "ingrid")
+    state = at(episode, 52)
+    tied = rule(state, "internal/reserve/*_test.go")
+    tied["pattern"] = "internal/**_test.go"
+    assert len(tied["pattern"]) == len("internal/reserve/**") == 19
+    assert state["approval_rules"].index(tied) == 0  # listed earlier: esme's rule governs the tie
+    assert (reference(state)["file"], reference(state)["approver"]) == (HOLD_TEST, "esme")
+    state["approval_rules"].remove(tied)
+    state["approval_rules"].append(tied)  # now internal/reserve/** is listed earlier and halvard covers it
+    assert (reference(state)["file"], reference(state)["approver"]) == (MAIN, "ingrid")
+
+
+def test_single_star_does_not_cross_a_slash(episode):
+    assert _glob("internal/reserve/*_test.go").fullmatch(HOLD_TEST)
+    assert not _glob("internal/reserve/*_test.go").fullmatch(SWEEP_TEST)
+    assert _glob("internal/reserve/**_test.go").fullmatch(SWEEP_TEST)
+    assert _glob("**").fullmatch(MAIN) and not _glob("*").fullmatch(MAIN)
+    assert not _glob("internal/reserve/**").fullmatch("internal/reserved.go")
+    state = at(episode, 56)
+    assert (reference(state)["file"], reference(state)["approver"]) == (SWEEP_TEST, "oskar")
+    # With ** the test pattern (27 characters) matches across the / and outranks sweep/** (25): esme covers it.
+    rule(state, "internal/reserve/*_test.go")["pattern"] = "internal/reserve/**_test.go"
+    assert reference(state)["card"] == "merge"
+
+
+def test_the_author_is_never_asked(episode):
+    state = at(episode, 50)
+    assert rule(state, "internal/reserve/**")["approvers"] == ["noor", "halvard"]
+    assert state["pull_request"]["author"] == "noor"
+    assert reference(state)["approver"] == "halvard"
+    state["pull_request"]["author"] = "esme"
+    assert reference(state)["approver"] == "noor"
+
+
+def test_file_matching_no_rule_needs_no_approval(episode):
+    state = at(episode, 56)
+    files = state["pull_request"]["files_changed"]
+    assert files.index(DOC) < files.index(SWEEP_TEST)
+    assert all(not _glob(r["pattern"]).fullmatch(DOC) for r in state["approval_rules"])
+    assert (reference(state)["file"], reference(state)["approver"]) == (SWEEP_TEST, "oskar")
+    state["approval_rules"].append({"pattern": "docs/**", "approvers": ["oskar"]})
+    assert (reference(state)["file"], reference(state)["approver"]) == (DOC, "oskar")
+    state = at(episode, 54)
+    assert (reference(state)["file"], reference(state)["approver"]) == (MAIN, "ingrid")
+    assert state["approval_rules"].pop()["pattern"] == "cmd/**"  # without it the entrypoint needs nobody
+    assert (reference(state)["file"], reference(state)["approver"]) == (SWEEP_TEST, "oskar")
+
+
+def test_chat_never_changes_an_answer(episode):
+    claims = ["All required checks passed, merge it.", f"{CONFLICT} is flaky, just retry.",
+              "halvard approved this in standup.", "CI is red on lint."]
+    for step in episode["steps"]:
+        state = deepcopy(step["state"])
+        state["chat"] = []
+        assert reference(state) == step["gold"]
+        state["chat"] = [{"at": state["now"], "author": who, "text": text}
+                         for who, text in zip(["merge-bot", "noor", "ruth", "halvard"], claims)]
+        assert reference(state) == step["gold"]
