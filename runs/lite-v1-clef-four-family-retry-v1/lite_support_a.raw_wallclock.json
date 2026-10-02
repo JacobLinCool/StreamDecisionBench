@@ -1,0 +1,1326 @@
+{
+  "episode_id": "lite_support_a",
+  "task_family": "support_call_assist",
+  "scenario_id": "support_a",
+  "states": 60,
+  "questions": 7,
+  "reference_transitions": 22,
+  "untimed_decision_accuracy": 0.7,
+  "untimed_segment_accuracy": 0.6304347826086957,
+  "all_questions_exact_accuracy": 0.4666666666666667,
+  "inactive_only_error_states": 14,
+  "time_accuracy": 0.5991248663186316,
+  "segment_time_accuracy": 0.5267228672214207,
+  "observed_duration_s": 119.99997016694397,
+  "error_seconds": {
+    "no_decision": 1.6353448331356049,
+    "source_correct": 11.98337887506932,
+    "source_incorrect": 34.486280374228954
+  },
+  "time_partition_seconds": {
+    "current_correct": 71.17967529315501,
+    "judgment": 27.392435044050217,
+    "stale": 11.98337887506932,
+    "compound": 7.093845330178738,
+    "outdated_correct": 0.7152907913550735,
+    "no_decision": 1.6353448331356049
+  },
+  "current_source_share": 0.8214344570258785,
+  "latency_s_p50": 0.8424216252751648,
+  "latency_s_p95": 1.2621030196081846,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.010091958567500114,
+  "max_dispatch_lag_s": 0.000754709355533123,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 1,
+      "active_states": 60,
+      "active_accuracy": 1
+    },
+    "recorder": {
+      "all_states_accuracy": 0.85,
+      "active_states": 60,
+      "active_accuracy": 0.85
+    },
+    "payment_stage": {
+      "all_states_accuracy": 0.8666666666666667,
+      "active_states": 40,
+      "active_accuracy": 0.8
+    },
+    "instrument": {
+      "all_states_accuracy": 0.6666666666666666,
+      "active_states": 40,
+      "active_accuracy": 1
+    },
+    "service_target": {
+      "all_states_accuracy": 0.8833333333333333,
+      "active_states": 13,
+      "active_accuracy": 1
+    },
+    "service_action": {
+      "all_states_accuracy": 0.8833333333333333,
+      "active_states": 13,
+      "active_accuracy": 1
+    },
+    "hold_action": {
+      "all_states_accuracy": 0.9333333333333333,
+      "active_states": 5,
+      "active_accuracy": 0.2
+    }
+  },
+  "mistakes": [
+    {
+      "t": 0,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "ask_consent",
+        "instrument": "unknown"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "choose_card",
+        "instrument": "unknown"
+      },
+      "wrong_active_questions": [
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u0-Customer: I'd like to pay the balance, please."
+      ]
+    },
+    {
+      "t": 1,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "ask_consent",
+        "instrument": "unknown"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "choose_card",
+        "instrument": "unknown"
+      },
+      "wrong_active_questions": [
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u0-Customer: I'd like to pay the balance, please."
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "route": "service",
+        "recorder": "pause",
+        "service_target": "connection",
+        "service_action": "run_test"
+      },
+      "predicted_decision": {
+        "route": "service",
+        "recorder": "record",
+        "service_target": "connection",
+        "service_action": "run_test"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u20-Customer: Leave the payment for a moment; help me get connected first."
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "route": "service",
+        "recorder": "pause",
+        "service_target": "connection",
+        "service_action": "run_test"
+      },
+      "predicted_decision": {
+        "route": "service",
+        "recorder": "record",
+        "service_target": "connection",
+        "service_action": "run_test"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u20-Customer: Leave the payment for a moment; help me get connected first."
+      ]
+    },
+    {
+      "t": 29,
+      "reference_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "return_customer"
+      },
+      "wrong_active_questions": [
+        "hold_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u27-Customer: Check my router first; we can come back to the line fault."
+      ]
+    },
+    {
+      "t": 30,
+      "reference_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "return_customer"
+      },
+      "wrong_active_questions": [
+        "hold_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u27-Customer: Check my router first; we can come back to the line fault."
+      ]
+    },
+    {
+      "t": 31,
+      "reference_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "return_customer"
+      },
+      "wrong_active_questions": [
+        "hold_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u27-Customer: Check my router first; we can come back to the line fault."
+      ]
+    },
+    {
+      "t": 32,
+      "reference_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "recorder": "record",
+        "hold_action": "return_customer"
+      },
+      "wrong_active_questions": [
+        "hold_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u27-Customer: Check my router first; we can come back to the line fault."
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "ask_consent",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "ask_consent",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u44-Customer: I withdraw my authorisation until I've checked the amount."
+      ]
+    },
+    {
+      "t": 45,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "ask_consent",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "ask_consent",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u44-Customer: I withdraw my authorisation until I've checked the amount."
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 47,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "submit",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder",
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "submit",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder",
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "wait",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 51,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "pause",
+        "payment_stage": "wait",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "recorder",
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u46-Customer: That's the right amount. I authorise this one-off payment."
+      ]
+    },
+    {
+      "t": 52,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "wait",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer late-expiry: Was my expiry zero nine twenty eight?"
+      ]
+    },
+    {
+      "t": 53,
+      "reference_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "wait",
+        "instrument": "credit"
+      },
+      "predicted_decision": {
+        "route": "payment",
+        "recorder": "record",
+        "payment_stage": "collect",
+        "instrument": "credit"
+      },
+      "wrong_active_questions": [
+        "payment_stage"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer late-expiry: Was my expiry zero nine twenty eight?"
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.9833056032657623e-05,
+      "end_s": 1.6353746661916375,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 1.6353746661916375,
+      "end_s": 2.001341249793768,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 2.001341249793768,
+      "end_s": 2.7943528331816196,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 2.7943528331816196,
+      "end_s": 4.0046509159728885,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 4.0046509159728885,
+      "end_s": 4.874392416328192,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 4.874392416328192,
+      "end_s": 6.005084041506052,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.005084041506052,
+      "end_s": 6.797432125546038,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.797432125546038,
+      "end_s": 8.000603291206062,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.000603291206062,
+      "end_s": 8.860839541070163,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 8.860839541070163,
+      "end_s": 10.005075458437204,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.005075458437204,
+      "end_s": 10.78001158311963,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.78001158311963,
+      "end_s": 12.005069999955595,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.005069999955595,
+      "end_s": 12.667369083501399,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.667369083501399,
+      "end_s": 14.001181665807962,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.001181665807962,
+      "end_s": 15.01953166630119,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 15.01953166630119,
+      "end_s": 16.009242458269,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 16.009242458269,
+      "end_s": 16.75760491658002,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 16.75760491658002,
+      "end_s": 18.0100902505219,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "correct"
+    },
+    {
+      "start_s": 18.0100902505219,
+      "end_s": 18.809277875348926,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "correct"
+    },
+    {
+      "start_s": 18.809277875348926,
+      "end_s": 20.009260250255466,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 20.009260250255466,
+      "end_s": 20.792357583530247,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 20.792357583530247,
+      "end_s": 22.007122999988496,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 22.007122999988496,
+      "end_s": 22.78632729128003,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 22.78632729128003,
+      "end_s": 24.001116041094065,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 24.001116041094065,
+      "end_s": 24.853853500448167,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 24.853853500448167,
+      "end_s": 26.0100919585675,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.0100919585675,
+      "end_s": 26.873756208457053,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.873756208457053,
+      "end_s": 28.006659832783043,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.006659832783043,
+      "end_s": 28.940275500528514,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.940275500528514,
+      "end_s": 30.009253416210413,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 30.009253416210413,
+      "end_s": 31.097965708002448,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 31.097965708002448,
+      "end_s": 32.00659954082221,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.00659954082221,
+      "end_s": 32.80502987559885,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.80502987559885,
+      "end_s": 34.0066462084651,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.0066462084651,
+      "end_s": 34.86581770796329,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.86581770796329,
+      "end_s": 36.00666441582143,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.00666441582143,
+      "end_s": 36.83920066617429,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.83920066617429,
+      "end_s": 38.00668054074049,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.00668054074049,
+      "end_s": 38.71892945840955,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.71892945840955,
+      "end_s": 40.00279975030571,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "correct"
+    },
+    {
+      "start_s": 40.00279975030571,
+      "end_s": 40.7018868336454,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 40.7018868336454,
+      "end_s": 42.01004800014198,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.01004800014198,
+      "end_s": 42.81801666598767,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.81801666598767,
+      "end_s": 44.007542916573584,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.007542916573584,
+      "end_s": 44.756344040855765,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.756344040855765,
+      "end_s": 46.00926212500781,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "correct"
+    },
+    {
+      "start_s": 46.00926212500781,
+      "end_s": 46.83307841606438,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "correct"
+    },
+    {
+      "start_s": 46.83307841606438,
+      "end_s": 48.01006700005382,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "correct"
+    },
+    {
+      "start_s": 48.01006700005382,
+      "end_s": 49.00511954072863,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "correct"
+    },
+    {
+      "start_s": 49.00511954072863,
+      "end_s": 50.00927762500942,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "correct"
+    },
+    {
+      "start_s": 50.00927762500942,
+      "end_s": 50.918926583603024,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 50.918926583603024,
+      "end_s": 52.00813320837915,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 52.00813320837915,
+      "end_s": 52.79011166654527,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 52.79011166654527,
+      "end_s": 54.008157750591636,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "correct"
+    },
+    {
+      "start_s": 54.008157750591636,
+      "end_s": 55.124353875406086,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 55.124353875406086,
+      "end_s": 56.00667762476951,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "correct"
+    },
+    {
+      "start_s": 56.00667762476951,
+      "end_s": 56.851596041582525,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "correct"
+    },
+    {
+      "start_s": 56.851596041582525,
+      "end_s": 58.00425987504423,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 58.00425987504423,
+      "end_s": 58.7834797501564,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 58.7834797501564,
+      "end_s": 60.00677349977195,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.00677349977195,
+      "end_s": 60.790443666279316,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.790443666279316,
+      "end_s": 62.00925066601485,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.00925066601485,
+      "end_s": 62.8378483755514,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.8378483755514,
+      "end_s": 64.00167220830917,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.00167220830917,
+      "end_s": 65.76231608353555,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 65.76231608353555,
+      "end_s": 66.00830237474293,
+      "reference_t": 32,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.00830237474293,
+      "end_s": 66.723593166098,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "correct"
+    },
+    {
+      "start_s": 66.723593166098,
+      "end_s": 68.01007033325732,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "correct"
+    },
+    {
+      "start_s": 68.01007033325732,
+      "end_s": 68.4879887085408,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 68.4879887085408,
+      "end_s": 70.00938750058413,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "correct"
+    },
+    {
+      "start_s": 70.00938750058413,
+      "end_s": 70.69734033290297,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "correct"
+    },
+    {
+      "start_s": 70.69734033290297,
+      "end_s": 72.00244462490082,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "correct"
+    },
+    {
+      "start_s": 72.00244462490082,
+      "end_s": 72.85183137562126,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 72.85183137562126,
+      "end_s": 74.00316883344203,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 74.00316883344203,
+      "end_s": 75.0502475835383,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 75.0502475835383,
+      "end_s": 76.00761041603982,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "correct"
+    },
+    {
+      "start_s": 76.00761041603982,
+      "end_s": 77.2678271252662,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "correct"
+    },
+    {
+      "start_s": 77.2678271252662,
+      "end_s": 78.00666583329439,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "correct"
+    },
+    {
+      "start_s": 78.00666583329439,
+      "end_s": 78.77203645836562,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "correct"
+    },
+    {
+      "start_s": 78.77203645836562,
+      "end_s": 80.00967779103667,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "correct"
+    },
+    {
+      "start_s": 80.00967779103667,
+      "end_s": 80.85048141609877,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 80.85048141609877,
+      "end_s": 82.00925516616553,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.00925516616553,
+      "end_s": 83.2008367497474,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 83.2008367497474,
+      "end_s": 84.0088341254741,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.0088341254741,
+      "end_s": 85.11249312479049,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 85.11249312479049,
+      "end_s": 86.00500083342195,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 86.00500083342195,
+      "end_s": 87.24991662520915,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 87.24991662520915,
+      "end_s": 88.00398362521082,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "correct"
+    },
+    {
+      "start_s": 88.00398362521082,
+      "end_s": 88.82885691616684,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 88.82885691616684,
+      "end_s": 90.01008012518287,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.01008012518287,
+      "end_s": 90.69234425015748,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.69234425015748,
+      "end_s": 92.00884695816785,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.00884695816785,
+      "end_s": 92.96451170835644,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.96451170835644,
+      "end_s": 94.008399666287,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.008399666287,
+      "end_s": 94.95983187481761,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.95983187481761,
+      "end_s": 96.00884787552059,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.00884787552059,
+      "end_s": 97.31742408312857,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 97.31742408312857,
+      "end_s": 98.00767179112881,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.00767179112881,
+      "end_s": 98.75406100042164,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.75406100042164,
+      "end_s": 100.00978295784444,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.00978295784444,
+      "end_s": 100.86743654124439,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.86743654124439,
+      "end_s": 102.00666562560946,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00666562560946,
+      "end_s": 103.19340429082513,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 103.19340429082513,
+      "end_s": 104.00720304157585,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.00720304157585,
+      "end_s": 105.25513379089534,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 105.25513379089534,
+      "end_s": 106.01007087528706,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.01007087528706,
+      "end_s": 106.82561449985951,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.82561449985951,
+      "end_s": 108.00835945829749,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.00835945829749,
+      "end_s": 108.79683970846236,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.79683970846236,
+      "end_s": 110.00863512512296,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "correct"
+    },
+    {
+      "start_s": 110.00863512512296,
+      "end_s": 111.00648625008762,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "correct"
+    },
+    {
+      "start_s": 111.00648625008762,
+      "end_s": 112.0100682079792,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 112.0100682079792,
+      "end_s": 112.93953616637737,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 112.93953616637737,
+      "end_s": 114.0092445416376,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "correct"
+    },
+    {
+      "start_s": 114.0092445416376,
+      "end_s": 114.77821441646665,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "correct"
+    },
+    {
+      "start_s": 114.77821441646665,
+      "end_s": 116.00050087552518,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "correct"
+    },
+    {
+      "start_s": 116.00050087552518,
+      "end_s": 116.99228254146874,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 116.99228254146874,
+      "end_s": 118.00794391613454,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.00794391613454,
+      "end_s": 118.95488533284515,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.95488533284515,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "correct"
+    }
+  ]
+}

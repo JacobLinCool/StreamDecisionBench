@@ -1,12 +1,13 @@
 # StreamDecisionBench README figures
 
-These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all fifteen
-completed single-model settings: six hosted APIs and nine self-hosted open-weight settings.
+These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all seventeen
+completed single-model settings: eight hosted APIs and nine self-hosted open-weight settings,
+including Cloudflare Clef and Clef Flash.
 Bars start at zero and rank settings by normalized log-AUC over 0.5–8 seconds.
 
 The second figure plots **in-force accuracy against the time-step interval**, on a logarithmic
 horizontal axis. Its curves are the functions summarized by the leaderboard's log-AUC values;
-they are not cumulative AUC curves. Lines connect 164 independently evaluated interval points
+they are not cumulative AUC curves. Lines connect independently evaluated interval points
 without smoothing. All settings retain their original recorded release clocks, successful-attempt
 latencies and commit lag. Scenarios receive equal weights within each family, then families receive
 equal weights. Primary areas come from the verified published analyses, independently of the display grid.
@@ -18,6 +19,7 @@ not isolate architecture speed. Qwen uses direct option logits, and Nimble proce
 Regenerate from the repository root, using Python 3.12/3.13, uv and Node.js:
 
 ```bash
+uv run --group paper python paper/analysis/lite_openweight.py
 uv run python docs/figures/prepare.py
 npm ci --prefix docs/figures --ignore-scripts
 npm run --prefix docs/figures render

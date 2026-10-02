@@ -1,0 +1,2026 @@
+{
+  "episode_id": "lite_presenter_a",
+  "task_family": "presenter_voice_control",
+  "scenario_id": "presenter_a",
+  "states": 60,
+  "questions": 6,
+  "reference_transitions": 24,
+  "untimed_decision_accuracy": 0.2,
+  "untimed_segment_accuracy": 0.10266666666666667,
+  "all_questions_exact_accuracy": 0.2,
+  "inactive_only_error_states": 0,
+  "time_accuracy": 0.19615826221137492,
+  "segment_time_accuracy": 0.10653033973648685,
+  "observed_duration_s": 119.99997341632843,
+  "error_seconds": {
+    "no_decision": 1.3011477077379823,
+    "source_correct": 1.2007476668804884,
+    "source_incorrect": 93.95909179095179
+  },
+  "time_partition_seconds": {
+    "current_correct": 22.44084612559527,
+    "judgment": 72.3317542495206,
+    "stale": 1.2007476668804884,
+    "compound": 21.62733754143119,
+    "outdated_correct": 1.0981401251628995,
+    "no_decision": 1.3011477077379823
+  },
+  "current_source_share": 0.78977184475126,
+  "latency_s_p50": 1.0039127497002482,
+  "latency_s_p95": 1.3599209644366055,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.0100814588367939,
+  "max_dispatch_lag_s": 0.0006651673465967178,
+  "per_question": {
+    "mode": {
+      "all_states_accuracy": 0.55,
+      "active_states": 60,
+      "active_accuracy": 0.55
+    },
+    "slide": {
+      "all_states_accuracy": 0.6,
+      "active_states": 60,
+      "active_accuracy": 0.6
+    },
+    "captions": {
+      "all_states_accuracy": 0.7333333333333333,
+      "active_states": 60,
+      "active_accuracy": 0.7333333333333333
+    },
+    "clip_state": {
+      "all_states_accuracy": 0.7333333333333333,
+      "active_states": 16,
+      "active_accuracy": 0
+    },
+    "question_card": {
+      "all_states_accuracy": 0.8166666666666667,
+      "active_states": 11,
+      "active_accuracy": 0
+    },
+    "host_cue": {
+      "all_states_accuracy": 0.6166666666666667,
+      "active_states": 41,
+      "active_accuracy": 0.9024390243902439
+    }
+  },
+  "mistakes": [
+    {
+      "t": 5,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s6",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "talk",
+        "slide": "s5",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "wrong_active_questions": [
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p5 (partial): next slide"
+      ]
+    },
+    {
+      "t": 6,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s6",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "talk",
+        "slide": "s5",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "wrong_active_questions": [
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p5 (partial): next slide shows the demo"
+      ]
+    },
+    {
+      "t": 8,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s6",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "talk",
+        "slide": "s5",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "wrong_active_questions": [
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p8 (partial): go to slide seven"
+      ]
+    },
+    {
+      "t": 14,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s11",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "wrong_active_questions": [
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p13 (partial): go back to the demo"
+      ]
+    },
+    {
+      "t": 15,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p13 (final): Go back to the demo."
+      ]
+    },
+    {
+      "t": 16,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p16 (partial): play the video"
+      ]
+    },
+    {
+      "t": 17,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p16 (final): Play the video."
+      ]
+    },
+    {
+      "t": 18,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p16 (final): Play the video."
+      ]
+    },
+    {
+      "t": 19,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "clip",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "captions",
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Clip c19 (partial): watch the top line"
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "clip",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "captions",
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Clip c19 (final): Watch the top line as the user speaks."
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "clip",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "captions",
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Clip c21 (final): Next slide."
+      ]
+    },
+    {
+      "t": 22,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p22 (partial): hold it"
+      ]
+    },
+    {
+      "t": 23,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p22 (final): Hold it there."
+      ]
+    },
+    {
+      "t": 24,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "audience",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "captions",
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Audience a24 (partial): can you play it again"
+      ]
+    },
+    {
+      "t": 25,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "audience",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "captions",
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Audience a24 (final): Can you play it again?"
+      ]
+    },
+    {
+      "t": 26,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p26 (partial): sure play it"
+      ]
+    },
+    {
+      "t": 27,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p26 (final): Sure, play it."
+      ]
+    },
+    {
+      "t": 28,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "clip",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "captions",
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Clip c28 (partial): watch the"
+      ]
+    },
+    {
+      "t": 29,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p29 (partial): pause the demo"
+      ]
+    },
+    {
+      "t": 30,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p29 (partial): because the demo runs on"
+      ]
+    },
+    {
+      "t": 31,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p29 (final): Because the demo runs on battery, the decoder is slower here."
+      ]
+    },
+    {
+      "t": 32,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p32 (partial): back to the slides"
+      ]
+    },
+    {
+      "t": 34,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p34 (partial): users mostly say next slide"
+      ]
+    },
+    {
+      "t": 35,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p34 (final): Users mostly say next slide, so that phrase gets extra training data."
+      ]
+    },
+    {
+      "t": 36,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "stand_by"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "host_cue"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p36 (partial): and the watch sends it back to you"
+      ]
+    },
+    {
+      "t": 37,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p36 (partial): and the watch sends it back to your phone"
+      ]
+    },
+    {
+      "t": 38,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p36 (final): And the watch sends it back to your phone in under a second."
+      ]
+    },
+    {
+      "t": 39,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p39 (partial): go to the thank you slide"
+      ]
+    },
+    {
+      "t": 40,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s12",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p39 (final): Go to the thank you slide."
+      ]
+    },
+    {
+      "t": 41,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s12",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p39 (final): Go to the thank you slide."
+      ]
+    },
+    {
+      "t": 42,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s12",
+        "captions": "presenter",
+        "host_cue": "stand_by"
+      },
+      "predicted_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "wrong_active_questions": [
+        "slide",
+        "host_cue"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p42 (partial): thats all from me back to you"
+      ]
+    },
+    {
+      "t": 43,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s12",
+        "captions": "presenter",
+        "host_cue": "stand_by"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "host_cue"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p42 (final): That's all from me. Back to you, Tomas."
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s12",
+        "captions": "presenter",
+        "host_cue": "stand_by"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "host_cue"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p42 (final): That's all from me. Back to you, Tomas."
+      ]
+    },
+    {
+      "t": 45,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s12",
+        "captions": "host",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h45 (partial): thank you mira lets take questions"
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "host",
+        "question_card": "waiting",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h45 (final): Thank you, Mira. Let's take questions."
+      ]
+    },
+    {
+      "t": 47,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "host",
+        "question_card": "waiting",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h45 (final): Thank you, Mira. Let's take questions."
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "audience",
+        "question_card": "listening",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Audience a48 (partial): does the decoder"
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "audience",
+        "question_card": "listening",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Audience a48 (partial): does the decoder work offline"
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "audience",
+        "question_card": "repeat",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Audience a48 (final): Does the decoder work offline?"
+      ]
+    },
+    {
+      "t": 51,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "audience",
+        "question_card": "repeat",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Audience a48 (final): Does the decoder work offline?"
+      ]
+    },
+    {
+      "t": 52,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "presenter",
+        "question_card": "repeat",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p52 (partial): the question is whether"
+      ]
+    },
+    {
+      "t": 53,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p52 (final): The question is whether it works offline."
+      ]
+    },
+    {
+      "t": 54,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p54 (partial): yes everything stays on the"
+      ]
+    },
+    {
+      "t": 55,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p54 (final): Yes. Everything stays on the device, including the partials."
+      ]
+    },
+    {
+      "t": 56,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s12",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p54 (final): Yes. Everything stays on the device, including the partials."
+      ]
+    },
+    {
+      "t": 57,
+      "reference_decision": {
+        "mode": "closed",
+        "slide": "s12",
+        "captions": "host"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h57 (final): Let's thank Mira."
+      ]
+    },
+    {
+      "t": 58,
+      "reference_decision": {
+        "mode": "closed",
+        "slide": "s12",
+        "captions": "host"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h57 (final): Let's thank Mira."
+      ]
+    },
+    {
+      "t": 59,
+      "reference_decision": {
+        "mode": "closed",
+        "slide": "s12",
+        "captions": "host"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h57 (final): Let's thank Mira."
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.658367156982422e-05,
+      "end_s": 1.301174291409552,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 1.301174291409552,
+      "end_s": 2.008068958297372,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 2.008068958297372,
+      "end_s": 3.055120624601841,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 3.055120624601841,
+      "end_s": 4.000899625010788,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.000899625010788,
+      "end_s": 5.19597112480551,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 5.19597112480551,
+      "end_s": 6.008618916384876,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.008618916384876,
+      "end_s": 7.1801221668720245,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 7.1801221668720245,
+      "end_s": 8.003517916426063,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.003517916426063,
+      "end_s": 9.204265583306551,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 9.204265583306551,
+      "end_s": 10.003847000189126,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.003847000189126,
+      "end_s": 11.365222250111401,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 11.365222250111401,
+      "end_s": 12.006821958348155,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 12.006821958348155,
+      "end_s": 13.168564584106207,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 13.168564584106207,
+      "end_s": 14.00979541707784,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 14.00979541707784,
+      "end_s": 15.253397000022233,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 15.253397000022233,
+      "end_s": 16.00630283355713,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 16.00630283355713,
+      "end_s": 16.805883374996483,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 16.805883374996483,
+      "end_s": 18.007479374296963,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.007479374296963,
+      "end_s": 19.219333624467254,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 19.219333624467254,
+      "end_s": 20.008393333293498,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 20.008393333293498,
+      "end_s": 21.18780737463385,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 21.18780737463385,
+      "end_s": 22.008395333774388,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 22.008395333774388,
+      "end_s": 23.001055833883584,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 23.001055833883584,
+      "end_s": 24.001854124478996,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 24.001854124478996,
+      "end_s": 25.100983916781843,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 25.100983916781843,
+      "end_s": 26.00972133409232,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.00972133409232,
+      "end_s": 27.435132416896522,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 27.435132416896522,
+      "end_s": 28.006600459106266,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.006600459106266,
+      "end_s": 29.106828916817904,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 29.106828916817904,
+      "end_s": 30.006711083464324,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 30.006711083464324,
+      "end_s": 31.104851208627224,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 31.104851208627224,
+      "end_s": 32.01008112449199,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 32.01008112449199,
+      "end_s": 33.2015784997493,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 33.2015784997493,
+      "end_s": 34.008394833654165,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 34.008394833654165,
+      "end_s": 34.86599199939519,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 34.86599199939519,
+      "end_s": 36.00665970891714,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 36.00665970891714,
+      "end_s": 37.103391208685935,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 37.103391208685935,
+      "end_s": 38.00122766662389,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 38.00122766662389,
+      "end_s": 39.16220704186708,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 39.16220704186708,
+      "end_s": 40.00392691697925,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.00392691697925,
+      "end_s": 40.896816125139594,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.896816125139594,
+      "end_s": 42.00681904144585,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.00681904144585,
+      "end_s": 43.08560087438673,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 43.08560087438673,
+      "end_s": 44.00778191629797,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.00778191629797,
+      "end_s": 44.94187204167247,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.94187204167247,
+      "end_s": 46.00194124970585,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.00194124970585,
+      "end_s": 47.03343216702342,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 47.03343216702342,
+      "end_s": 48.0058322083205,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.0058322083205,
+      "end_s": 48.992541833780706,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.992541833780706,
+      "end_s": 50.00941462442279,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 50.00941462442279,
+      "end_s": 50.86182575020939,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 50.86182575020939,
+      "end_s": 52.008413459174335,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.008413459174335,
+      "end_s": 52.85365275014192,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.85365275014192,
+      "end_s": 54.00840829219669,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.00840829219669,
+      "end_s": 55.22972445841879,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 55.22972445841879,
+      "end_s": 56.010081458836794,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.010081458836794,
+      "end_s": 56.956129083409905,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.956129083409905,
+      "end_s": 58.002920041792095,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 58.002920041792095,
+      "end_s": 59.07241195905954,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 59.07241195905954,
+      "end_s": 60.00632062461227,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.00632062461227,
+      "end_s": 61.00114674959332,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 61.00114674959332,
+      "end_s": 62.00581566710025,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.00581566710025,
+      "end_s": 62.73675108421594,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.73675108421594,
+      "end_s": 64.00980479177088,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.00980479177088,
+      "end_s": 65.06769883353263,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 65.06769883353263,
+      "end_s": 66.00682791694999,
+      "reference_t": 32,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.00682791694999,
+      "end_s": 66.92781941685826,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.92781941685826,
+      "end_s": 68.00808091647923,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "correct"
+    },
+    {
+      "start_s": 68.00808091647923,
+      "end_s": 69.06538358330727,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "correct"
+    },
+    {
+      "start_s": 69.06538358330727,
+      "end_s": 70.00979662500322,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.00979662500322,
+      "end_s": 70.97099387459457,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.97099387459457,
+      "end_s": 72.0077907089144,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.0077907089144,
+      "end_s": 72.81810870859772,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.81810870859772,
+      "end_s": 74.00817724969238,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.00817724969238,
+      "end_s": 74.9061625842005,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.9061625842005,
+      "end_s": 76.00981954205781,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.00981954205781,
+      "end_s": 76.7505365414545,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.7505365414545,
+      "end_s": 78.00211745873094,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.00211745873094,
+      "end_s": 78.87766399979591,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.87766399979591,
+      "end_s": 80.00507758371532,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.00507758371532,
+      "end_s": 80.92074562516063,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.92074562516063,
+      "end_s": 82.00507850013673,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 82.00507850013673,
+      "end_s": 83.05923512484878,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 83.05923512484878,
+      "end_s": 84.0024608746171,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 84.0024608746171,
+      "end_s": 85.01641962490976,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 85.01641962490976,
+      "end_s": 86.00349095836282,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.00349095836282,
+      "end_s": 86.97234299965203,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.97234299965203,
+      "end_s": 88.00495850015432,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.00495850015432,
+      "end_s": 88.93763008341193,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.93763008341193,
+      "end_s": 90.00507774949074,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00507774949074,
+      "end_s": 90.91218099929392,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.91218099929392,
+      "end_s": 92.00506854150444,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.00506854150444,
+      "end_s": 93.36571841686964,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 93.36571841686964,
+      "end_s": 94.00168970879167,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.00168970879167,
+      "end_s": 94.81989808380604,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.81989808380604,
+      "end_s": 96.00096054188907,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.00096054188907,
+      "end_s": 96.8899108748883,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.8899108748883,
+      "end_s": 98.00152287445962,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.00152287445962,
+      "end_s": 99.05091516673565,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 99.05091516673565,
+      "end_s": 100.00282870884985,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.00282870884985,
+      "end_s": 100.9232923751697,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.9232923751697,
+      "end_s": 102.00329012516886,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00329012516886,
+      "end_s": 102.77165791671723,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.77165791671723,
+      "end_s": 104.00464304164052,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.00464304164052,
+      "end_s": 105.14625054132193,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 105.14625054132193,
+      "end_s": 106.00064391642809,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.00064391642809,
+      "end_s": 106.75172762479633,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.75172762479633,
+      "end_s": 108.00506937503815,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.00506937503815,
+      "end_s": 108.85259983409196,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.85259983409196,
+      "end_s": 110.0018457500264,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.0018457500264,
+      "end_s": 111.69913091696799,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 111.69913091696799,
+      "end_s": 112.00507699977607,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.00507699977607,
+      "end_s": 112.76321458350867,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.76321458350867,
+      "end_s": 114.00507974997163,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.00507974997163,
+      "end_s": 114.87548566702753,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.87548566702753,
+      "end_s": 116.0050846664235,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.0050846664235,
+      "end_s": 116.8604477494955,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.8604477494955,
+      "end_s": 118.00382049940526,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 118.00382049940526,
+      "end_s": 119.19210633356124,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 119.19210633356124,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "source_incorrect"
+    }
+  ]
+}

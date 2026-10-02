@@ -1,0 +1,1708 @@
+{
+  "episode_id": "lite_support_b",
+  "task_family": "support_call_assist",
+  "scenario_id": "support_b",
+  "states": 60,
+  "questions": 7,
+  "reference_transitions": 24,
+  "untimed_decision_accuracy": 0.4166666666666667,
+  "untimed_segment_accuracy": 0.45,
+  "all_questions_exact_accuracy": 0.38333333333333336,
+  "inactive_only_error_states": 2,
+  "time_accuracy": 0.40186462281416047,
+  "segment_time_accuracy": 0.41847775920997765,
+  "observed_duration_s": 119.99997483380139,
+  "error_seconds": {
+    "no_decision": 0.7735095415264368,
+    "source_correct": 5.94243008363992,
+    "source_incorrect": 65.06029058434069
+  },
+  "time_partition_seconds": {
+    "current_correct": 45.411425748839974,
+    "judgment": 60.871699002571404,
+    "stale": 5.94243008363992,
+    "compound": 4.188591581769288,
+    "outdated_correct": 2.812318875454366,
+    "no_decision": 0.7735095415264368
+  },
+  "current_source_share": 0.8856928920077884,
+  "latency_s_p50": 0.515780667308718,
+  "latency_s_p95": 0.8160429163835934,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.005162249319255352,
+  "max_dispatch_lag_s": 0.0009462926536798477,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 0.8333333333333334,
+      "active_states": 60,
+      "active_accuracy": 0.8333333333333334
+    },
+    "contact_channel": {
+      "all_states_accuracy": 0.9666666666666667,
+      "active_states": 60,
+      "active_accuracy": 0.9666666666666667
+    },
+    "delivery_target": {
+      "all_states_accuracy": 1,
+      "active_states": 24,
+      "active_accuracy": 1
+    },
+    "delivery_action": {
+      "all_states_accuracy": 0.8833333333333333,
+      "active_states": 18,
+      "active_accuracy": 0.6111111111111112
+    },
+    "repair_target": {
+      "all_states_accuracy": 0.85,
+      "active_states": 29,
+      "active_accuracy": 0.9310344827586207
+    },
+    "repair_action": {
+      "all_states_accuracy": 0.6166666666666667,
+      "active_states": 29,
+      "active_accuracy": 0.4482758620689655
+    },
+    "cancellation_action": {
+      "all_states_accuracy": 0.9,
+      "active_states": 6,
+      "active_accuracy": 0.6666666666666666
+    }
+  },
+  "mistakes": [
+    {
+      "t": 0,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "none",
+        "delivery_target": "original",
+        "delivery_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "wait"
+      },
+      "wrong_active_questions": [
+        "contact_channel"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u0-Customer: Please track the original parcel first."
+      ]
+    },
+    {
+      "t": 1,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "none",
+        "delivery_target": "original",
+        "delivery_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "wait"
+      },
+      "wrong_active_questions": [
+        "contact_channel"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u0-Customer: Please track the original parcel first."
+      ]
+    },
+    {
+      "t": 4,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "wait"
+      },
+      "predicted_decision": {
+        "route": "cancel",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "cancellation_action": "cancel_request"
+      },
+      "wrong_active_questions": [
+        "route",
+        "delivery_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u2-Customer: You can send the follow-up by email."
+      ]
+    },
+    {
+      "t": 8,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "delivery_action": "correct_address"
+      },
+      "predicted_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "delivery_action": "wait"
+      },
+      "wrong_active_questions": [
+        "delivery_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u6-Customer: Actually track the replacement parcel, not the original one."
+      ]
+    },
+    {
+      "t": 9,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "delivery_action": "correct_address"
+      },
+      "predicted_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "delivery_action": "wait"
+      },
+      "wrong_active_questions": [
+        "delivery_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u6-Customer: Actually track the replacement parcel, not the original one."
+      ]
+    },
+    {
+      "t": 10,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "delivery_action": "correct_address"
+      },
+      "predicted_decision": {
+        "route": "cancel",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "cancellation_action": "cancel_request"
+      },
+      "wrong_active_questions": [
+        "route",
+        "delivery_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u6-Customer: Actually track the replacement parcel, not the original one."
+      ]
+    },
+    {
+      "t": 11,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "delivery_action": "correct_address"
+      },
+      "predicted_decision": {
+        "route": "cancel",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "cancellation_action": "cancel_request"
+      },
+      "wrong_active_questions": [
+        "route",
+        "delivery_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u6-Customer: Actually track the replacement parcel, not the original one."
+      ]
+    },
+    {
+      "t": 14,
+      "reference_decision": {
+        "route": "cancel",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "cancellation_action": "cancel_request"
+      },
+      "predicted_decision": {
+        "route": "cancel",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "cancellation_action": "confirm_cancelled"
+      },
+      "wrong_active_questions": [
+        "cancellation_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer cancel: Cancel the replacement parcel, please."
+      ]
+    },
+    {
+      "t": 15,
+      "reference_decision": {
+        "route": "cancel",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "cancellation_action": "cancel_request"
+      },
+      "predicted_decision": {
+        "route": "cancel",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "cancellation_action": "confirm_cancelled"
+      },
+      "wrong_active_questions": [
+        "cancellation_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer cancel: Cancel the replacement parcel, please."
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "open_case"
+      },
+      "predicted_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "wait"
+      },
+      "wrong_active_questions": [
+        "delivery_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u18-Customer: Leave that cancelled parcel alone. Track the original parcel again."
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "open_case"
+      },
+      "predicted_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "wait"
+      },
+      "wrong_active_questions": [
+        "delivery_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u18-Customer: Leave that cancelled parcel alone. Track the original parcel again."
+      ]
+    },
+    {
+      "t": 26,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "base",
+        "repair_action": "diagnose"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "diagnose"
+      },
+      "wrong_active_questions": [
+        "repair_target"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u24-Customer: Now check the base unit; it will not power up."
+      ]
+    },
+    {
+      "t": 27,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "base",
+        "repair_action": "diagnose"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "diagnose"
+      },
+      "wrong_active_questions": [
+        "repair_target"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u24-Customer: Now check the base unit; it will not power up."
+      ]
+    },
+    {
+      "t": 30,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "diagnose"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "explain_clear"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer device: Actually check the handset, not the base unit."
+      ]
+    },
+    {
+      "t": 31,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "diagnose"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "explain_clear"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer device: Actually check the handset, not the base unit."
+      ]
+    },
+    {
+      "t": 32,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "await_result"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "explain_clear"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer device: Actually check the handset, not the base unit."
+      ]
+    },
+    {
+      "t": 33,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "await_result"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "explain_clear"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer device: Actually check the handset, not the base unit."
+      ]
+    },
+    {
+      "t": 34,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "book_visit"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "explain_clear"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer device: Actually check the handset, not the base unit."
+      ]
+    },
+    {
+      "t": 35,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "book_visit"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "email",
+        "repair_target": "handset",
+        "repair_action": "explain_clear"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer device: Actually check the handset, not the base unit."
+      ]
+    },
+    {
+      "t": 36,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "handset",
+        "repair_action": "book_visit"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "handset",
+        "repair_action": "explain_clear"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u36-Customer: Text me the follow-up instead of sending email."
+      ]
+    },
+    {
+      "t": 37,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "handset",
+        "repair_action": "book_visit"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "handset",
+        "repair_action": "explain_clear"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u36-Customer: Text me the follow-up instead of sending email."
+      ]
+    },
+    {
+      "t": 38,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "handset",
+        "repair_action": "send_part"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "handset",
+        "repair_action": "explain_clear"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u36-Customer: Text me the follow-up instead of sending email."
+      ]
+    },
+    {
+      "t": 39,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "handset",
+        "repair_action": "send_part"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "handset",
+        "repair_action": "explain_clear"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u36-Customer: Text me the follow-up instead of sending email."
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "route": "hold_wait",
+        "contact_channel": "sms"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "base",
+        "repair_action": "await_result"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u40-Customer: Leave the handset there; check the base unit now."
+      ]
+    },
+    {
+      "t": 45,
+      "reference_decision": {
+        "route": "hold_wait",
+        "contact_channel": "sms"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "base",
+        "repair_action": "await_result"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u40-Customer: Leave the handset there; check the base unit now."
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "route": "hold_wait",
+        "contact_channel": "sms"
+      },
+      "predicted_decision": {
+        "route": "hold_return",
+        "contact_channel": "sms"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u40-Customer: Leave the handset there; check the base unit now."
+      ]
+    },
+    {
+      "t": 47,
+      "reference_decision": {
+        "route": "hold_wait",
+        "contact_channel": "sms"
+      },
+      "predicted_decision": {
+        "route": "hold_return",
+        "contact_channel": "sms"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u40-Customer: Leave the handset there; check the base unit now."
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "base",
+        "repair_action": "request_access"
+      },
+      "predicted_decision": {
+        "route": "hold_return",
+        "contact_channel": "sms"
+      },
+      "wrong_active_questions": [
+        "route",
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u40-Customer: Leave the handset there; check the base unit now."
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "base",
+        "repair_action": "request_access"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "base",
+        "repair_action": "send_part"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u40-Customer: Leave the handset there; check the base unit now."
+      ]
+    },
+    {
+      "t": 54,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "await_result"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "remote_check"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u53-Customer: Do not send any messages afterwards. Keep the remote check going."
+      ]
+    },
+    {
+      "t": 55,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "await_result"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "remote_check"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u53-Customer: Do not send any messages afterwards. Keep the remote check going."
+      ]
+    },
+    {
+      "t": 56,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "explain_clear"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "remote_check"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u53-Customer: Do not send any messages afterwards. Keep the remote check going."
+      ]
+    },
+    {
+      "t": 57,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "explain_clear"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "remote_check"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u53-Customer: Do not send any messages afterwards. Keep the remote check going."
+      ]
+    },
+    {
+      "t": 58,
+      "reference_decision": {
+        "route": "closed",
+        "contact_channel": "none"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "remote_check"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "telephony.status=ended",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u53-Customer: Do not send any messages afterwards. Keep the remote check going."
+      ]
+    },
+    {
+      "t": 59,
+      "reference_decision": {
+        "route": "closed",
+        "contact_channel": "none"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "remote_check"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "telephony.status=ended",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u53-Customer: Do not send any messages afterwards. Keep the remote check going."
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.516619861125946e-05,
+      "end_s": 0.7735347077250481,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 0.7735347077250481,
+      "end_s": 2.0050824163481593,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 2.0050824163481593,
+      "end_s": 2.2607212914153934,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 2.2607212914153934,
+      "end_s": 4.003209332935512,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 4.003209332935512,
+      "end_s": 4.544482916593552,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.544482916593552,
+      "end_s": 6.004506874829531,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.004506874829531,
+      "end_s": 6.273028624244034,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.273028624244034,
+      "end_s": 8.005066124722362,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.005066124722362,
+      "end_s": 8.520510207861662,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.520510207861662,
+      "end_s": 10.001645999960601,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 10.001645999960601,
+      "end_s": 10.722070749849081,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 10.722070749849081,
+      "end_s": 12.00408220756799,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.00408220756799,
+      "end_s": 12.644788332283497,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 12.644788332283497,
+      "end_s": 14.002055582590401,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.002055582590401,
+      "end_s": 14.508385207504034,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.508385207504034,
+      "end_s": 16.005084957927465,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 16.005084957927465,
+      "end_s": 17.1269967071712,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 17.1269967071712,
+      "end_s": 18.003403166309,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.003403166309,
+      "end_s": 18.70371124986559,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.70371124986559,
+      "end_s": 20.004284999333322,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.004284999333322,
+      "end_s": 20.591293124482036,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.591293124482036,
+      "end_s": 22.002941166982055,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 22.002941166982055,
+      "end_s": 22.605731249786913,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 22.605731249786913,
+      "end_s": 24.005085749551654,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 24.005085749551654,
+      "end_s": 24.613265707157552,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 24.613265707157552,
+      "end_s": 26.002154457382858,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.002154457382858,
+      "end_s": 26.475094457156956,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.475094457156956,
+      "end_s": 28.001940874382854,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.001940874382854,
+      "end_s": 28.500525124371052,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.500525124371052,
+      "end_s": 30.00504870712757,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 30.00504870712757,
+      "end_s": 30.383513166569173,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 30.383513166569173,
+      "end_s": 32.004503374919295,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 32.004503374919295,
+      "end_s": 32.567902707494795,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.567902707494795,
+      "end_s": 34.00223229173571,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.00223229173571,
+      "end_s": 34.26879120711237,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.26879120711237,
+      "end_s": 36.00506491679698,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.00506491679698,
+      "end_s": 36.472312291152775,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 36.472312291152775,
+      "end_s": 38.005121416412294,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.005121416412294,
+      "end_s": 38.483813249506056,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.483813249506056,
+      "end_s": 40.00483958236873,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "correct"
+    },
+    {
+      "start_s": 40.00483958236873,
+      "end_s": 40.272286124527454,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 40.272286124527454,
+      "end_s": 42.00226499978453,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.00226499978453,
+      "end_s": 42.529956999234855,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.529956999234855,
+      "end_s": 44.001270291395485,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.001270291395485,
+      "end_s": 44.488214957527816,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.488214957527816,
+      "end_s": 46.005085666663945,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "correct"
+    },
+    {
+      "start_s": 46.005085666663945,
+      "end_s": 47.100595249794424,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "correct"
+    },
+    {
+      "start_s": 47.100595249794424,
+      "end_s": 48.00150329153985,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "correct"
+    },
+    {
+      "start_s": 48.00150329153985,
+      "end_s": 48.72737041674554,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 48.72737041674554,
+      "end_s": 50.00503549911082,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "correct"
+    },
+    {
+      "start_s": 50.00503549911082,
+      "end_s": 50.443893416784704,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "correct"
+    },
+    {
+      "start_s": 50.443893416784704,
+      "end_s": 52.005057124421,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 52.005057124421,
+      "end_s": 52.586050749756396,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 52.586050749756396,
+      "end_s": 54.00370304193348,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.00370304193348,
+      "end_s": 54.31146549992263,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.31146549992263,
+      "end_s": 56.003670207224786,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.003670207224786,
+      "end_s": 56.539633916690946,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "correct"
+    },
+    {
+      "start_s": 56.539633916690946,
+      "end_s": 58.005076999776065,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 58.005076999776065,
+      "end_s": 58.39790841657668,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 58.39790841657668,
+      "end_s": 60.005068874917924,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "correct"
+    },
+    {
+      "start_s": 60.005068874917924,
+      "end_s": 61.81935883220285,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "correct"
+    },
+    {
+      "start_s": 61.81935883220285,
+      "end_s": 62.00505279190838,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.00505279190838,
+      "end_s": 62.24715554155409,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.24715554155409,
+      "end_s": 64.00284608267248,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.00284608267248,
+      "end_s": 64.60000362433493,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.60000362433493,
+      "end_s": 66.00505958218127,
+      "reference_t": 32,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.00505958218127,
+      "end_s": 66.53711058292538,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.53711058292538,
+      "end_s": 68.00357895717025,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 68.00357895717025,
+      "end_s": 68.25172762479633,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 68.25172762479633,
+      "end_s": 70.00515999924392,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.00515999924392,
+      "end_s": 70.54854729119688,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.54854729119688,
+      "end_s": 72.00507454201579,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.00507454201579,
+      "end_s": 72.46367741655558,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.46367741655558,
+      "end_s": 74.0019084168598,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.0019084168598,
+      "end_s": 74.51581566687673,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.51581566687673,
+      "end_s": 76.00375549960881,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.00375549960881,
+      "end_s": 76.50181433279067,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.50181433279067,
+      "end_s": 78.00357608217746,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.00357608217746,
+      "end_s": 78.54150241613388,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.54150241613388,
+      "end_s": 80.00494854152203,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.00494854152203,
+      "end_s": 80.80683016683906,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.80683016683906,
+      "end_s": 82.00333208218217,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.00333208218217,
+      "end_s": 82.58502208255231,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.58502208255231,
+      "end_s": 84.00151870772243,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.00151870772243,
+      "end_s": 84.47300895769149,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 84.47300895769149,
+      "end_s": 86.00493724923581,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 86.00493724923581,
+      "end_s": 86.38097841665149,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 86.38097841665149,
+      "end_s": 88.00082162488252,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "correct"
+    },
+    {
+      "start_s": 88.00082162488252,
+      "end_s": 88.77412554156035,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 88.77412554156035,
+      "end_s": 90.00484724994749,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00484724994749,
+      "end_s": 90.76327229198068,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.76327229198068,
+      "end_s": 92.00264279171824,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.00264279171824,
+      "end_s": 92.59993049968034,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.59993049968034,
+      "end_s": 94.00440941657871,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.00440941657871,
+      "end_s": 94.52197612449527,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.52197612449527,
+      "end_s": 96.00471845734864,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.00471845734864,
+      "end_s": 96.56822074949741,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "correct"
+    },
+    {
+      "start_s": 96.56822074949741,
+      "end_s": 98.00055908225477,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "correct"
+    },
+    {
+      "start_s": 98.00055908225477,
+      "end_s": 98.48840404115617,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 98.48840404115617,
+      "end_s": 100.0049125822261,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.0049125822261,
+      "end_s": 100.6068732496351,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.6068732496351,
+      "end_s": 102.0050583742559,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.0050583742559,
+      "end_s": 102.4777008742094,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.4777008742094,
+      "end_s": 104.00354495737702,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "correct"
+    },
+    {
+      "start_s": 104.00354495737702,
+      "end_s": 104.25387429166585,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "correct"
+    },
+    {
+      "start_s": 104.25387429166585,
+      "end_s": 106.00276745762676,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "correct"
+    },
+    {
+      "start_s": 106.00276745762676,
+      "end_s": 106.40053508244455,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 106.40053508244455,
+      "end_s": 108.005076832138,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "correct"
+    },
+    {
+      "start_s": 108.005076832138,
+      "end_s": 108.59392124973238,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 108.59392124973238,
+      "end_s": 110.00516224931926,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.00516224931926,
+      "end_s": 110.57650641631335,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.57650641631335,
+      "end_s": 112.00138029176742,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.00138029176742,
+      "end_s": 112.32402983214706,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.32402983214706,
+      "end_s": 114.00112379156053,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.00112379156053,
+      "end_s": 114.4719534162432,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.4719534162432,
+      "end_s": 116.00339474994689,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.00339474994689,
+      "end_s": 116.30590008292347,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.30590008292347,
+      "end_s": 118.00315133295953,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 118.00315133295953,
+      "end_s": 118.28122241701931,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 118.28122241701931,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "source_incorrect"
+    }
+  ]
+}

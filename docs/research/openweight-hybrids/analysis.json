@@ -204,6 +204,30 @@
         "sha256": "ee4e1651c3465e1a94a72d71993f40f9fb3c00b9c3e3af74ce61834187cc9ff4"
       }
     },
+    "Clef": {
+      "run": "runs/lite-v1-clef-four-family-retry-v1",
+      "sha256": {
+        "run.json": "335c05d1007dd8b55a9fcef08c387e3795d8d85ab921de1724bee8fa50b41001",
+        "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+        "events.jsonl": "ccd49c2e08c2f7d2807f2a6ebac6f303e3da9e65f478a313eaa5d7847fb5043d"
+      },
+      "published_report": {
+        "path": "docs/lite/results/four-family/clef/analysis.json",
+        "sha256": "36caae48bd30ade7109aec0d59f107d496c07380561fa72516a1a77e08638a5a"
+      }
+    },
+    "ClefFlash": {
+      "run": "runs/lite-v1-clef-flash-four-family-retry-v1",
+      "sha256": {
+        "run.json": "694e14758081ac052a22cb0474a0eb11a6731ffc03539ba9b7e018a466c27128",
+        "episodes.json": "6eff2b58bf161d3c94be1b43836513e576edab841a0f98a08f486b7935297dae",
+        "events.jsonl": "ac80f6822650a1a140997cff625c4940c56559e611c6ba46c87fcb5fa1fc08ca"
+      },
+      "published_report": {
+        "path": "docs/lite/results/four-family/clef-flash/analysis.json",
+        "sha256": "6f959d94707e8610e8ce0e04b9a9625dddb5c9d622d64dac585f5d9d838ccdd3"
+      }
+    },
     "LayaEnglish": {
       "run": "runs/pro6000-lab-20261001/runs/laya-english",
       "sha256": {
@@ -600,6 +624,22 @@
       "accuracy": 0.5962713450411192,
       "untimed": 0.6375,
       "median_s": 0.25328739546239376
+    },
+    "Clef": {
+      "label": "Clef",
+      "report": "four-family/clef",
+      "model": "clef",
+      "accuracy": 0.3095552081736652,
+      "untimed": 0.38958333333333334,
+      "median_s": 0.9469464579597116
+    },
+    "ClefFlash": {
+      "label": "Clef Flash",
+      "report": "four-family/clef-flash",
+      "model": "clef-flash",
+      "accuracy": 0.19687027777686622,
+      "untimed": 0.21666666666666667,
+      "median_s": 0.536501603666693
     }
   },
   "standalone": {
@@ -27735,7 +27775,7 @@
     }
   },
   "verification": {
-    "standalone_partition_checks": 120,
+    "standalone_partition_checks": 136,
     "max_nominal_recorded_gap_points": 0.01732767322237816,
     "nominal_recorded_gaps_points": {
       "Luna": 0.01732767322237816,
@@ -27744,6 +27784,8 @@
       "TerraNone": 0.013608345284321643,
       "Astra": 0.004840209477957602,
       "Jev": 0.011796046217460443,
+      "Clef": 0.01482878314806868,
+      "ClefFlash": 0.008062022312319006,
       "LayaEnglish": 0.00015168548389565828,
       "LayaTyped": 5.240391927896493e-05,
       "LayaMultilingual": 3.8181067255060874e-05,
@@ -27757,15 +27799,16 @@
     "shared_hosted_control_checks": 20
   },
   "sources_sha256": {
-    "paper/analysis/lite_openweight.py": "5194730bc8aaea08584e335be5761b0d7f11114119637f4a7bcac1d9233c7cd1",
+    "paper/analysis/lite_openweight.py": "4d668eb8666122cbb9dfc3763379b25e72278314d5a7dfba8df1658028a667f1",
     "paper/analysis/openweight_policy.json": "de4447bb77ebbb65cef3a1f3e4e516f5f4dec8b5cec2407cc7d39c4616e9865b",
     "paper/analysis/lite_trajectory_value.py": "fea66b556faae61adb6d74780d30c9b6e6e6ac0cbc47b2dbc4b4a2a491fce764",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
     "paper/analysis/lite_numbers.py": "944f9b645bf30e14556b97e755dd4b57594541880f7c264cadd40adc54569cba",
+    "paper/analysis/leaderboard_models.py": "59dd400b281b7423a505aa77a7f533401fe5db2aff0cd8b68eaf93246b2edec8",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616",
     "paper/analysis/figstyle.py": "e6278862b795d054107f8e47988d09c7c1743794a514860e75a72a7783f742da",
-    "src/streamdecisionbench/lite/__main__.py": "9b42eb5f1be4d3943a913f0b3a39c11e9fd2b49b6055cba052fee8fff83d01de",
-    "src/streamdecisionbench/lite/core.py": "6e792b226e43126cccef80107f296c7897eedecb0a57ba53a35d324e053baa70",
+    "src/streamdecisionbench/lite/__main__.py": "9e397ff23bfb44c796d22d5f80d13d80af9bb12b65992a47fc3bd430a3483f7e",
+    "src/streamdecisionbench/lite/core.py": "bdefc99a8ff0cc83bbe8627d21e1b7c9f8f7be0f9fd231d03d2db025bc841598",
     "src/streamdecisionbench/lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
     "src/streamdecisionbench/lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
     "src/streamdecisionbench/lite/interval_scoring.py": "ce3eda9c2fe2efcd84b75a02ce329e8fc7bf7f21b9abd65e65fd10bf3d9a6eb3",

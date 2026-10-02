@@ -1,0 +1,1872 @@
+{
+  "episode_id": "lite_assembly_b",
+  "task_family": "procedural_coaching",
+  "scenario_id": "assembly_cable_module",
+  "states": 60,
+  "questions": 6,
+  "reference_transitions": 23,
+  "untimed_decision_accuracy": 0.2,
+  "untimed_segment_accuracy": 0.2048611111111111,
+  "all_questions_exact_accuracy": 0.08333333333333333,
+  "inactive_only_error_states": 7,
+  "time_accuracy": 0.183299868602363,
+  "segment_time_accuracy": 0.1869923267772075,
+  "observed_duration_s": 119.99997441656888,
+  "error_seconds": {
+    "no_decision": 0.6504982495680451,
+    "source_correct": 2.001467832364142,
+    "source_incorrect": 95.35202879179269
+  },
+  "time_partition_seconds": {
+    "current_correct": 21.995979542843997,
+    "judgment": 85.2281466703862,
+    "stale": 2.001467832364142,
+    "compound": 10.123882121406496,
+    "outdated_correct": 0.0,
+    "no_decision": 0.6504982495680451
+  },
+  "current_source_share": 0.8935345756075872,
+  "latency_s_p50": 0.5569531251676381,
+  "latency_s_p95": 1.0318945582024743,
+  "failed_requests": 0,
+  "accepted_updates": 59,
+  "discarded_updates": {
+    "older_than_active": 1
+  },
+  "max_release_lag_s": 0.005108583718538284,
+  "max_dispatch_lag_s": 0.0007116664201021194,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 0.48333333333333334,
+      "active_states": 60,
+      "active_accuracy": 0.48333333333333334
+    },
+    "stage": {
+      "all_states_accuracy": 0.6666666666666666,
+      "active_states": 60,
+      "active_accuracy": 0.6666666666666666
+    },
+    "target": {
+      "all_states_accuracy": 0.7166666666666667,
+      "active_states": 18,
+      "active_accuracy": 0.6111111111111112
+    },
+    "method": {
+      "all_states_accuracy": 0.8166666666666667,
+      "active_states": 16,
+      "active_accuracy": 0.4375
+    },
+    "next_step": {
+      "all_states_accuracy": 0.6833333333333333,
+      "active_states": 12,
+      "active_accuracy": 0.5
+    },
+    "destination": {
+      "all_states_accuracy": 0.5833333333333334,
+      "active_states": 24,
+      "active_accuracy": 0.6666666666666666
+    }
+  },
+  "mistakes": [
+    {
+      "t": 3,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "mount",
+        "target": "orientation",
+        "method": "reseat"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "intake",
+        "target": "orientation",
+        "method": "reseat"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-3-heartbeat"
+      ]
+    },
+    {
+      "t": 6,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "terminate"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "terminate",
+        "target": "P1",
+        "method": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-6-0"
+      ]
+    },
+    {
+      "t": 7,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "terminate"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "terminate",
+        "target": "P1",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-7-heartbeat"
+      ]
+    },
+    {
+      "t": 8,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "terminate",
+        "target": "P2",
+        "method": "recrimp"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "terminate",
+        "target": "none",
+        "destination": "electrical_lead"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "b-8-0"
+      ]
+    },
+    {
+      "t": 9,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "terminate",
+        "target": "P2",
+        "method": "recrimp"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "terminate",
+        "target": "none",
+        "destination": "electrical_lead"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "b-9-heartbeat"
+      ]
+    },
+    {
+      "t": 11,
+      "reference_decision": {
+        "route": "escalate",
+        "stage": "terminate",
+        "target": "P2",
+        "destination": "electrical_lead"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "terminate",
+        "target": "none",
+        "destination": "electrical_lead"
+      },
+      "wrong_active_questions": [
+        "target"
+      ],
+      "reference_evidence": [
+        "b-11-heartbeat"
+      ]
+    },
+    {
+      "t": 14,
+      "reference_decision": {
+        "route": "hold",
+        "stage": "terminate",
+        "destination": "quality_desk"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "stage": "intake",
+        "destination": "electrical_lead"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "b-14-0"
+      ]
+    },
+    {
+      "t": 16,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "terminate",
+        "destination": "electrical_lead"
+      },
+      "predicted_decision": {
+        "route": "handoff",
+        "stage": "terminate",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "destination"
+      ],
+      "reference_evidence": [
+        "b-16-0"
+      ]
+    },
+    {
+      "t": 17,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "terminate",
+        "destination": "electrical_lead"
+      },
+      "predicted_decision": {
+        "route": "handoff",
+        "stage": "terminate",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "destination"
+      ],
+      "reference_evidence": [
+        "b-17-heartbeat"
+      ]
+    },
+    {
+      "t": 19,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "terminate",
+        "destination": "electrical_lead"
+      },
+      "predicted_decision": {
+        "route": "handoff",
+        "stage": "terminate",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "destination"
+      ],
+      "reference_evidence": [
+        "b-19-heartbeat"
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "terminate",
+        "destination": "electrical_lead"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "terminate",
+        "target": "none",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "destination"
+      ],
+      "reference_evidence": [
+        "b-20-0"
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "terminate",
+        "destination": "electrical_lead"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "terminate",
+        "target": "P2",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "destination"
+      ],
+      "reference_evidence": [
+        "b-21-heartbeat"
+      ]
+    },
+    {
+      "t": 22,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "terminate",
+        "next_step": "electrical"
+      },
+      "predicted_decision": {
+        "route": "handoff",
+        "stage": "terminate",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "b-22-0"
+      ]
+    },
+    {
+      "t": 23,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "terminate",
+        "next_step": "electrical"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "terminate",
+        "target": "none",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "b-23-heartbeat"
+      ]
+    },
+    {
+      "t": 24,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "electrical",
+        "target": "continuity",
+        "method": "trace_connection"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "electrical",
+        "target": "continuity",
+        "destination": "electrical_lead"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-24-0"
+      ]
+    },
+    {
+      "t": 25,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "electrical",
+        "target": "continuity",
+        "method": "trace_connection"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "electrical",
+        "target": "continuity",
+        "destination": "electrical_lead"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-25-heartbeat"
+      ]
+    },
+    {
+      "t": 26,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "electrical",
+        "target": "continuity",
+        "method": "trace_connection"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "electrical",
+        "target": "continuity",
+        "destination": "electrical_lead"
+      },
+      "wrong_active_questions": [
+        "route",
+        "method"
+      ],
+      "reference_evidence": [
+        "b-26-0"
+      ]
+    },
+    {
+      "t": 27,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "electrical",
+        "target": "continuity",
+        "method": "trace_connection"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "electrical",
+        "target": "continuity",
+        "destination": "electrical_lead"
+      },
+      "wrong_active_questions": [
+        "route",
+        "method"
+      ],
+      "reference_evidence": [
+        "b-27-heartbeat"
+      ]
+    },
+    {
+      "t": 28,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "electrical",
+        "next_step": "label"
+      },
+      "predicted_decision": {
+        "route": "escalate",
+        "stage": "electrical",
+        "target": "none",
+        "destination": "electrical_lead"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-28-0"
+      ]
+    },
+    {
+      "t": 29,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "electrical",
+        "next_step": "label"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-29-heartbeat"
+      ]
+    },
+    {
+      "t": 30,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "label",
+        "target": "label",
+        "method": "replace_label"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "b-30-0"
+      ]
+    },
+    {
+      "t": 31,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "label",
+        "target": "label",
+        "method": "replace_label"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "b-31-heartbeat"
+      ]
+    },
+    {
+      "t": 32,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "label"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-32-0"
+      ]
+    },
+    {
+      "t": 33,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "label"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-33-heartbeat"
+      ]
+    },
+    {
+      "t": 34,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "label",
+        "target": "accessory",
+        "method": "adjust_kit"
+      },
+      "predicted_decision": {
+        "route": "advance",
+        "stage": "electrical",
+        "next_step": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "method"
+      ],
+      "reference_evidence": [
+        "b-34-0"
+      ]
+    },
+    {
+      "t": 35,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "label",
+        "target": "accessory",
+        "method": "adjust_kit"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-35-heartbeat"
+      ]
+    },
+    {
+      "t": 36,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-36-0"
+      ]
+    },
+    {
+      "t": 37,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "b-37-heartbeat"
+      ]
+    },
+    {
+      "t": 38,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "terminate",
+        "next_step": "electrical"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "b-38-0"
+      ]
+    },
+    {
+      "t": 39,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "terminate",
+        "next_step": "electrical"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "b-39-heartbeat"
+      ]
+    },
+    {
+      "t": 40,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "label",
+        "target": "continuity",
+        "method": "complete_missing"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "b-40-0"
+      ]
+    },
+    {
+      "t": 41,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "label",
+        "target": "continuity",
+        "method": "complete_missing"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "b-41-heartbeat"
+      ]
+    },
+    {
+      "t": 42,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "electrical"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-42-0"
+      ]
+    },
+    {
+      "t": 43,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "electrical"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "b-43-heartbeat"
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "electrical",
+        "next_step": "label"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "route",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "b-46-0"
+      ]
+    },
+    {
+      "t": 47,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "electrical",
+        "next_step": "label"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "route",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "b-47-heartbeat"
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "label"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-48-0"
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "label"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-49-heartbeat"
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-50-0"
+      ]
+    },
+    {
+      "t": 51,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-51-heartbeat"
+      ]
+    },
+    {
+      "t": 52,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-52-0"
+      ]
+    },
+    {
+      "t": 53,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-53-heartbeat"
+      ]
+    },
+    {
+      "t": 54,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-54-0"
+      ]
+    },
+    {
+      "t": 55,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-55-heartbeat"
+      ]
+    },
+    {
+      "t": 56,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-56-0"
+      ]
+    },
+    {
+      "t": 57,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-57-heartbeat"
+      ]
+    },
+    {
+      "t": 58,
+      "reference_decision": {
+        "route": "hold",
+        "stage": "label",
+        "destination": "quality_desk"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "b-58-0"
+      ]
+    },
+    {
+      "t": 59,
+      "reference_decision": {
+        "route": "release",
+        "stage": "label",
+        "destination": "validation_rack"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "electrical",
+        "destination": "validation_rack"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "b-59-0"
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.5583431124687195e-05,
+      "end_s": 0.6505238329991698,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 0.6505238329991698,
+      "end_s": 2.0029654167592525,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 2.0029654167592525,
+      "end_s": 2.8078576251864433,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 2.8078576251864433,
+      "end_s": 4.004008625634015,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.004008625634015,
+      "end_s": 4.491885166615248,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 4.491885166615248,
+      "end_s": 6.002692708745599,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.002692708745599,
+      "end_s": 6.573630332946777,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.573630332946777,
+      "end_s": 8.000976250506938,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 8.000976250506938,
+      "end_s": 8.518005332909524,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 8.518005332909524,
+      "end_s": 10.003942208364606,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.003942208364606,
+      "end_s": 10.496382500045002,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.496382500045002,
+      "end_s": 12.005068541504443,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.005068541504443,
+      "end_s": 12.557223374955356,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 12.557223374955356,
+      "end_s": 14.004117333330214,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 14.004117333330214,
+      "end_s": 14.646850625053048,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 14.646850625053048,
+      "end_s": 16.00267633330077,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 16.00267633330077,
+      "end_s": 16.573912375606596,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 16.573912375606596,
+      "end_s": 18.005085083656013,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.005085083656013,
+      "end_s": 18.89940662495792,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.89940662495792,
+      "end_s": 20.005081250332296,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.005081250332296,
+      "end_s": 20.60905108321458,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.60905108321458,
+      "end_s": 22.00377962552011,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 22.00377962552011,
+      "end_s": 22.62172608356923,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 22.62172608356923,
+      "end_s": 24.003958250395954,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 24.003958250395954,
+      "end_s": 24.662542208097875,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 24.662542208097875,
+      "end_s": 26.003968000411987,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.003968000411987,
+      "end_s": 26.70522337500006,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.70522337500006,
+      "end_s": 28.004055833444,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.004055833444,
+      "end_s": 28.6161060417071,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.6161060417071,
+      "end_s": 30.005092083476484,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 30.005092083476484,
+      "end_s": 30.48794887494296,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 30.48794887494296,
+      "end_s": 32.003976416774094,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.003976416774094,
+      "end_s": 32.6691589159891,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 32.6691589159891,
+      "end_s": 34.00397245865315,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 34.00397245865315,
+      "end_s": 34.5712025007233,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 34.5712025007233,
+      "end_s": 36.00300308316946,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 36.00300308316946,
+      "end_s": 36.66690850071609,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 36.66690850071609,
+      "end_s": 38.00507349986583,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.00507349986583,
+      "end_s": 38.626297833397985,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.626297833397985,
+      "end_s": 40.00507887545973,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.00507887545973,
+      "end_s": 40.69712104089558,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.69712104089558,
+      "end_s": 42.005092583596706,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.005092583596706,
+      "end_s": 42.53942579124123,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.53942579124123,
+      "end_s": 44.002349958755076,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.002349958755076,
+      "end_s": 44.69895308371633,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.69895308371633,
+      "end_s": 46.003375666216016,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.003375666216016,
+      "end_s": 46.87427237536758,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.87427237536758,
+      "end_s": 48.00240375008434,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.00240375008434,
+      "end_s": 48.53818891663104,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.53818891663104,
+      "end_s": 50.005076833069324,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 50.005076833069324,
+      "end_s": 50.568048666231334,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 50.568048666231334,
+      "end_s": 52.005078916437924,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.005078916437924,
+      "end_s": 52.67211274988949,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.67211274988949,
+      "end_s": 54.00398683361709,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.00398683361709,
+      "end_s": 54.570056666620076,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.570056666620076,
+      "end_s": 56.00509020872414,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.00509020872414,
+      "end_s": 57.51584208291024,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 57.51584208291024,
+      "end_s": 58.002813833765686,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 58.002813833765686,
+      "end_s": 58.54724204167724,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 58.54724204167724,
+      "end_s": 60.00029974989593,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.00029974989593,
+      "end_s": 60.63920966628939,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.63920966628939,
+      "end_s": 62.00508545804769,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.00508545804769,
+      "end_s": 63.02202979102731,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 63.02202979102731,
+      "end_s": 64.00012712553144,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.00012712553144,
+      "end_s": 64.71026725042611,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.71026725042611,
+      "end_s": 66.00475066620857,
+      "reference_t": 32,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.00475066620857,
+      "end_s": 66.63921120855957,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.63921120855957,
+      "end_s": 68.00507495831698,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 68.00507495831698,
+      "end_s": 68.30557462573051,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 68.30557462573051,
+      "end_s": 70.00361687503755,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.00361687503755,
+      "end_s": 70.31538062542677,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.31538062542677,
+      "end_s": 72.0035882499069,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.0035882499069,
+      "end_s": 72.33857558295131,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.33857558295131,
+      "end_s": 74.00505866669118,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.00505866669118,
+      "end_s": 74.3025919161737,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.3025919161737,
+      "end_s": 76.00402875058353,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.00402875058353,
+      "end_s": 76.51266500074416,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.51266500074416,
+      "end_s": 78.00175362545997,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.00175362545997,
+      "end_s": 78.36138462554663,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.36138462554663,
+      "end_s": 80.00507908314466,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.00507908314466,
+      "end_s": 80.32227408327162,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.32227408327162,
+      "end_s": 82.00409591663629,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 82.00409591663629,
+      "end_s": 82.31438233330846,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 82.31438233330846,
+      "end_s": 84.00429791677743,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 84.00429791677743,
+      "end_s": 84.30432920809835,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 84.30432920809835,
+      "end_s": 86.00149529147893,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.00149529147893,
+      "end_s": 86.35174641665071,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.35174641665071,
+      "end_s": 88.00408808328211,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.00408808328211,
+      "end_s": 88.37094320822507,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.37094320822507,
+      "end_s": 90.00510433316231,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "correct"
+    },
+    {
+      "start_s": 90.00510433316231,
+      "end_s": 90.31275270786136,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "correct"
+    },
+    {
+      "start_s": 90.31275270786136,
+      "end_s": 92.00297387503088,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "correct"
+    },
+    {
+      "start_s": 92.00297387503088,
+      "end_s": 92.29922783374786,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 92.29922783374786,
+      "end_s": 94.00510858371854,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.00510858371854,
+      "end_s": 96.00229229126126,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.00229229126126,
+      "end_s": 96.44749954156578,
+      "reference_t": 48,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.44749954156578,
+      "end_s": 98.00505233369768,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.00505233369768,
+      "end_s": 98.37133450061083,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.37133450061083,
+      "end_s": 100.00504874996841,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.00504874996841,
+      "end_s": 100.45186949986964,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.45186949986964,
+      "end_s": 102.00421825051308,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00421825051308,
+      "end_s": 102.63265441637486,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.63265441637486,
+      "end_s": 104.0039977915585,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.0039977915585,
+      "end_s": 104.34805208351463,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.34805208351463,
+      "end_s": 106.00381712522358,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.00381712522358,
+      "end_s": 106.39762800000608,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.39762800000608,
+      "end_s": 108.0050717908889,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.0050717908889,
+      "end_s": 108.41577441617846,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.41577441617846,
+      "end_s": 110.00509895849973,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.00509895849973,
+      "end_s": 111.33504379168153,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 111.33504379168153,
+      "end_s": 112.00416912510991,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.00416912510991,
+      "end_s": 112.80625391658396,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.80625391658396,
+      "end_s": 114.00392983295023,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.00392983295023,
+      "end_s": 114.38837237562984,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.38837237562984,
+      "end_s": 116.00187250040472,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.00187250040472,
+      "end_s": 116.35928904172033,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.35928904172033,
+      "end_s": 118.00404150038958,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 118.00404150038958,
+      "end_s": 118.30726529099047,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 118.30726529099047,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "source_incorrect"
+    }
+  ]
+}

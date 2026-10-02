@@ -58,8 +58,9 @@ reference decision, so an unused answer changing does not create a new segment.
 
 ## Execution and transport retries
 
-The runner uses the OpenAI Responses adapter with strict structured outputs, or
-TypeSafe's SDK for Jev (`--provider typesafe`); the provider, requested model
+The runner uses the OpenAI Responses adapter with strict structured outputs,
+TypeSafe's SDK for Jev (`--provider typesafe`), or Clef's native Workers AI REST
+endpoint (`--provider cloudflare`), preserving its probability distributions; the provider, requested model
 and any reasoning effort are recorded in each run. This uses
 pipelined requests: one logical request is dispatched at every
 evidence release even if an earlier response is pending. Episodes run serially,

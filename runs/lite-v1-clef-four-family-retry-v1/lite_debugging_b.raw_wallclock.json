@@ -1,0 +1,1609 @@
+{
+  "episode_id": "lite_debugging_b",
+  "task_family": "live_debugging",
+  "scenario_id": "debugging_b",
+  "states": 60,
+  "questions": 7,
+  "reference_transitions": 21,
+  "untimed_decision_accuracy": 0.45,
+  "untimed_segment_accuracy": 0.4318181818181818,
+  "all_questions_exact_accuracy": 0.45,
+  "inactive_only_error_states": 0,
+  "time_accuracy": 0.3643744399583407,
+  "segment_time_accuracy": 0.32283248182373786,
+  "observed_duration_s": 119.9999757502228,
+  "error_seconds": {
+    "no_decision": 0.8961465004831553,
+    "source_correct": 9.158457583747804,
+    "source_incorrect": 66.22044770698994
+  },
+  "time_partition_seconds": {
+    "current_correct": 43.7249239590019,
+    "judgment": 55.75674841552973,
+    "stale": 9.158457583747804,
+    "compound": 10.463699291460216,
+    "outdated_correct": 0.0,
+    "no_decision": 0.8961465004831553
+  },
+  "current_source_share": 0.8290141039828245,
+  "latency_s_p50": 0.9107430623844266,
+  "latency_s_p95": 1.413632711861282,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.005170750431716442,
+  "max_dispatch_lag_s": 0.000605500303208828,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 0.55,
+      "active_states": 60,
+      "active_accuracy": 0.55
+    },
+    "process": {
+      "all_states_accuracy": 0.8333333333333334,
+      "active_states": 60,
+      "active_accuracy": 0.8333333333333334
+    },
+    "target_result": {
+      "all_states_accuracy": 1,
+      "active_states": 60,
+      "active_accuracy": 1
+    },
+    "rerun_scope": {
+      "all_states_accuracy": 0.85,
+      "active_states": 8,
+      "active_accuracy": 0.25
+    },
+    "inspect_file": {
+      "all_states_accuracy": 0.9166666666666666,
+      "active_states": 1,
+      "active_accuracy": 1
+    },
+    "control_action": {
+      "all_states_accuracy": 0.9166666666666666,
+      "active_states": 4,
+      "active_accuracy": 0
+    },
+    "owner": {
+      "all_states_accuracy": 0.9,
+      "active_states": 6,
+      "active_accuracy": 0
+    }
+  },
+  "mistakes": [
+    {
+      "t": 7,
+      "reference_decision": {
+        "route": "control",
+        "process": "paused",
+        "target_result": "original_error",
+        "control_action": "continue"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "control_action"
+      ],
+      "reference_evidence": [
+        "clock advanced to 7; cursor moved to line 37; no relevant event"
+      ]
+    },
+    {
+      "t": 8,
+      "reference_decision": {
+        "route": "control",
+        "process": "paused",
+        "target_result": "original_error",
+        "control_action": "continue"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "paused",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "control_action"
+      ],
+      "reference_evidence": [
+        "buffer edited: ledger/settlement/batch.py"
+      ]
+    },
+    {
+      "t": 9,
+      "reference_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "control",
+        "process": "stalled",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process"
+      ],
+      "reference_evidence": [
+        "debugger: continued"
+      ]
+    },
+    {
+      "t": 11,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "original_error",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "original_error",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "run finished: D7; 0 passed, 1 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 12,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "original_error",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "original_error",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "call: I saved the fix, so this old error cannot matter."
+      ]
+    },
+    {
+      "t": 18,
+      "reference_decision": {
+        "route": "wait",
+        "process": "stalled",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "process"
+      ],
+      "reference_evidence": [
+        "clock advanced to 18; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 19,
+      "reference_decision": {
+        "route": "wait",
+        "process": "stalled",
+        "target_result": "original_error"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "process"
+      ],
+      "reference_evidence": [
+        "call: Give it more time; I think it is still fine."
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "route": "control",
+        "process": "stalled",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process",
+        "control_action"
+      ],
+      "reference_evidence": [
+        "clock advanced to 20; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "route": "control",
+        "process": "stalled",
+        "target_result": "original_error",
+        "control_action": "stop"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "process": "running",
+        "target_result": "original_error"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process",
+        "control_action"
+      ],
+      "reference_evidence": [
+        "buffer edited: ledger/settlement/batch.py"
+      ]
+    },
+    {
+      "t": 22,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "run finished: D8; interrupted; no completed result"
+      ]
+    },
+    {
+      "t": 23,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 23; cursor moved to line 35; no relevant event"
+      ]
+    },
+    {
+      "t": 24,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "module"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "saved tests/settlement_helpers.py at 24"
+      ]
+    },
+    {
+      "t": 25,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "not_run",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 25; cursor moved to line 37; no relevant event"
+      ]
+    },
+    {
+      "t": 26,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "not_run",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 26; cursor moved to line 38; no relevant event"
+      ]
+    },
+    {
+      "t": 27,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "not_run",
+        "inspect_file": "ledger/settlement/batch.py"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 27; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 31,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "running",
+        "target_result": "passed",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "process",
+        "owner"
+      ],
+      "reference_evidence": [
+        "run finished: D9; 1 passed, 1 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 32,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @platform-core about D9."
+      ]
+    },
+    {
+      "t": 33,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @fx-platform about D9. [partial]"
+      ]
+    },
+    {
+      "t": 34,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@fx-platform"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: Could you contact @fx-platform about D9?"
+      ]
+    },
+    {
+      "t": 35,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "stalled",
+        "target_result": "passed",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @fx-platform about D9."
+      ]
+    },
+    {
+      "t": 36,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 36; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 37,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "saved ledger/settlement/scheduler.py at 37"
+      ]
+    },
+    {
+      "t": 38,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 38; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 39,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 39; cursor moved to line 33; no relevant event"
+      ]
+    },
+    {
+      "t": 40,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 40; cursor moved to line 34; no relevant event"
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "running",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process",
+        "owner"
+      ],
+      "reference_evidence": [
+        "run finished: D10; 1 passed, 1 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 45,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "different_error",
+        "owner": "@platform-core"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "running",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process",
+        "owner"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @platform-core about D9."
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "running",
+        "target_result": "different_error",
+        "owner": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process"
+      ],
+      "reference_evidence": [
+        "call: I have contacted @platform-core about D10."
+      ]
+    },
+    {
+      "t": 47,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 47; cursor moved to line 32; no relevant event"
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "saved ledger/common/pool.py at 48"
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 49; cursor moved to line 34; no relevant event"
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "different_error",
+        "rerun_scope": "full"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 50; cursor moved to line 35; no relevant event"
+      ]
+    },
+    {
+      "t": 51,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "different_error",
+        "rerun_scope": "full"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 51; cursor moved to line 36; no relevant event"
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.424977719783783e-05,
+      "end_s": 0.8961707502603531,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 0.8961707502603531,
+      "end_s": 2.0031920839101076,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 2.0031920839101076,
+      "end_s": 2.9570636665448546,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 2.9570636665448546,
+      "end_s": 4.003170667216182,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.003170667216182,
+      "end_s": 5.196542374789715,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 5.196542374789715,
+      "end_s": 6.003217875026166,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.003217875026166,
+      "end_s": 6.998111958615482,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.998111958615482,
+      "end_s": 8.005074334330857,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.005074334330857,
+      "end_s": 8.85750004183501,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.85750004183501,
+      "end_s": 10.002891125157475,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.002891125157475,
+      "end_s": 10.876708292402327,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.876708292402327,
+      "end_s": 12.00229166727513,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.00229166727513,
+      "end_s": 13.258315292187035,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 13.258315292187035,
+      "end_s": 14.005082291550934,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.005082291550934,
+      "end_s": 15.406762417405844,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 15.406762417405844,
+      "end_s": 16.00056179240346,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 16.00056179240346,
+      "end_s": 17.677945000119507,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 17.677945000119507,
+      "end_s": 18.0015026666224,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.0015026666224,
+      "end_s": 18.774926291778684,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.774926291778684,
+      "end_s": 20.0050787916407,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.0050787916407,
+      "end_s": 21.6681576250121,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 21.6681576250121,
+      "end_s": 22.005087374709547,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 22.005087374709547,
+      "end_s": 22.79126466717571,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 22.79126466717571,
+      "end_s": 24.00508304219693,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 24.00508304219693,
+      "end_s": 24.852592417038977,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 24.852592417038977,
+      "end_s": 26.00507800001651,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 26.00507800001651,
+      "end_s": 27.075541583821177,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 27.075541583821177,
+      "end_s": 28.000756916590035,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.000756916590035,
+      "end_s": 28.79913091659546,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.79913091659546,
+      "end_s": 30.00318470876664,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 30.00318470876664,
+      "end_s": 31.08377566654235,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 31.08377566654235,
+      "end_s": 32.00404329225421,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.00404329225421,
+      "end_s": 32.99629000015557,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.99629000015557,
+      "end_s": 34.00508666690439,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.00508666690439,
+      "end_s": 34.8129989169538,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.8129989169538,
+      "end_s": 36.00412170868367,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.00412170868367,
+      "end_s": 37.03700829204172,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 37.03700829204172,
+      "end_s": 38.00505533441901,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 38.00505533441901,
+      "end_s": 39.65846820920706,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 39.65846820920706,
+      "end_s": 40.0009242920205,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.0009242920205,
+      "end_s": 40.98692137468606,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.98692137468606,
+      "end_s": 42.00284087471664,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.00284087471664,
+      "end_s": 42.87569316662848,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.87569316662848,
+      "end_s": 44.00122879166156,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.00122879166156,
+      "end_s": 44.90155974961817,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.90155974961817,
+      "end_s": 46.00358312483877,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.00358312483877,
+      "end_s": 46.999915291555226,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.999915291555226,
+      "end_s": 48.00508491694927,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.00508491694927,
+      "end_s": 48.92748545855284,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.92748545855284,
+      "end_s": 50.00509170908481,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 50.00509170908481,
+      "end_s": 50.84003783389926,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 50.84003783389926,
+      "end_s": 52.00491595920175,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.00491595920175,
+      "end_s": 52.76692141685635,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.76692141685635,
+      "end_s": 54.00507524982095,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.00507524982095,
+      "end_s": 54.86310504190624,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.86310504190624,
+      "end_s": 56.005078417249024,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.005078417249024,
+      "end_s": 56.889083250425756,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.889083250425756,
+      "end_s": 58.003073958680034,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 58.003073958680034,
+      "end_s": 59.166605750098825,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 59.166605750098825,
+      "end_s": 60.005085499957204,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "correct"
+    },
+    {
+      "start_s": 60.005085499957204,
+      "end_s": 60.87408454157412,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "correct"
+    },
+    {
+      "start_s": 60.87408454157412,
+      "end_s": 62.001164709217846,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "correct"
+    },
+    {
+      "start_s": 62.001164709217846,
+      "end_s": 62.8486435841769,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 62.8486435841769,
+      "end_s": 64.00517075043172,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.00517075043172,
+      "end_s": 64.87730458378792,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.87730458378792,
+      "end_s": 66.0050950422883,
+      "reference_t": 32,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.0050950422883,
+      "end_s": 66.8342488752678,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.8342488752678,
+      "end_s": 68.00509012490511,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 68.00509012490511,
+      "end_s": 69.01948508433998,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 69.01948508433998,
+      "end_s": 70.00198016688228,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.00198016688228,
+      "end_s": 70.83079958427697,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.83079958427697,
+      "end_s": 72.00405804160982,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.00405804160982,
+      "end_s": 73.34224441740662,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 73.34224441740662,
+      "end_s": 74.00057487469167,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.00057487469167,
+      "end_s": 75.05007716733962,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 75.05007716733962,
+      "end_s": 76.00205674953759,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.00205674953759,
+      "end_s": 76.88362099975348,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.88362099975348,
+      "end_s": 78.0001525003463,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.0001525003463,
+      "end_s": 78.70165712479502,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.70165712479502,
+      "end_s": 80.00160704180598,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.00160704180598,
+      "end_s": 80.7309046247974,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.7309046247974,
+      "end_s": 82.00508954189718,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 82.00508954189718,
+      "end_s": 82.83548558410257,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 82.83548558410257,
+      "end_s": 84.00508250016719,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.00508250016719,
+      "end_s": 84.89347558375448,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.89347558375448,
+      "end_s": 86.00129854213446,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 86.00129854213446,
+      "end_s": 86.8649873342365,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 86.8649873342365,
+      "end_s": 88.0050992500037,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "correct"
+    },
+    {
+      "start_s": 88.0050992500037,
+      "end_s": 88.94357395917177,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 88.94357395917177,
+      "end_s": 90.00405600015074,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00405600015074,
+      "end_s": 91.04046087525785,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 91.04046087525785,
+      "end_s": 92.00404366664588,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.00404366664588,
+      "end_s": 93.21863349992782,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 93.21863349992782,
+      "end_s": 94.00237141735852,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.00237141735852,
+      "end_s": 94.95922724995762,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.95922724995762,
+      "end_s": 96.00010195933282,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.00010195933282,
+      "end_s": 96.83559450041503,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.83559450041503,
+      "end_s": 98.00510120857507,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.00510120857507,
+      "end_s": 99.01907841674984,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 99.01907841674984,
+      "end_s": 100.00059724971652,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.00059724971652,
+      "end_s": 100.73470816668123,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.73470816668123,
+      "end_s": 102.00256620906293,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00256620906293,
+      "end_s": 103.132962458767,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 103.132962458767,
+      "end_s": 104.00137966684997,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.00137966684997,
+      "end_s": 104.77943258360028,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.77943258360028,
+      "end_s": 106.00508008431643,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "correct"
+    },
+    {
+      "start_s": 106.00508008431643,
+      "end_s": 106.79755337536335,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "correct"
+    },
+    {
+      "start_s": 106.79755337536335,
+      "end_s": 108.00510829221457,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "correct"
+    },
+    {
+      "start_s": 108.00510829221457,
+      "end_s": 109.01590774953365,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "correct"
+    },
+    {
+      "start_s": 109.01590774953365,
+      "end_s": 110.00510820932686,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "correct"
+    },
+    {
+      "start_s": 110.00510820932686,
+      "end_s": 110.9828209169209,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 110.9828209169209,
+      "end_s": 112.00371416658163,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 112.00371416658163,
+      "end_s": 113.05929629225284,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "correct"
+    },
+    {
+      "start_s": 113.05929629225284,
+      "end_s": 114.00407845899463,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "correct"
+    },
+    {
+      "start_s": 114.00407845899463,
+      "end_s": 115.03088245913386,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 115.03088245913386,
+      "end_s": 116.00404629204422,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "correct"
+    },
+    {
+      "start_s": 116.00404629204422,
+      "end_s": 117.02525070868433,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "correct"
+    },
+    {
+      "start_s": 117.02525070868433,
+      "end_s": 118.00199274998158,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.00199274998158,
+      "end_s": 118.8903207089752,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.8903207089752,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "correct"
+    }
+  ]
+}

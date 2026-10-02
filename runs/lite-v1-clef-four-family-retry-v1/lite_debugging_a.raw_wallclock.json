@@ -1,0 +1,1593 @@
+{
+  "episode_id": "lite_debugging_a",
+  "task_family": "live_debugging",
+  "scenario_id": "debugging_a",
+  "states": 60,
+  "questions": 7,
+  "reference_transitions": 20,
+  "untimed_decision_accuracy": 0.45,
+  "untimed_segment_accuracy": 0.44841269841269843,
+  "all_questions_exact_accuracy": 0.45,
+  "inactive_only_error_states": 0,
+  "time_accuracy": 0.3736157436413152,
+  "segment_time_accuracy": 0.3676111696213494,
+  "observed_duration_s": 119.99995933286846,
+  "error_seconds": {
+    "no_decision": 1.6366345407441258,
+    "source_correct": 8.558014918118715,
+    "source_incorrect": 64.97143583092839
+  },
+  "time_partition_seconds": {
+    "current_correct": 44.83387404307723,
+    "judgment": 54.396134126000106,
+    "stale": 8.558014918118715,
+    "compound": 10.575301704928279,
+    "outdated_correct": 0.0,
+    "no_decision": 1.6366345407441258
+  },
+  "current_source_share": 0.826917014978503,
+  "latency_s_p50": 0.9009065832942724,
+  "latency_s_p95": 1.2225160496309395,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.005134999752044678,
+  "max_dispatch_lag_s": 0.0007106252014636993,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 0.5166666666666667,
+      "active_states": 60,
+      "active_accuracy": 0.5166666666666667
+    },
+    "process": {
+      "all_states_accuracy": 0.9333333333333333,
+      "active_states": 60,
+      "active_accuracy": 0.9333333333333333
+    },
+    "target_result": {
+      "all_states_accuracy": 1,
+      "active_states": 60,
+      "active_accuracy": 1
+    },
+    "rerun_scope": {
+      "all_states_accuracy": 0.8333333333333334,
+      "active_states": 10,
+      "active_accuracy": 0.2
+    },
+    "inspect_file": {
+      "all_states_accuracy": 0.75,
+      "active_states": 6,
+      "active_accuracy": 0.6666666666666666
+    },
+    "control_action": {
+      "all_states_accuracy": 1,
+      "active_states": 0,
+      "active_accuracy": null
+    },
+    "owner": {
+      "all_states_accuracy": 0.8833333333333333,
+      "active_states": 3,
+      "active_accuracy": 1
+    }
+  },
+  "mistakes": [
+    {
+      "t": 5,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "buffer edited: src/refunds/grace.ts"
+      ]
+    },
+    {
+      "t": 6,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 6; cursor moved to line 36; no relevant event"
+      ]
+    },
+    {
+      "t": 7,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "saved src/refunds/grace.ts at 7"
+      ]
+    },
+    {
+      "t": 8,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 8; cursor moved to line 38; no relevant event"
+      ]
+    },
+    {
+      "t": 9,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "different_error",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 9; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 10,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "different_error",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "saved CHANGELOG.md at 10"
+      ]
+    },
+    {
+      "t": 14,
+      "reference_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "src/refunds/fees.ts"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "running",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "process",
+        "inspect_file"
+      ],
+      "reference_evidence": [
+        "run finished: R19; 0 passed, 2 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 15,
+      "reference_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "src/refunds/fees.ts"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "inspect_file"
+      ],
+      "reference_evidence": [
+        "clock advanced to 15; cursor moved to line 36; no relevant event"
+      ]
+    },
+    {
+      "t": 16,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "buffer edited: src/refunds/grace.ts"
+      ]
+    },
+    {
+      "t": 17,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 17; cursor moved to line 38; no relevant event"
+      ]
+    },
+    {
+      "t": 18,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "saved src/refunds/grace.ts at 18"
+      ]
+    },
+    {
+      "t": 19,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "different_error"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "different_error",
+        "inspect_file": "none"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 19; cursor moved to line 31; no relevant event"
+      ]
+    },
+    {
+      "t": 25,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "not_run",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "buffer edited: src/refunds/grace.ts"
+      ]
+    },
+    {
+      "t": 26,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "not_run",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 26; cursor moved to line 38; no relevant event"
+      ]
+    },
+    {
+      "t": 27,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "not_run",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "saved src/refunds/grace.ts at 27"
+      ]
+    },
+    {
+      "t": 28,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "not_run"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "not_run",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 28; cursor moved to line 31; no relevant event"
+      ]
+    },
+    {
+      "t": 29,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "not_run",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "call: The last run was green: it had zero failed tests."
+      ]
+    },
+    {
+      "t": 30,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "not_run",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "inspect",
+        "process": "idle",
+        "target_result": "not_run",
+        "inspect_file": "src/refunds/grace.ts"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 30; cursor moved to line 33; no relevant event"
+      ]
+    },
+    {
+      "t": 34,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "run finished: R21; 1 passed, 0 failed, 2 skipped"
+      ]
+    },
+    {
+      "t": 35,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "module"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "call: Only the target ran; that should be enough to commit."
+      ]
+    },
+    {
+      "t": 42,
+      "reference_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "running",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "process"
+      ],
+      "reference_evidence": [
+        "clock advanced to 42; cursor moved to line 36; no relevant event"
+      ]
+    },
+    {
+      "t": 43,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "stalled",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "route",
+        "process"
+      ],
+      "reference_evidence": [
+        "saved project.config.ts at 43"
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 44; cursor moved to line 38; no relevant event"
+      ]
+    },
+    {
+      "t": 45,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "full"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 45; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "full"
+      },
+      "predicted_decision": {
+        "route": "ready",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 46; cursor moved to line 31; no relevant event"
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@runtime"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "running",
+        "target_result": "passed",
+        "owner": "@runtime"
+      },
+      "wrong_active_questions": [
+        "process"
+      ],
+      "reference_evidence": [
+        "run finished: R23; 1 passed, 1 failed, 0 skipped"
+      ]
+    },
+    {
+      "t": 53,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@runtime"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "call: I'll contact @runtime about R23."
+      ]
+    },
+    {
+      "t": 54,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@runtime"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 54; cursor moved to line 30; no relevant event"
+      ]
+    },
+    {
+      "t": 55,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@runtime"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "buffer edited: src/refunds/grace.ts"
+      ]
+    },
+    {
+      "t": 56,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@runtime"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "saved src/refunds/grace.ts at 56"
+      ]
+    },
+    {
+      "t": 57,
+      "reference_decision": {
+        "route": "wait",
+        "process": "idle",
+        "target_result": "passed"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@runtime"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "clock advanced to 57; cursor moved to line 33; no relevant event"
+      ]
+    },
+    {
+      "t": 58,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@runtime"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 58; cursor moved to line 34; no relevant event"
+      ]
+    },
+    {
+      "t": 59,
+      "reference_decision": {
+        "route": "rerun",
+        "process": "idle",
+        "target_result": "passed",
+        "rerun_scope": "target"
+      },
+      "predicted_decision": {
+        "route": "delegate",
+        "process": "idle",
+        "target_result": "passed",
+        "owner": "@runtime"
+      },
+      "wrong_active_questions": [
+        "route",
+        "rerun_scope"
+      ],
+      "reference_evidence": [
+        "clock advanced to 59; cursor moved to line 35; no relevant event"
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 4.0667131543159485e-05,
+      "end_s": 1.636675207875669,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 1.636675207875669,
+      "end_s": 2.001621457748115,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 2.001621457748115,
+      "end_s": 3.055071291513741,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 3.055071291513741,
+      "end_s": 4.00264241732657,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.00264241732657,
+      "end_s": 4.7481789579615,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.7481789579615,
+      "end_s": 6.005063374526799,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.005063374526799,
+      "end_s": 6.835373083129525,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 6.835373083129525,
+      "end_s": 8.005069541744888,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.005069541744888,
+      "end_s": 8.782277625054121,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.782277625054121,
+      "end_s": 10.004726749844849,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.004726749844849,
+      "end_s": 10.907856833189726,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 10.907856833189726,
+      "end_s": 12.000793999992311,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 12.000793999992311,
+      "end_s": 12.875977999530733,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 12.875977999530733,
+      "end_s": 14.005071500316262,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 14.005071500316262,
+      "end_s": 14.890737666748464,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 14.890737666748464,
+      "end_s": 16.0035840831697,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 16.0035840831697,
+      "end_s": 16.94753862451762,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 16.94753862451762,
+      "end_s": 18.00509295798838,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.00509295798838,
+      "end_s": 18.721457707695663,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.721457707695663,
+      "end_s": 20.002153292298317,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.002153292298317,
+      "end_s": 20.858487541787326,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.858487541787326,
+      "end_s": 22.001291166990995,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 22.001291166990995,
+      "end_s": 22.836432707495987,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 22.836432707495987,
+      "end_s": 24.00077191647142,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 24.00077191647142,
+      "end_s": 25.068654499948025,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 25.068654499948025,
+      "end_s": 26.0050729168579,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.0050729168579,
+      "end_s": 26.8137623751536,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.8137623751536,
+      "end_s": 28.005090791732073,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.005090791732073,
+      "end_s": 28.803354292176664,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 28.803354292176664,
+      "end_s": 30.005076083354652,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 30.005076083354652,
+      "end_s": 31.11966499965638,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 31.11966499965638,
+      "end_s": 32.005064708180726,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 32.005064708180726,
+      "end_s": 32.927249499596655,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 32.927249499596655,
+      "end_s": 34.00507100019604,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 34.00507100019604,
+      "end_s": 34.805044249631464,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 34.805044249631464,
+      "end_s": 36.00507379230112,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 36.00507379230112,
+      "end_s": 36.82320849969983,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 36.82320849969983,
+      "end_s": 38.00183533318341,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 38.00183533318341,
+      "end_s": 38.90173879172653,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 38.90173879172653,
+      "end_s": 40.005077958106995,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.005077958106995,
+      "end_s": 41.101007333025336,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 41.101007333025336,
+      "end_s": 42.00235962495208,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "correct"
+    },
+    {
+      "start_s": 42.00235962495208,
+      "end_s": 42.850633832626045,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "correct"
+    },
+    {
+      "start_s": 42.850633832626045,
+      "end_s": 44.0005820421502,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "correct"
+    },
+    {
+      "start_s": 44.0005820421502,
+      "end_s": 44.85916491691023,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "correct"
+    },
+    {
+      "start_s": 44.85916491691023,
+      "end_s": 46.00275191664696,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "correct"
+    },
+    {
+      "start_s": 46.00275191664696,
+      "end_s": 47.17872687522322,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 47.17872687522322,
+      "end_s": 48.004590707831085,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "correct"
+    },
+    {
+      "start_s": 48.004590707831085,
+      "end_s": 48.97913270816207,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "correct"
+    },
+    {
+      "start_s": 48.97913270816207,
+      "end_s": 50.00233691651374,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "correct"
+    },
+    {
+      "start_s": 50.00233691651374,
+      "end_s": 51.14835454151034,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 51.14835454151034,
+      "end_s": 52.00137491710484,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.00137491710484,
+      "end_s": 52.99253441672772,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.99253441672772,
+      "end_s": 54.00507074967027,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.00507074967027,
+      "end_s": 54.74235133267939,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.74235133267939,
+      "end_s": 56.00507637485862,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.00507637485862,
+      "end_s": 57.20843958295882,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 57.20843958295882,
+      "end_s": 58.00306308269501,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 58.00306308269501,
+      "end_s": 59.013566583395004,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 59.013566583395004,
+      "end_s": 60.00152008328587,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.00152008328587,
+      "end_s": 61.158881625160575,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 61.158881625160575,
+      "end_s": 62.000850667245686,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.000850667245686,
+      "end_s": 62.89750345796347,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.89750345796347,
+      "end_s": 64.00505487527698,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "correct"
+    },
+    {
+      "start_s": 64.00505487527698,
+      "end_s": 65.22011304181069,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "correct"
+    },
+    {
+      "start_s": 65.22011304181069,
+      "end_s": 66.00507829152048,
+      "reference_t": 32,
+      "source_t": 32,
+      "kind": "correct"
+    },
+    {
+      "start_s": 66.00507829152048,
+      "end_s": 66.87840583268553,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "correct"
+    },
+    {
+      "start_s": 66.87840583268553,
+      "end_s": 68.0014613326639,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "correct"
+    },
+    {
+      "start_s": 68.0014613326639,
+      "end_s": 69.15740837529302,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 69.15740837529302,
+      "end_s": 70.00149908289313,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.00149908289313,
+      "end_s": 71.1849321667105,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 71.1849321667105,
+      "end_s": 72.00509316660464,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.00509316660464,
+      "end_s": 72.91352595761418,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.91352595761418,
+      "end_s": 74.00508045777678,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 74.00508045777678,
+      "end_s": 74.77563016675413,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 74.77563016675413,
+      "end_s": 76.00067745801061,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "correct"
+    },
+    {
+      "start_s": 76.00067745801061,
+      "end_s": 76.84189704153687,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "correct"
+    },
+    {
+      "start_s": 76.84189704153687,
+      "end_s": 78.00091958325356,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "correct"
+    },
+    {
+      "start_s": 78.00091958325356,
+      "end_s": 78.85392524953932,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 78.85392524953932,
+      "end_s": 80.00506654195487,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "correct"
+    },
+    {
+      "start_s": 80.00506654195487,
+      "end_s": 81.0325471246615,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "correct"
+    },
+    {
+      "start_s": 81.0325471246615,
+      "end_s": 82.00198220834136,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.00198220834136,
+      "end_s": 82.87164770811796,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.87164770811796,
+      "end_s": 84.00507420767099,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.00507420767099,
+      "end_s": 84.89168379176408,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.89168379176408,
+      "end_s": 86.00460487511009,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.00460487511009,
+      "end_s": 87.37933629192412,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 87.37933629192412,
+      "end_s": 88.00047008320689,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.00047008320689,
+      "end_s": 88.89915254153311,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.89915254153311,
+      "end_s": 90.00113254226744,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00113254226744,
+      "end_s": 90.78434295766056,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.78434295766056,
+      "end_s": 92.00170649960637,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.00170649960637,
+      "end_s": 92.97288012504578,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.97288012504578,
+      "end_s": 94.00502741709352,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.00502741709352,
+      "end_s": 94.9491467922926,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.9491467922926,
+      "end_s": 96.00506825000048,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "correct"
+    },
+    {
+      "start_s": 96.00506825000048,
+      "end_s": 96.83124741725624,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "correct"
+    },
+    {
+      "start_s": 96.83124741725624,
+      "end_s": 98.00359845813364,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "correct"
+    },
+    {
+      "start_s": 98.00359845813364,
+      "end_s": 99.05941791739315,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "correct"
+    },
+    {
+      "start_s": 99.05941791739315,
+      "end_s": 100.00089449994266,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "correct"
+    },
+    {
+      "start_s": 100.00089449994266,
+      "end_s": 100.97699708305299,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 100.97699708305299,
+      "end_s": 102.00466658268124,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00466658268124,
+      "end_s": 102.8837560415268,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.8837560415268,
+      "end_s": 104.00372208282351,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "correct"
+    },
+    {
+      "start_s": 104.00372208282351,
+      "end_s": 104.66239450033754,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "correct"
+    },
+    {
+      "start_s": 104.66239450033754,
+      "end_s": 106.0050177918747,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "correct"
+    },
+    {
+      "start_s": 106.0050177918747,
+      "end_s": 106.72428154200315,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 106.72428154200315,
+      "end_s": 108.00507566705346,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.00507566705346,
+      "end_s": 108.9478017501533,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.9478017501533,
+      "end_s": 110.00357425026596,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.00357425026596,
+      "end_s": 110.82956274971366,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.82956274971366,
+      "end_s": 112.00420808326453,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.00420808326453,
+      "end_s": 113.14859891682863,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 113.14859891682863,
+      "end_s": 114.00507520791143,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.00507520791143,
+      "end_s": 115.92663345765322,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 115.92663345765322,
+      "end_s": 116.00513499975204,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.00513499975204,
+      "end_s": 117.09316595830023,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 117.09316595830023,
+      "end_s": 118.00162324961275,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 118.00162324961275,
+      "end_s": 119.08781004231423,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 119.08781004231423,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "source_incorrect"
+    }
+  ]
+}

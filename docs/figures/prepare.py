@@ -11,6 +11,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "paper/analysis"))
 
+from leaderboard_models import HOSTED_MODELS
 from lite_openweight import original_clock, verified_run, verify_standalone
 from trajectory_replay import aggregate, evaluate, prepare
 
@@ -29,8 +30,11 @@ def build() -> dict:
             raise ValueError(f"Stale analysis source: {filename}; regenerate the analysis first")
     specs = summary["policy"]["settings"]
     names = [*summary["hosted"], *summary["standalone"]]
-    if len(names) != 15 or len(set(names)) != 15:
-        raise ValueError("The leaderboard requires all six hosted and nine self-hosted settings")
+    hosted_names = {name for name, _, _ in HOSTED_MODELS}
+    local_names = {spec["name"] for spec in specs}
+    if (set(summary["hosted"]) != hosted_names or set(summary["standalone"]) != local_names
+            or len(names) != len(set(names))):
+        raise ValueError("The leaderboard requires every registered hosted and self-hosted setting exactly once")
     runs, reports, provenance = {}, {}, {}
     for name in names:
         source = summary["provenance"][name]
@@ -77,7 +81,7 @@ def build() -> dict:
                        "report": provenance[name]["published_report"]["path"]})
         print(f"Verified {name}: {100 * expected:.2f}% log-AUC; {len(intervals)} curve points", flush=True)
     series.sort(key=lambda row: -row["log_auc_pct"])
-    sources = ["docs/figures/prepare.py", "paper/analysis/lite_openweight.py",
+    sources = ["docs/figures/prepare.py", "paper/analysis/leaderboard_models.py", "paper/analysis/lite_openweight.py",
                "paper/analysis/trajectory_replay.py", "paper/analysis/evaluation_policy.json"]
     return {"benchmark": "StreamDecisionBench", "metric": "Normalized log-AUC over 0.5–8 s (%)",
             "states": 480, "scenarios": 8, "families": 4, "passes_per_setting": 1,

@@ -107,7 +107,7 @@ def validate_episode(episode: dict) -> dict:
 
 def sources() -> dict[str, str]:
     package = Path(__file__).parent
-    paths = [*package.rglob("*.py"), package.parent / "adapters" / "llm.py", package.parent / "jev.py"]
+    paths = [*package.rglob("*.py"), *(package.parent / "adapters").glob("*.py"), package.parent / "jev.py"]
     return {str(p.relative_to(package.parent)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(paths)}
 
 

@@ -1,6 +1,6 @@
 """Primary log-AUC reports and recorded-cadence diagnostics; no API calls.
 
-Without arguments, regenerate the published reports of the paper's settings. With --run, evaluate any
+Without arguments, regenerate the public leaderboard's published reports. With --run, evaluate any
 recorded pass (for example a new model) the same way and write its report to --out.
 """
 import argparse
@@ -14,7 +14,8 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts/lite"))
-from lite_numbers import FACTS_COLUMNS, FAMILIES, MODELS, POLICY
+from leaderboard_models import HOSTED_LABELS, HOSTED_MODELS
+from lite_numbers import FAMILIES, POLICY
 from lite_report import analyze, command_path, report
 from lite_auc import compute_auc
 from streamdecisionbench.lite.__main__ import rescore_run
@@ -136,7 +137,7 @@ def write_index() -> None:
     """Render the published index and cohort summaries from verified reports."""
     local_policy = json.loads((ROOT / "paper/analysis/openweight_policy.json").read_text())
     groups = [
-        ("Hosted APIs", [(FACTS_COLUMNS[name], folder, run) for name, folder, run in MODELS]),
+        ("Hosted APIs", [(HOSTED_LABELS[name], folder, run) for name, folder, run in HOSTED_MODELS]),
         ("Self-hosted settings", [(spec["label"], spec["run"].replace("/runs/", "/"), spec["run"])
                                   for spec in local_policy["settings"]]),
     ]
@@ -167,7 +168,9 @@ def write_index() -> None:
     lines += [
         "Each setting has one complete pass over all 480 states. For Luna low, Luna none, Terra low, Terra none "
         "and Jev, the original six scenarios and the two presenter scenarios were recorded in separate sessions; "
-        "Astra low was recorded in one session covering all eight scenarios. No new model query was made for this evaluation.", "",
+        "Astra low, Clef and Clef Flash each used one session covering all eight scenarios. "
+        "Clef Flash's two failed attempts were retried successfully; raw failures remain in its report. "
+        "No new model query was made for this evaluation.", "",
         "Each analysis contains `auc.primary`, six `auc.sensitivity` conditions, and fixed 2 s diagnostics in `scores`. "
         "The physical wall-clock trace and secondary network-removal estimate are separate. The integration rule "
         "was adopted after inspecting the recorded passes; comparisons are descriptive and do not establish stable rankings.", "",
@@ -193,8 +196,8 @@ def main():
         return
     if args.out or args.label:
         parser.error("--out and --label need --run")
-    for name, folder, run in MODELS:
-        write_setting(FACTS_COLUMNS[name], folder, run)
+    for name, folder, run in HOSTED_MODELS:
+        write_setting(HOSTED_LABELS[name], folder, run)
     local_policy = json.loads((ROOT / "paper/analysis/openweight_policy.json").read_text())
     for spec in local_policy["settings"]:
         write_setting(spec["label"], spec["run"].replace("/runs/", "/"), spec["run"])

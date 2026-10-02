@@ -1,0 +1,1162 @@
+{
+  "episode_id": "lite_support_b",
+  "task_family": "support_call_assist",
+  "scenario_id": "support_b",
+  "states": 60,
+  "questions": 7,
+  "reference_transitions": 24,
+  "untimed_decision_accuracy": 0.8166666666666667,
+  "untimed_segment_accuracy": 0.78,
+  "all_questions_exact_accuracy": 0.7333333333333333,
+  "inactive_only_error_states": 5,
+  "time_accuracy": 0.6523559183053984,
+  "segment_time_accuracy": 0.5982483771731252,
+  "observed_duration_s": 119.99997599981725,
+  "error_seconds": {
+    "no_decision": 1.1714575001969934,
+    "source_correct": 18.90898858383298,
+    "source_incorrect": 21.63683537580073
+  },
+  "time_partition_seconds": {
+    "current_correct": 78.28269453998655,
+    "judgment": 16.86828124895692,
+    "stale": 18.90898858383298,
+    "compound": 4.76855412684381,
+    "outdated_correct": 0.0,
+    "no_decision": 1.1714575001969934
+  },
+  "current_source_share": 0.7929249568273945,
+  "latency_s_p50": 0.9550195201300085,
+  "latency_s_p95": 1.2283199077937752,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.010092291049659252,
+  "max_dispatch_lag_s": 0.00063345767557621,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 0.9666666666666667,
+      "active_states": 60,
+      "active_accuracy": 0.9666666666666667
+    },
+    "contact_channel": {
+      "all_states_accuracy": 1,
+      "active_states": 60,
+      "active_accuracy": 1
+    },
+    "delivery_target": {
+      "all_states_accuracy": 1,
+      "active_states": 24,
+      "active_accuracy": 1
+    },
+    "delivery_action": {
+      "all_states_accuracy": 0.95,
+      "active_states": 18,
+      "active_accuracy": 0.8333333333333334
+    },
+    "repair_target": {
+      "all_states_accuracy": 0.8833333333333333,
+      "active_states": 29,
+      "active_accuracy": 1
+    },
+    "repair_action": {
+      "all_states_accuracy": 0.85,
+      "active_states": 29,
+      "active_accuracy": 0.7931034482758621
+    },
+    "cancellation_action": {
+      "all_states_accuracy": 0.9833333333333333,
+      "active_states": 6,
+      "active_accuracy": 1
+    }
+  },
+  "mistakes": [
+    {
+      "t": 10,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "delivery_action": "correct_address"
+      },
+      "predicted_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "replacement",
+        "delivery_action": "none"
+      },
+      "wrong_active_questions": [
+        "delivery_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u6-Customer: Actually track the replacement parcel, not the original one."
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "open_case"
+      },
+      "predicted_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "wait"
+      },
+      "wrong_active_questions": [
+        "delivery_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u18-Customer: Leave that cancelled parcel alone. Track the original parcel again."
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "open_case"
+      },
+      "predicted_decision": {
+        "route": "delivery",
+        "contact_channel": "email",
+        "delivery_target": "original",
+        "delivery_action": "wait"
+      },
+      "wrong_active_questions": [
+        "delivery_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u18-Customer: Leave that cancelled parcel alone. Track the original parcel again."
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "route": "hold_wait",
+        "contact_channel": "sms"
+      },
+      "predicted_decision": {
+        "route": "hold_return",
+        "contact_channel": "sms"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u40-Customer: Leave the handset there; check the base unit now."
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "route": "hold_return",
+        "contact_channel": "sms"
+      },
+      "predicted_decision": {
+        "route": "hold_wait",
+        "contact_channel": "sms"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "telephony.status=hold",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u40-Customer: Leave the handset there; check the base unit now."
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "base",
+        "repair_action": "request_access"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "base",
+        "repair_action": "send_part"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u40-Customer: Leave the handset there; check the base unit now."
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "base",
+        "repair_action": "request_access"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "sms",
+        "repair_target": "base",
+        "repair_action": "send_part"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u40-Customer: Leave the handset there; check the base unit now."
+      ]
+    },
+    {
+      "t": 54,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "await_result"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "remote_check"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u53-Customer: Do not send any messages afterwards. Keep the remote check going."
+      ]
+    },
+    {
+      "t": 55,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "await_result"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "remote_check"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u53-Customer: Do not send any messages afterwards. Keep the remote check going."
+      ]
+    },
+    {
+      "t": 56,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "explain_clear"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "remote_check"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u53-Customer: Do not send any messages afterwards. Keep the remote check going."
+      ]
+    },
+    {
+      "t": 57,
+      "reference_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "explain_clear"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "contact_channel": "none",
+        "repair_target": "base",
+        "repair_action": "remote_check"
+      },
+      "wrong_active_questions": [
+        "repair_action"
+      ],
+      "reference_evidence": [
+        "telephony.status=connected",
+        "The complete public workflow rules are in prepared.rules.",
+        "Customer u53-Customer: Do not send any messages afterwards. Keep the remote check going."
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.400018274784088e-05,
+      "end_s": 1.1714815003797412,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 1.1714815003797412,
+      "end_s": 2.0097268326207995,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 2.0097268326207995,
+      "end_s": 2.9063226245343685,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 2.9063226245343685,
+      "end_s": 4.007317082956433,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.007317082956433,
+      "end_s": 4.8938830411061645,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 4.8938830411061645,
+      "end_s": 6.0072475001215935,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.0072475001215935,
+      "end_s": 6.751651125028729,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.751651125028729,
+      "end_s": 8.001034832559526,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.001034832559526,
+      "end_s": 9.035562666133046,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 9.035562666133046,
+      "end_s": 10.006375416181982,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.006375416181982,
+      "end_s": 10.851738790981472,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.851738790981472,
+      "end_s": 12.002695707604289,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.002695707604289,
+      "end_s": 12.974741582758725,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 12.974741582758725,
+      "end_s": 14.010067500174046,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.010067500174046,
+      "end_s": 14.820585374720395,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.820585374720395,
+      "end_s": 16.006250999867916,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 16.006250999867916,
+      "end_s": 16.775333208031952,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 16.775333208031952,
+      "end_s": 18.00733633339405,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "correct"
+    },
+    {
+      "start_s": 18.00733633339405,
+      "end_s": 18.625902416184545,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "correct"
+    },
+    {
+      "start_s": 18.625902416184545,
+      "end_s": 20.007319582626224,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 20.007319582626224,
+      "end_s": 20.977947666309774,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 20.977947666309774,
+      "end_s": 22.009917207993567,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 22.009917207993567,
+      "end_s": 22.83118045795709,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 22.83118045795709,
+      "end_s": 24.000112832523882,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 24.000112832523882,
+      "end_s": 24.68577149976045,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 24.68577149976045,
+      "end_s": 26.001569665968418,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.001569665968418,
+      "end_s": 26.499973375350237,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "correct"
+    },
+    {
+      "start_s": 26.499973375350237,
+      "end_s": 28.01008483301848,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.01008483301848,
+      "end_s": 28.950767625123262,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.950767625123262,
+      "end_s": 30.010077665559947,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 30.010077665559947,
+      "end_s": 30.907213374972343,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 30.907213374972343,
+      "end_s": 32.00733804050833,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "correct"
+    },
+    {
+      "start_s": 32.00733804050833,
+      "end_s": 33.672211582772434,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 33.672211582772434,
+      "end_s": 34.007126291282475,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.007126291282475,
+      "end_s": 34.97931820806116,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "correct"
+    },
+    {
+      "start_s": 34.97931820806116,
+      "end_s": 36.00211091618985,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "correct"
+    },
+    {
+      "start_s": 36.00211091618985,
+      "end_s": 37.16920404136181,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 37.16920404136181,
+      "end_s": 38.00842020753771,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.00842020753771,
+      "end_s": 38.766867333091795,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "correct"
+    },
+    {
+      "start_s": 38.766867333091795,
+      "end_s": 40.00741458311677,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "correct"
+    },
+    {
+      "start_s": 40.00741458311677,
+      "end_s": 40.89265295770019,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 40.89265295770019,
+      "end_s": 42.01009229104966,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.01009229104966,
+      "end_s": 43.20372312515974,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 43.20372312515974,
+      "end_s": 44.01007808279246,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.01007808279246,
+      "end_s": 44.799507291056216,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.799507291056216,
+      "end_s": 46.01007416564971,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "correct"
+    },
+    {
+      "start_s": 46.01007416564971,
+      "end_s": 46.9761910000816,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "correct"
+    },
+    {
+      "start_s": 46.9761910000816,
+      "end_s": 48.003968874923885,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "correct"
+    },
+    {
+      "start_s": 48.003968874923885,
+      "end_s": 48.98153825011104,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 48.98153825011104,
+      "end_s": 50.000285333022475,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "correct"
+    },
+    {
+      "start_s": 50.000285333022475,
+      "end_s": 51.063684166409075,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "correct"
+    },
+    {
+      "start_s": 51.063684166409075,
+      "end_s": 52.00736641604453,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 52.00736641604453,
+      "end_s": 52.899656999856234,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "correct"
+    },
+    {
+      "start_s": 52.899656999856234,
+      "end_s": 54.008686415851116,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "correct"
+    },
+    {
+      "start_s": 54.008686415851116,
+      "end_s": 55.31912983302027,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "correct"
+    },
+    {
+      "start_s": 55.31912983302027,
+      "end_s": 56.00825004093349,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "correct"
+    },
+    {
+      "start_s": 56.00825004093349,
+      "end_s": 57.129804166033864,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 57.129804166033864,
+      "end_s": 58.0078722499311,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 58.0078722499311,
+      "end_s": 58.9983290405944,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "correct"
+    },
+    {
+      "start_s": 58.9983290405944,
+      "end_s": 60.00734812486917,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "correct"
+    },
+    {
+      "start_s": 60.00734812486917,
+      "end_s": 61.13362295832485,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "correct"
+    },
+    {
+      "start_s": 61.13362295832485,
+      "end_s": 62.00894891563803,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "correct"
+    },
+    {
+      "start_s": 62.00894891563803,
+      "end_s": 63.270197625271976,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "correct"
+    },
+    {
+      "start_s": 63.270197625271976,
+      "end_s": 64.01008270774037,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "correct"
+    },
+    {
+      "start_s": 64.01008270774037,
+      "end_s": 65.02947420813143,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 65.02947420813143,
+      "end_s": 66.00115349981934,
+      "reference_t": 32,
+      "source_t": 32,
+      "kind": "correct"
+    },
+    {
+      "start_s": 66.00115349981934,
+      "end_s": 66.62956191599369,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "correct"
+    },
+    {
+      "start_s": 66.62956191599369,
+      "end_s": 68.00284145772457,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "correct"
+    },
+    {
+      "start_s": 68.00284145772457,
+      "end_s": 68.95480970758945,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 68.95480970758945,
+      "end_s": 70.00158725026995,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "correct"
+    },
+    {
+      "start_s": 70.00158725026995,
+      "end_s": 71.17088554054499,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "correct"
+    },
+    {
+      "start_s": 71.17088554054499,
+      "end_s": 72.00527729094028,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "correct"
+    },
+    {
+      "start_s": 72.00527729094028,
+      "end_s": 73.23241150006652,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 73.23241150006652,
+      "end_s": 74.00586170796305,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 74.00586170796305,
+      "end_s": 74.92490683309734,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 74.92490683309734,
+      "end_s": 76.00957112479955,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "correct"
+    },
+    {
+      "start_s": 76.00957112479955,
+      "end_s": 76.76883979141712,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 76.76883979141712,
+      "end_s": 78.0073445411399,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "correct"
+    },
+    {
+      "start_s": 78.0073445411399,
+      "end_s": 78.85577404126525,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "correct"
+    },
+    {
+      "start_s": 78.85577404126525,
+      "end_s": 80.00920629128814,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "correct"
+    },
+    {
+      "start_s": 80.00920629128814,
+      "end_s": 81.01134833320975,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 81.01134833320975,
+      "end_s": 82.00734587479383,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.00734587479383,
+      "end_s": 82.7397551657632,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "correct"
+    },
+    {
+      "start_s": 82.7397551657632,
+      "end_s": 84.00916408281773,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "correct"
+    },
+    {
+      "start_s": 84.00916408281773,
+      "end_s": 84.76490912493318,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 84.76490912493318,
+      "end_s": 86.0031987503171,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 86.0031987503171,
+      "end_s": 86.90042979083955,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "correct"
+    },
+    {
+      "start_s": 86.90042979083955,
+      "end_s": 88.00949412491173,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "correct"
+    },
+    {
+      "start_s": 88.00949412491173,
+      "end_s": 88.82947645802051,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 88.82947645802051,
+      "end_s": 90.00357183255255,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00357183255255,
+      "end_s": 90.9627356659621,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.9627356659621,
+      "end_s": 92.0052849156782,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "correct"
+    },
+    {
+      "start_s": 92.0052849156782,
+      "end_s": 92.9840461248532,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "correct"
+    },
+    {
+      "start_s": 92.9840461248532,
+      "end_s": 94.00528162531555,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "correct"
+    },
+    {
+      "start_s": 94.00528162531555,
+      "end_s": 95.01281641609967,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "correct"
+    },
+    {
+      "start_s": 95.01281641609967,
+      "end_s": 96.00862520840019,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "correct"
+    },
+    {
+      "start_s": 96.00862520840019,
+      "end_s": 97.00129929091781,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 97.00129929091781,
+      "end_s": 98.00362204108387,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.00362204108387,
+      "end_s": 99.20852312538773,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 99.20852312538773,
+      "end_s": 100.00616712495685,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.00616712495685,
+      "end_s": 100.63410866633058,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.63410866633058,
+      "end_s": 102.00214558281004,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00214558281004,
+      "end_s": 102.88132150005549,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.88132150005549,
+      "end_s": 104.00730258319527,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "correct"
+    },
+    {
+      "start_s": 104.00730258319527,
+      "end_s": 104.84945666603744,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "correct"
+    },
+    {
+      "start_s": 104.84945666603744,
+      "end_s": 106.0022836253047,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "correct"
+    },
+    {
+      "start_s": 106.0022836253047,
+      "end_s": 107.08284516632557,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 107.08284516632557,
+      "end_s": 108.0073118750006,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "correct"
+    },
+    {
+      "start_s": 108.0073118750006,
+      "end_s": 109.1777515411377,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 109.1777515411377,
+      "end_s": 110.00736237503588,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.00736237503588,
+      "end_s": 110.96664333250374,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.96664333250374,
+      "end_s": 112.00771087501198,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.00771087501198,
+      "end_s": 112.86754325032234,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.86754325032234,
+      "end_s": 114.00734325032681,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.00734325032681,
+      "end_s": 115.16292416583747,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 115.16292416583747,
+      "end_s": 116.00600283313543,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.00600283313543,
+      "end_s": 117.04121837485582,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 117.04121837485582,
+      "end_s": 118.00553725007921,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.00553725007921,
+      "end_s": 118.81579854059964,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "correct"
+    },
+    {
+      "start_s": 118.81579854059964,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "correct"
+    }
+  ]
+}

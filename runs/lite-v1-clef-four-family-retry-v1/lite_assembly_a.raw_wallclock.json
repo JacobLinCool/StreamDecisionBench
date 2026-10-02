@@ -1,0 +1,1979 @@
+{
+  "episode_id": "lite_assembly_a",
+  "task_family": "procedural_coaching",
+  "scenario_id": "assembly_gearbox",
+  "states": 60,
+  "questions": 6,
+  "reference_transitions": 21,
+  "untimed_decision_accuracy": 0.13333333333333333,
+  "untimed_segment_accuracy": 0.18181818181818182,
+  "all_questions_exact_accuracy": 0.05,
+  "inactive_only_error_states": 5,
+  "time_accuracy": 0.11917314362181486,
+  "segment_time_accuracy": 0.1624325340103801,
+  "observed_duration_s": 119.99997179210186,
+  "error_seconds": {
+    "no_decision": 0.9584122095257044,
+    "source_correct": 3.0431089997291565,
+    "source_incorrect": 101.69767670985311
+  },
+  "time_partition_seconds": {
+    "current_correct": 13.466326247900724,
+    "judgment": 85.28624475002289,
+    "stale": 3.0431089997291565,
+    "compound": 16.411431959830225,
+    "outdated_correct": 0.8344476250931621,
+    "no_decision": 0.9584122095257044
+  },
+  "current_source_share": 0.8229382850940244,
+  "latency_s_p50": 0.9713595202192664,
+  "latency_s_p95": 1.3042850337456913,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.005105750635266304,
+  "max_dispatch_lag_s": 0.0006997920572757721,
+  "per_question": {
+    "route": {
+      "all_states_accuracy": 0.4666666666666667,
+      "active_states": 60,
+      "active_accuracy": 0.4666666666666667
+    },
+    "stage": {
+      "all_states_accuracy": 0.4666666666666667,
+      "active_states": 60,
+      "active_accuracy": 0.4666666666666667
+    },
+    "target": {
+      "all_states_accuracy": 0.6333333333333333,
+      "active_states": 17,
+      "active_accuracy": 0.29411764705882354
+    },
+    "method": {
+      "all_states_accuracy": 0.4666666666666667,
+      "active_states": 14,
+      "active_accuracy": 0.5
+    },
+    "next_step": {
+      "all_states_accuracy": 0.4666666666666667,
+      "active_states": 12,
+      "active_accuracy": 0.5
+    },
+    "destination": {
+      "all_states_accuracy": 0.55,
+      "active_states": 30,
+      "active_accuracy": 0.13333333333333333
+    }
+  },
+  "mistakes": [
+    {
+      "t": 1,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "intake",
+        "next_step": "seal"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "stage": "intake"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "a-1-heartbeat"
+      ]
+    },
+    {
+      "t": 3,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "seal",
+        "next_step": "cover"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "stage": "seal"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "a-3-heartbeat"
+      ]
+    },
+    {
+      "t": 8,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "fasten"
+      },
+      "predicted_decision": {
+        "route": "advance",
+        "stage": "fasten",
+        "next_step": "fasten"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "a-8-0"
+      ]
+    },
+    {
+      "t": 9,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "fasten"
+      },
+      "predicted_decision": {
+        "route": "advance",
+        "stage": "fasten",
+        "next_step": "fasten"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "a-9-heartbeat"
+      ]
+    },
+    {
+      "t": 10,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "J2",
+        "method": "retorque"
+      },
+      "predicted_decision": {
+        "route": "advance",
+        "stage": "fasten",
+        "next_step": "inspection"
+      },
+      "wrong_active_questions": [
+        "route"
+      ],
+      "reference_evidence": [
+        "a-10-0"
+      ]
+    },
+    {
+      "t": 11,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "J2",
+        "method": "retorque"
+      },
+      "predicted_decision": {
+        "route": "advance",
+        "stage": "fasten",
+        "next_step": "inspection"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target"
+      ],
+      "reference_evidence": [
+        "a-11-heartbeat"
+      ]
+    },
+    {
+      "t": 12,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "inspection",
+        "target": "J2",
+        "method": "retorque"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "a-12-0"
+      ]
+    },
+    {
+      "t": 13,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "inspection",
+        "target": "J2",
+        "method": "retorque"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target"
+      ],
+      "reference_evidence": [
+        "a-13-heartbeat"
+      ]
+    },
+    {
+      "t": 14,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "J2",
+        "method": "retorque"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "none",
+        "method": "none"
+      },
+      "wrong_active_questions": [
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "a-14-0"
+      ]
+    },
+    {
+      "t": 15,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "J2",
+        "method": "retorque"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "stage": "inspection"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "a-15-heartbeat"
+      ]
+    },
+    {
+      "t": 16,
+      "reference_decision": {
+        "route": "escalate",
+        "stage": "fasten",
+        "target": "J2",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "inspection",
+        "method": "complete_missing"
+      },
+      "wrong_active_questions": [
+        "route",
+        "target",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-16-0"
+      ]
+    },
+    {
+      "t": 17,
+      "reference_decision": {
+        "route": "escalate",
+        "stage": "fasten",
+        "target": "J2",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "inspection",
+        "target": "none",
+        "method": "complete_missing"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "target",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-17-heartbeat"
+      ]
+    },
+    {
+      "t": 18,
+      "reference_decision": {
+        "route": "escalate",
+        "stage": "fasten",
+        "target": "J2",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "inspection",
+        "target": "inspection",
+        "method": "complete_missing"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "target",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-18-0"
+      ]
+    },
+    {
+      "t": 19,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "fasten",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "handoff",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-19-0"
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "fasten",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "handoff",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-20-heartbeat"
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "route": "hold",
+        "stage": "fasten",
+        "destination": "quality_desk"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "stage": "inspection",
+        "destination": "quality_desk"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "a-21-0"
+      ]
+    },
+    {
+      "t": 22,
+      "reference_decision": {
+        "route": "hold",
+        "stage": "fasten",
+        "destination": "quality_desk"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "stage": "inspection",
+        "destination": "quality_desk"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "a-22-heartbeat"
+      ]
+    },
+    {
+      "t": 23,
+      "reference_decision": {
+        "route": "hold",
+        "stage": "fasten",
+        "destination": "quality_desk"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "stage": "inspection",
+        "destination": "quality_desk"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "a-23-0"
+      ]
+    },
+    {
+      "t": 24,
+      "reference_decision": {
+        "route": "hold",
+        "stage": "fasten",
+        "destination": "quality_desk"
+      },
+      "predicted_decision": {
+        "route": "hold",
+        "stage": "inspection",
+        "destination": "quality_desk"
+      },
+      "wrong_active_questions": [
+        "stage"
+      ],
+      "reference_evidence": [
+        "a-24-0"
+      ]
+    },
+    {
+      "t": 25,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "fasten",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-25-0"
+      ]
+    },
+    {
+      "t": 26,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "fasten",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-26-heartbeat"
+      ]
+    },
+    {
+      "t": 27,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "fasten",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "none",
+        "method": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-27-0"
+      ]
+    },
+    {
+      "t": 28,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "fasten",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "none",
+        "method": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-28-heartbeat"
+      ]
+    },
+    {
+      "t": 29,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "fasten",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "inspection",
+        "method": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-29-0"
+      ]
+    },
+    {
+      "t": 30,
+      "reference_decision": {
+        "route": "handoff",
+        "stage": "fasten",
+        "destination": "mechanical_lead"
+      },
+      "predicted_decision": {
+        "route": "wait",
+        "stage": "fasten"
+      },
+      "wrong_active_questions": [
+        "route",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-30-heartbeat"
+      ]
+    },
+    {
+      "t": 31,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "fasten",
+        "next_step": "inspection"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "a-31-0"
+      ]
+    },
+    {
+      "t": 32,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "fasten",
+        "next_step": "inspection"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "a-32-heartbeat"
+      ]
+    },
+    {
+      "t": 33,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-33-0"
+      ]
+    },
+    {
+      "t": 34,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-34-heartbeat"
+      ]
+    },
+    {
+      "t": 35,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "seal",
+        "target": "gasket",
+        "method": "fit_gasket"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-35-0"
+      ]
+    },
+    {
+      "t": 36,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "seal",
+        "target": "gasket",
+        "method": "fit_gasket"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-36-heartbeat"
+      ]
+    },
+    {
+      "t": 39,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "seal",
+        "next_step": "inspection"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "seal",
+        "target": "gasket",
+        "method": "fit_gasket"
+      },
+      "wrong_active_questions": [
+        "route",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "a-39-0"
+      ]
+    },
+    {
+      "t": 40,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "seal",
+        "next_step": "inspection"
+      },
+      "predicted_decision": {
+        "route": "repair",
+        "stage": "seal",
+        "target": "gasket",
+        "method": "fit_gasket"
+      },
+      "wrong_active_questions": [
+        "route",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "a-40-heartbeat"
+      ]
+    },
+    {
+      "t": 41,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-41-0"
+      ]
+    },
+    {
+      "t": 42,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-42-heartbeat"
+      ]
+    },
+    {
+      "t": 43,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "cover",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-43-0"
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-44-heartbeat"
+      ]
+    },
+    {
+      "t": 45,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "J1",
+        "method": "replace_fastener"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "a-45-0"
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "fasten",
+        "target": "J1",
+        "method": "replace_fastener"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "a-46-heartbeat"
+      ]
+    },
+    {
+      "t": 47,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "fasten"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage"
+      ],
+      "reference_evidence": [
+        "a-47-0"
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "route": "wait",
+        "stage": "fasten"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage"
+      ],
+      "reference_evidence": [
+        "a-48-heartbeat"
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "fasten",
+        "next_step": "inspection"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "a-49-0"
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "route": "advance",
+        "stage": "fasten",
+        "next_step": "inspection"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "next_step"
+      ],
+      "reference_evidence": [
+        "a-50-heartbeat"
+      ]
+    },
+    {
+      "t": 51,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "inspection",
+        "target": "inspection",
+        "method": "reinspect"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "a-51-0"
+      ]
+    },
+    {
+      "t": 52,
+      "reference_decision": {
+        "route": "repair",
+        "stage": "inspection",
+        "target": "inspection",
+        "method": "reinspect"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "route",
+        "stage",
+        "target",
+        "method"
+      ],
+      "reference_evidence": [
+        "a-52-heartbeat"
+      ]
+    },
+    {
+      "t": 53,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-53-0"
+      ]
+    },
+    {
+      "t": 54,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-54-heartbeat"
+      ]
+    },
+    {
+      "t": 55,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-55-0"
+      ]
+    },
+    {
+      "t": 56,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-56-heartbeat"
+      ]
+    },
+    {
+      "t": 57,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-57-0"
+      ]
+    },
+    {
+      "t": 58,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-58-heartbeat"
+      ]
+    },
+    {
+      "t": 59,
+      "reference_decision": {
+        "route": "release",
+        "stage": "inspection",
+        "destination": "outbound_lane"
+      },
+      "predicted_decision": {
+        "route": "release",
+        "stage": "seal",
+        "destination": "none"
+      },
+      "wrong_active_questions": [
+        "stage",
+        "destination"
+      ],
+      "reference_evidence": [
+        "a-59-heartbeat"
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.8207898139953613e-05,
+      "end_s": 0.9584404174238443,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 0.9584404174238443,
+      "end_s": 2.00507437530905,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 2.00507437530905,
+      "end_s": 3.007130333222449,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 3.007130333222449,
+      "end_s": 4.003805375657976,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 4.003805375657976,
+      "end_s": 5.105019042268395,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 5.105019042268395,
+      "end_s": 6.000640583224595,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.000640583224595,
+      "end_s": 7.097958750091493,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 7.097958750091493,
+      "end_s": 8.005014000460505,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 8.005014000460505,
+      "end_s": 8.773972542025149,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 8.773972542025149,
+      "end_s": 10.005096667446196,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.005096667446196,
+      "end_s": 11.08689345791936,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 11.08689345791936,
+      "end_s": 12.00046162493527,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "correct"
+    },
+    {
+      "start_s": 12.00046162493527,
+      "end_s": 12.976720125414431,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 12.976720125414431,
+      "end_s": 14.002604708075523,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.002604708075523,
+      "end_s": 14.983171500265598,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "correct"
+    },
+    {
+      "start_s": 14.983171500265598,
+      "end_s": 16.004814750514925,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 16.004814750514925,
+      "end_s": 17.163238500244915,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 17.163238500244915,
+      "end_s": 18.005080667324364,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.005080667324364,
+      "end_s": 18.869267125613987,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.869267125613987,
+      "end_s": 20.004050500690937,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.004050500690937,
+      "end_s": 20.833445167168975,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 20.833445167168975,
+      "end_s": 22.00508137512952,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 22.00508137512952,
+      "end_s": 22.805955708026886,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 22.805955708026886,
+      "end_s": 24.004428333602846,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 24.004428333602846,
+      "end_s": 25.026845167391002,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 25.026845167391002,
+      "end_s": 26.005089417099953,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 26.005089417099953,
+      "end_s": 27.36492104269564,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 27.36492104269564,
+      "end_s": 28.00402787514031,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 28.00402787514031,
+      "end_s": 29.019438832998276,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 29.019438832998276,
+      "end_s": 30.004212917760015,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 30.004212917760015,
+      "end_s": 30.85565200075507,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 30.85565200075507,
+      "end_s": 32.00310537498444,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 32.00310537498444,
+      "end_s": 32.813800333067775,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 32.813800333067775,
+      "end_s": 34.00027033314109,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 34.00027033314109,
+      "end_s": 34.98734904266894,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 34.98734904266894,
+      "end_s": 36.00366954226047,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 36.00366954226047,
+      "end_s": 37.67290804255754,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 37.67290804255754,
+      "end_s": 38.00442237500101,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 38.00442237500101,
+      "end_s": 38.74666904192418,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 38.74666904192418,
+      "end_s": 40.00046716723591,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.00046716723591,
+      "end_s": 41.16945266723633,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 41.16945266723633,
+      "end_s": 42.000799832865596,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.000799832865596,
+      "end_s": 42.854066625237465,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.854066625237465,
+      "end_s": 44.00509887561202,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.00509887561202,
+      "end_s": 44.94992629252374,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.94992629252374,
+      "end_s": 46.005105750635266,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.005105750635266,
+      "end_s": 46.94504120852798,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.94504120852798,
+      "end_s": 48.00482575036585,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.00482575036585,
+      "end_s": 48.83955091703683,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.83955091703683,
+      "end_s": 50.00100345816463,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 50.00100345816463,
+      "end_s": 51.07087591756135,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 51.07087591756135,
+      "end_s": 52.005076167173684,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.005076167173684,
+      "end_s": 52.84626100026071,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.84626100026071,
+      "end_s": 54.000207708217204,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.000207708217204,
+      "end_s": 55.14538154192269,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 55.14538154192269,
+      "end_s": 56.00508954189718,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.00508954189718,
+      "end_s": 57.234851208515465,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 57.234851208515465,
+      "end_s": 58.001850167289376,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 58.001850167289376,
+      "end_s": 58.89023570809513,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 58.89023570809513,
+      "end_s": 60.00508241727948,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.00508241727948,
+      "end_s": 61.12396941706538,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 61.12396941706538,
+      "end_s": 62.00085570849478,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.00085570849478,
+      "end_s": 63.06086187530309,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 63.06086187530309,
+      "end_s": 64.0026718750596,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.0026718750596,
+      "end_s": 64.93653391767293,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.93653391767293,
+      "end_s": 66.00361145846546,
+      "reference_t": 32,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.00361145846546,
+      "end_s": 66.97140675038099,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.97140675038099,
+      "end_s": 68.00279291719198,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 68.00279291719198,
+      "end_s": 69.0686844587326,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 69.0686844587326,
+      "end_s": 70.00507041718811,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.00507041718811,
+      "end_s": 71.16746741719544,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 71.16746741719544,
+      "end_s": 72.00386237539351,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.00386237539351,
+      "end_s": 72.75185412541032,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.75185412541032,
+      "end_s": 74.00052241701633,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.00052241701633,
+      "end_s": 74.83497004210949,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "correct"
+    },
+    {
+      "start_s": 74.83497004210949,
+      "end_s": 76.00507416762412,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "correct"
+    },
+    {
+      "start_s": 76.00507416762412,
+      "end_s": 77.05915900040418,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "correct"
+    },
+    {
+      "start_s": 77.05915900040418,
+      "end_s": 78.0050829583779,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "correct"
+    },
+    {
+      "start_s": 78.0050829583779,
+      "end_s": 78.9135097078979,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 78.9135097078979,
+      "end_s": 80.0047623757273,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.0047623757273,
+      "end_s": 80.91635729186237,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.91635729186237,
+      "end_s": 82.00507854204625,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 82.00507854204625,
+      "end_s": 83.15003179199994,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 83.15003179199994,
+      "end_s": 84.00508108362556,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 84.00508108362556,
+      "end_s": 84.91753216739744,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 84.91753216739744,
+      "end_s": 86.00507295876741,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.00507295876741,
+      "end_s": 86.65760145802051,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.65760145802051,
+      "end_s": 88.0005490006879,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.0005490006879,
+      "end_s": 89.30706233344972,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 89.30706233344972,
+      "end_s": 90.00008829217404,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00008829217404,
+      "end_s": 91.30496183317155,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 91.30496183317155,
+      "end_s": 92.00430004205555,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.00430004205555,
+      "end_s": 93.08135587535799,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 93.08135587535799,
+      "end_s": 94.00038291700184,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.00038291700184,
+      "end_s": 95.28222245816141,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 95.28222245816141,
+      "end_s": 96.00393108371645,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.00393108371645,
+      "end_s": 96.97050095815212,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.97050095815212,
+      "end_s": 98.00301533285528,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.00301533285528,
+      "end_s": 98.6394353331998,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.6394353331998,
+      "end_s": 100.0009903749451,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.0009903749451,
+      "end_s": 100.78707141708583,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.78707141708583,
+      "end_s": 102.00508370809257,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00508370809257,
+      "end_s": 102.79432595800608,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.79432595800608,
+      "end_s": 104.00508554186672,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.00508554186672,
+      "end_s": 105.08954804204404,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 105.08954804204404,
+      "end_s": 106.00012683309615,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.00012683309615,
+      "end_s": 107.01295320875943,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 107.01295320875943,
+      "end_s": 108.00398145802319,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.00398145802319,
+      "end_s": 108.77269975002855,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.77269975002855,
+      "end_s": 110.00508479215205,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.00508479215205,
+      "end_s": 110.73380775004625,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.73380775004625,
+      "end_s": 112.00508204195648,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.00508204195648,
+      "end_s": 112.72854166757315,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.72854166757315,
+      "end_s": 114.00508120842278,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.00508120842278,
+      "end_s": 114.99278437532485,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.99278437532485,
+      "end_s": 116.00188754219562,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.00188754219562,
+      "end_s": 117.14683954231441,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 117.14683954231441,
+      "end_s": 118.0044661257416,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 118.0044661257416,
+      "end_s": 118.88971570786089,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 118.88971570786089,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "source_incorrect"
+    }
+  ]
+}

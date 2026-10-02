@@ -1,0 +1,2083 @@
+{
+  "episode_id": "lite_presenter_b",
+  "task_family": "presenter_voice_control",
+  "scenario_id": "presenter_b",
+  "states": 60,
+  "questions": 6,
+  "reference_transitions": 22,
+  "untimed_decision_accuracy": 0.18333333333333332,
+  "untimed_segment_accuracy": 0.16873706004140787,
+  "all_questions_exact_accuracy": 0.1,
+  "inactive_only_error_states": 5,
+  "time_accuracy": 0.17774254973094675,
+  "segment_time_accuracy": 0.14848463302325962,
+  "observed_duration_s": 119.99997579213232,
+  "error_seconds": {
+    "no_decision": 1.1216486673802137,
+    "source_correct": 3.7611574586480856,
+    "source_incorrect": 93.78806800115854
+  },
+  "time_partition_seconds": {
+    "current_correct": 20.093799707479775,
+    "judgment": 76.85413887631148,
+    "stale": 3.7611574586480856,
+    "compound": 16.933929124847054,
+    "outdated_correct": 1.2353019574657083,
+    "no_decision": 1.1216486673802137
+  },
+  "current_source_share": 0.8078996511776593,
+  "latency_s_p50": 1.0229462082497776,
+  "latency_s_p95": 1.546959694102406,
+  "failed_requests": 0,
+  "accepted_updates": 60,
+  "discarded_updates": {},
+  "max_release_lag_s": 0.005101333372294903,
+  "max_dispatch_lag_s": 0.0007383748888969421,
+  "per_question": {
+    "mode": {
+      "all_states_accuracy": 0.2833333333333333,
+      "active_states": 60,
+      "active_accuracy": 0.2833333333333333
+    },
+    "slide": {
+      "all_states_accuracy": 0.3,
+      "active_states": 60,
+      "active_accuracy": 0.3
+    },
+    "captions": {
+      "all_states_accuracy": 0.75,
+      "active_states": 60,
+      "active_accuracy": 0.75
+    },
+    "clip_state": {
+      "all_states_accuracy": 0.18333333333333332,
+      "active_states": 11,
+      "active_accuracy": 0.45454545454545453
+    },
+    "question_card": {
+      "all_states_accuracy": 0.7,
+      "active_states": 18,
+      "active_accuracy": 0
+    },
+    "host_cue": {
+      "all_states_accuracy": 0.6833333333333333,
+      "active_states": 45,
+      "active_accuracy": 0.9111111111111111
+    }
+  },
+  "mistakes": [
+    {
+      "t": 5,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s6",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p4 (final): Play the animation."
+      ]
+    },
+    {
+      "t": 6,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s6",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p6 (partial): oh its on the next one"
+      ]
+    },
+    {
+      "t": 8,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s7",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p8 (partial): play the animation"
+      ]
+    },
+    {
+      "t": 12,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "none"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p11 (final): Hold on to your seats."
+      ]
+    },
+    {
+      "t": 15,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p15 (partial): pause it"
+      ]
+    },
+    {
+      "t": 16,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p15 (final): Pause it."
+      ]
+    },
+    {
+      "t": 17,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p17 (partial): the second gate rises only"
+      ]
+    },
+    {
+      "t": 18,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p17 (final): The second gate rises only when the first is sealed."
+      ]
+    },
+    {
+      "t": 19,
+      "reference_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "pause"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "clip_state"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p19 (partial): next slide"
+      ]
+    },
+    {
+      "t": 20,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s8",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p19 (final): Next slide."
+      ]
+    },
+    {
+      "t": 21,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s8",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p21 (partial): the barrier costs"
+      ]
+    },
+    {
+      "t": 22,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s8",
+        "captions": "host",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h22 (partial): sorry ines"
+      ]
+    },
+    {
+      "t": 23,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s8",
+        "captions": "host",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h22 (partial): sorry ines lets take one"
+      ]
+    },
+    {
+      "t": 24,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "host",
+        "question_card": "waiting",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h22 (final): Sorry, Ines. Let's take one question from the floor."
+      ]
+    },
+    {
+      "t": 25,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "host",
+        "question_card": "waiting",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h22 (final): Sorry, Ines. Let's take one question from the floor."
+      ]
+    },
+    {
+      "t": 26,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "audience",
+        "question_card": "listening",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Audience a26 (partial): will the"
+      ]
+    },
+    {
+      "t": 27,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "audience",
+        "question_card": "listening",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Audience a26 (partial): will the barrier close the river path"
+      ]
+    },
+    {
+      "t": 28,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "audience",
+        "question_card": "repeat",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Audience a26 (final): Will the barrier close the river path?"
+      ]
+    },
+    {
+      "t": 29,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "audience",
+        "question_card": "repeat",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Audience a26 (final): Will the barrier close the river path?"
+      ]
+    },
+    {
+      "t": 30,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "presenter",
+        "question_card": "repeat",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p30 (partial): yes for about four hours"
+      ]
+    },
+    {
+      "t": 31,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "presenter",
+        "question_card": "repeat",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p30 (final): Yes, for about four hours during a closure."
+      ]
+    },
+    {
+      "t": 32,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "presenter",
+        "question_card": "repeat",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p32 (partial): sorry the question is"
+      ]
+    },
+    {
+      "t": 33,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p32 (final): Sorry. The question is whether the river path closes."
+      ]
+    },
+    {
+      "t": 34,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p34 (partial): go to the zone"
+      ]
+    },
+    {
+      "t": 35,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s8",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p34 (partial): go to the zone map"
+      ]
+    },
+    {
+      "t": 36,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s10",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p34 (final): Go to the zone map."
+      ]
+    },
+    {
+      "t": 37,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s10",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p34 (final): Go to the zone map."
+      ]
+    },
+    {
+      "t": 38,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s10",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "stand_by"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card",
+        "host_cue"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p38 (partial): the path back to you"
+      ]
+    },
+    {
+      "t": 39,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s10",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p38 (partial): the path back to union street"
+      ]
+    },
+    {
+      "t": 40,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s10",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p38 (final): The path back to Union Street closes only in zone B."
+      ]
+    },
+    {
+      "t": 41,
+      "reference_decision": {
+        "mode": "questions",
+        "slide": "s10",
+        "captions": "presenter",
+        "question_card": "answer",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "question_card"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p41 (partial): lets move on"
+      ]
+    },
+    {
+      "t": 42,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s10",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p41 (final): Let's move on."
+      ]
+    },
+    {
+      "t": 43,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s10",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p41 (final): Let's move on."
+      ]
+    },
+    {
+      "t": 44,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s10",
+        "captions": "host",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h44 (partial): a request from jun online"
+      ]
+    },
+    {
+      "t": 45,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s10",
+        "captions": "host",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h44 (final): A request from Jun online. Go back to slide 3, please."
+      ]
+    },
+    {
+      "t": 46,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s10",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p46 (partial): go back to slide three"
+      ]
+    },
+    {
+      "t": 47,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s10",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p46 (final): Go back to slide 3? Not today. The footage is in the handout."
+      ]
+    },
+    {
+      "t": 48,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s9",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p48 (final): Previous slide."
+      ]
+    },
+    {
+      "t": 49,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s9",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p48 (final): Previous slide."
+      ]
+    },
+    {
+      "t": 50,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s9",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p50 (partial): the timeline has both"
+      ]
+    },
+    {
+      "t": 51,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s9",
+        "captions": "presenter",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p50 (final): The timeline has both gates working by next spring."
+      ]
+    },
+    {
+      "t": 52,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s9",
+        "captions": "presenter",
+        "host_cue": "stand_by"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "host_cue"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p52 (partial): thats the timeline back to you"
+      ]
+    },
+    {
+      "t": 53,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s9",
+        "captions": "presenter",
+        "host_cue": "stand_by"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "host_cue"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p52 (final): That's the timeline. Back to you, Paulo."
+      ]
+    },
+    {
+      "t": 54,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s9",
+        "captions": "presenter",
+        "host_cue": "stand_by"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "host_cue"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Presenter p52 (final): That's the timeline. Back to you, Paulo."
+      ]
+    },
+    {
+      "t": 55,
+      "reference_decision": {
+        "mode": "talk",
+        "slide": "s9",
+        "captions": "host",
+        "host_cue": "listen"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h55 (partial): were out of time"
+      ]
+    },
+    {
+      "t": 56,
+      "reference_decision": {
+        "mode": "closed",
+        "slide": "s9",
+        "captions": "host"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h55 (final): We're out of time. Let's thank Ines."
+      ]
+    },
+    {
+      "t": 57,
+      "reference_decision": {
+        "mode": "closed",
+        "slide": "s9",
+        "captions": "host"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h55 (final): We're out of time. Let's thank Ines."
+      ]
+    },
+    {
+      "t": 58,
+      "reference_decision": {
+        "mode": "closed",
+        "slide": "s9",
+        "captions": "host"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h55 (final): We're out of time. Let's thank Ines."
+      ]
+    },
+    {
+      "t": 59,
+      "reference_decision": {
+        "mode": "closed",
+        "slide": "s9",
+        "captions": "host"
+      },
+      "predicted_decision": {
+        "mode": "clip",
+        "slide": "s7",
+        "captions": "presenter",
+        "clip_state": "play"
+      },
+      "wrong_active_questions": [
+        "mode",
+        "slide",
+        "captions"
+      ],
+      "reference_evidence": [
+        "The complete public rules are in prepared.rules.",
+        "Host h55 (final): We're out of time. Let's thank Ines."
+      ]
+    }
+  ],
+  "intervals": [
+    {
+      "start_s": 2.4207867681980133e-05,
+      "end_s": 1.1216728752478957,
+      "reference_t": 0,
+      "source_t": null,
+      "kind": "no_decision"
+    },
+    {
+      "start_s": 1.1216728752478957,
+      "end_s": 2.0032244585454464,
+      "reference_t": 0,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 2.0032244585454464,
+      "end_s": 3.404906707815826,
+      "reference_t": 1,
+      "source_t": 0,
+      "kind": "correct"
+    },
+    {
+      "start_s": 3.404906707815826,
+      "end_s": 4.005041374824941,
+      "reference_t": 1,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 4.005041374824941,
+      "end_s": 5.106475042179227,
+      "reference_t": 2,
+      "source_t": 1,
+      "kind": "correct"
+    },
+    {
+      "start_s": 5.106475042179227,
+      "end_s": 6.001898833550513,
+      "reference_t": 2,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 6.001898833550513,
+      "end_s": 7.071364916861057,
+      "reference_t": 3,
+      "source_t": 2,
+      "kind": "correct"
+    },
+    {
+      "start_s": 7.071364916861057,
+      "end_s": 8.005099667236209,
+      "reference_t": 3,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.005099667236209,
+      "end_s": 8.880927000194788,
+      "reference_t": 4,
+      "source_t": 3,
+      "kind": "correct"
+    },
+    {
+      "start_s": 8.880927000194788,
+      "end_s": 10.005080999806523,
+      "reference_t": 4,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 10.005080999806523,
+      "end_s": 11.83487091679126,
+      "reference_t": 5,
+      "source_t": 4,
+      "kind": "correct"
+    },
+    {
+      "start_s": 11.83487091679126,
+      "end_s": 12.00508779194206,
+      "reference_t": 5,
+      "source_t": 5,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 12.00508779194206,
+      "end_s": 13.542484832927585,
+      "reference_t": 6,
+      "source_t": 5,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 13.542484832927585,
+      "end_s": 14.005101333372295,
+      "reference_t": 6,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 14.005101333372295,
+      "end_s": 15.069045375101268,
+      "reference_t": 7,
+      "source_t": 6,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 15.069045375101268,
+      "end_s": 16.00235779210925,
+      "reference_t": 7,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 16.00235779210925,
+      "end_s": 17.76054112520069,
+      "reference_t": 8,
+      "source_t": 7,
+      "kind": "correct"
+    },
+    {
+      "start_s": 17.76054112520069,
+      "end_s": 18.003947875462472,
+      "reference_t": 8,
+      "source_t": 8,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 18.003947875462472,
+      "end_s": 19.23924983292818,
+      "reference_t": 9,
+      "source_t": 8,
+      "kind": "correct"
+    },
+    {
+      "start_s": 19.23924983292818,
+      "end_s": 20.001773833297193,
+      "reference_t": 9,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 20.001773833297193,
+      "end_s": 21.06873566750437,
+      "reference_t": 10,
+      "source_t": 9,
+      "kind": "correct"
+    },
+    {
+      "start_s": 21.06873566750437,
+      "end_s": 22.001305333338678,
+      "reference_t": 10,
+      "source_t": 10,
+      "kind": "correct"
+    },
+    {
+      "start_s": 22.001305333338678,
+      "end_s": 23.034192916937172,
+      "reference_t": 11,
+      "source_t": 10,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 23.034192916937172,
+      "end_s": 24.004061750136316,
+      "reference_t": 11,
+      "source_t": 11,
+      "kind": "correct"
+    },
+    {
+      "start_s": 24.004061750136316,
+      "end_s": 25.39147354196757,
+      "reference_t": 12,
+      "source_t": 11,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 25.39147354196757,
+      "end_s": 26.005078500136733,
+      "reference_t": 12,
+      "source_t": 12,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 26.005078500136733,
+      "end_s": 27.046917667612433,
+      "reference_t": 13,
+      "source_t": 12,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 27.046917667612433,
+      "end_s": 28.002909666858613,
+      "reference_t": 13,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 28.002909666858613,
+      "end_s": 29.06127329263836,
+      "reference_t": 14,
+      "source_t": 13,
+      "kind": "correct"
+    },
+    {
+      "start_s": 29.06127329263836,
+      "end_s": 30.004099249839783,
+      "reference_t": 14,
+      "source_t": 14,
+      "kind": "correct"
+    },
+    {
+      "start_s": 30.004099249839783,
+      "end_s": 31.34495733305812,
+      "reference_t": 15,
+      "source_t": 14,
+      "kind": "source_correct"
+    },
+    {
+      "start_s": 31.34495733305812,
+      "end_s": 32.001715750433505,
+      "reference_t": 15,
+      "source_t": 15,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 32.001715750433505,
+      "end_s": 33.17097929213196,
+      "reference_t": 16,
+      "source_t": 15,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 33.17097929213196,
+      "end_s": 34.00202854257077,
+      "reference_t": 16,
+      "source_t": 16,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 34.00202854257077,
+      "end_s": 34.87750149983913,
+      "reference_t": 17,
+      "source_t": 16,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 34.87750149983913,
+      "end_s": 36.00134291686118,
+      "reference_t": 17,
+      "source_t": 17,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 36.00134291686118,
+      "end_s": 37.24261691700667,
+      "reference_t": 18,
+      "source_t": 17,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 37.24261691700667,
+      "end_s": 38.002096875570714,
+      "reference_t": 18,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 38.002096875570714,
+      "end_s": 39.20211875066161,
+      "reference_t": 19,
+      "source_t": 18,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 39.20211875066161,
+      "end_s": 40.00116450060159,
+      "reference_t": 19,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.00116450060159,
+      "end_s": 40.93354812543839,
+      "reference_t": 20,
+      "source_t": 19,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 40.93354812543839,
+      "end_s": 42.00095987506211,
+      "reference_t": 20,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 42.00095987506211,
+      "end_s": 43.03827220853418,
+      "reference_t": 21,
+      "source_t": 20,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 43.03827220853418,
+      "end_s": 44.00507987476885,
+      "reference_t": 21,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.00507987476885,
+      "end_s": 44.84128037560731,
+      "reference_t": 22,
+      "source_t": 21,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 44.84128037560731,
+      "end_s": 46.003085291944444,
+      "reference_t": 22,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.003085291944444,
+      "end_s": 46.70612854231149,
+      "reference_t": 23,
+      "source_t": 22,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 46.70612854231149,
+      "end_s": 48.00386766716838,
+      "reference_t": 23,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.00386766716838,
+      "end_s": 48.7648544581607,
+      "reference_t": 24,
+      "source_t": 23,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 48.7648544581607,
+      "end_s": 50.00507379230112,
+      "reference_t": 24,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 50.00507379230112,
+      "end_s": 51.18294554203749,
+      "reference_t": 25,
+      "source_t": 24,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 51.18294554203749,
+      "end_s": 52.00507212523371,
+      "reference_t": 25,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 52.00507212523371,
+      "end_s": 53.019196666777134,
+      "reference_t": 26,
+      "source_t": 25,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 53.019196666777134,
+      "end_s": 54.00507237482816,
+      "reference_t": 26,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 54.00507237482816,
+      "end_s": 55.42759104259312,
+      "reference_t": 27,
+      "source_t": 26,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 55.42759104259312,
+      "end_s": 56.00506995804608,
+      "reference_t": 27,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 56.00506995804608,
+      "end_s": 57.06297766696662,
+      "reference_t": 28,
+      "source_t": 27,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 57.06297766696662,
+      "end_s": 58.001735041849315,
+      "reference_t": 28,
+      "source_t": 28,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 58.001735041849315,
+      "end_s": 59.01251658331603,
+      "reference_t": 29,
+      "source_t": 28,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 59.01251658331603,
+      "end_s": 60.00459504220635,
+      "reference_t": 29,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 60.00459504220635,
+      "end_s": 61.074644749984145,
+      "reference_t": 30,
+      "source_t": 29,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 61.074644749984145,
+      "end_s": 62.00507966708392,
+      "reference_t": 30,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.00507966708392,
+      "end_s": 62.88078850042075,
+      "reference_t": 31,
+      "source_t": 30,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 62.88078850042075,
+      "end_s": 64.00087637547404,
+      "reference_t": 31,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 64.00087637547404,
+      "end_s": 65.23744741734117,
+      "reference_t": 32,
+      "source_t": 31,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 65.23744741734117,
+      "end_s": 66.00187291763723,
+      "reference_t": 32,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.00187291763723,
+      "end_s": 66.93946308363229,
+      "reference_t": 33,
+      "source_t": 32,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 66.93946308363229,
+      "end_s": 68.00233408343047,
+      "reference_t": 33,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 68.00233408343047,
+      "end_s": 68.90536045841873,
+      "reference_t": 34,
+      "source_t": 33,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 68.90536045841873,
+      "end_s": 70.00504266750067,
+      "reference_t": 34,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.00504266750067,
+      "end_s": 70.76309908274561,
+      "reference_t": 35,
+      "source_t": 34,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 70.76309908274561,
+      "end_s": 72.00509362481534,
+      "reference_t": 35,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 72.00509362481534,
+      "end_s": 73.11940633319318,
+      "reference_t": 36,
+      "source_t": 35,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 73.11940633319318,
+      "end_s": 74.00053275004029,
+      "reference_t": 36,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.00053275004029,
+      "end_s": 74.84311587549746,
+      "reference_t": 37,
+      "source_t": 36,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 74.84311587549746,
+      "end_s": 76.00507450010628,
+      "reference_t": 37,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.00507450010628,
+      "end_s": 76.87978262547404,
+      "reference_t": 38,
+      "source_t": 37,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 76.87978262547404,
+      "end_s": 78.00095675047487,
+      "reference_t": 38,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.00095675047487,
+      "end_s": 78.86764154210687,
+      "reference_t": 39,
+      "source_t": 38,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 78.86764154210687,
+      "end_s": 80.00508262496442,
+      "reference_t": 39,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.00508262496442,
+      "end_s": 80.78014579229057,
+      "reference_t": 40,
+      "source_t": 39,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 80.78014579229057,
+      "end_s": 82.00508158281446,
+      "reference_t": 40,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 82.00508158281446,
+      "end_s": 83.06235633324832,
+      "reference_t": 41,
+      "source_t": 40,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 83.06235633324832,
+      "end_s": 84.00508604198694,
+      "reference_t": 41,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 84.00508604198694,
+      "end_s": 84.6745159169659,
+      "reference_t": 42,
+      "source_t": 41,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 84.6745159169659,
+      "end_s": 86.00465908367187,
+      "reference_t": 42,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.00465908367187,
+      "end_s": 86.86103412508965,
+      "reference_t": 43,
+      "source_t": 42,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 86.86103412508965,
+      "end_s": 88.00321491714567,
+      "reference_t": 43,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.00321491714567,
+      "end_s": 88.84035929199308,
+      "reference_t": 44,
+      "source_t": 43,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 88.84035929199308,
+      "end_s": 90.00509483367205,
+      "reference_t": 44,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.00509483367205,
+      "end_s": 90.80576220806688,
+      "reference_t": 45,
+      "source_t": 44,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 90.80576220806688,
+      "end_s": 92.00034779217094,
+      "reference_t": 45,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 92.00034779217094,
+      "end_s": 93.07349575031549,
+      "reference_t": 46,
+      "source_t": 45,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 93.07349575031549,
+      "end_s": 94.0036451248452,
+      "reference_t": 46,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.0036451248452,
+      "end_s": 94.92149333283305,
+      "reference_t": 47,
+      "source_t": 46,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 94.92149333283305,
+      "end_s": 96.00316462479532,
+      "reference_t": 47,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 96.00316462479532,
+      "end_s": 97.21816220786422,
+      "reference_t": 48,
+      "source_t": 47,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 97.21816220786422,
+      "end_s": 98.00508129224181,
+      "reference_t": 48,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.00508129224181,
+      "end_s": 98.88993575051427,
+      "reference_t": 49,
+      "source_t": 48,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 98.88993575051427,
+      "end_s": 100.0050770426169,
+      "reference_t": 49,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.0050770426169,
+      "end_s": 100.88804183341563,
+      "reference_t": 50,
+      "source_t": 49,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 100.88804183341563,
+      "end_s": 102.00508116744459,
+      "reference_t": 50,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.00508116744459,
+      "end_s": 102.86527395807207,
+      "reference_t": 51,
+      "source_t": 50,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 102.86527395807207,
+      "end_s": 104.00122458301485,
+      "reference_t": 51,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.00122458301485,
+      "end_s": 104.94030533358455,
+      "reference_t": 52,
+      "source_t": 51,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 104.94030533358455,
+      "end_s": 106.00506945792586,
+      "reference_t": 52,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 106.00506945792586,
+      "end_s": 107.74587070848793,
+      "reference_t": 53,
+      "source_t": 52,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 107.74587070848793,
+      "end_s": 108.00508075021207,
+      "reference_t": 53,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.00508075021207,
+      "end_s": 108.90481437556446,
+      "reference_t": 54,
+      "source_t": 53,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 108.90481437556446,
+      "end_s": 110.00507833342999,
+      "reference_t": 54,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.00507833342999,
+      "end_s": 110.84969695843756,
+      "reference_t": 55,
+      "source_t": 54,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 110.84969695843756,
+      "end_s": 112.00506062526256,
+      "reference_t": 55,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.00506062526256,
+      "end_s": 112.83167787548155,
+      "reference_t": 56,
+      "source_t": 55,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 112.83167787548155,
+      "end_s": 114.00495679210871,
+      "reference_t": 56,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 114.00495679210871,
+      "end_s": 115.06951641757041,
+      "reference_t": 57,
+      "source_t": 56,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 115.06951641757041,
+      "end_s": 116.000995750539,
+      "reference_t": 57,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.000995750539,
+      "end_s": 116.67030954174697,
+      "reference_t": 58,
+      "source_t": 57,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 116.67030954174697,
+      "end_s": 118.00320979207754,
+      "reference_t": 58,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 118.00320979207754,
+      "end_s": 118.97011200059205,
+      "reference_t": 59,
+      "source_t": 58,
+      "kind": "source_incorrect"
+    },
+    {
+      "start_s": 118.97011200059205,
+      "end_s": 120.0,
+      "reference_t": 59,
+      "source_t": 59,
+      "kind": "source_incorrect"
+    }
+  ]
+}

@@ -76,7 +76,7 @@ not a faster component in these recordings.
 
 ## Verification and scope
 
-Original-clock replay reproduces correctness and all six time classes in 120 setting/scenario checks.
+Original-clock replay reproduces correctness and all six time classes in 136 setting/scenario checks.
 The largest nominal/original-clock difference at 2 s is 0.017328 percentage points.
 The log integral is analytical between every release/arrival crossing; a third interior point checks each affine piece.
 Published standalone aggregates and family partitions are checked against independently recomputed areas.

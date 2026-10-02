@@ -12,11 +12,12 @@ const INK = '#15253B';
 const MUTED = '#627187';
 const GRID = '#E8EDF4';
 const WIDTH = 1240;
-const HEIGHT = 834;
+const HEIGHT = 950;
 
 const names = {
   Jev: 'Jev', TerraNone: 'GPT-5.6-Terra · none', Terra: 'GPT-5.6-Terra · low',
   Luna: 'GPT-5.6-Luna · low', Astra: 'GPT-6-Astra · low', LunaNone: 'GPT-5.6-Luna · none',
+  Clef: 'Cloudflare Clef', ClefFlash: 'Cloudflare Clef Flash',
   DJev: 'DJev / DiffusionGemma', Kev: 'Kev-4B', KevNine: 'Kev-9B', KevTwentySeven: 'Kev-27B', QwenLogits: 'Qwen3.5-4B · direct logits',
   Nimble: 'Bespoke Nimble-9B', LayaTyped: 'Laya · typed decisions',
   LayaEnglish: 'Laya · English', LayaMultilingual: 'Laya · multilingual',
@@ -24,6 +25,7 @@ const names = {
 const colors = {
   Jev: '#0F766E', TerraNone: '#2563EB', Terra: '#6387CA',
   Luna: '#7C3AED', Astra: '#475569', LunaNone: '#A17CC5',
+  Clef: '#E27602', ClefFlash: '#D94A21',
   DJev: '#B45309', Kev: '#CA8A04', KevNine: '#0891B2', KevTwentySeven: '#DC2626', QwenLogits: '#BE185D', Nimble: '#60813B',
   LayaTyped: '#8A9CAF', LayaEnglish: '#64748B', LayaMultilingual: '#334155',
 };
@@ -32,12 +34,14 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-assert(data.series.length === 15 && new Set(data.series.map(row => row.id)).size === 15,
-  'All fifteen distinct settings must be rendered');
-assert(data.series.filter(row => row.deployment === 'hosted').length === 6,
-  'Six hosted settings are required');
-assert(data.series.filter(row => row.deployment === 'self-hosted').length === 9,
-  'Nine self-hosted settings are required');
+const ids = new Set(data.series.map(row => row.id));
+const hostedCount = data.series.filter(row => row.deployment === 'hosted').length;
+const localCount = data.series.filter(row => row.deployment === 'self-hosted').length;
+assert(ids.size === data.series.length && ids.size === Object.keys(data.provenance).length
+  && Object.keys(data.provenance).every(id => ids.has(id)),
+  'Every verified setting must be rendered exactly once');
+assert(hostedCount > 0 && localCount > 0 && hostedCount + localCount === ids.size,
+  'Every setting must have a known deployment');
 assert(data.intervals_s[0] === 0.5 && data.intervals_s.at(-1) === 8, 'Interval range must be 0.5–8 s');
 for (const [path, expected] of Object.entries(data.sources_sha256)) {
   const hash = createHash('sha256').update(readFileSync(new URL(path, root))).digest('hex');
@@ -72,8 +76,8 @@ function base(subtitle, description) {
         shape: { width: WIDTH - 2, height: HEIGHT - 2, r: 18 },
         style: { fill: '#FFFFFF', stroke: '#DCE4EE', lineWidth: 1 } },
       text(43, 121, description, 16),
-      text(989, 45, '6 CLOUD API', 14, MUTED, 700),
-      text(989, 70, '9 SELF-HOSTED', 14, MUTED, 700),
+      text(989, 45, `${hostedCount} CLOUD API`, 14, MUTED, 700),
+      text(989, 70, `${localCount} SELF-HOSTED`, 14, MUTED, 700),
     ],
   };
 }
@@ -155,10 +159,11 @@ function intervalCurves() {
     silent: true, clip: true,
   }));
   option.graphic.push(text(903, 180, 'CLOUD API  /  SOLID', 14, MUTED, 700));
-  option.graphic.push(text(903, 420, 'SELF-HOSTED  /  DASHED', 14, MUTED, 700));
+  const localHeaderTop = 222 + hostedCount * 33;
+  option.graphic.push(text(903, localHeaderTop, 'SELF-HOSTED  /  DASHED', 14, MUTED, 700));
   option.legend = [
     { deployment: 'hosted', top: 211 },
-    { deployment: 'self-hosted', top: 451 },
+    { deployment: 'self-hosted', top: localHeaderTop + 31 },
   ].map(({ deployment, top }) => ({
     data: data.series.filter(row => row.deployment === deployment).map(row => row.id),
     orient: 'vertical', left: 894, top, itemGap: 18, itemWidth: 27, itemHeight: 9,
@@ -176,7 +181,7 @@ function save(name, option, description) {
     svg = svg.replace(/<svg\b/, '<svg role="img" aria-labelledby="chart-title chart-description"')
       .replace(/(<svg\b[^>]*>)/,
         `$1\n<title id="chart-title">StreamDecisionBench — ${description}</title>\n`
-        + '<desc id="chart-description">Fifteen single-model settings, six cloud APIs and nine self-hosted open-weight settings. '
+        + `<desc id="chart-description">${ids.size} single-model settings, ${hostedCount} cloud APIs and ${localCount} self-hosted open-weight settings. `
         + 'Normalized log-AUC over update intervals of 0.5–8 seconds; one recorded pass per setting.</desc>');
     assert(!svg.includes('NaN'), `${name}: invalid SVG geometry`);
     writeFileSync(new URL(name, directory), svg + '\n');

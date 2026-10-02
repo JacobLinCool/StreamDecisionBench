@@ -14,6 +14,8 @@ The domain spans update rates four times faster and slower than the recording ca
 | Terra none | 48.84% | 49.91% | 56.18% | 61.48% | 54.11% | 82.08% | [report](gpt-5.6-terra-none/REPORT.md) |
 | Astra low | 45.58% | 47.16% | 39.20% | 48.66% | 45.15% | 99.79% | [report](gpt-6-astra-low/REPORT.md) |
 | Jev | 41.30% | 62.79% | 67.95% | 66.46% | 59.63% | 63.75% | [report](jev-latest/REPORT.md) |
+| Clef | 34.53% | 13.51% | 58.20% | 17.58% | 30.96% | 38.96% | [report](clef/REPORT.md) |
+| Clef Flash | 12.80% | 24.13% | 28.38% | 13.44% | 19.69% | 21.67% | [report](clef-flash/REPORT.md) |
 
 ## Self-hosted settings
 
@@ -29,7 +31,7 @@ The domain spans update rates four times faster and slower than the recording ca
 | Bespoke Nimble-9B | 0.17% | 11.05% | 24.45% | 23.24% | 14.72% | 22.50% | [report](../pro6000-lab-20261001/nimble-9b/REPORT.md) |
 | Qwen3.5-4B direct-logit | 0.00% | 12.40% | 27.09% | 22.36% | 15.46% | 17.71% | [report](../pro6000-lab-20261001/semif-qwen35-4b/REPORT.md) |
 
-Each setting has one complete pass over all 480 states. For Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and the two presenter scenarios were recorded in separate sessions; Astra low was recorded in one session covering all eight scenarios. No new model query was made for this evaluation.
+Each setting has one complete pass over all 480 states. For Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and the two presenter scenarios were recorded in separate sessions; Astra low, Clef and Clef Flash each used one session covering all eight scenarios. Clef Flash's two failed attempts were retried successfully; raw failures remain in its report. No new model query was made for this evaluation.
 
 Each analysis contains `auc.primary`, six `auc.sensitivity` conditions, and fixed 2 s diagnostics in `scores`. The physical wall-clock trace and secondary network-removal estimate are separate. The integration rule was adopted after inspecting the recorded passes; comparisons are descriptive and do not establish stable rankings.
 

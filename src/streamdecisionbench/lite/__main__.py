@@ -148,9 +148,9 @@ def main() -> None:
     run = commands.add_parser("run")
     run.add_argument("--data", type=Path, required=True)
     run.add_argument("--out", type=Path, required=True)
-    run.add_argument("--provider", choices=("openai", "typesafe"), default="openai")
+    run.add_argument("--provider", choices=("openai", "typesafe", "cloudflare"), default="openai")
     run.add_argument("--model", required=True)
-    run.add_argument("--effort", help="reasoning effort for openai (e.g. none, low); omit it for a model or compatible endpoint without reasoning effort; not accepted for typesafe")
+    run.add_argument("--effort", help="reasoning effort for openai (e.g. none, low); omit it for a model or compatible endpoint without reasoning effort; only accepted for openai")
     run.add_argument("--timeout", type=float, default=20.0)
     run.add_argument("--max-attempts", type=int, default=5)
     run.add_argument("--retry-delay", type=float, default=0.5)
@@ -175,11 +175,16 @@ def main() -> None:
 
         load_dotenv()
         openai = args.provider == "openai"
-        key, endpoint = ("OPENAI_API_KEY", "OPENAI_BASE_URL") if openai else ("TYPESAFE_API_KEY", "TYPESAFE_BASE_URL")
-        if not os.environ.get(key):
-            parser.error(f"{key} is required")
+        credentials = {"openai": ("OPENAI_API_KEY",), "typesafe": ("TYPESAFE_API_KEY",),
+                       "cloudflare": ("CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_AUTH_TOKEN")}
+        for key in credentials[args.provider]:
+            if not os.environ.get(key):
+                parser.error(f"{key} is required")
+        endpoint = {"openai": "OPENAI_BASE_URL", "typesafe": "TYPESAFE_BASE_URL"}.get(args.provider)
         if not openai and args.effort is not None:
-            parser.error("--effort is not accepted for typesafe")
+            parser.error(f"--effort is not accepted for {args.provider}")
+        if args.provider == "cloudflare" and args.model not in {"clef", "clef-flash"}:
+            parser.error("Cloudflare model must be clef or clef-flash")
         if not math.isfinite(args.timeout) or args.timeout <= 0:
             parser.error("timeout must be positive and finite")
         if args.max_attempts < 1:
@@ -197,7 +202,7 @@ def main() -> None:
                   "protocol": RETRY_PROTOCOL, "workers": 32,
                   "episode_concurrency": 1, "request_timeout_s": args.timeout,
                   "max_attempts": args.max_attempts, "retry_delay_s": args.retry_delay,
-                  "sdk_retries": 0, "custom_endpoint": bool(os.environ.get(endpoint)),
+                  "sdk_retries": 0, "custom_endpoint": bool(endpoint and os.environ.get(endpoint)),
                   "untimed": "one final successful response per state; failed transport attempts excluded from model timing"}
         if families or episode_ids:
             config["selection"] = {"families": families} if families else {"episodes": episode_ids}
@@ -205,10 +210,14 @@ def main() -> None:
             from streamdecisionbench.adapters.llm import OpenAIAdapter
 
             factory = lambda: OpenAIAdapter(model=args.model, effort=args.effort, timeout=args.timeout, max_retries=0)
-        else:
+        elif args.provider == "typesafe":
             from streamdecisionbench.adapters.remote import TypeSafeAdapter
 
             factory = lambda: TypeSafeAdapter(model=args.model, timeout=args.timeout, max_retries=0)
+        else:
+            from streamdecisionbench.adapters.cloudflare import CloudflareAdapter
+
+            factory = lambda: CloudflareAdapter(model=args.model, timeout=args.timeout)
         result = run_dataset(episodes, manifest, factory, args.out, config)
         print(json.dumps({k: v for k, v in result.items() if k != "per_episode"}, indent=2))
     elif args.command == "merge":

@@ -18,7 +18,8 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
-from lite_numbers import FACTS_COLUMNS, FAMILIES, MODELS, fixed
+from leaderboard_models import HOSTED_LABELS, HOSTED_MODELS
+from lite_numbers import FAMILIES, MODELS, fixed
 from lite_trajectory_value import LABELS, POLICY_MACROS, integrate
 from streamdecisionbench.lite.__main__ import rescore_run
 from streamdecisionbench.lite.core import digest
@@ -117,7 +118,7 @@ def compare_published(result, report, name, tolerance):
 def analyze():
     policy = json.loads(POLICY_PATH.read_text())
     auc_policy = json.loads((ROOT / "paper/analysis/evaluation_policy.json").read_text())
-    paths = {name: ROOT / "runs" / folder for name, _, folder in MODELS}
+    paths = {name: ROOT / "runs" / folder for name, _, folder in HOSTED_MODELS}
     paths.update({spec["name"]: ROOT / "runs" / spec["run"] for spec in policy["settings"]})
     runs, provenance = {}, {}
     for name, path in paths.items():
@@ -126,7 +127,7 @@ def analyze():
     scenarios = prepare(runs)  # Reject different frozen content, including references.
     data = {"policy": policy, "auc_policy": auc_policy, "provenance": provenance,
             "hosted": {}, "standalone": {}, "systems": {}, "controls": {}, "verification": {}}
-    report_names = {name: report for name, report, _ in MODELS}
+    report_names = {name: report for name, report, _ in HOSTED_MODELS}
     gaps = {}
     for name, run in runs.items():
         spec = next((s for s in policy["settings"] if s["name"] == name), None)
@@ -144,7 +145,7 @@ def analyze():
         # Hosted summary retains its existing published aggregate; the two
         # composition controls are independently integrated below.
         if spec is None:
-            data["hosted"][name] = {"label": FACTS_COLUMNS[name], "report": report_dir,
+            data["hosted"][name] = {"label": HOSTED_LABELS[name], "report": report_dir,
                 "model": run["frozen"]["config"]["model"],
                 "accuracy": report["auc"]["primary"]["overall"]["accuracy"],
                 "untimed": report["scores"]["overall"]["untimed_decision_accuracy"],
@@ -178,7 +179,8 @@ def analyze():
             "retry_reliability": report["retry_reliability"]}
         print(f"Verified standalone {name}", flush=True)
     slow = policy["correction_setting"]
-    if data["hosted"][slow]["accuracy"] != max(r["accuracy"] for n, r in data["hosted"].items() if n != "Jev"):
+    if data["hosted"][slow]["accuracy"] != max(data["hosted"][name]["accuracy"]
+            for name, _, _ in MODELS if name != "Jev"):
         raise ValueError("declared correction-setting selection no longer matches hosted results")
     data["controls"]["TerraNone"] = integrate(scenarios, slow, None, "freshest", auc_policy["primary"])
     data["controls"]["JevTerraNone"] = integrate(scenarios, "Jev", slow, "freshest", auc_policy["primary"])
@@ -205,7 +207,7 @@ def analyze():
         "shared_hosted_control_checks": len(shared) * len(METRICS)}
     sources = ["paper/analysis/lite_openweight.py", "paper/analysis/openweight_policy.json",
         "paper/analysis/lite_trajectory_value.py", "paper/analysis/trajectory_replay.py",
-        "paper/analysis/lite_numbers.py", "paper/analysis/evaluation_policy.json",
+        "paper/analysis/lite_numbers.py", "paper/analysis/leaderboard_models.py", "paper/analysis/evaluation_policy.json",
         "paper/analysis/figstyle.py", "src/streamdecisionbench/lite/__main__.py",
         "src/streamdecisionbench/lite/core.py", "src/streamdecisionbench/lite/scoring.py",
         "src/streamdecisionbench/lite/retry_scoring.py", "src/streamdecisionbench/lite/interval_scoring.py",
@@ -313,8 +315,10 @@ def write_tex(data):
     add("NumSettings", str(len(data["standalone"])), "policy.settings")
     words = {7: "seven", 9: "nine", 13: "thirteen", 15: "fifteen"}
     add("NumSettingsWord", words[len(data["standalone"])], "policy.settings")
-    add("TotalSettingsWord", words[len(data["hosted"]) + len(data["standalone"])], "hosted + standalone")
-    add("NominalGap", fixed(data["verification"]["max_nominal_recorded_gap_points"], 6), "verification.max_nominal_recorded_gap_points")
+    add("TotalSettingsWord", words[len(MODELS) + len(data["standalone"])], "manuscript hosted cohort + standalone")
+    paper_names = {name for name, _, _ in MODELS} | data["standalone"].keys()
+    paper_gap = max(data["verification"]["nominal_recorded_gaps_points"][name] for name in paper_names)
+    add("NominalGap", fixed(paper_gap, 6), "verification.nominal_recorded_gaps_points: manuscript cohort")
     for name, row in data["standalone"].items():
         for suffix, value in [("Auc", pct(row["integrated"]["overall"]["accuracy"])), ("Untimed", pct(row["untimed"])),
                               ("Median", fixed(row["latency_s"]["p50"], 3)), ("Tail", fixed(row["latency_s"]["p95"], 3))]:

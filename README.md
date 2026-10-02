@@ -14,9 +14,9 @@ erroneous instant to **judgment** (wrong for the current state), **latency** (a 
 right for an outdated state) or both. The primary score is **normalized log-AUC**: in-force accuracy
 averaged over time-step intervals from 0.5 to 8 s on a logarithmic axis.
 
-![StreamDecisionBench leaderboard: all thirteen single-model settings ranked by normalized log-AUC over 0.5–8 seconds](docs/figures/leaderboard.svg)
+![StreamDecisionBench leaderboard: all completed single-model settings ranked by normalized log-AUC over 0.5–8 seconds](docs/figures/leaderboard.svg)
 
-![StreamDecisionBench in-force accuracy curves across update intervals from 0.5 to 8 seconds, for all thirteen single-model settings](docs/figures/interval-curves.svg)
+![StreamDecisionBench in-force accuracy curves across update intervals from 0.5 to 8 seconds, for all completed single-model settings](docs/figures/interval-curves.svg)
 
 The curves show in-force accuracy at each update interval; the leaderboard summarizes them with
 normalized log-AUC. [Figure data and regeneration](docs/figures/README.md).
@@ -44,7 +44,9 @@ Latency includes the remote service and internet round trip from the benchmark c
 | Terra low | `gpt-5.6-terra` | 48.04 | 95.42 | 2.439 |
 | Luna low | `gpt-5.6-luna` | 45.26 | 88.75 | 2.405 |
 | Astra low | `gpt-6-astra` | 45.15 | 99.79 | 2.671 |
+| Clef | `clef` | 30.96 | 38.96 | 0.947 |
 | Luna none | `gpt-5.6-luna` | 30.67 | 43.75 | 1.318 |
+| Clef Flash | `clef-flash` | 19.69 | 21.67 | 0.537 |
 
 [Family scores and hosted reports](docs/lite/results/four-family/README.md).
 
@@ -136,7 +138,7 @@ uv run python paper/analysis/lite_reports.py \
 ### 1. Set credentials
 
 ```bash
-cp .env.example .env   # then fill in OPENAI_API_KEY and/or TYPESAFE_API_KEY
+cp .env.example .env   # then fill in the credentials for your provider
 ```
 
 `.env` is git-ignored and loaded automatically; exported variables take precedence.
@@ -159,7 +161,19 @@ uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
 # Jev and other System One models (TypeSafe)
 uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
   --out runs/my-jev --provider typesafe --model jev-latest
+
+# Clef's native decisions and probabilities (Cloudflare Workers AI)
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-clef --provider cloudflare --model clef
+
+# Clef Flash uses the same native decision API
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-clef-flash --provider cloudflare --model clef-flash
 ```
+
+Cloudflare requires `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_AUTH_TOKEN`. Create a Workers AI
+API token scoped to that account with Workers AI Read and Edit permissions. The adapter calls the
+native REST endpoint and preserves the returned probabilities; `--effort` is only for OpenAI.
 
 Try one scenario first (60 requests) with `--episodes lite_assembly_a`, or one family with
 `--families support_call_assist`. Scenario ids are the file names in `data/lite/v1/`; family ids
@@ -215,7 +229,7 @@ class MyAdapter(StatelessAdapter):
 ```
 
 Then add a `--provider` choice for it in the `run` command
-([`lite/__main__.py`](src/streamdecisionbench/lite/__main__.py)), next to the OpenAI and TypeSafe
+([`lite/__main__.py`](src/streamdecisionbench/lite/__main__.py)), next to the existing provider
 branches. Create the client with SDK retries disabled: the runner retries transport errors itself
 (`--max-attempts`) and keeps failed attempts out of the latency it scores. Raise
 `FatalAdapterError` for errors that would repeat on every request, such as a bad key.
