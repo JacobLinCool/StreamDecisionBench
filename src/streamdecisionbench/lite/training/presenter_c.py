@@ -60,23 +60,23 @@ MODERATOR_PHRASES = {("open", "the", "poll"): "open_poll", ("close", "the", "pol
                      ("end", "the", "lecture"): "end"}
 
 RULES = [
-    "Time and channels. now, session.ends_at and every segment's start and end are ticks of two seconds; "
-    "snapshot number t appears at tick t, and the inputs stay as they are until the next snapshot. asr.segments "
-    "keeps every speech segment the recogniser has produced since tick 0, in seg_id order; segments are "
-    "numbered by onset, so start never decreases along the list (two segments may begin in the same tick). "
-    "channel is lecturer (the lecturer's headset), moderator (the moderator's handheld microphone), "
-    "room (the ceiling microphones over the seats) or media (the soundtrack of a playing clip). start is the "
-    "segment's first tick of speech and end its latest tick of speech so far, with start <= end <= now.",
-    "Stable and unstable segments. A segment whose stable is false is a working guess of the recogniser: at "
-    "any later tick its words, their confidences and its end may be revised, extended or replaced, and only the "
-    "newest hypothesis is published. Its words are lower-case letters only, without punctuation, and numbers are "
-    "spelled out. Once stable is true the segment never changes again; stable words may carry capitals and "
-    "attached punctuation, and numbers may appear in digits. A segment may also be published stable at its "
-    "first appearance. A segment keeps its seg_id, channel and start for good. Each channel has at most one "
-    "unstable segment, and it is that channel's newest segment; segments of different channels can overlap in "
-    "time. Every segment of this recording becomes stable and none is withdrawn. No answer depends on an "
-    "unstable segment, even one that already reads as a complete command with confident words: once stable it "
-    "may run on past the phrase or carry a word below the threshold.",
+    "Clock and segment list. Every time value (now, session.ends_at, each segment's start and end) counts "
+    "ticks of two seconds. The snapshot with now = t is the one released at tick t, and nothing in it changes "
+    "before the next release. asr.segments is the complete list of segments since tick 0, sorted by seg_id; "
+    "seg_id follows onset, so start is non-decreasing down the list, and two segments may share a start. "
+    "Fields: channel names the microphone (lecturer = the lecturer's headset; moderator = the moderator's "
+    "handheld; room = ceiling microphones above the seats; media = a playing clip's soundtrack); start = the "
+    "first tick with speech; end = the last tick with speech so far; start <= end <= now always holds.",
+    "Settled and working segments. stable = true marks a settled segment: its words, confidences and end are "
+    "frozen from then on, and some segments are already settled when they first appear. stable = false marks a "
+    "working (unstable) segment: the recogniser publishes only its latest guess, and a later snapshot may rewrite any of "
+    "its words, confidences or its end. Text form: a working segment uses lower-case letters only, no "
+    "punctuation, numbers as words; a settled one may add capitals and attached punctuation and may use "
+    "digits. seg_id, channel and start never change. Only a channel's newest segment can be working, so no "
+    "channel ever has two; the four channels are independent and their segments may overlap in time. In this "
+    "recording every segment ends up settled and no segment disappears. Working segments never affect any "
+    "answer, even one that already reads as a complete command with confident words, because its settled "
+    "form may continue past the phrase or include a word below the threshold.",
     "Reading words. Each entry of words is one recognised word w with its confidence conf, a number from 0 to "
     "1. A word reads as w in lower case with anything other than a letter or digit dropped: "
     "'Console,' reads console and '6.' reads 6. No word reads as empty. Capitals and punctuation therefore "
