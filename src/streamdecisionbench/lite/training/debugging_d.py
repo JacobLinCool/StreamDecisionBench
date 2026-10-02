@@ -139,7 +139,7 @@ RULES = [
     "interrupt_kernel; otherwise wait. (5) an open failure exists -> fix_cell. (6) a counted table is "
     "behind -> refresh_table. (7) a tracked cell needs a run -> run_cell. (8) a counted table is overdue "
     "-> ask_data_owner. (9) the results are unshared, meaning notebook.shared_at is null or some tracked "
-    "cell has an executed_at later than shared_at -> share_results. (10) otherwise wait.",
+    "cell has an executed_at strictly later than shared_at (a cell executed at the tick of shared_at counts as shared) -> share_results. (10) otherwise wait.",
 
     "Selections: interrupt_kernel names the running cell. fix_cell names the error.raised_in_cell of the "
     "first open failure in notebook order. run_cell names the first runnable cell in notebook order (one "

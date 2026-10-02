@@ -46,7 +46,14 @@ workflow rules) but keep the family's six common station rules and its question 
 
 | Variant | Own rules | Own questions | State layout overlap with evaluation |
 |---|---|---|---:|
-<!-- SPEC TABLE -->
+| `train_debugging_c` | 13 new paragraphs | `card`, `ci_badge`, `review_badge`, `job`, `test`, `reviewer`, `file`, `approver` | 0.00 |
+| `train_debugging_d` | 14 new paragraphs | `next_action`, `kernel_badge`, `freshness_badge`, `cell`, `table`, `owner_team` | 0.00 |
+| `train_assembly_c` | 12 paragraphs: 6 shared common station rules + 6 new workflow rules | `route`, `stage`, `target`, `method`, `next_step`, `destination`: the family's ids and instructions, new option sets except `route` | 0.67 |
+| `train_assembly_d` | 12 paragraphs: 6 shared common station rules + 6 new workflow rules | `route`, `stage`, `target`, `method`, `next_step`, `destination`: the family's ids and instructions, new option sets except `route` | 0.67 |
+| `train_support_c` | 10 new paragraphs | `route`, `recorder`, `segment`, `rebook_action`, `refund_action`, `bag`, `bag_action` (the ids `recorder` and `route` also occur in evaluation, with new instructions and options) | 0.24 |
+| `train_support_d` | 10 new paragraphs | `route`, `priority_register`, `meter_target`, `meter_action`, `plan_stage`, `instalments`, `outage_site`, `outage_action` (the id `route` also occurs in evaluation, with new instructions and options) | 0.32 |
+| `train_presenter_c` | 12 new paragraphs | `stage_mode`, `projected_slide`, `recording_light`, `timer_cue`, `pointer`, `media_state`, `poll_panel` | 0.02 |
+| `train_presenter_d` | 12 new paragraphs | `scene`, `stop`, `caption_source`, `guide_prompt`, `screen_warmup`, `film_audio`, `question_queue`, `held_scene` | 0.00 |
 
 ## Verification
 
@@ -65,104 +72,122 @@ agents rather than human validation:
 
 | Variant | Fix rounds | Blocking or major findings fixed | Final blind re-derivation | Final review |
 |---|---:|---|---|---|
-| `train_debugging_c` | 1 | none (minor only) | 60/60 ticks, all fields | clean |
-| `train_debugging_d` | 1 | 2 blocking, 2 major (story beats and a file name reused from evaluation, paraphrased distractors, an inconsistent dependency version; session re-plotted) | 60/60 ticks, all fields | clean |
+| `train_debugging_c` | 2 | 2 major (a person's name from evaluation; a question id from evaluation) | 60/60 ticks, all fields | clean |
+| `train_debugging_d` | 2 | 1 blocking, 4 major (an option description contradicting its rule; a timer beat mirroring evaluation; an impossible notebook beat; rules never decisive) | 60/60 ticks, all fields | clean |
 | `train_assembly_c` | 2 | 3 blocking, 2 major (story beats copied from the evaluation gearbox story; after re-plotting, a repair at a stage later than the current one and an unstated tick-0 stage) | 60/60 ticks, all fields | clean |
 | `train_assembly_d` | 2 | 1 blocking, 1 major (beat sequence copied from the evaluation scenarios; after re-plotting, a firmware defect repaired while the stage was back at weld) | 60/60 ticks, all fields | clean |
 | `train_support_c` | 1 | 1 blocking (case of the capture phrase unstated) | 60/60 ticks, all fields | clean |
 | `train_support_d` | 1 | 1 major (the meter target never left its default) | 60/60 ticks, all fields | clean |
-| `train_presenter_c` | 1 | none (minor only) | 60/60 ticks, all fields | clean |
-| `train_presenter_d` | 1 | 2 major (story beats too close to evaluation scenario B) | 60/60 ticks, all fields | clean |
+| `train_presenter_c` | 2 | 3 major (an early-pause rule and story beat mirroring evaluation; a question id from evaluation) | 60/60 ticks, all fields | clean |
+| `train_presenter_d` | 1 | 3 major (input conventions paraphrasing the evaluation rules; evaluation distractor beats; rules never decisive) | 60/60 ticks, all fields | clean |
 
-The reviews also compared story beats, which the automatic audit cannot see: four first drafts
-followed the sequence of evaluation story beats with new nouns and were re-plotted. Remaining minor
-notes concern story realism and coverage, not reference answers: for example, two
-overlapping quality tickets never occur in `train_assembly_d`, and no close command takes effect in
-`train_presenter_d`.
+The debugging and presenter variants were first written on their family's published rules and then
+rewritten with their own specification; the table shows the rewrite. The reviews also compared what
+the audits cannot see: four first drafts followed evaluation story beats with new nouns, and in the
+rewrite round reviewers rejected rule text that paraphrased evaluation conventions with renamed
+fields, reused question ids and a reused person's name; all were reworked. After the last review,
+small wording edits to six modules (settling a tie, removing a contradiction, restructuring two
+convention paragraphs, rewording phrases that shared ten words with evaluation rules) were checked by
+a separate agent against the references. Remaining minor notes concern story realism and coverage,
+not reference answers; for example, two overlapping quality tickets never occur in
+`train_assembly_d`.
 
 ## Variants
 
 | Episode | Family | Rules | Transitions | Routes reached |
 |---|---|---|---:|---|
-| `train_debugging_c` | `live_debugging` | shared policy | 25 | control, delegate, inspect, ready, rerun, wait |
-| `train_debugging_d` | `live_debugging` | shared policy | 24 | control, delegate, inspect, ready, rerun, wait |
+| `train_debugging_c` | `live_debugging` | own rules (pre-merge CI) | 31 | address_review, fix_build, fix_lint, investigate_test, merge, request_review, retry_flaky, unblock_queue, wait_ci |
+| `train_debugging_d` | `live_debugging` | own rules (data notebook) | 31 | ask_data_owner, fix_cell, interrupt_kernel, refresh_table, restart_kernel, run_cell, share_results, wait |
 | `train_assembly_c` | `procedural_coaching` | new workflow `pump_cartridge` | 23 | advance, escalate, handoff, hold, release, repair, wait |
 | `train_assembly_d` | `procedural_coaching` | new workflow `battery_pack` | 25 | advance, escalate, handoff, hold, release, repair, wait |
 | `train_support_c` | `support_call_assist` | new workflow `travel_change` | 22 | baggage, closed, hold_return, hold_wait, rebook, refund |
 | `train_support_d` | `support_call_assist` | new workflow `energy_account` | 31 | closed, hold_return, hold_wait, meter, outage, plan |
-| `train_presenter_c` | `presenter_voice_control` | shared rules | 27 | clip, closed, questions, talk |
-| `train_presenter_d` | `presenter_voice_control` | shared rules | 39 | clip, closed, questions, talk |
+| `train_presenter_c` | `presenter_voice_control` | own rules (wake-word console) | 30 | break, ended, lecture, media, poll |
+| `train_presenter_d` | `presenter_voice_control` | own rules (gallery tour) | 35 | at_stop, film, finished, paused, questions |
 
-### `train_debugging_c`: Stock hold expiry hunt
+### `train_debugging_c`: Pre-merge CI and approval watch for a stock-hold pull request
 
-A Go microservice that places time-limited stock holds, with its own team, two external teams, new files, runs and tests. The pinned test fails with its original and then a different message; a two-error compile failure must open the first reported file, not the one just edited; a module run goes quiet, its own terminal line resets the silence while editor-tool output does not, and it must be stopped even with an unsaved relevant buffer. An interrupted run, a green run with too many skips, a test-file save exactly at a run's start, a retry failure delegated to the storage team by the last matching owners rule after five messages that do not count, a `go.mod` bump that forces the full suite, ready, and a commit back to wait.
+A pre-merge CI and review assistant for a pull request of a Go stock-hold service. The state holds the pull request, its commits, CI job attempts by stage and commit, reviews, path-based approval rules and chat; the card has nine routes, with CI and review badges and job, test, reviewer, file and approver fields. Only head-commit attempts are current, the earliest failing stage decides, a test is flaky only when a later attempt of the same job on the same commit passed, retries stop at a published limit, a queued job reaching the queue limit needs a runner, change requests persist across commits, older approvals are stale, and the approval rule with the longest matching pattern governs a file. Story: a slower lint failure overtaking a unit failure, a queue at exactly its limit, flaky retries up to the cap, a test wrongly called flaky in chat, bots claiming success, and approvers asked in turn until merge.
 
 <details><summary>Reference decision timeline</summary>
 
 | Ticks | Applied decision |
 |---|---|
-| 0 | **wait**; process=idle, target_result=original_error |
-| 1 | **rerun**; process=idle, target_result=original_error, rerun_scope=target |
-| 2–3 | **wait**; process=running, target_result=original_error |
-| 4–5 | **inspect**; process=idle, target_result=different_error, inspect_file=internal/reserve/ttl.go |
-| 6–8 | **wait**; process=idle, target_result=different_error |
-| 9 | **rerun**; process=idle, target_result=different_error, rerun_scope=module |
-| 10–11 | **wait**; process=running, target_result=different_error |
-| 12–13 | **inspect**; process=idle, target_result=not_run, inspect_file=internal/reserve/hold.go |
-| 14–17 | **wait**; process=idle, target_result=not_run |
-| 18 | **rerun**; process=idle, target_result=not_run, rerun_scope=module |
-| 19–24 | **wait**; process=running, target_result=not_run |
-| 25 | **wait**; process=stalled, target_result=not_run |
-| 26–29 | **wait**; process=running, target_result=not_run |
-| 30–31 | **wait**; process=stalled, target_result=not_run |
-| 32–33 | **control**; process=stalled, target_result=not_run, control_action=stop |
-| 34 | **wait**; process=idle, target_result=not_run |
-| 35 | **rerun**; process=idle, target_result=not_run, rerun_scope=target |
-| 36–37 | **wait**; process=running, target_result=not_run |
-| 38–39 | **rerun**; process=idle, target_result=passed, rerun_scope=module |
-| 40–41 | **wait**; process=running, target_result=passed |
-| 42–47 | **delegate**; process=idle, target_result=passed, owner=@kv-storage |
-| 48–51 | **wait**; process=idle, target_result=passed |
-| 52 | **rerun**; process=idle, target_result=passed, rerun_scope=full |
-| 53–54 | **wait**; process=running, target_result=passed |
-| 55–57 | **ready**; process=idle, target_result=passed |
-| 58–59 | **wait**; process=idle, target_result=passed |
+| 0 | **wait_ci**; ci_badge=pending, review_badge=none |
+| 1 | **investigate_test**; ci_badge=red, review_badge=none, job=unit-reserve, test=TestRenewExtendsFromNow |
+| 2–3 | **fix_lint**; ci_badge=red, review_badge=none, job=lint |
+| 4–5 | **fix_lint**; ci_badge=red, review_badge=changes_requested, job=lint |
+| 6 | **address_review**; ci_badge=stale, review_badge=changes_requested, reviewer=halvard |
+| 7–9 | **address_review**; ci_badge=pending, review_badge=changes_requested, reviewer=halvard |
+| 10–11 | **fix_build**; ci_badge=red, review_badge=changes_requested, job=build |
+| 12 | **fix_build**; ci_badge=red, review_badge=approved, job=build |
+| 13 | **wait_ci**; ci_badge=stale, review_badge=approval_stale |
+| 14–18 | **wait_ci**; ci_badge=pending, review_badge=approval_stale |
+| 19 | **unblock_queue**; ci_badge=pending, review_badge=approval_stale, job=unit-storage |
+| 20 | **unblock_queue**; ci_badge=pending, review_badge=approval_stale, job=integration-kv |
+| 21–22 | **wait_ci**; ci_badge=pending, review_badge=approval_stale |
+| 23 | **retry_flaky**; ci_badge=red, review_badge=approval_stale, job=integration-kv, test=TestReserveRetriesOnConflict |
+| 24–26 | **wait_ci**; ci_badge=pending, review_badge=approval_stale |
+| 27–28 | **retry_flaky**; ci_badge=red, review_badge=approval_stale, job=integration-kv, test=TestReserveRetriesOnConflict |
+| 29–31 | **wait_ci**; ci_badge=pending, review_badge=approval_stale |
+| 32–34 | **investigate_test**; ci_badge=red, review_badge=approval_stale, job=integration-kv, test=TestReserveRetriesOnConflict |
+| 35 | **wait_ci**; ci_badge=stale, review_badge=approval_stale |
+| 36–37 | **wait_ci**; ci_badge=pending, review_badge=approval_stale |
+| 38 | **investigate_test**; ci_badge=red, review_badge=approval_stale, job=integration-kv, test=TestReserveRetryCapHonoured |
+| 39–40 | **investigate_test**; ci_badge=red, review_badge=approval_stale, job=unit-storage, test=TestTxnRetryBackoff |
+| 41–42 | **investigate_test**; ci_badge=red, review_badge=changes_requested, job=unit-storage, test=TestTxnRetryBackoff |
+| 43 | **address_review**; ci_badge=stale, review_badge=changes_requested, reviewer=ruth |
+| 44–45 | **address_review**; ci_badge=pending, review_badge=changes_requested, reviewer=ruth |
+| 46–47 | **address_review**; ci_badge=pending, review_badge=changes_requested, reviewer=wendell |
+| 48–49 | **wait_ci**; ci_badge=pending, review_badge=approved |
+| 50–51 | **request_review**; ci_badge=green, review_badge=approved, file=internal/reserve/hold.go, approver=halvard |
+| 52–53 | **request_review**; ci_badge=green, review_badge=approved, file=internal/reserve/hold_test.go, approver=esme |
+| 54–55 | **request_review**; ci_badge=green, review_badge=approved, file=cmd/stockhold/main.go, approver=ingrid |
+| 56–57 | **request_review**; ci_badge=green, review_badge=approved, file=internal/reserve/sweep/sweep_test.go, approver=oskar |
+| 58–59 | **merge**; ci_badge=green, review_badge=approved |
 
 </details>
 
-### `train_debugging_d`: Buoy telemetry decoder session
+### `train_debugging_d`: North-shelf gust QC notebook: cell budgets, freshness and feed cover
 
-A Rust crate that decodes buoy telemetry, with its own team, three external teams and new files, runs and tests. A build stalls until its own compiler output resumes and fails with two call-site errors (the first compiler file wins over tooling and a teammate); a module rerun fails differently; a paused debugger is stepped, so the continue card appears four ticks after the last step; the resumed run goes silent, reaches the stop card and is interrupted. Then a green target-only run that skips too many tests, a write exactly at a run's start, a newly failing test owned by the serial team by the last nested owners rule, near-miss commitments before a valid one, a pulled fix with a lock-file bump that forces the full suite, and ready interrupted by an unsaved edit.
+A data-notebook debugging assistant for a buoy gust quality-control notebook. The state holds cells with dependencies, run-time budgets, edit and execution ticks, statuses and errors; the kernel's status, start and memory; data snapshots with feed cadences and owner teams; teams with away status and cover teams; and comments. The card has eight routes, with kernel and freshness badges and cell, table and owner-team fields. A cell's run-time budget (not a silence clock) decides interruption, results from an earlier kernel count as never run, a failure is fixed in the cell that raised it, the first runnable cell is gated by its whole upstream chain, memory at 90% of the limit restarts the kernel, a snapshot behind its source is refreshed, an overdue feed goes to its owner or to the cover of an away owner, and comments never change an answer.
 
 <details><summary>Reference decision timeline</summary>
 
 | Ticks | Applied decision |
 |---|---|
-| 0 | **wait**; process=running, target_result=original_error |
-| 1 | **wait**; process=stalled, target_result=original_error |
-| 2–3 | **wait**; process=running, target_result=original_error |
-| 4–5 | **inspect**; process=idle, target_result=not_run, inspect_file=crates/decoder/src/fields/heading.rs |
-| 6–9 | **wait**; process=idle, target_result=not_run |
-| 10 | **rerun**; process=idle, target_result=not_run, rerun_scope=module |
-| 11–13 | **wait**; process=running, target_result=not_run |
-| 14–15 | **inspect**; process=idle, target_result=different_error, inspect_file=crates/decoder/src/fields/gust.rs |
-| 16 | **wait**; process=running, target_result=different_error |
-| 17–26 | **wait**; process=paused, target_result=different_error |
-| 27–28 | **control**; process=paused, target_result=different_error, control_action=continue |
-| 29–33 | **wait**; process=running, target_result=different_error |
-| 34–35 | **wait**; process=stalled, target_result=different_error |
-| 36–37 | **control**; process=stalled, target_result=different_error, control_action=stop |
-| 38 | **rerun**; process=idle, target_result=not_run, rerun_scope=target |
-| 39–40 | **wait**; process=running, target_result=not_run |
-| 41–42 | **rerun**; process=idle, target_result=passed, rerun_scope=module |
-| 43–45 | **wait**; process=running, target_result=passed |
-| 46–49 | **delegate**; process=idle, target_result=passed, owner=@serial-io |
-| 50–52 | **wait**; process=idle, target_result=passed |
-| 53 | **rerun**; process=idle, target_result=passed, rerun_scope=full |
-| 54–55 | **wait**; process=running, target_result=passed |
-| 56 | **ready**; process=idle, target_result=passed |
-| 57–58 | **wait**; process=idle, target_result=passed |
-| 59 | **ready**; process=idle, target_result=passed |
+| 0 | **wait**; kernel_badge=busy, freshness_badge=stale |
+| 1–4 | **wait**; kernel_badge=overrun, freshness_badge=stale |
+| 5–6 | **interrupt_kernel**; kernel_badge=overrun, freshness_badge=stale, cell=load_frames |
+| 7–8 | **fix_cell**; kernel_badge=idle, freshness_badge=broken, cell=load_frames |
+| 9 | **run_cell**; kernel_badge=idle, freshness_badge=broken, cell=load_frames |
+| 10–12 | **wait**; kernel_badge=busy, freshness_badge=stale |
+| 13–15 | **fix_cell**; kernel_badge=idle, freshness_badge=broken, cell=helpers |
+| 16–17 | **refresh_table**; kernel_badge=idle, freshness_badge=broken, table=marine.buoy_frames |
+| 18 | **run_cell**; kernel_badge=idle, freshness_badge=broken, cell=load_frames |
+| 19–21 | **wait**; kernel_badge=busy, freshness_badge=stale |
+| 22 | **run_cell**; kernel_badge=idle, freshness_badge=stale, cell=rollup |
+| 23–24 | **wait**; kernel_badge=busy, freshness_badge=stale |
+| 25 | **run_cell**; kernel_badge=idle, freshness_badge=stale, cell=summary |
+| 26 | **wait**; kernel_badge=busy, freshness_badge=stale |
+| 27–28 | **share_results**; kernel_badge=idle, freshness_badge=fresh |
+| 29–30 | **wait**; kernel_badge=idle, freshness_badge=fresh |
+| 31–32 | **restart_kernel**; kernel_badge=busy, freshness_badge=fresh |
+| 33 | **restart_kernel**; kernel_badge=dead, freshness_badge=stale |
+| 34 | **wait**; kernel_badge=restarting, freshness_badge=stale |
+| 35–39 | **wait**; kernel_badge=busy, freshness_badge=stale |
+| 40–41 | **run_cell**; kernel_badge=idle, freshness_badge=broken, cell=unit_table |
+| 42 | **wait**; kernel_badge=busy, freshness_badge=broken |
+| 43 | **run_cell**; kernel_badge=idle, freshness_badge=broken, cell=helpers |
+| 44–47 | **wait**; kernel_badge=busy, freshness_badge=stale |
+| 48–49 | **ask_data_owner**; kernel_badge=idle, freshness_badge=stale, table=marine.buoy_frames, owner_team=@marine-feeds |
+| 50 | **ask_data_owner**; kernel_badge=idle, freshness_badge=stale, table=marine.buoy_frames, owner_team=@buoy-ingest |
+| 51 | **run_cell**; kernel_badge=idle, freshness_badge=stale, cell=stations |
+| 52 | **run_cell**; kernel_badge=idle, freshness_badge=stale, cell=unit_table |
+| 53 | **refresh_table**; kernel_badge=idle, freshness_badge=stale, table=marine.buoy_frames |
+| 54–56 | **wait**; kernel_badge=busy, freshness_badge=stale |
+| 57 | **share_results**; kernel_badge=idle, freshness_badge=fresh |
+| 58–59 | **ask_data_owner**; kernel_badge=idle, freshness_badge=stale, table=ops.sensor_calibration, owner_team=@buoy-ingest |
 
 </details>
 
@@ -315,93 +340,91 @@ A home-energy supplier's account desk: a meter branch (submitting electricity an
 
 </details>
 
-### `train_presenter_c`: Marine acoustics guest lecture with a narrated dive clip and a reef recording
+### `train_presenter_c`: Wake-word lecture console: whale clicks, a class poll and a reef recording
 
-A marine-acoustics guest lecture with a narrated whale-dive clip and a silent reef recording, a new 13-slide deck starting on a clip slide, and a new presenter and chair. Early pauses that lapse when the partial is revised into talk, final pause, resume, close, a slide command that closes the clip, go-to commands by number and by name, command-like talk, an echo question that is not a repetition, the 'the question is' repetition, a non-question remark, a near-miss handback and a real one, the Host's thanks, and slide commands after closing, including next at the last slide.
-
-<details><summary>Reference decision timeline</summary>
-
-| Ticks | Applied decision |
-|---|---|
-| 0–2 | **talk**; slide=s4, captions=presenter, host_cue=listen |
-| 3 | **clip**; slide=s4, captions=presenter, clip_state=play |
-| 4 | **clip**; slide=s4, captions=clip, clip_state=play |
-| 5 | **clip**; slide=s4, captions=presenter, clip_state=pause |
-| 6–7 | **clip**; slide=s4, captions=presenter, clip_state=play |
-| 8–11 | **clip**; slide=s4, captions=presenter, clip_state=pause |
-| 12–13 | **clip**; slide=s4, captions=presenter, clip_state=play |
-| 14–15 | **talk**; slide=s4, captions=presenter, host_cue=listen |
-| 16–21 | **talk**; slide=s6, captions=presenter, host_cue=listen |
-| 22 | **talk**; slide=s9, captions=presenter, host_cue=listen |
-| 23–25 | **clip**; slide=s9, captions=presenter, clip_state=play |
-| 26–28 | **talk**; slide=s10, captions=presenter, host_cue=listen |
-| 29 | **talk**; slide=s10, captions=host, host_cue=listen |
-| 30–31 | **questions**; slide=s10, captions=host, question_card=waiting, host_cue=listen |
-| 32–33 | **questions**; slide=s10, captions=audience, question_card=listening, host_cue=listen |
-| 34 | **questions**; slide=s10, captions=audience, question_card=repeat, host_cue=listen |
-| 35–36 | **questions**; slide=s10, captions=presenter, question_card=repeat, host_cue=listen |
-| 37–38 | **questions**; slide=s9, captions=presenter, question_card=repeat, host_cue=listen |
-| 39–41 | **questions**; slide=s9, captions=presenter, question_card=answer, host_cue=listen |
-| 42 | **questions**; slide=s9, captions=audience, question_card=answer, host_cue=listen |
-| 43–44 | **talk**; slide=s9, captions=presenter, host_cue=listen |
-| 45–46 | **talk**; slide=s11, captions=presenter, host_cue=listen |
-| 47 | **talk**; slide=s11, captions=presenter, host_cue=stand_by |
-| 48 | **talk**; slide=s11, captions=presenter, host_cue=listen |
-| 49–51 | **talk**; slide=s11, captions=presenter, host_cue=stand_by |
-| 52 | **talk**; slide=s11, captions=host, host_cue=listen |
-| 53–55 | **closed**; slide=s11, captions=host |
-| 56–59 | **closed**; slide=s13, captions=presenter |
-
-</details>
-
-### `train_presenter_d`: Maritime museum lecture with two clips, a floor comment and a floor request for an earlier slide
-
-A maritime museum's livestreamed lecture on raising a sunken oyster smack, with a diver video with radio talk and a silent lift animation on a new 12-slide deck. Clip speech that sounds like a command, an early pause that lapses, a final pause and resume, a close command phrased as a question, a close command ignored in questions mode, questions opened from clip mode, a floor comment that needs no repeat, a floor request for an earlier slide that does not move it, two floor questions where the second resets the repeat card, a stand-by revised away, a handback ended by the Host's first sound, the thanks command, and a slide command after closing.
+A wake-word lecture console in a marine-acoustics evening lecture. Speech recognition publishes segments on four channels with word confidences and a stable flag; only a stable lecturer or moderator segment that starts with the wake word, says exactly one phrase from that speaker's list and has every word at or above the confidence threshold is a command, and commands replay in order of segment end. The route is the stage mode (lecture, media, poll, break, ended); the projected slide, recording light and countdown cue apply in every mode, with pointer, media state and poll panel as branch fields. A student using the wake word from the seats, a confident hypothesis that settles with one word under the threshold, a slide command locked out during a clip, a class poll that holds the clip, a title command at exactly the threshold, an unpublished slide that pauses the capture until cleared, and an ending only the moderator can give.
 
 <details><summary>Reference decision timeline</summary>
 
 | Ticks | Applied decision |
 |---|---|
-| 0–2 | **talk**; slide=s2, captions=presenter, host_cue=listen |
-| 3–4 | **talk**; slide=s3, captions=presenter, host_cue=listen |
-| 5 | **clip**; slide=s3, captions=presenter, clip_state=play |
-| 6–8 | **clip**; slide=s3, captions=clip, clip_state=play |
-| 9 | **clip**; slide=s3, captions=presenter, clip_state=pause |
-| 10 | **clip**; slide=s3, captions=presenter, clip_state=play |
-| 11–13 | **clip**; slide=s3, captions=presenter, clip_state=pause |
-| 14–16 | **clip**; slide=s3, captions=presenter, clip_state=play |
-| 17 | **clip**; slide=s3, captions=host, clip_state=play |
-| 18–19 | **clip**; slide=s3, captions=presenter, clip_state=play |
-| 20–21 | **talk**; slide=s4, captions=presenter, host_cue=listen |
-| 22–23 | **talk**; slide=s6, captions=presenter, host_cue=listen |
-| 24–26 | **clip**; slide=s6, captions=presenter, clip_state=play |
-| 27 | **clip**; slide=s6, captions=host, clip_state=play |
-| 28 | **questions**; slide=s6, captions=host, question_card=waiting, host_cue=listen |
-| 29–30 | **questions**; slide=s6, captions=presenter, question_card=waiting, host_cue=listen |
-| 31 | **questions**; slide=s6, captions=audience, question_card=listening, host_cue=listen |
-| 32 | **questions**; slide=s6, captions=audience, question_card=answer, host_cue=listen |
-| 33 | **questions**; slide=s6, captions=presenter, question_card=answer, host_cue=listen |
-| 34 | **talk**; slide=s6, captions=presenter, host_cue=listen |
-| 35 | **talk**; slide=s6, captions=presenter, host_cue=stand_by |
-| 36–37 | **talk**; slide=s6, captions=presenter, host_cue=listen |
-| 38–39 | **talk**; slide=s6, captions=presenter, host_cue=stand_by |
-| 40–41 | **talk**; slide=s6, captions=host, host_cue=listen |
-| 42–43 | **questions**; slide=s6, captions=host, question_card=waiting, host_cue=listen |
-| 44–45 | **questions**; slide=s6, captions=audience, question_card=listening, host_cue=listen |
-| 46 | **questions**; slide=s6, captions=audience, question_card=repeat, host_cue=listen |
-| 47 | **questions**; slide=s6, captions=presenter, question_card=repeat, host_cue=listen |
-| 48 | **questions**; slide=s2, captions=presenter, question_card=answer, host_cue=listen |
-| 49 | **questions**; slide=s2, captions=audience, question_card=listening, host_cue=listen |
-| 50 | **questions**; slide=s2, captions=audience, question_card=answer, host_cue=listen |
-| 51 | **questions**; slide=s2, captions=presenter, question_card=answer, host_cue=listen |
-| 52 | **questions**; slide=s4, captions=presenter, question_card=answer, host_cue=listen |
-| 53 | **questions**; slide=s4, captions=audience, question_card=listening, host_cue=listen |
-| 54 | **questions**; slide=s4, captions=audience, question_card=repeat, host_cue=listen |
-| 55 | **questions**; slide=s4, captions=presenter, question_card=repeat, host_cue=listen |
-| 56 | **questions**; slide=s4, captions=presenter, question_card=repeat, host_cue=stand_by |
-| 57 | **closed**; slide=s4, captions=host |
-| 58 | **closed**; slide=s4, captions=presenter |
-| 59 | **closed**; slide=s3, captions=presenter |
+| 0–2 | **lecture**; projected_slide=slide_1, recording_light=on, timer_cue=none, pointer=off |
+| 3–8 | **lecture**; projected_slide=slide_2, recording_light=on, timer_cue=none, pointer=off |
+| 9–11 | **lecture**; projected_slide=slide_3, recording_light=on, timer_cue=none, pointer=off |
+| 12–13 | **lecture**; projected_slide=slide_3, recording_light=on, timer_cue=none, pointer=zoom |
+| 14–16 | **lecture**; projected_slide=slide_3, recording_light=on, timer_cue=none, pointer=off |
+| 17 | **lecture**; projected_slide=slide_4, recording_light=on, timer_cue=none, pointer=off |
+| 18–22 | **media**; projected_slide=slide_4, recording_light=on, timer_cue=none, media_state=playing |
+| 23–25 | **poll**; projected_slide=slide_4, recording_light=on, timer_cue=none, poll_panel=collecting |
+| 26 | **poll**; projected_slide=slide_4, recording_light=on, timer_cue=none, poll_panel=results |
+| 27 | **media**; projected_slide=slide_4, recording_light=on, timer_cue=none, media_state=paused |
+| 28–29 | **media**; projected_slide=slide_4, recording_light=on, timer_cue=none, media_state=playing |
+| 30 | **lecture**; projected_slide=slide_4, recording_light=on, timer_cue=none, pointer=off |
+| 31–33 | **lecture**; projected_slide=slide_6, recording_light=on, timer_cue=none, pointer=off |
+| 34 | **lecture**; projected_slide=slide_6, recording_light=on, timer_cue=none, pointer=spotlight |
+| 35–36 | **lecture**; projected_slide=slide_6, recording_light=on, timer_cue=wrap_up, pointer=spotlight |
+| 37–38 | **lecture**; projected_slide=slide_6, recording_light=on, timer_cue=none, pointer=spotlight |
+| 39–41 | **lecture**; projected_slide=slide_8, recording_light=on, timer_cue=none, pointer=off |
+| 42 | **lecture**; projected_slide=slide_8, recording_light=paused, timer_cue=none, pointer=off |
+| 43–45 | **media**; projected_slide=slide_8, recording_light=paused, timer_cue=none, media_state=playing |
+| 46 | **media**; projected_slide=slide_8, recording_light=paused, timer_cue=wrap_up, media_state=playing |
+| 47 | **media**; projected_slide=slide_8, recording_light=paused, timer_cue=wrap_up, media_state=paused |
+| 48 | **lecture**; projected_slide=slide_8, recording_light=paused, timer_cue=wrap_up, pointer=off |
+| 49 | **lecture**; projected_slide=slide_8, recording_light=on, timer_cue=wrap_up, pointer=off |
+| 50 | **break**; projected_slide=slide_8, recording_light=paused, timer_cue=wrap_up |
+| 51 | **break**; projected_slide=slide_9, recording_light=paused, timer_cue=wrap_up |
+| 52–53 | **lecture**; projected_slide=slide_9, recording_light=paused, timer_cue=wrap_up, pointer=off |
+| 54 | **lecture**; projected_slide=slide_9, recording_light=paused, timer_cue=overtime, pointer=off |
+| 55 | **lecture**; projected_slide=slide_9, recording_light=on, timer_cue=overtime, pointer=off |
+| 56 | **lecture**; projected_slide=slide_10, recording_light=on, timer_cue=overtime, pointer=off |
+| 57 | **lecture**; projected_slide=slide_9, recording_light=paused, timer_cue=overtime, pointer=off |
+| 58–59 | **ended**; projected_slide=slide_9, recording_light=off, timer_cue=none |
 
 </details>
 
+### `train_presenter_d`: After-hours gallery tour of a raised oyster smack, run by the guide's voice
+
+An after-hours gallery tour of a raised oyster smack, controlled by the guide's voice. The recogniser publishes one live slot per role (guide, visitor, staff radio, film) and a log of finished turns already cut into phrases with a question flag. The route is the scene (at_stop, film, questions, paused, finished); the stop and caption source are always shown, with a time-based guide prompt, a screen warm-up from the guide's stable live words, film ducking, a question queue and the scene held by a staff pause as branch fields. Filler words are removed from command phrases, staff pauses hold and restore the scene, a film accepts only the guide's stop command, the end of the tour is final, and both the dwell time and the wrap-up tick count equality.
+
+<details><summary>Reference decision timeline</summary>
+
+| Ticks | Applied decision |
+|---|---|
+| 0 | **at_stop**; stop=estuary, caption_source=blank, guide_prompt=on_time, screen_warmup=idle |
+| 1–4 | **at_stop**; stop=estuary, caption_source=guide, guide_prompt=on_time, screen_warmup=idle |
+| 5 | **at_stop**; stop=estuary, caption_source=guide, guide_prompt=on_time, screen_warmup=bell |
+| 6–8 | **at_stop**; stop=bell, caption_source=guide, guide_prompt=on_time, screen_warmup=idle |
+| 9–10 | **at_stop**; stop=bell, caption_source=visitor, guide_prompt=on_time, screen_warmup=idle |
+| 11 | **film**; stop=bell, caption_source=guide, film_audio=full |
+| 12–13 | **film**; stop=bell, caption_source=film, film_audio=full |
+| 14 | **film**; stop=bell, caption_source=visitor, film_audio=full |
+| 15 | **film**; stop=bell, caption_source=guide, film_audio=ducked |
+| 16 | **film**; stop=bell, caption_source=film, film_audio=full |
+| 17 | **paused**; stop=bell, caption_source=film, held_scene=film |
+| 18–19 | **paused**; stop=bell, caption_source=guide, held_scene=film |
+| 20 | **film**; stop=bell, caption_source=guide, film_audio=full |
+| 21–22 | **film**; stop=bell, caption_source=film, film_audio=full |
+| 23–24 | **at_stop**; stop=bell, caption_source=guide, guide_prompt=move_along, screen_warmup=idle |
+| 25–26 | **at_stop**; stop=bell, caption_source=guide, guide_prompt=move_along, screen_warmup=terrace |
+| 27 | **at_stop**; stop=bell, caption_source=guide, guide_prompt=move_along, screen_warmup=idle |
+| 28 | **at_stop**; stop=bell, caption_source=guide, guide_prompt=move_along, screen_warmup=hull |
+| 29–33 | **at_stop**; stop=hull, caption_source=guide, guide_prompt=on_time, screen_warmup=idle |
+| 34–36 | **questions**; stop=hull, caption_source=visitor, question_queue=empty, guide_prompt=on_time, screen_warmup=idle |
+| 37 | **questions**; stop=hull, caption_source=guide, question_queue=one, guide_prompt=on_time, screen_warmup=idle |
+| 38 | **questions**; stop=hull, caption_source=visitor, question_queue=several, guide_prompt=on_time, screen_warmup=idle |
+| 39–40 | **questions**; stop=hull, caption_source=guide, question_queue=empty, guide_prompt=move_along, screen_warmup=idle |
+| 41–43 | **at_stop**; stop=hull, caption_source=guide, guide_prompt=move_along, screen_warmup=idle |
+| 44 | **at_stop**; stop=hull, caption_source=guide, guide_prompt=move_along, screen_warmup=lab |
+| 45 | **at_stop**; stop=lab, caption_source=guide, guide_prompt=on_time, screen_warmup=idle |
+| 46–48 | **paused**; stop=lab, caption_source=guide, held_scene=at_stop |
+| 49–50 | **at_stop**; stop=lab, caption_source=guide, guide_prompt=on_time, screen_warmup=idle |
+| 51 | **questions**; stop=lab, caption_source=guide, question_queue=empty, guide_prompt=on_time, screen_warmup=idle |
+| 52 | **questions**; stop=lab, caption_source=visitor, question_queue=empty, guide_prompt=wrap_up, screen_warmup=idle |
+| 53 | **questions**; stop=lab, caption_source=visitor, question_queue=one, guide_prompt=wrap_up, screen_warmup=idle |
+| 54 | **questions**; stop=lab, caption_source=guide, question_queue=empty, guide_prompt=wrap_up, screen_warmup=idle |
+| 55–56 | **at_stop**; stop=terrace, caption_source=guide, guide_prompt=wrap_up, screen_warmup=idle |
+| 57 | **finished**; stop=terrace, caption_source=guide |
+| 58 | **finished**; stop=terrace, caption_source=visitor |
+| 59 | **finished**; stop=terrace, caption_source=guide |
+
+</details>

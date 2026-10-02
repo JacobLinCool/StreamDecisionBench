@@ -5,37 +5,42 @@
   "episodes": [
     {
       "episode_id": "train_debugging_c",
-      "questions": 7,
+      "questions": 8,
       "steps": 60,
       "duration_s": 120.0,
-      "decision_transitions": 25,
+      "decision_transitions": 31,
       "routes_seen": [
-        "control",
-        "delegate",
-        "inspect",
-        "ready",
-        "rerun",
-        "wait"
+        "address_review",
+        "fix_build",
+        "fix_lint",
+        "investigate_test",
+        "merge",
+        "request_review",
+        "retry_flaky",
+        "unblock_queue",
+        "wait_ci"
       ],
       "routes_unseen": [],
-      "public_hash": "ba9862ae8514c786fd57b2a4ffc460c6cb33b1bc5d30cfc16bba6436223dba1a"
+      "public_hash": "90587df468cccd0704aaa37a4897f1e85e6b24da77d37f6e4f4300608b658817"
     },
     {
       "episode_id": "train_debugging_d",
-      "questions": 7,
+      "questions": 6,
       "steps": 60,
       "duration_s": 120.0,
-      "decision_transitions": 24,
+      "decision_transitions": 31,
       "routes_seen": [
-        "control",
-        "delegate",
-        "inspect",
-        "ready",
-        "rerun",
+        "ask_data_owner",
+        "fix_cell",
+        "interrupt_kernel",
+        "refresh_table",
+        "restart_kernel",
+        "run_cell",
+        "share_results",
         "wait"
       ],
       "routes_unseen": [],
-      "public_hash": "b4b507bbbb4a06ec0a37258f6a0c80266578d1a2c29585211196ec1061dd73c0"
+      "public_hash": "dc187cd2a4a7155d9a9c53503ba9d82a25ee514ea257800b256639f8e77d1cb6"
     },
     {
       "episode_id": "train_assembly_c",
@@ -88,7 +93,7 @@
         "refund"
       ],
       "routes_unseen": [],
-      "public_hash": "453b0460fe44291c6dac402c65e1073b0533143e5a42b6a1fa95aeb5553b817d"
+      "public_hash": "3acd1b7de9c10eef19b05f8257332b3675affcc256543b63271b425d0f914ce8"
     },
     {
       "episode_id": "train_support_d",
@@ -105,48 +110,50 @@
         "plan"
       ],
       "routes_unseen": [],
-      "public_hash": "33b1f67d51b1cd49d73aa61f4857064ff47d37825aeec8b8338d6e05ada9251b"
+      "public_hash": "df877121c99691c2cfc0784efe73515a83d2dedf9e00628efd08165a88b98e60"
     },
     {
       "episode_id": "train_presenter_c",
-      "questions": 6,
+      "questions": 7,
       "steps": 60,
       "duration_s": 120.0,
-      "decision_transitions": 27,
+      "decision_transitions": 30,
       "routes_seen": [
-        "clip",
-        "closed",
-        "questions",
-        "talk"
+        "break",
+        "ended",
+        "lecture",
+        "media",
+        "poll"
       ],
       "routes_unseen": [],
-      "public_hash": "6b876c14ff73db94035075165c76a9ba99751a8212d1d576bd4d05802fc6cfd3"
+      "public_hash": "3748a9dc512b7ebe0e1369fe75c494216c996e394251d42de9182a95e7b2f1e6"
     },
     {
       "episode_id": "train_presenter_d",
-      "questions": 6,
+      "questions": 8,
       "steps": 60,
       "duration_s": 120.0,
-      "decision_transitions": 39,
+      "decision_transitions": 35,
       "routes_seen": [
-        "clip",
-        "closed",
-        "questions",
-        "talk"
+        "at_stop",
+        "film",
+        "finished",
+        "paused",
+        "questions"
       ],
       "routes_unseen": [],
-      "public_hash": "5597427b118feaa79036e5c53be8698382bd8e34a8b24f51044ef53693197c3f"
+      "public_hash": "0b162299c94600225c626c15692dd53990c7cf0c46110c64b96f64d1e1c5ccac"
     }
   ],
   "hashes": {
-    "train_debugging_c": "67fd6d2ad81d8aa38c1972d0847b368be5d9666fee36fc541a6bdb2bb205c6b8",
-    "train_debugging_d": "9cc33e98461ad37361ef28a6db2dfe2d5e3d1cfb117d834c2cdf1c3aab83de14",
+    "train_debugging_c": "3f48cb16410f912c8c4f9b69382e4a1721d14975c166c6271f9756e109d712dc",
+    "train_debugging_d": "6c96e412bddd37e64ee43efbad6c7e89c0d6fac839e0b7be3c7c8ab0583a5281",
     "train_assembly_c": "574995441b770eec1393c70a81382272d4fc52725c6fe5848ae99544c1ae555a",
     "train_assembly_d": "3df5084f672ec823909488c1c7073d91ad71b3c1b9a692849272cbbcce2154ac",
-    "train_support_c": "79587b191f5fb8b0f01c391ba4d4d457a3b078b0a9bf4bd5cba7101c754a75b1",
-    "train_support_d": "6447198ec20674ee8466007c70d25b63b49b4dc2cd665bb8dbb5c440ac3db814",
-    "train_presenter_c": "8f1134aaee085ec296e176ed18d6958af52b1a745b41332f53ce7c2a116f392f",
-    "train_presenter_d": "19f0c53f22658a1bdd6c4336ad7095ef33a34b356d25bedac3c2700470009447"
+    "train_support_c": "1873ba8be74fa16a48478937ca65d5355ef9bbb38bf26e1c2394727a186670d1",
+    "train_support_d": "a1db19dcef84e4de4db33d28046f6b23aceea97c7b721de89b33defee6d39696",
+    "train_presenter_c": "edbe507d94658a4cdea7248e8579499d29a77b71f7146abdb14d083fb0a5a484",
+    "train_presenter_d": "a92072db9394f75e7a386ed06d804c741d07dd5d0880cf10daf5d2b4251bc12e"
   },
   "generator_sources": {
     "adapters/llm.py": "14a64eb0c3ee6b6b7d755ea55bd52cb87aaa56356c800a740fe71a4b79fa8ae2",
@@ -168,15 +175,15 @@
     "lite/training/__main__.py": "463c3c7b77982af340fd732aa1d8d6f102bbc7beac98d7fbc4983ff84e908623",
     "lite/training/assembly_c.py": "344c03c19ffaa95494c98a4f2ea8cdc5ab5435a27974af109ebebd3875e674e3",
     "lite/training/assembly_d.py": "7eb515283fa2822b10f6d1915c966422ad3e64a82783f04acbe9b5da8dd04c97",
-    "lite/training/audit.py": "67970136412b46fa1e55d596fda2d13e911113fc6c5a69fc429a9f096ceb70fe",
-    "lite/training/debugging_c.py": "7a66ef283af4e7a74dfe7bd88b89927c71018d208e6768d37df977a865ac4347",
-    "lite/training/debugging_d.py": "38c5069c240704fbf0b997ea90fdf2e7ab5e68db0e2d384f0a0e080dfe80753e",
-    "lite/training/presenter_c.py": "e83f2af14005feb44b10e48c577c7fa1a8b08d60784f3ae15d34ac1132188fb0",
-    "lite/training/presenter_d.py": "60c31377056f78da97cdc963cee07f1e9194faf8eefe80e275e13d5fd9142093",
-    "lite/training/support_c.py": "97e5d0aed22b60befc65b3a5b88340500ecab69bfb12c53c72990ecaf0d8a105",
-    "lite/training/support_d.py": "a4e66b2986dbeffb26e812b7b7b122256765e7c94e8c5158a889661f82084364"
+    "lite/training/audit.py": "d93824567b57bcfa509d8b9f9238863d1d1896e6197971518c21620469e2e8ac",
+    "lite/training/debugging_c.py": "382ba937fa53bdec65da6513803bcee3f8778f45770556176861df190c00e22c",
+    "lite/training/debugging_d.py": "449cc947f349f7d0468e9766f332556252ec8b788dcbbf63d67d7645f2be28a1",
+    "lite/training/presenter_c.py": "d11fc16bae444225f59fd6e9ebb40ed15cc2db5eabf863867b015ff0d2ef8079",
+    "lite/training/presenter_d.py": "b9e3da267dd9d7464fa3ffecbef75b721634fd9b61061acc122a115681f0c7d4",
+    "lite/training/support_c.py": "d616621b4774c2c99569d67fde3efadda1425ef1f888e1b0036d28dcdb57eea6",
+    "lite/training/support_d.py": "ca690320a0e52fa2947ddd6b0e1eb81fcb990b43fb8a2dcef1a6d93285661213"
   },
   "reference_validation": "public-only executable reference agreement; not independent human adjudication",
   "leakage_audit": "no evaluation state, sentence, six-word run or identifier outside the families' published rules (streamdecisionbench.lite.training.audit)",
-  "dataset_hash": "00bc46f6994bd2d4f08eca909f50b797f5604fe512bbe3bc10ff147bf18d9762"
+  "dataset_hash": "bc76643a389fff09a60e45355ee3f01ddc7b0c51f2994ec907d4f09b3643e1cd"
 }

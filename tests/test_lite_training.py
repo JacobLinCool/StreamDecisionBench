@@ -76,7 +76,7 @@ def test_leakage_audit_rejects_copied_evaluation_content(training, evaluation):
 def test_training_writes_its_own_rules_questions_and_state_layout(training, evaluation):
     own = [s for s in training if s["episode_id"] not in SHARED_SPEC]
     assert SHARED_SPEC <= {s["episode_id"] for s in training}
-    assert {s["task_family"] for s in own} == FAMILIES
+    assert {s["task_family"] for s in own} == FAMILIES - {"procedural_coaching"}
     assert spec_overlap(own, evaluation) == []
     for scenario in own:
         assert layout_overlap(scenario, evaluation) <= MAX_LAYOUT_OVERLAP, scenario["episode_id"]

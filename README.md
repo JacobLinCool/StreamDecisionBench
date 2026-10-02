@@ -226,7 +226,8 @@ branches. Create the client with SDK retries disabled: the runner retries transp
   work instruction), a support call (workflow route, guidance and the call recorder) and presenter
   voice control (slide, captions and cues from streaming ASR). Each has two independently authored
   scenarios of 60 states. A separate [training split](docs/lite/training.md) adds two more scenarios
-  per family for training; it shares no evaluation content and is never scored.
+  per family for training; it shares no evaluation content, writes its own rules and questions (the
+  assembly variants keep the family's common station rules) and is never scored.
 - **States and time.** State *t* is published at time step *t*. All times the model sees are written
   in time steps, so a recording at a 2 s step can be evaluated at any other interval.
 - **Questions and decisions.** Each state asks six or seven multiple-choice questions with opaque

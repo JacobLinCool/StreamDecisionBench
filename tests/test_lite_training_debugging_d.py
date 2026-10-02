@@ -72,8 +72,8 @@ def test_option_texts_agree_with_the_numbered_rules(episode):
     criteria = episode["questions"]["next_action"]["criteria"]
     share, wait = criteria["share_results"], criteria["wait"]
     rules = " ".join(debugging_d.RULES)
-    assert ("notebook.shared_at is null or some tracked cell has an executed_at later than shared_at "
-            "-> share_results") in rules
+    assert ("notebook.shared_at is null or some tracked cell has an executed_at strictly later than shared_at "
+            "(a cell executed at the tick of shared_at counts as shared) -> share_results") in rules
     assert "never shared" in share and "has started since" in share and "later than shared_at" in share
     assert "no tracked cell has started since" not in share
     assert "memory under 90%" in wait and "no tracked cell started later than shared_at" in wait
