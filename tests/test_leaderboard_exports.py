@@ -107,8 +107,8 @@ def test_winnow_exports_match_independently_verified_three_pass_report(name, tmp
     assert len(source["provenance"][name]) == 3
 
 
-@pytest.mark.parametrize("missing", ["Winnow12B", "WinnowE4B"])
-def test_omitting_completed_winnow_recording_cannot_publish(missing, tmp_path, monkeypatch):
+@pytest.mark.parametrize("missing", ["Winnow12B", "WinnowE4B", "DecisionKai", "DecisionEos", "DecisionSol", "DecisionNox", "DecisionLux", "DecisionVega"])
+def test_omitting_completed_self_hosted_recording_cannot_publish(missing, tmp_path, monkeypatch):
     summary = json.loads(figure_data.SUMMARY.read_text())
     del summary["standalone"][missing]
     path = tmp_path / "analysis.json"
@@ -116,6 +116,20 @@ def test_omitting_completed_winnow_recording_cannot_publish(missing, tmp_path, m
     monkeypatch.setattr(figure_data, "SUMMARY", path)
     with pytest.raises(ValueError, match="every registered"):
         figure_data.build()
+
+
+@pytest.mark.parametrize('name', ['DecisionKai', 'DecisionEos', 'DecisionSol', 'DecisionNox', 'DecisionLux', 'DecisionVega'])
+def test_decision20_exports_match_verified_native_three_pass_reports(name, tmp_path):
+    row = next(r for r in site_build.build(tmp_path)['settings'] if r['id'] == name)
+    report = json.loads((ROOT / 'docs/lite/results/decision20-pro6000-20261003/results.json').read_text())
+    expected = next(r for r in report['aggregate'] if r['model'] == 'vllm-sr/Decision-2.0-' + row['label'].removeprefix('Decision 2.0 '))
+    tolerance = json.loads((ROOT / 'paper/analysis/evaluation_policy.json').read_text())['integration']['tolerance']
+    assert row['passes'] == expected['passes'] == 3
+    assert row['log_auc_pct'] == pytest.approx(expected['log_auc_pct'], abs=100*tolerance, rel=0)
+    assert row['untimed_pct'] == pytest.approx(expected['untimed_pct'], abs=1e-9)
+    for q in ('p50', 'p95'):
+        assert row[q+'_s'] == pytest.approx(expected[q+'_s'], abs=1e-9)
+    assert len(json.loads(figure_data.OUT.read_text())['provenance'][name]) == 3
 
 
 def test_generated_markdown_tables_have_consistent_columns():

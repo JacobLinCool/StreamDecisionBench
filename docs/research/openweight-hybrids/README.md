@@ -20,6 +20,12 @@ Self-hosted results and curves average three passes; latency summaries average p
 | Qwen3.5-4B direct-logit | 15.61 | 17.71 | 0.777 / 1.254 | RTX PRO 6000 (96 GB) |
 | Winnow-12B | 43.15 | 46.46 | 0.328 / 0.453 | RTX PRO 6000 (96 GB; RunPod) |
 | Winnow-E4B | 18.97 | 19.79 | 0.170 / 0.235 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Kai-0.6B | 3.63 | 3.75 | 0.198 / 0.340 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Eos-0.8B | 5.02 | 5.21 | 0.307 / 0.453 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Sol-2B | 3.59 | 3.54 | 0.404 / 0.582 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Nox-4B | 15.85 | 18.33 | 0.936 / 1.350 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Lux-9B | 24.38 | 29.58 | 1.201 / 1.731 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Vega-27B | 7.47 | 68.54 | 53.020 / 174.150 | RTX PRO 6000 (96 GB; RunPod) |
 
 ## Pair selection and acceptance
 
@@ -46,6 +52,12 @@ not a faster component in these recordings.
 | Qwen3.5-4B direct-logit + Terra none | 46.22 |
 | Winnow-12B + Terra none | 56.09 |
 | Winnow-E4B + Terra none | 39.52 |
+| Decision 2.0 Kai-0.6B + Terra none | 30.10 |
+| Decision 2.0 Eos-0.8B + Terra none | 32.15 |
+| Decision 2.0 Sol-2B + Terra none | 32.69 |
+| Decision 2.0 Nox-4B + Terra none | 48.12 |
+| Decision 2.0 Lux-9B + Terra none | 52.81 |
+| Decision 2.0 Vega-27B + Terra none | 54.11 |
 
 ## Complete local/policy matrix
 
@@ -84,16 +96,34 @@ not a faster component in these recordings.
 | Winnow-E4B | Freshest source | 39.52 | 0.01 | 37.36 | 34.14 |
 | Winnow-E4B | One-tick lag | 43.51 | 0.00 | 38.06 | 47.25 |
 | Winnow-E4B | Late override | 43.85 | 0.00 | 38.06 | 52.48 |
+| Decision 2.0 Kai-0.6B | Freshest source | 30.10 | 0.03 | 27.84 | 34.92 |
+| Decision 2.0 Kai-0.6B | One-tick lag | 35.76 | 0.01 | 28.32 | 48.00 |
+| Decision 2.0 Kai-0.6B | Late override | 36.64 | 0.01 | 28.32 | 52.81 |
+| Decision 2.0 Eos-0.8B | Freshest source | 32.15 | 0.04 | 30.96 | 37.43 |
+| Decision 2.0 Eos-0.8B | One-tick lag | 36.97 | 0.03 | 31.17 | 50.30 |
+| Decision 2.0 Eos-0.8B | Late override | 37.52 | 0.02 | 31.17 | 53.83 |
+| Decision 2.0 Sol-2B | Freshest source | 32.69 | 0.05 | 32.44 | 39.98 |
+| Decision 2.0 Sol-2B | One-tick lag | 37.06 | 0.02 | 32.56 | 52.42 |
+| Decision 2.0 Sol-2B | Late override | 37.44 | 0.02 | 32.56 | 54.95 |
+| Decision 2.0 Nox-4B | Freshest source | 48.12 | 0.03 | 51.07 | 62.26 |
+| Decision 2.0 Nox-4B | One-tick lag | 48.53 | 0.03 | 51.16 | 67.43 |
+| Decision 2.0 Nox-4B | Late override | 48.52 | 0.03 | 51.16 | 67.67 |
+| Decision 2.0 Lux-9B | Freshest source | 52.81 | 0.01 | 56.81 | 74.13 |
+| Decision 2.0 Lux-9B | One-tick lag | 52.73 | 0.01 | 56.90 | 76.66 |
+| Decision 2.0 Lux-9B | Late override | 52.72 | 0.01 | 56.90 | 76.75 |
+| Decision 2.0 Vega-27B | Freshest source | 54.11 | 0.00 | 59.86 | 97.95 |
+| Decision 2.0 Vega-27B | One-tick lag | 54.11 | 0.00 | 59.86 | 97.95 |
+| Decision 2.0 Vega-27B | Late override | 54.11 | 0.00 | 59.86 | 97.95 |
 
 ## Verification and scope
 
-Original-clock replay reproduces correctness and all six time classes in 456 setting/scenario checks.
+Original-clock replay reproduces correctness and all six time classes in 600 setting/scenario checks.
 The largest nominal/original-clock difference at 2 s is 0.017328 percentage points.
 The log integral is analytical between every release/arrival crossing; a third interior point checks each affine piece.
 Published standalone aggregates and family partitions are checked against independently recomputed areas.
 Compositions average three self-hosted passes, each paired with the same hosted recording. Retiming assumes fixed
 service latency; hardware normalization, joint contention, variability across hosted passes and generative Qwen
-performance are outside the measurements. Sol-2B had no executable public native runtime and receives no score.
+performance are outside the measurements. Decision 2.0 releases use their preserved native runtime and exact input audits.
 
 [analysis.json](analysis.json) includes all scenario/family partitions, full curves, raw event and input-audit
 hashes, execution configuration and analysis-source hashes. Original recording files are unchanged.

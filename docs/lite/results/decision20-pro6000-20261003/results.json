@@ -1,0 +1,248 @@
+{
+  "complete_passes": 18,
+  "expected_passes": 18,
+  "results": [
+    {
+      "model": "vllm-sr/Decision-2.0-Kai-0.6B",
+      "setting": "kai-06b",
+      "pass": 1,
+      "log_auc_pct": 3.628186202260099,
+      "untimed_pct": 3.75,
+      "p50_s": 0.20086876198183745,
+      "p95_s": 0.3400491425069049,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Eos-0.8B",
+      "setting": "eos-08b",
+      "pass": 1,
+      "log_auc_pct": 5.022984809132893,
+      "untimed_pct": 5.208333333333334,
+      "p50_s": 0.30481784051517025,
+      "p95_s": 0.4500817104068119,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Sol-2B",
+      "setting": "sol-2b",
+      "pass": 1,
+      "log_auc_pct": 3.591655250677644,
+      "untimed_pct": 3.5416666666666665,
+      "p50_s": 0.4026226485148072,
+      "p95_s": 0.5762106468959246,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Nox-4B",
+      "setting": "nox-4b",
+      "pass": 1,
+      "log_auc_pct": 15.851216171680171,
+      "untimed_pct": 18.333333333333336,
+      "p50_s": 0.9361102245748043,
+      "p95_s": 1.346832690242445,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Lux-9B",
+      "setting": "lux-9b",
+      "pass": 1,
+      "log_auc_pct": 24.38882576542867,
+      "untimed_pct": 29.583333333333332,
+      "p50_s": 1.2007035920396447,
+      "p95_s": 1.7313709428126458,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Vega-27B",
+      "setting": "vega-27b",
+      "pass": 1,
+      "log_auc_pct": 7.473188333150568,
+      "untimed_pct": 68.54166666666667,
+      "p50_s": 53.06677709001815,
+      "p95_s": 174.27459333643782,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Kai-0.6B",
+      "setting": "kai-06b",
+      "pass": 2,
+      "log_auc_pct": 3.6291001851165063,
+      "untimed_pct": 3.75,
+      "p50_s": 0.19495142251253128,
+      "p95_s": 0.33924288011039605,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Eos-0.8B",
+      "setting": "eos-08b",
+      "pass": 2,
+      "log_auc_pct": 5.023300126706518,
+      "untimed_pct": 5.208333333333334,
+      "p50_s": 0.3079052724642679,
+      "p95_s": 0.4568852680909913,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Sol-2B",
+      "setting": "sol-2b",
+      "pass": 2,
+      "log_auc_pct": 3.593334388587573,
+      "untimed_pct": 3.5416666666666665,
+      "p50_s": 0.40413810953032225,
+      "p95_s": 0.5806488628149963,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Nox-4B",
+      "setting": "nox-4b",
+      "pass": 2,
+      "log_auc_pct": 15.855020635732664,
+      "untimed_pct": 18.333333333333336,
+      "p50_s": 0.9354868300142698,
+      "p95_s": 1.3450142719550058,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Lux-9B",
+      "setting": "lux-9b",
+      "pass": 2,
+      "log_auc_pct": 24.38708391132393,
+      "untimed_pct": 29.583333333333332,
+      "p50_s": 1.1997049880446866,
+      "p95_s": 1.7284155796340201,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Vega-27B",
+      "setting": "vega-27b",
+      "pass": 2,
+      "log_auc_pct": 7.4756403238634626,
+      "untimed_pct": 68.54166666666667,
+      "p50_s": 52.95208357449155,
+      "p95_s": 174.00223094599204,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Kai-0.6B",
+      "setting": "kai-06b",
+      "pass": 3,
+      "log_auc_pct": 3.6287383037411933,
+      "untimed_pct": 3.75,
+      "p50_s": 0.19884929154068232,
+      "p95_s": 0.339817650715122,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Eos-0.8B",
+      "setting": "eos-08b",
+      "pass": 3,
+      "log_auc_pct": 5.0216247674044405,
+      "untimed_pct": 5.208333333333334,
+      "p50_s": 0.3071965710259974,
+      "p95_s": 0.452887740987353,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Sol-2B",
+      "setting": "sol-2b",
+      "pass": 3,
+      "log_auc_pct": 3.592082497107138,
+      "untimed_pct": 3.5416666666666665,
+      "p50_s": 0.4040256894659251,
+      "p95_s": 0.5895815674448386,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Nox-4B",
+      "setting": "nox-4b",
+      "pass": 3,
+      "log_auc_pct": 15.843471897828518,
+      "untimed_pct": 18.333333333333336,
+      "p50_s": 0.9371727465186268,
+      "p95_s": 1.3577314188005403,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Lux-9B",
+      "setting": "lux-9b",
+      "pass": 3,
+      "log_auc_pct": 24.369242142102646,
+      "untimed_pct": 29.583333333333332,
+      "p50_s": 1.2039144095033407,
+      "p95_s": 1.7330455357092434,
+      "failed_attempts": 0
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Vega-27B",
+      "setting": "vega-27b",
+      "pass": 3,
+      "log_auc_pct": 7.47207157070319,
+      "untimed_pct": 68.54166666666667,
+      "p50_s": 53.0401422540308,
+      "p95_s": 174.17181811467745,
+      "failed_attempts": 0
+    }
+  ],
+  "aggregate": [
+    {
+      "model": "vllm-sr/Decision-2.0-Kai-0.6B",
+      "setting": "kai-06b",
+      "passes": 3,
+      "log_auc_pct": 3.628674897039266,
+      "untimed_pct": 3.75,
+      "p50_s": 0.19822315867835036,
+      "p95_s": 0.33970322444414097,
+      "log_auc_sd_pp": 0.0004602786904025434
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Eos-0.8B",
+      "setting": "eos-08b",
+      "passes": 3,
+      "log_auc_pct": 5.02263656774795,
+      "untimed_pct": 5.208333333333334,
+      "p50_s": 0.3066398946684785,
+      "p95_s": 0.45328490649505204,
+      "log_auc_sd_pp": 0.0008903152500123162
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Sol-2B",
+      "setting": "sol-2b",
+      "passes": 3,
+      "log_auc_pct": 3.5923573787907848,
+      "untimed_pct": 3.5416666666666665,
+      "p50_s": 0.4035954825036849,
+      "p95_s": 0.5821470257185865,
+      "log_auc_sd_pp": 0.0008726660215360566
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Nox-4B",
+      "setting": "nox-4b",
+      "passes": 3,
+      "log_auc_pct": 15.849902901747118,
+      "untimed_pct": 18.333333333333336,
+      "p50_s": 0.9362566003692336,
+      "p95_s": 1.3498594603326637,
+      "log_auc_sd_pp": 0.005885307573310152
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Lux-9B",
+      "setting": "lux-9b",
+      "passes": 3,
+      "log_auc_pct": 24.38171727295175,
+      "untimed_pct": 29.583333333333332,
+      "p50_s": 1.201440996529224,
+      "p95_s": 1.7309440193853032,
+      "log_auc_sd_pp": 0.010838827483045923
+    },
+    {
+      "model": "vllm-sr/Decision-2.0-Vega-27B",
+      "setting": "vega-27b",
+      "passes": 3,
+      "log_auc_pct": 7.473633409239073,
+      "untimed_pct": 68.54166666666667,
+      "p50_s": 53.0196676395135,
+      "p95_s": 174.14954746570243,
+      "log_auc_sd_pp": 0.0018255326135564161
+    }
+  ]
+}

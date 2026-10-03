@@ -19,6 +19,7 @@ these files byte for byte.
 | `hosted-api-repeats-20261003/pass{2,3}/<setting>/` | Sixteen additional hosted passes on the same frozen dataset and execution protocol: Astra low, Luna low/none, Terra low/none, Jev, Clef and Clef Flash each have passes 2 and 3. The original fifteen additional passes succeeded without retries; Astra pass 3 retains its own attempt record. The public leaderboard averages these with each original pass. [Per-pass scores and provenance](../docs/lite/results/hosted-api-repeats-20261003/README.md). |
 | `pro6000-lab-20261001/runs/<setting>/` | Current self-hosted cohort: nine native BF16 settings on the same RTX PRO 6000 lab host (96 GB), recorded 2026-10-01, with 480 states each. Supersedes the two RunPod cohorts in the public leaderboard. [Settings and deployment details](../docs/lite/results/pro6000-lab-20261001/README.md). |
 | `winnow-pro6000-20261003/pass{1,2,3}/{winnow-12b,winnow-e4b}/` | Three BF16 passes per Winnow model on one RunPod RTX PRO 6000 Blackwell Server (96 GB), with a fresh native server per pass. All 2,880 requests succeeded without retries. [Repeated measurements and provenance](../docs/lite/results/winnow-pro6000-20261003/README.md). |
+| `decision20-pro6000-20261003/pass{1,2,3}/<setting>/` | Three native BF16-resident passes for each of the six Decision 2.0 models on one RunPod RTX PRO 6000 Blackwell Server (96 GB), with a fresh runtime per pass. All 8,640 requests succeeded without retries; committed answers were identical across the three passes. [Repeated measurements and provenance](../docs/lite/results/decision20-pro6000-20261003/README.md). |
 | `runpod-openweight-20260930/runs/{laya-english,laya-typed-decisions,laya-multilingual,djev-diffusiongemma}/` | Four self-hosted BF16 settings on RTX PRO 6000 Blackwell Server (96 GB); each has the same eight frozen scenarios and 480 requests, recorded on 2026-09-30. |
 | `runpod-openweight-20260930-round2/runs/{kev-4b,nimble-9b,semif-qwen35-4b}/` | Three self-hosted BF16 native settings on L40S (48 GB), recorded on 2026-09-30; Qwen is a direct-logit baseline. |
 
@@ -28,6 +29,11 @@ The self-hosted folders expose only `run.json`, `episodes.json` and `events.json
 
 The Winnow cohort additionally preserves frozen source archives and recorder snapshots.
 Recompute its reports with `uv run python scripts/runpod/winnow_report.py`.
+
+The Decision 2.0 cohort preserves the exact benchmark deployment, upstream native
+source and license archives, release manifests, dependency versions and per-pass
+input audits. Recompute its reports and equal-pass means with
+`uv run python scripts/runpod/decision20_report.py`; no GPU or API key is needed.
 
 A new pass needs a fresh `--out` folder (`run` refuses an existing one). Name it outside the `lite-v1-*-retry-v1` pattern unless it should be versioned.
 

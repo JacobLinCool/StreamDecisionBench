@@ -150,6 +150,132 @@
         "winnow-pro6000-20261003/pass3/winnow-e4b.input-audit.json"
       ],
       "native_sources": "winnow-pro6000-20261003/source-provenance.json"
+    },
+    {
+      "name": "DecisionKai",
+      "label": "Decision 2.0 Kai-0.6B",
+      "run": "decision20-pro6000-20261003/pass1/kai-06b",
+      "repeats": [
+        "decision20-pro6000-20261003/pass2/kai-06b",
+        "decision20-pro6000-20261003/pass3/kai-06b"
+      ],
+      "gpu": "RTX PRO 6000 (96 GB; RunPod)",
+      "reports": [
+        "decision20-pro6000-20261003/kai-06b-pass1",
+        "decision20-pro6000-20261003/kai-06b-pass2",
+        "decision20-pro6000-20261003/kai-06b-pass3"
+      ],
+      "audits": [
+        "decision20-pro6000-20261003/pass1/kai-06b.input-audit.json",
+        "decision20-pro6000-20261003/pass2/kai-06b.input-audit.json",
+        "decision20-pro6000-20261003/pass3/kai-06b.input-audit.json"
+      ],
+      "native_sources": "decision20-pro6000-20261003/source-provenance.json"
+    },
+    {
+      "name": "DecisionEos",
+      "label": "Decision 2.0 Eos-0.8B",
+      "run": "decision20-pro6000-20261003/pass1/eos-08b",
+      "repeats": [
+        "decision20-pro6000-20261003/pass2/eos-08b",
+        "decision20-pro6000-20261003/pass3/eos-08b"
+      ],
+      "gpu": "RTX PRO 6000 (96 GB; RunPod)",
+      "reports": [
+        "decision20-pro6000-20261003/eos-08b-pass1",
+        "decision20-pro6000-20261003/eos-08b-pass2",
+        "decision20-pro6000-20261003/eos-08b-pass3"
+      ],
+      "audits": [
+        "decision20-pro6000-20261003/pass1/eos-08b.input-audit.json",
+        "decision20-pro6000-20261003/pass2/eos-08b.input-audit.json",
+        "decision20-pro6000-20261003/pass3/eos-08b.input-audit.json"
+      ],
+      "native_sources": "decision20-pro6000-20261003/source-provenance.json"
+    },
+    {
+      "name": "DecisionSol",
+      "label": "Decision 2.0 Sol-2B",
+      "run": "decision20-pro6000-20261003/pass1/sol-2b",
+      "repeats": [
+        "decision20-pro6000-20261003/pass2/sol-2b",
+        "decision20-pro6000-20261003/pass3/sol-2b"
+      ],
+      "gpu": "RTX PRO 6000 (96 GB; RunPod)",
+      "reports": [
+        "decision20-pro6000-20261003/sol-2b-pass1",
+        "decision20-pro6000-20261003/sol-2b-pass2",
+        "decision20-pro6000-20261003/sol-2b-pass3"
+      ],
+      "audits": [
+        "decision20-pro6000-20261003/pass1/sol-2b.input-audit.json",
+        "decision20-pro6000-20261003/pass2/sol-2b.input-audit.json",
+        "decision20-pro6000-20261003/pass3/sol-2b.input-audit.json"
+      ],
+      "native_sources": "decision20-pro6000-20261003/source-provenance.json"
+    },
+    {
+      "name": "DecisionNox",
+      "label": "Decision 2.0 Nox-4B",
+      "run": "decision20-pro6000-20261003/pass1/nox-4b",
+      "repeats": [
+        "decision20-pro6000-20261003/pass2/nox-4b",
+        "decision20-pro6000-20261003/pass3/nox-4b"
+      ],
+      "gpu": "RTX PRO 6000 (96 GB; RunPod)",
+      "reports": [
+        "decision20-pro6000-20261003/nox-4b-pass1",
+        "decision20-pro6000-20261003/nox-4b-pass2",
+        "decision20-pro6000-20261003/nox-4b-pass3"
+      ],
+      "audits": [
+        "decision20-pro6000-20261003/pass1/nox-4b.input-audit.json",
+        "decision20-pro6000-20261003/pass2/nox-4b.input-audit.json",
+        "decision20-pro6000-20261003/pass3/nox-4b.input-audit.json"
+      ],
+      "native_sources": "decision20-pro6000-20261003/source-provenance.json"
+    },
+    {
+      "name": "DecisionLux",
+      "label": "Decision 2.0 Lux-9B",
+      "run": "decision20-pro6000-20261003/pass1/lux-9b",
+      "repeats": [
+        "decision20-pro6000-20261003/pass2/lux-9b",
+        "decision20-pro6000-20261003/pass3/lux-9b"
+      ],
+      "gpu": "RTX PRO 6000 (96 GB; RunPod)",
+      "reports": [
+        "decision20-pro6000-20261003/lux-9b-pass1",
+        "decision20-pro6000-20261003/lux-9b-pass2",
+        "decision20-pro6000-20261003/lux-9b-pass3"
+      ],
+      "audits": [
+        "decision20-pro6000-20261003/pass1/lux-9b.input-audit.json",
+        "decision20-pro6000-20261003/pass2/lux-9b.input-audit.json",
+        "decision20-pro6000-20261003/pass3/lux-9b.input-audit.json"
+      ],
+      "native_sources": "decision20-pro6000-20261003/source-provenance.json"
+    },
+    {
+      "name": "DecisionVega",
+      "label": "Decision 2.0 Vega-27B",
+      "run": "decision20-pro6000-20261003/pass1/vega-27b",
+      "repeats": [
+        "decision20-pro6000-20261003/pass2/vega-27b",
+        "decision20-pro6000-20261003/pass3/vega-27b"
+      ],
+      "gpu": "RTX PRO 6000 (96 GB; RunPod)",
+      "reports": [
+        "decision20-pro6000-20261003/vega-27b-pass1",
+        "decision20-pro6000-20261003/vega-27b-pass2",
+        "decision20-pro6000-20261003/vega-27b-pass3"
+      ],
+      "audits": [
+        "decision20-pro6000-20261003/pass1/vega-27b.input-audit.json",
+        "decision20-pro6000-20261003/pass2/vega-27b.input-audit.json",
+        "decision20-pro6000-20261003/pass3/vega-27b.input-audit.json"
+      ],
+      "native_sources": "decision20-pro6000-20261003/source-provenance.json"
     }
   ],
   "manuscript_settings": [

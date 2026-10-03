@@ -67,8 +67,14 @@ Latency includes the remote service and internet round trip from the benchmark c
 | Qwen3.5-4B direct-logit | 15.61 | 17.71 | 0.777 / 1.254 | RTX PRO 6000 (96 GB) |
 | Winnow-12B | 43.15 | 46.46 | 0.328 / 0.453 | RTX PRO 6000 (96 GB; RunPod) |
 | Winnow-E4B | 18.97 | 19.79 | 0.170 / 0.235 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Kai-0.6B | 3.63 | 3.75 | 0.198 / 0.340 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Eos-0.8B | 5.02 | 5.21 | 0.307 / 0.453 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Sol-2B | 3.59 | 3.54 | 0.404 / 0.582 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Nox-4B | 15.85 | 18.33 | 0.936 / 1.350 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Lux-9B | 24.38 | 29.58 | 1.201 / 1.731 | RTX PRO 6000 (96 GB; RunPod) |
+| Decision 2.0 Vega-27B | 7.47 | 68.54 | 53.020 / 174.150 | RTX PRO 6000 (96 GB; RunPod) |
 
-All 11 settings use BF16 backbones and native decision readouts, each on one RTX PRO 6000. Benchmark and
+All 17 settings use BF16 backbones and native decision readouts, each on one RTX PRO 6000. Benchmark and
 model run on the same GPU host; latency includes request processing, runtime queueing and inference, and excludes
 download, initialization and warmup. These rows describe the measured deployment: the self-hosted settings
 and hosted APIs are not a controlled hardware comparison.
@@ -77,9 +83,13 @@ Nimble scores each field sequentially with its full prompt; its latency covers t
 request. The Qwen row uses SemIf's direct option logits with thinking disabled; it is not an evaluation
 of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/results/pro6000-lab-20261001/README.md).
 
-Winnow-12B and Winnow-E4B were measured on RunPod; the other nine self-hosted settings used the lab host.
+Winnow and the six Decision 2.0 models were measured on RunPod; the other nine self-hosted settings used the lab host.
 Winnow uses the native CUDA runtime with BF16 GGUF weights and F16 KV cache.
 [Winnow deployment, calibration and three-pass results](docs/lite/results/winnow-pro6000-20261003/README.md).
+
+Decision 2.0 uses its pinned native CUDA eager runtime, BF16-resident backbones and independent-question path.
+Vega's queueing yields mean p50/p95 latency above the primary interval range, reducing its in-force score despite higher untimed accuracy.
+[Decision 2.0 deployment and three-pass results](docs/lite/results/decision20-pro6000-20261003/README.md).
 
 ### Provisional decisions with corrections
 
@@ -100,6 +110,12 @@ These compositions retain the original single hosted recordings; their controls 
 | Qwen3.5-4B direct-logit + Terra none | 46.22 |
 | Winnow-12B + Terra none | 56.09 |
 | Winnow-E4B + Terra none | 39.52 |
+| Decision 2.0 Kai-0.6B + Terra none | 30.10 |
+| Decision 2.0 Eos-0.8B + Terra none | 32.15 |
+| Decision 2.0 Sol-2B + Terra none | 32.69 |
+| Decision 2.0 Nox-4B + Terra none | 48.12 |
+| Decision 2.0 Lux-9B + Terra none | 52.81 |
+| Decision 2.0 Vega-27B + Terra none | 54.11 |
 
 Both components receive each state. A provisional answer never moves the active source backward;
 the correction wins equal-source ties and, under the **freshest-source** rule used above, cannot
@@ -107,7 +123,7 @@ overwrite a newer source. These are counterfactual compositions of independent r
 common nominal releases, retaining original measured latencies. Each self-hosted pass is paired with the same
 hosted recording before averaging. Joint deployment contention is unmeasured.
 
-The Jev, Kev-27B, Winnow-12B pairings improve on Terra none alone, while the other self-hosted components reduce
+The Jev, Kev-27B, Winnow-12B, Decision 2.0 Vega-27B pairings improve on Terra none alone, while the other self-hosted components reduce
 accuracy: an incorrect answer for a newer state can displace a still-correct correction. Speed alone
 does not determine whether composition helps. Nimble occupies the provisional slot in this analysis
 even though its recorded median latency exceeds Terra none's.

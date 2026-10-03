@@ -8,3 +8,5 @@
 *.png binary
 *.zip binary
 *.pptx binary
+# Preserve the captured hardware receipt's whitespace byte for byte.
+runs/decision20-pro6000-20261003/nvidia-smi.txt -whitespace

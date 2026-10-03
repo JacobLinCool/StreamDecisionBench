@@ -26,6 +26,7 @@ from streamdecisionbench.lite.__main__ import rescore_run
 from streamdecisionbench.lite.core import digest
 from trajectory_replay import METRICS, PARTITION, aggregate, evaluate, prepare
 from winnow_report import validate as validate_winnow
+from decision20_report import validate as validate_decision20
 
 POLICY_PATH = ROOT / "paper/analysis/openweight_policy.json"
 OUT = ROOT / "docs/research/openweight-hybrids"
@@ -66,6 +67,12 @@ def verified_run(path: Path) -> tuple[dict, dict]:
 def verify_audit(spec: dict, run: dict) -> dict:
     path = ROOT / "runs" / spec["audit"]
     audit = json.loads(path.read_text())
+    if run["frozen"]["config"]["provider"] == "decision20":
+        folder = ROOT / "runs" / spec["run"]
+        cohort = folder.parent.parent
+        plan = json.loads((cohort / "source/decision20-plan.json").read_text())
+        setting = next(s for s in plan["settings"] if s["id"] == folder.name)
+        validate_decision20(folder, cohort, plan, setting)
     if run["frozen"]["config"]["provider"] == "winnow":
         folder = ROOT / "runs" / spec["run"]
         cohort = folder.parent.parent
@@ -220,7 +227,7 @@ def analyze_pass(policy):
         "paper/analysis/figstyle.py", "src/streamdecisionbench/lite/__main__.py",
         "src/streamdecisionbench/lite/core.py", "src/streamdecisionbench/lite/scoring.py",
         "src/streamdecisionbench/lite/retry_scoring.py", "src/streamdecisionbench/lite/interval_scoring.py",
-        "docs/research/trajectory-value/analysis.json", "scripts/runpod/winnow_report.py"]
+        "docs/research/trajectory-value/analysis.json", "scripts/runpod/winnow_report.py", "scripts/runpod/decision20_report.py"]
     data["sources_sha256"] = {p: sha(ROOT / p) for p in sources}
     return data
 
@@ -341,9 +348,12 @@ def render_results(data, *, hosted):
         "Nimble scores each field sequentially with its full prompt; its latency covers the complete decision",
         "request. The Qwen row uses SemIf's direct option logits with thinking disabled; it is not an evaluation",
         "of Qwen's usual generated answers. Details: [RTX PRO 6000 cohort](docs/lite/results/pro6000-lab-20261001/README.md).", "",
-        "Winnow-12B and Winnow-E4B were measured on RunPod; the other nine self-hosted settings used the lab host.",
+        "Winnow and the six Decision 2.0 models were measured on RunPod; the other nine self-hosted settings used the lab host.",
         "Winnow uses the native CUDA runtime with BF16 GGUF weights and F16 KV cache.",
         "[Winnow deployment, calibration and three-pass results](docs/lite/results/winnow-pro6000-20261003/README.md).", "",
+        "Decision 2.0 uses its pinned native CUDA eager runtime, BF16-resident backbones and independent-question path.",
+        "Vega's queueing yields mean p50/p95 latency above the primary interval range, reducing its in-force score despite higher untimed accuracy.",
+        "[Decision 2.0 deployment and three-pass results](docs/lite/results/decision20-pro6000-20261003/README.md).", "",
         "### Provisional decisions with corrections", "",
         "These compositions retain the original single hosted recordings; their controls differ from the hosted leaderboard means above.", "", *hybrid_summary(data), "",
         "Both components receive each state. A provisional answer never moves the active source backward;",
@@ -392,7 +402,7 @@ def render_report(data):
         "Published standalone aggregates and family partitions are checked against independently recomputed areas.",
         "Compositions average three self-hosted passes, each paired with the same hosted recording. Retiming assumes fixed",
         "service latency; hardware normalization, joint contention, variability across hosted passes and generative Qwen",
-        "performance are outside the measurements. Sol-2B had no executable public native runtime and receives no score.", "",
+        "performance are outside the measurements. Decision 2.0 releases use their preserved native runtime and exact input audits.", "",
         "[analysis.json](analysis.json) includes all scenario/family partitions, full curves, raw event and input-audit",
         "hashes, execution configuration and analysis-source hashes. Original recording files are unchanged."]
     return "\n".join(lines) + "\n"

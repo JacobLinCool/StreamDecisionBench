@@ -321,6 +321,30 @@ _site/
 !/runs/hosted-api-repeats-20261003/pass*/*/episodes.json
 !/runs/hosted-api-repeats-20261003/pass*/*/events.jsonl
 
+# Decision 2.0: immutable recordings, audits and source receipts only.
+!/runs/decision20-pro6000-20261003/
+/runs/decision20-pro6000-20261003/*
+!/runs/decision20-pro6000-20261003/pass[123]/
+/runs/decision20-pro6000-20261003/pass[123]/*
+!/runs/decision20-pro6000-20261003/pass[123]/*.input-audit.json
+!/runs/decision20-pro6000-20261003/pass[123]/*/
+/runs/decision20-pro6000-20261003/pass[123]/*/*
+!/runs/decision20-pro6000-20261003/pass[123]/*/run.json
+!/runs/decision20-pro6000-20261003/pass[123]/*/episodes.json
+!/runs/decision20-pro6000-20261003/pass[123]/*/events.jsonl
+!/runs/decision20-pro6000-20261003/*.MODEL_MANIFEST.json
+!/runs/decision20-pro6000-20261003/*.prepared.json
+!/runs/decision20-pro6000-20261003/source/
+!/runs/decision20-pro6000-20261003/source-provenance.json
+!/runs/decision20-pro6000-20261003/bench-requirements.txt
+!/runs/decision20-pro6000-20261003/deployment.tar.gz
+!/runs/decision20-pro6000-20261003/upstream-sources.tar.gz
+!/runs/decision20-pro6000-20261003/archives.json
+!/runs/decision20-pro6000-20261003/nvidia-smi.txt
+!/runs/decision20-pro6000-20261003/cleanup.json
+/output/decision20-pro6000-20261003.tar.gz
+/output/decision20-pro6000-20261003.tar.gz.sha256
+
 !/runs/wity-1-auto-workers16-retry-after-20261003-pass1/
 /runs/wity-1-auto-workers16-retry-after-20261003-pass1/*
 !/runs/wity-1-auto-workers16-retry-after-20261003-pass1/run.json
