@@ -21,7 +21,7 @@ Every run recomputes from the frozen files and makes no network request:
 4. The Figure 1 window is recomputed with the rule in lite_window.py.
 5. Audit counts are derived from paper/notes/audit_record.json.
 6. Family macro identities and partitions are checked; FACTS.md is regenerated from verified values.
-7. Setting counts, the orderings the prose states, and Astra low's single untimed miss (its state,
+7. Setting counts, the mean orderings the prose states, and Astra low's pass-1 untimed miss (its state,
    the preceding one and the audit finding on the same question) are checked against the runs, the
    frozen states and the audit record.
 
@@ -144,10 +144,21 @@ def _dec(x) -> Decimal:
     return Decimal(repr(float(x)))
 
 
+class NumericText(str):
+    """Rendered number retaining its exact value for aggregation before rounding."""
+
+    def __new__(cls, text, value, places, is_count=False):
+        result = super().__new__(cls, text)
+        result.number = _dec(value)
+        result.places = places
+        result.is_count = is_count
+        return result
+
+
 def fixed(x, places: int) -> str:
     """Half-up rounding of the full-precision decimal value."""
     value = _dec(x).quantize(Decimal(1).scaleb(-places), rounding=ROUND_HALF_UP)
-    return f"{abs(value) if value == 0 else value:f}"
+    return NumericText(f"{abs(value) if value == 0 else value:f}", x, places)
 
 
 def pct(fraction) -> str:
@@ -186,7 +197,7 @@ def count(n) -> str:
         if not n.is_integer():
             raise ValueError(f"count is not an integer: {n!r}")
         n = int(n)
-    return f"{n:,}".replace(",", "{,}") if n >= 10000 else str(n)
+    return NumericText(f"{n:,}".replace(",", "{,}") if n >= 10000 else str(n), n, 0, is_count=True)
 
 
 def exact(x) -> str:
@@ -215,6 +226,12 @@ class Source:
     def __init__(self, rel: str):
         self.rel = rel
         self.data = json.loads((ROOT / rel).read_text())
+
+    @classmethod
+    def from_data(cls, rel, data):
+        source = cls.__new__(cls)
+        source.rel, source.data = rel, data
+        return source
 
     def get(self, *keys):
         value = self.data
@@ -390,7 +407,7 @@ def load_model(prefix: str, folder: str, run: str, bench: dict, checks: Checks) 
     a = analysis.data
     checks.equal(f"{prefix} dataset hash", a["dataset_hash"], bench["manifest"].get("dataset_hash"))
     checks.equal(f"{prefix} events sha256", a["events_sha256"], sha256(f"{run_rel}/events.jsonl"))
-    checks.equal(f"{prefix} analysis run folder", Path(a["run"]).name, run)
+    checks.equal(f"{prefix} analysis run folder", Path(a["run"]).name, Path(run).name)
     # 1. Recompute scores and the network-removed estimate with the benchmark's own code.
     verified = rescore_run(ROOT / run_rel)
     checks.equal(f"{prefix} frozen dataset hash", verified["frozen"]["dataset_manifest"]["dataset_hash"], a["dataset_hash"])
@@ -615,7 +632,7 @@ def model_macros(m: Macros, model: dict, bench: dict, checks: Checks) -> None:
                 note=f"share of {model['late_total']} after the next release_s in {events_src}, or the horizon for the last release"))
     for metric, key in (("InputTok", "input_tokens"), ("OutputTok", "output_tokens"), ("ReasoningTok", "reasoning_tokens")):
         values = [u.get(key) or 0 for u in ev["usage"]]
-        m.add(f"{p}{metric}Median", count(int(Decimal(str(median(values))).quantize(Decimal(1), rounding=ROUND_HALF_UP))),
+        m.add(f"{p}{metric}Median", fixed(median(values), 0),
               f"{events_src}:response.usage.{key} (median over {len(values)} responses, half-up)")
         m.add(f"{p}{metric}Total", count(A.get("usage", key)), A.ref("usage", key))
     inputs = [u["input_tokens"] for u in ev["usage"]]
@@ -1024,7 +1041,7 @@ def current_source_share(ref: list, release: list[float], ready: list[float], ho
     return ok / (horizon - release[0])
 
 
-def decomposition_macros(m: Macros, models: dict, bench: dict, checks: Checks) -> None:
+def decomposition_macros(m: Macros, models: dict, bench: dict, checks: Checks, *, write_crossings=True) -> None:
     """Timing-by-judgment partition, the untimed x oracle factorization, crossing intervals and schedule projections."""
     import random
 
@@ -1120,7 +1137,8 @@ def decomposition_macros(m: Macros, models: dict, bench: dict, checks: Checks) -
         if len(roots) == 1:
             m.add(f"Cross{a}{b}Sec", sec(roots[0]), "common-interval replay, root found within 0.5--8 s")
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "crossings.json").write_text(json.dumps(crossings, indent=2) + "\n")
+    if write_crossings:
+        (OUT / "crossings.json").write_text(json.dumps(crossings, indent=2) + "\n")
     for p in models:
         for name, interval in (("Two", Decimal(2)), ("Eight", Decimal(8))):
             m.add(f"{p}Common{name}", pct(at_interval(p, interval)), "common-interval replay of frozen answers and latencies")
@@ -1271,7 +1289,7 @@ def setting_macros(m: Macros, models: dict, checks: Checks) -> None:
     hosted = {model for _, model, _ in settings}
     gpt = {model for provider, model, _ in settings if provider == "openai"}
     src = "docs/lite/results/four-family/*/analysis.json:config"
-    m.add("NumSettings", count(len(models)), f"{src} (distinct model and reasoning effort; one recorded pass each)")
+    m.add("NumSettings", count(len(models)), f"{src} (distinct model and reasoning effort; three recorded passes each)")
     m.add("NumSettingsWord", word(len(models)), r"\NumSettings spelled out")
     m.add("NumHostedModels", count(len(hosted)), f"{src}.model (distinct values)")
     m.add("NumHostedModelsWord", word(len(hosted)), r"\NumHostedModels spelled out")
@@ -1285,100 +1303,39 @@ def setting_macros(m: Macros, models: dict, checks: Checks) -> None:
 
 
 def claim_checks(m: Macros, models: dict, checks: Checks) -> None:
-    """Orderings and groupings the paper states in prose and captions, over all settings (Astra low included)."""
-    gpt = [p for p, model in models.items() if model["analysis"].get("config").get("provider", "openai") == "openai"]
-    low_effort = [p for p in gpt if models[p]["analysis"].get("config", "reasoning_effort") == "low"]
-    no_reasoning = [p for p in gpt if models[p]["analysis"].get("config", "reasoning_effort") == "none"]
-    checks.equal("settings: low-effort GPT settings", low_effort, ["Luna", "Terra", "Astra"])
-    checks.equal("settings: GPT settings without reasoning", no_reasoning, ["LunaNone", "TerraNone"])
+    """Check the manuscript's descriptive claims on three-pass means."""
     primary = {p: model["analysis"].get("auc", "primary", "overall") for p, model in models.items()}
-    # Figure 2: the largest error class over log-weighted time.
-    largest = {p: max(("stale", "judgment", "compound", "no_decision"), key=lambda k: primary[p][k]) for p in models}
-    checks.equal("paper claim: stale is the largest error class of the low-effort GPT settings",
-                 {p: largest[p] for p in low_effort}, dict.fromkeys(low_effort, "stale"))
-    checks.equal("paper claim: judgment is the largest error class of Jev and Luna none",
-                 (largest["Jev"], largest["LunaNone"]), ("judgment", "judgment"))
-    for p in ("Jev", "LunaNone"):
-        errors = sum(primary[p][k] for k in ("stale", "judgment", "compound", "no_decision"))
-        checks.equal(f"paper claim: judgment is most of {p}'s error time", primary[p]["judgment"] > errors / 2, True)
-    checks.equal("paper claim: stale is the largest error class of every setting except Jev and Luna none",
-                 {p: largest[p] for p in models if p not in ("Jev", "LunaNone")},
-                 {p: "stale" for p in models if p not in ("Jev", "LunaNone")})
-    # Table 7 caption: with the remainder removed (upper end of its range), the low-effort GPT settings stay below
-    # untimed accuracy in every family.
-    for p in low_effort:
-        for fp, family in FAMILIES:
-            fam = models[p]["analysis"].get("network_adjustment", "scores", "high", "by_family", family)
-            untimed_f = models[p]["analysis"].get("scores", "by_family", family, "untimed_decision_accuracy")
-            checks.equal(f"paper claim: {p} network-removed (high) stays below untimed accuracy in {family}",
-                         fam["time_accuracy"] < untimed_f, True)
-    gaps = {}
-    for p in models:
-        for fp, family in FAMILIES:
-            high = models[p]["analysis"].get("network_adjustment", "scores", "high", "by_family", family, "time_accuracy")
-            untimed_f = models[p]["analysis"].get("scores", "by_family", family, "untimed_decision_accuracy")
-            checks.equal(f"paper claim: every setting's network-removed (high) is below untimed in {family} ({p})",
-                         high < untimed_f, True)
-            gaps[(p, family)] = shown(untimed_f) - shown(high)
-    low_gap = min(gaps[(p, f)] for p in low_effort for _, f in FAMILIES)
-    m.add("NetRemovedLowEffortMinGap", points(low_gap),
-          "min over Luna low, Terra low, Astra low and families of untimed minus network-removed (upper range end), printed points")
-    # Table 1 and RQ3: family leaders over the integrated range.
+    largest = {p: max(("stale", "judgment", "compound", "no_decision"), key=lambda k: row[k])
+               for p, row in primary.items()}
+    checks.equal("mean error classes", largest,
+                 {p: "judgment" if p in ("Jev", "LunaNone") else "stale" for p in models})
     leaders = {family: max(models, key=lambda p: models[p]["analysis"].get("auc", "primary", "by_family", family, "accuracy"))
                for _, family in FAMILIES}
-    checks.equal("paper claim: family log-AUC leaders", leaders,
-                 {"live_debugging": "TerraNone", "procedural_coaching": "Jev", "support_call_assist": "Jev",
-                  "presenter_voice_control": "Jev"})
-    # Sensitivity table: linear weighting, 8 s, and the other log bounds.
-    sens = {p: model["analysis"].get("auc", "sensitivity") for p, model in models.items()}
-    checks.equal("paper claim: under linear weighting Terra low, Terra none and Astra low are above Jev",
-                 [p for p in models if sens[p]["Linear"]["overall"]["accuracy"] > sens["Jev"]["Linear"]["overall"]["accuracy"]],
-                 ["Terra", "TerraNone", "Astra"])
-    eight = {p: Decimal(m.items[f"{p}CommonEight"].value) for p in models}
-    above = [p for p in gpt if eight[p] > eight["Jev"]]
-    checks.equal("paper claim: GPT settings above Jev at 8 s", above, ["Luna", "Terra", "TerraNone", "Astra"])
-    checks.equal("paper claim: Astra low has the highest in-force accuracy at 8 s", max(eight, key=eight.get), "Astra")
-    median_latency = {p: model["analysis"].get("latency_s", "p50") for p, model in models.items()}
-    checks.equal("paper claim: Astra low has the longest median latency", max(median_latency, key=median_latency.get), "Astra")
-    checks.equal("paper claim: Astra low has the lowest oracle log-AUC",
-                 min(models, key=lambda p: primary[p]["oracle"]), "Astra")
-    m.add("GPTAboveJevCommonEight", count(len(above)), "settings with provider openai whose \\<Model>CommonEight exceeds \\JevCommonEight (count)")
-    m.add("GPTAboveJevCommonEightWord", word(len(above)), r"\GPTAboveJevCommonEight spelled out")
-    expected_log_leaders = {"Narrow": "Jev", "HalfFour": "Jev", "OneEight": "TerraNone",
-                            "TenthFour": "Jev", "TenthEight": "Jev"}
-    for name, expected in expected_log_leaders.items():
-        values = {p: sens[p][name]["overall"]["accuracy"] for p in models}
-        checks.equal(f"paper claim: leader under log bounds {name}", max(values, key=values.get), expected)
-    # Appendix C: token terms of the fitted envelope at the median request.
-    net = {p: models[p]["analysis"].get("network_adjustment") for p in models}
-    zero_prefill = [p for p in gpt if net[p]["prefill_s_per_1k_input_tokens"] == 0 and net[p]["decode_s_per_output_token"] > 0]
-    both_zero = [p for p in gpt if net[p]["prefill_s_per_1k_input_tokens"] == 0 and net[p]["decode_s_per_output_token"] == 0]
-    checks.equal("paper claim: prefill slope dropped (decode kept)", zero_prefill, ["LunaNone", "Terra", "Astra"])
-    checks.equal("paper claim: both slopes dropped", both_zero, ["TerraNone"])
-    for p in gpt:
-        usage = models[p]["events"]["usage"]
-        uncached = median([u["input_tokens"] - (u.get("cached_tokens") or 0) for u in usage])
-        output = median([u.get("output_tokens") or 0 for u in usage])
-        prefill = net[p]["prefill_s_per_1k_input_tokens"] * uncached / 1000
-        decode = net[p]["decode_s_per_output_token"] * output
-        remainder = net[p]["network_s"]["estimate"]
-        if p in low_effort:
-            checks.equal(f"paper claim: decode dominates the median {p} request", decode > max(prefill, remainder), True)
-        else:
-            checks.equal(f"paper claim: the non-token remainder dominates the median {p} request", remainder > prefill + decode, True)
-    checks.equal("paper claim: no GPT pass reported cached input tokens",
-                 [p for p in gpt if models[p]["analysis"].get("usage", "cached_tokens")], [])
-    checks.equal("paper claim: Luna low has the largest GPT prefill slope",
-                 max(gpt, key=lambda p: net[p]["prefill_s_per_1k_input_tokens"]), "Luna")
-    checks.equal("paper claim: the fastest low-effort GPT responses exceed their remainders",
-                 all(net[p]["latency_floor_s"] > net[p]["network_s"]["high"] for p in low_effort), True)
-    clamped = {p: max(net[p]["scores"][b]["clamped_requests"] for b in ("estimate", "low", "high")) for p in models}
-    checks.equal("paper claim: clamped requests only for Luna none, Terra none and Jev",
-                 [p for p in models if clamped[p]], ["LunaNone", "TerraNone", "Jev"])
+    checks.equal("mean family leaders", leaders,
+                 {"live_debugging": "Terra", "procedural_coaching": "Jev",
+                  "support_call_assist": "Jev", "presenter_voice_control": "Jev"})
+    checks.equal("mean primary hosted leader", max(primary, key=lambda p: primary[p]["accuracy"]), "Jev")
+    checks.equal("mean oracle minimum", min(primary, key=lambda p: primary[p]["oracle"]), "Luna")
+    checks.equal("mean median maximum", max(models, key=lambda p: models[p]["analysis"].get("latency_s", "p50")), "Luna")
+    expected = {"Linear": "Terra", "Narrow": "TerraNone", "HalfFour": "Jev", "OneEight": "TerraNone",
+                "TenthFour": "Jev", "TenthEight": "Jev"}
+    for key, leader in expected.items():
+        checks.equal(f"mean sensitivity leader {key}", max(models, key=lambda p: models[p]["analysis"].get("auc", "sensitivity", key, "overall", "accuracy")), leader)
+    gaps = [100 * (model["analysis"].get("scores", "by_family", family, "untimed_decision_accuracy") -
+                   model["analysis"].get("network_adjustment", "scores", "high", "by_family", family, "time_accuracy"))
+            for p, model in models.items() if p in ("Luna", "Terra", "Astra") for _, family in FAMILIES]
+    m.add("NetRemovedLowEffortMinGap", points(min(gaps)), "three-pass family means: untimed minus network-removed high endpoint")
+    above = [p for p in models if p != "Jev" and Decimal(m.items[p+"CommonEight"].value) > Decimal(m.items["JevCommonEight"].value)]
+    m.add("GPTAboveJevCommonEight", count(len(above)), "three-pass fixed 8 s means")
+    m.add("GPTAboveJevCommonEightWord", word(len(above)), "three-pass fixed 8 s means")
+    for p, row in primary.items():
+        checks.close(f"{p} mean integrated factorization", row["accuracy"],
+                     row["oracle"] * row["current_correct"] / row["oracle"] + row["outdated_correct"], 1e-12)
+
 
 
 def astra_macros(m: Macros, models: dict, bench: dict, checks: Checks) -> None:
-    """Astra low: its session, its position among the settings and its single untimed miss (validity evidence)."""
+    """Astra low pass 1: its recording session and concrete validity case."""
     astra = models["Astra"]
     A, ev = astra["analysis"], astra["events"]
     a = A.data
@@ -1395,21 +1352,6 @@ def astra_macros(m: Macros, models: dict, bench: dict, checks: Checks) -> None:
               for part in model["analysis"].data.get("combined_from") or [model["analysis"].data]]
     checks.equal("Astra: recorded after every other setting's recordings", started > max(others), True)
     m.add("AstraRecordedEndUTC", finished[11:16], A.ref("finished_at_utc", note="minute; same UTC date as started_at_utc"))
-    # Position among the settings: the highest untimed accuracy, yet a log-AUC below Luna low's.
-    untimed = {p: model["analysis"].get("scores", "overall", "untimed_decision_accuracy") for p, model in models.items()}
-    auc = {p: model["analysis"].get("auc", "primary", "overall", "accuracy") for p, model in models.items()}
-    checks.equal("paper claim: Astra low has the highest untimed accuracy (strictly)",
-                 all(untimed["Astra"] > v for p, v in untimed.items() if p != "Astra"), True)
-    checks.equal("paper claim: Astra low's log-AUC is below Luna low's", auc["Astra"] < auc["Luna"], True)
-    checks.equal("Astra low's log-AUC exceeds only Luna none's", sorted(p for p in auc if auc[p] < auc["Astra"]), ["LunaNone"])
-    d = shown(auc["Luna"]) - shown(auc["Astra"])
-    checks.equal("LunaMinusAstraAuc is nonnegative", d >= 0, True)
-    m.add("LunaMinusAstraAuc", points(d), "\\LunaAuc minus \\AstraAuc (points, from the printed values)")
-    checks.equal("paper claim: Astra low's oracle and observed log-AUC agree at printed precision",
-                 shown(A.get("auc", "primary", "overall", "oracle")), shown(auc["Astra"]))
-    d = shown(untimed["Astra"]) - shown(untimed["Jev"])
-    checks.equal("AstraMinusJevUntimed is nonnegative", d >= 0, True)
-    m.add("AstraMinusJevUntimed", points(d), "\\AstraUntimed minus \\JevUntimed (points, from the printed values)")
     # Astra low rarely emits reasoning tokens, so its latency is not a reasoning cost.
     decode = {p: models[p]["analysis"].get("network_adjustment", "decode_s_per_output_token") for p in ("Luna", "Terra", "Astra")}
     checks.equal("paper claim: Astra low decodes more slowly per token than Luna low and Terra low",
@@ -1723,7 +1665,7 @@ def write_facts(m: Macros, models: dict, bench: dict) -> None:
         keys = [f"{p}{key}" for key in ("Untimed", "Auc", "CommonTwo", "CommonEight", "LatencyMedian")]
         lines.append("| " + " | ".join([FACTS_COLUMNS[p], *[m.items[k].value for k in keys]]) + " |")
     v = {k: x.value.replace("\\_", "_") for k, x in m.items.items()}
-    lines += ["", f"Astra low is correct at {v['AstraUntimedStates']} of {v['AstraStates']} states untimed. Its only miss is "
+    lines += ["", f"Astra low is correct at {v['AstraUntimedStates']} of {v['AstraStates']} evaluations across three passes untimed. In pass 1, its miss is "
               f"`{ASTRA_MISS['episode']}` t={v['AstraMissStep']}: it answered {v['AstraMissRoute']} "
               f"(target {v['AstraMissTarget']}, method {v['AstraMissMethod']}); the reference is {v['AstraMissRefRoute']} "
               f"to {v['AstraMissRefNextStep']} at stage {v['AstraMissRefStage']}, because the J2 screw replacement "
@@ -1741,45 +1683,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--list", action="store_true", help="print every macro with its value and source")
     args = parser.parse_args()
-    checks = Checks()
-    bench = load_benchmark(checks)
-    models = {}
-    for prefix, folder, run in MODELS:
-        models[prefix] = load_model(prefix, folder, run, bench, checks)
-    facts, prose = parse_facts()
-    m = Macros()
-    benchmark_macros(m, bench, checks)
-    for prefix in models:
-        model_macros(m, models[prefix], bench, checks)
-    shared_macros(m, models, checks)
-    comparison_macros(m, models, {eid: bench["episodes"][eid].get("task_family") for eid in bench["order"]}, checks)
-    pair_macros(m, models, checks)
-    counterfactual_macros(m, models, bench, checks)
-    decomposition_macros(m, models, bench, checks)
-    from lite_auc import auc_macros
-    auc_macros(m, models)
-    checks.equal("paper claim: all attempts succeed first time", sum(x["analysis"].get("retry_reliability", "failed_attempts") for x in models.values()), 0)
-    window_macros(m, models, bench, checks)
-    audit_macros(m, facts, bench, checks)
-    setting_macros(m, models, checks)
-    claim_checks(m, models, checks)
-    astra_macros(m, models, bench, checks)
-    if checks.failures:
-        print(f"lite_numbers: {len(checks.failures)} check(s) failed; nothing written.", file=sys.stderr)
-        for failure in checks.failures:
-            print(f"  - {failure}", file=sys.stderr)
-        return 1
-    inputs = ([f"{DATA}/manifest.json"] + [f"{DATA}/{eid}.json" for eid in bench["order"]]
-              + [f"docs/lite/results/{folder}/analysis.json" for _, folder, _ in MODELS]
-              + [f"runs/{run}/events.jsonl" for _, _, run in MODELS] + [FACTS, AUDIT, RESULTS_README, POLICY_PATH])
-    write(m, inputs)
-    write_facts(m, models, bench)
-    print(f"lite_numbers: {checks.passed} checks passed; wrote {len(m.items)} macros to "
-          f"{(OUT / 'numbers.tex').relative_to(ROOT)} and {len(tables(m))} table bodies to {(OUT / 'tables.tex').relative_to(ROOT)}.")
-    if args.list:
-        for x in m.items.values():
-            print(f"\\{x.name}\t{x.value}\t{x.source}")
-    return 0
+    from lite_repeated import generate_numbers
+    return generate_numbers(args)
 
 
 if __name__ == "__main__":

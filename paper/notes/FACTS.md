@@ -7,14 +7,14 @@ Recorded at 2 s; primary score is normalized log-AUC over 0.5--8 s, equal scenar
 
 | Setting | Untimed (%) | Log-AUC 0.5--8 s (%) | Common 2 s (%) | Common 8 s (%) | Latency p50 (s) |
 |---|---:|---:|---:|---:|---:|
-| Luna low | 88.8 | 45.3 | 47.7 | 77.8 | 2.41 |
-| Luna none | 43.8 | 30.7 | 33.3 | 40.9 | 1.32 |
-| Terra low | 95.4 | 48.0 | 50.4 | 83.3 | 2.44 |
-| Terra none | 82.1 | 54.1 | 59.8 | 76.4 | 1.49 |
-| Astra low | 99.8 | 45.2 | 45.8 | 85.4 | 2.67 |
-| Jev | 63.8 | 59.6 | 60.7 | 63.0 | 0.25 |
+| Luna low | 89.9 | 45.5 | 47.9 | 78.8 | 2.44 |
+| Luna none | 43.5 | 30.9 | 33.5 | 41.0 | 1.31 |
+| Terra low | 95.8 | 52.1 | 55.9 | 85.4 | 2.13 |
+| Terra none | 81.9 | 55.5 | 61.3 | 76.7 | 1.36 |
+| Astra low | 99.9 | 49.5 | 52.1 | 87.5 | 2.35 |
+| Jev | 62.4 | 58.5 | 59.5 | 61.6 | 0.23 |
 
-Astra low is correct at 479 of 480 states untimed. Its only miss is `lite_assembly_a` t=32: it answered repair (target inspection, method complete_missing); the reference is advance to inspection at stage fasten, because the J2 screw replacement (t=27) and rundown (t=29, 26.0 N m) after the t=12 inspection PASS moved the stage back to fasten. At t=31, whose state differs only by one heartbeat record, it returned the reference; the original audit's grouped finding covering both time steps upheld the reference under every lens.
+Astra low is correct at 1438 of 1440 evaluations across three passes untimed. In pass 1, its miss is `lite_assembly_a` t=32: it answered repair (target inspection, method complete_missing); the reference is advance to inspection at stage fasten, because the J2 screw replacement (t=27) and rundown (t=29, 26.0 N m) after the t=12 inspection PASS moved the stage back to fasten. At t=31, whose state differs only by one heartbeat record, it returned the reference; the original audit's grouped finding covering both time steps upheld the reference under every lens.
 
 The independent LLM-agent audit covers the original six scenarios only; see `audit_summary.md` and `audit_record.json`.
 Presenter reference tests and public-rule agreement cover its 120 released states; no equivalent blind LLM-agent audit is claimed.

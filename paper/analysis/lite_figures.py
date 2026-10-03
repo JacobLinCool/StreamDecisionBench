@@ -111,9 +111,13 @@ def partition_patch(kind: str, label: str | None = None) -> Patch:
 # ---------------------------------------------------------------- loading
 
 
-def load() -> dict:
+def load_pass(index: int) -> dict:
     data = {}
-    for model in MODELS:
+    from leaderboard_models import HOSTED_PASSES
+    from lite_numbers import MODELS as PAPER_MODELS
+    for model, (name, _, _) in zip(MODELS, PAPER_MODELS, strict=True):
+        folder, run_folder = HOSTED_PASSES[name][index]
+        model = Model(model.key, model.name, run_folder, folder)
         analysis = json.loads((ROOT / "docs/lite/results" / model.results / "analysis.json").read_text())
         run = rescore_run(ROOT / "runs" / model.run)
         if analysis["events_sha256"] != run["frozen"]["events_sha256"]:
@@ -139,6 +143,14 @@ def load() -> dict:
                 raise ValueError(f"{model.key}/{a['episode_id']}: report disagrees with reference replay")
         data[model.key] = {"analysis": analysis, "recorded": run, "run": evaluated}
     return data
+
+
+def load() -> dict:
+    from lite_repeated import mean_report
+    passes = [load_pass(index) for index in range(3)]
+    return {model.key: {**passes[0][model.key],
+            "analysis": mean_report([p[model.key]["analysis"] for p in passes]),
+            "passes": [p[model.key] for p in passes]} for model in MODELS}
 
 
 def window_check(data: dict) -> dict:
@@ -533,7 +545,7 @@ def fig_trajectory(data: dict) -> dict:
 # --------------------------------------------------------- appendix: latency
 
 
-def latency_data(data: dict) -> dict:
+def latency_pass_data(data: dict) -> dict:
     out = {}
     for model in MODELS:
         run, net = data[model.key]["run"], data[model.key]["analysis"]["network_adjustment"]
@@ -562,6 +574,19 @@ def latency_data(data: dict) -> dict:
             "above_envelope_s": median - network - prefill - decode,
             "points": {"output_tokens": output.tolist(), "time_before_receipt_s": y.tolist()},
         }
+    return out
+
+
+def latency_data(data: dict) -> dict:
+    from lite_repeated import mean_tree
+    passes = [latency_pass_data({m.key: data[m.key]["passes"][i] for m in MODELS}) for i in range(3)]
+    out = {}
+    for model in MODELS:
+        rows = [p[model.key] for p in passes]
+        out[model.key] = mean_tree([{k:v for k,v in row.items() if k != "points"} for row in rows])
+        out[model.key]["points"] = {k: [v for row in rows for v in row["points"][k]] for k in rows[0]["points"]}
+        out[model.key]["requests"] = sum(row["requests"] for row in rows)
+        out[model.key]["pass_fits"] = [{k:v for k,v in row.items() if k != "points"} for row in rows]
     return out
 
 
@@ -657,7 +682,7 @@ def fig_latency(data: dict) -> dict:
             continue
         # A nonzero prefill slope is drawn at the median uncached input, so the line is the
         # envelope of a typical request of that length.
-        prefill = v["prefill_s_per_1k_input_tokens"] * v["median_uncached_input_tokens"] / 1000
+        prefill = v["prefill_s"]
         x = np.array(v["points"]["output_tokens"])
         y = np.array(v["points"]["time_before_receipt_s"])
         every_x += x.tolist()
@@ -775,7 +800,7 @@ def fig_errortime(data: dict) -> dict:
     return values
 
 
-def separability_data(data: dict) -> dict:
+def separability_pass_data(data: dict) -> dict:
     """Per scenario: in-force accuracy against untimed accuracy x oracle in-force accuracy."""
     from decimal import Decimal
     from lite_numbers import _scaled, replay as scaled_replay  # noqa: E402
@@ -788,6 +813,11 @@ def separability_data(data: dict) -> dict:
         rows[model.key] = [{"episode": s["episode_id"], "in_force": s["time_accuracy"],
                             "product": s["untimed_decision_accuracy"] * o["time_accuracy"]} for s, o in zip(same, oracle)]
     return rows
+
+
+def separability_data(data: dict) -> dict:
+    from lite_repeated import mean_tree
+    return mean_tree([separability_pass_data({m.key: data[m.key]["passes"][i] for m in MODELS}) for i in range(3)])
 
 
 def fig_separability(data: dict) -> dict:
@@ -825,11 +855,8 @@ RECORDED_INK = "#9A9A9A"
 MAP_LABEL = {"luna": ((-5, 0.5), "right", "center", "untimed"), "luna_none": ((0, -5), "center", "top", "in_force"),
              "terra": ((-5, 2.5), "right", "center", "untimed"), "terra_none": ((-5, -1), "right", "center", "untimed"),
              "astra": ((6, -5), "right", "top", "in_force"), "jev": ((5, 2), "left", "center", "untimed")}
-# Luna low, Terra low and Astra low have median latencies within 11% of one another (Luna and Terra
-# about 1.4% apart), so on the log axis their untimed-to-in-force lines would coincide. Each is drawn
-# this many points left or right of its data position, in latency order (display offset only; the
-# plotted values are recorded unchanged).
-MAP_NUDGE_PT = {"luna": -2.0, "terra": 2.0, "astra": 4.0}
+# Apply display offsets in latency order to the three nearly coincident medians.
+MAP_NUDGE_PT = {"terra": -2.0, "astra": 2.0, "luna": 4.0}
 MAP_NUDGE_SPAN = 1.15  # the offset is only for medians within this factor of one another
 MAP_TINT = 0.4  # share of the setting colour in the network-removed marker's fill (rest white)
 
@@ -847,7 +874,7 @@ def map_data(data: dict) -> dict:
     for model in MODELS:
         a = data[model.key]["analysis"]
         net = a["network_adjustment"]
-        ceiling = scaled_replay(data[model.key]["run"], _oracle)
+        ceiling = [s for p in data[model.key]["passes"] for s in scaled_replay(p["run"], _oracle)]
         rows[model.key] = {
             "name": model.name,
             "median_response_s": a["latency_s"]["p50"],
@@ -941,7 +968,7 @@ def fig_map(data: dict) -> dict:
     return values
 
 
-def pace_data(data: dict) -> dict:
+def pace_pass_data(data: dict) -> dict:
     from decimal import Decimal
     from lite_numbers import _scaled, replay as scaled_replay
 
@@ -961,6 +988,11 @@ def pace_data(data: dict) -> dict:
         family_curves[model.key] = by_family
     return {"intervals_s": list(PACE_INTERVALS), "recorded_interval_s": float(recorded.pop()),
             "weighting": "log", "in_force": curves, "by_family": family_curves}
+
+
+def pace_data(data: dict) -> dict:
+    from lite_repeated import mean_tree
+    return mean_tree([pace_pass_data({m.key:data[m.key]["passes"][i] for m in MODELS}) for i in range(3)])
 
 
 def fig_pace(data: dict) -> dict:
@@ -1023,12 +1055,12 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     data = load()
     record = {
-        "sources": {m.key: {"run": f"runs/{m.run}", "analysis": f"docs/lite/results/{m.results}/analysis.json",
-                            "events_sha256": data[m.key]["analysis"]["events_sha256"],
-                            "dataset_hash": data[m.key]["analysis"]["dataset_hash"],
-                            "auc_sources_sha256": data[m.key]["analysis"]["auc"]["sources_sha256"]} for m in MODELS},
-        "fig_trajectory_window": window_check(data),
-        "fig_trajectory": fig_trajectory(data),
+        "sources": {m.key: [{"events_sha256": p["analysis"]["events_sha256"],
+                             "dataset_hash": p["analysis"]["dataset_hash"],
+                             "run": p["analysis"]["run"]} for p in data[m.key]["passes"]] for m in MODELS},
+        "aggregation": "equal mean of three passes; Figure 1 uses pass 1",
+        "fig_trajectory_window": window_check({m.key:data[m.key]["passes"][0] for m in MODELS}),
+        "fig_trajectory": fig_trajectory({m.key:data[m.key]["passes"][0] for m in MODELS}),
         "fig_latency": fig_latency(data),
         "fig_errortime": fig_errortime(data),
         "fig_map": fig_map(data),

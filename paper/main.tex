@@ -94,7 +94,7 @@ However, even the best evaluated system keeps a correct decision in force only a
   \centering
   \includegraphics[width=\linewidth]{figures/fig_trajectory.pdf}
   \caption{\textbf{A decision right for its own state stays in force after new or revised speech changes the reference.}
-  Presenter voice control (presenter~A, \TrajWindowStart--\TrajWindowEnd\,s; window rule in Appendix~\ref{app:window}): the chair cue follows the current ASR hypothesis, so a revision withdraws its stand-by, while the slide waits for the final text.}
+  Presenter voice control, pass 1 (presenter~A, \TrajWindowStart--\TrajWindowEnd\,s; Appendix~\ref{app:window}): the chair cue follows ASR revisions; the slide waits for final text.}
   \label{fig:trajectory}
 \end{figure*}
 
@@ -122,10 +122,10 @@ Every erroneous instant is attributed exactly to judgment, to latency or to both
 
 We evaluate \NumSettingsWord{} hosted settings: Luna and Terra at low and no reasoning effort, Astra at low, and Jev, a commercial decision model; supplementary measurements cover \OwNumSettingsWord{} self-hosted decision settings.
 Across this range they fall short for different reasons.
-At low reasoning effort, Luna, Terra and Astra lose \LunaAucGap, \TerraAucGap{} and \AstraAucGap{} points from untimed accuracy to the integrated score, mostly through stale decisions, so Astra, correct at \AstraUntimedStates{} of \NumStates{} states untimed, reaches only \AstraAuc\%, close to Luna low's \LunaAuc\%.
+At low reasoning effort, Luna, Terra and Astra lose \LunaAucGap, \TerraAucGap{} and \AstraAucGap{} points from untimed accuracy to the integrated score, mostly through stale decisions, so Astra, \AstraUntimed\% correct untimed, reaches \AstraAuc\%, compared with Luna low's \LunaAuc\%.
 Jev responds in \JevLatencyMedian\,s, but its judgment errors account for \JevAucJudgment\% of log-weighted time.
 Dropping reasoning pays off where judgment survives: Terra reaches \TerraNoneAuc\%, close to Jev's \JevAuc\%, while Luna falls to \LunaNoneAuc\%.
-The family curves expose differences hidden by the aggregate: Terra without reasoning leads the hosted settings in IDE debugging, whereas Jev leads them in the other three families over the integrated range.
+The family curves expose differences hidden by the aggregate: Terra low leads the hosted settings in IDE debugging, whereas Jev leads them in the other three families over the integrated range.
 
 Our contributions are:\footnote{Code, data, recordings and reproducible analysis accompany the submission (Appendix~\ref{app:repro}).}
 \begin{itemize}[leftmargin=*,itemsep=1pt,topsep=2pt]
@@ -268,7 +268,7 @@ Appendix~\ref{app:tasks} lists every decision specification and shows an example
     \bottomrule
   \end{tabular}
   \caption{\textbf{Similar integrated scores can conceal different family-level tradeoffs.}
-  Hosted settings; Macro averages the four families equally. Untimed is decision accuracy (\%) with latency ignored.}
+  Means of three passes; Macro averages families equally, with sample SD in points. Untimed ignores latency.}
   \label{tab:main}
 \end{table*}
 
@@ -289,8 +289,8 @@ For the original \AuditScenarios{} IDE, assembly and support scenarios, \AuditRe
 Under its default reading of the rules, each re-derivation agreed with the reference at all \ReleasesPerScenario{} consumed decisions of its scenario.
 Further agents compared the reference code with the rule text and judged each of the \AuditFindingGroups{} grouped findings from \AuditLensesWord{} angles (Appendix~\ref{app:audit}).
 No reference answer was confirmed wrong, although LLM auditors can share blind spots with the reference; \AuditAmbiguitiesWord{} rule ambiguities affecting \AuditAffectedStates{} states were fixed by one sentence per family, in agreement with the reference.
-Astra low (\S\ref{sec:setup}), recorded after the benchmark was frozen and never used to author or tune it, adds evidence that the references follow from the public rules: ignoring latency, it returns the reference decision at \AstraUntimedStates{} of \NumStates{} states, including the presenter scenarios the audit did not cover.
-Its \AstraUntimedMissesWord{} miss (\AstraMissScenarioLabel, time step \AstraMissStep) is a model error: rework has moved the stage back to fasten, so inspection is a future stage and the reference advances to it, since ``incomplete future stages are not defects''; Astra instead routed a repair to complete the inspection, a reading the audit had raised and rejected.
+Astra low (\S\ref{sec:setup}), recorded after the benchmark was frozen and never used to author or tune it, adds evidence that the references follow from the public rules: ignoring latency, it returns the reference decision in \AstraUntimedStates{} of \AstraStates{} evaluations across three passes, including the presenter scenarios the audit did not cover.
+In pass 1, its miss (\AstraMissScenarioLabel, time step \AstraMissStep) is a model error: rework has moved the stage back to fasten, so inspection is a future stage and the reference advances to it, since ``incomplete future stages are not defects''; Astra instead routed a repair to complete the inspection, a reading the audit had raised and rejected.
 Astra returned the reference at the \AstraSituationCorrect{} other states the audit grouped with this one, including the preceding time step with the same decision-relevant evidence (Appendix~\ref{app:audit}).
 
 \subsection{Trivial Baselines}
@@ -318,13 +318,13 @@ Supplementary measurements cover \OwNumSettingsWord{} self-hosted native setting
   \centering
   \includegraphics[width=\linewidth]{figures/fig_pace.pdf}
   \caption{\textbf{The ordering of the settings changes with the time-step interval, and differently in each family.}
-  In-force accuracy of each recorded pass at every interval, reusing its recorded answers and latencies; (a) is the equal mean of families (b)--(e).
+  Mean in-force accuracy over three passes at every interval, reusing its recorded answers and latencies; (a) is the equal mean of families (b)--(e).
   The normalized area under each curve on the log axis is its score in Table~\ref{tab:main}.}
   \label{fig:pace}
 \end{figure*}
 
 \paragraph{Protocol.}
-Hosted passes were recorded on \RecordingDatesUTC{} (UTC) from one client; self-hosted passes use the same dataset and 2\,s cadence. Every setting completes \NumStates{} state-level decision evaluations and \AnswersPerPass{} question-answer evaluations on the first attempt.
+Hosted passes were recorded on \RecordingDatesUTC{} (UTC) from one client; self-hosted passes use the same dataset and 2\,s cadence. Every pass completes \NumStates{} state-level decision evaluations and \AnswersPerPass{} question-answer evaluations on the first attempt.
 Appendix~\ref{app:protocol} records session and reliability details. For hosted passes, step-anchored and physical-clock accuracy differ by at most \MaxReplayPhysicalDiff{} points at 2\,s.
 
 \paragraph{Research questions.}
@@ -333,7 +333,7 @@ Appendix~\ref{app:protocol} records session and reliability details. For hosted 
 \textbf{RQ3}: How do the comparisons change across time scales and task families?
 
 \paragraph{Reporting.}
-We report means over three recorded passes for self-hosted settings and one pass for hosted settings (Appendix~\ref{app:openweight}); adjacent states are dependent, so comparisons are descriptive. The primary score uses Equation~\eqref{eq:macro}, retaining recorded answers and latencies; Appendix~\ref{app:intervals} varies bounds and weighting. Fixed-interval analyses are labelled explicitly.
+We report equal means over three independently evaluated passes per setting, sample standard deviations (SD) for hosted primary scores, and means of per-pass latency quantiles; adjacent states are dependent, so comparisons are descriptive. The primary score uses Equation~\eqref{eq:macro}, retaining recorded answers and latencies; Appendix~\ref{app:intervals} varies bounds and weighting. Fixed-interval analyses are labelled explicitly.
 
 
 % ---------------------------------------------------------------------------
@@ -344,15 +344,15 @@ We report means over three recorded passes for self-hosted settings and one pass
 \label{sec:rq1}
 Luna low loses \LunaAucGap{} points (from \LunaUntimed\% untimed to \LunaAuc\% log-AUC) and Terra low \TerraAucGap{} (from \TerraUntimed\% to \TerraAuc\%), while Jev loses \JevAucGap{} (Table~\ref{tab:main}).
 Stale decisions account for \LunaAucStale\% and \TerraAucStale\% of log-weighted time for Luna low and Terra low (Figure~\ref{fig:errortime}); their median response times are \LunaLatencyMedian\ and \TerraLatencyMedian\,s.
-Astra low has the highest untimed accuracy (\AstraUntimed\%) and longest median latency (\AstraLatencyMedian\,s), but its log-AUC (\AstraAuc\%) falls \LunaMinusAstraAuc{} points below Luna low's, with \AstraAucStale\% of log-weighted time stale.
+Astra low has the highest untimed accuracy (\AstraUntimed\%) and a mean per-pass median latency of \AstraLatencyMedian\,s, but its log-AUC (\AstraAuc\%) remains far below its untimed accuracy, with \AstraAucStale\% of log-weighted time stale.
 Its slower output decoding is detailed in Appendix~\ref{app:network}.
 Jev responds in \JevLatencyMedian\,s at the median and spends \JevAucStale\% of log-weighted time stale.
 
-The oracle's log-AUC is \LunaAucOracle\% (Luna low), \TerraAucOracle\% (Terra low), \AstraAucOracle\% (Astra low), \LunaNoneAucOracle\% (Luna none), \TerraNoneAucOracle\% (Terra none) and \JevAucOracle\% (Jev); Astra low's is the lowest and nearly matches its observed score, with negligible current-source judgment error.
+The oracle's log-AUC is \LunaAucOracle\% (Luna low), \TerraAucOracle\% (Terra low), \AstraAucOracle\% (Astra low), \LunaNoneAucOracle\% (Luna none), \TerraNoneAucOracle\% (Terra none) and \JevAucOracle\% (Jev); Luna low's is the lowest; Astra low's nearly matches its observed score, with negligible current-source judgment error.
 For the hosted scenarios, multiplying untimed accuracy by the oracle's log-AUC, then averaging with the same family weights, approximates the primary score: the observed score exceeds this product by \AucProductGapMin--\AucProductGapMax{} points per setting, with an absolute deviation of at most \AucProductMaxDeviation{} points per scenario.
 The exact partition in Equation~\eqref{eq:factor} explains the residual through current-source judgment and lucky time (Appendix~\ref{app:auc-decomposition}).
 
-The reference trajectory also localizes judgment errors. Within one tick of a reference transition, Luna low errs at \TrajLunaNearError\% of \TrajLunaNearStates{} states, versus \TrajLunaFarError\% of \TrajLunaFarStates{} farther away; Terra low gives \TrajTerraNearError\% versus \TrajTerraFarError\%.
+The reference trajectory also localizes judgment errors. Within one tick of a reference transition, Luna low errs at \TrajLunaNearError\% of \TrajLunaNearStates{} state evaluations, versus \TrajLunaFarError\% of \TrajLunaFarStates{} farther away; Terra low gives \TrajTerraNearError\% versus \TrajTerraFarError\%.
 Luna none shows little difference (\TrajLunaNoneNearError\% versus \TrajLunaNoneFarError\%); concentration is setting-dependent (Appendix~\ref{app:composition}).
 
 \subsection{RQ2: Speed Helps When Judgment Survives}
@@ -362,13 +362,13 @@ Jev's log-AUC exceeds Luna low's by \JevMinusLunaAuc, Terra low's by \JevMinusTe
 Its judgment errors still occupy \JevAucJudgment\% of log-weighted time.
 
 Dropping reasoning makes responses \LunaNoneLatencySavingSec\,s (Luna) and \TerraNoneLatencySavingSec\,s (Terra) faster at the median.
-Terra retains \TerraNoneUntimed\% untimed accuracy, and its log-AUC rises to \TerraNoneAuc\%, \JevMinusTerraNoneAuc{} points below Jev in this recording.
+Terra retains \TerraNoneUntimed\% untimed accuracy, and its log-AUC rises to \TerraNoneAuc\%, \JevMinusTerraNoneAuc{} points below Jev on average.
 Luna loses \LunaMinusLunaNoneUntimed{} points untimed; judgment errors occupy \LunaNoneAucJudgment\% of log-weighted time, and its log-AUC falls to \LunaNoneAuc\%.
 A shorter response helps only if the decision remains accurate enough.
 
 \paragraph{Fast provisional answers and slow corrections.}
-We replay every Jev/GPT pair, dispatching both at each state and allowing the slower answer to correct the faster answer for that state.
-At 2\,s, Jev plus Terra low attains \TrajTerraFreshestTwo\% when slow answers cannot regress the active source, but \TrajTerraArrivalTwo\% when they may overwrite newer fast answers: composition changes from improving on Jev alone (\TrajJevTwo\%) to reducing accuracy, with identical component answers, latency distributions and reference transitions.
+We replay every Jev/GPT pair with matching pass indices, dispatching both at each state and allowing the slower answer to correct the faster answer for that state.
+At 2\,s, Jev plus Terra low averages \TrajTerraFreshestTwo\% when slow answers cannot regress the active source and \TrajTerraArrivalTwo\% when they may overwrite newer fast answers, both above Jev alone (\TrajJevTwo\%). In pass 1, however, allowing overwrites reverses the improvement into a loss with identical component answers and latencies (Appendix~\ref{app:composition}).
 Jev plus Terra none with the freshness rule attains \OwJevTerraNoneAuc\% log-AUC, against \OwTerraNoneAuc\% for Terra none alone and \TrajJevAuc\% for Jev alone.
 With the same correction model and rule, DJev and Kev-4B give \OwDJevFreshestAuc\% and \OwKevFreshestAuc\%, despite mean per-pass median latencies of \OwDJevMedian\,s and \OwKevMedian\,s: their untimed decision accuracies are \OwDJevUntimed\% and \OwKevUntimed\%.
 Kev-27B is untimed-correct at \OwKevTwentySevenUntimed\% of states; alone it reaches \OwKevTwentySevenAuc\% log-AUC at a mean per-pass median latency of \OwKevTwentySevenMedian\,s, above Jev, and with Terra none corrections \OwKevTwentySevenFreshestAuc\%, the highest evaluated mean.
@@ -380,11 +380,11 @@ These are counterfactual combinations of separate recordings on common nominal r
 \label{sec:rq3}
 The aggregate curve in Figure~\ref{fig:pace}a shows the conditions summarized by the primary score.
 At 2\,s Jev and Terra without reasoning obtain \JevCommonTwo\% and \TerraNoneCommonTwo\% in-force accuracy; at 8\,s they obtain \JevCommonEight\% and \TerraNoneCommonEight\%.
-A larger interval gives slow answers more time to remain current, although arbitrary wrong answers need not yield a monotone curve; at 8\,s Astra low, the slowest setting at the median, has the highest in-force accuracy (\AstraCommonEight\%).
+A larger interval gives slow answers more time to remain current, although arbitrary wrong answers need not yield a monotone curve; at 8\,s Astra low has the highest in-force accuracy (\AstraCommonEight\%).
 The area summarizes a declared range; it does not identify a setting that dominates at every interval.
 
 Panels b--e show how the four families contribute to this aggregate.
-Terra without reasoning has the highest log-AUC in IDE debugging (\TerraNoneDebugAuc\%), while Jev leads in assembly, support and presenter control (Table~\ref{tab:main}).
+Terra low has the highest log-AUC in IDE debugging (\TerraDebugAuc\%), while Jev leads in assembly, support and presenter control (Table~\ref{tab:main}).
 IDE debugging remains Jev's weakest family (\JevDebugAuc\% log-AUC, \JevDebugUntimed\% untimed).
 The family curves retain the different authored patterns of evidence and reference changes even though their integration bounds and weights are identical.
 

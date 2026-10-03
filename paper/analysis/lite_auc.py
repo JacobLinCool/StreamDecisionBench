@@ -146,7 +146,7 @@ def auc_tables(models):
             [
                 f"\\{p}RowLabel",
                 *[f"\\{p}{fp}Auc" for fp, _ in FAMILIES],
-                f"\\{p}Auc",
+                f"\\{p}Auc~$\\pm$~\\{p}AucSD",
                 f"\\{p}Untimed",
             ]
         )

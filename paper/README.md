@@ -3,7 +3,7 @@
 ACL long paper on StreamDecisionBench (SDB). The benchmark's internal name `lite` appears only in paths and module names (`data/lite/v1`, `analysis/lite_*.py`); the manuscript calls it SDB. `main.tex` holds the paper and `appendix.tex` the appendices. The bibliography is `references.bib`, merged from `bib/part_a.bib` and `bib/part_b.bib` plus entries added during revision; `bib/*_notes.md` record where each entry was verified.
 
 The manuscript covers six hosted settings and nine same-host open-weight settings. The public leaderboard
-also includes Cloudflare Clef and Clef Flash, for 17 settings; those two additions do not change the
+includes additional completed settings; those additions do not change the
 manuscript's frozen model subset. See the [documentation index](../docs/README.md) for current and historical cohorts.
 
 ## Build
@@ -25,34 +25,27 @@ For the camera-ready version, add an entry file that sets `\SDBVersion` to `fina
 
 ## Regenerate numbers, tables and figures
 
-Run these from the repository root. They read the frozen data and the recorded runs, and they make no model call or network request.
+Run these from the repository root. They read frozen data and all three recorded passes per
+manuscript setting, and make no model call or network request.
 
 ```bash
-# primary log-AUC reports and recorded-cadence diagnostics for all seventeen public settings
-# -> docs/lite/results/four-family/ and the current RTX PRO 6000 lab cohort
-uv run python paper/analysis/lite_reports.py
+# Verify all passes; regenerate manuscript evidence, numbers, tables and figures.
+uv run --group paper python paper/analysis/lite_repeated.py
 
-# numbers and table bodies -> generated/numbers.tex, generated/tables.tex
+# Regenerate only number/table macros from the verified three-pass manifest.
 uv run python paper/analysis/lite_numbers.py
-uv run python paper/analysis/lite_numbers.py --list   # also prints every macro with its source
-
-# figures -> figures/fig_*.pdf (+ local .svg previews, not versioned) and figures/lite_figures_data.json
-# matplotlib comes from the `paper` dependency group in pyproject.toml
-uv run --group paper python paper/analysis/lite_figures.py
-
-# transition-local errors and fast/slow arbitration -> docs/research/trajectory-value/
-# plus generated/trajectory_{numbers,tables}.tex and figures/fig_arbitration.pdf
-uv run --group paper python paper/analysis/lite_trajectory_value.py
-
-# nine self-hosted settings and all nine/Terra-none pairs under three policies
-# -> docs/research/openweight-hybrids/, generated/openweight_{numbers,tables}.tex
-# plus the generated Results section in the root README and a composition figure
-uv run --group paper python paper/analysis/lite_openweight.py
+uv run python paper/analysis/lite_numbers.py --list
 ```
+
+The manifest is `docs/research/manuscript-three-pass/analysis.json`. Individual runs and
+reports remain immutable inputs. Single-model statistics average independently evaluated
+passes; composition pairs matching pass indices before averaging. Figure 1 and the detailed
+stale-override example retain pass 1 and are labelled accordingly. The public composition
+report commands do not overwrite manuscript tables or figures.
 
 `lite_numbers.py` does the following:
 
-- It rescores every run from its `events.jsonl` with the benchmark's scorer and network estimator, and requires the published `docs/lite/results/four-family/*/analysis.json` to match.
+- It rescores every run from its `events.jsonl` with the benchmark's scorer and network estimator, and requires each corresponding published `docs/lite/results/*/analysis.json` to match.
 - It recomputes the remaining statistics independently.
 - It re-runs the executable reference on all 480 states.
 - It computes the counterfactual replays with the benchmark's replay scorer: the timing ceiling (reference answers replayed with each model's recorded delays) and the delay-scaling table (every recorded delay multiplied by 0.5, 2/3, 1.5 or 2).
@@ -68,6 +61,7 @@ If any check fails, the script lists every failure and does not publish new numb
 | --- | --- |
 | `main.tex`, `appendix.tex` | Paper and appendices |
 | `submission.tex`, `preprint.tex`, `.latexmkrc` | Entry files and latexmk configuration |
+| `analysis/lite_repeated.py` | Three-pass manuscript manifest, matching-index compositions, and regeneration entry point |
 | `analysis/lite_numbers.py` | Writes `generated/numbers.tex` (one macro per stated number, each with its source) and `generated/tables.tex` (table bodies) |
 | `analysis/lite_figures.py`, `analysis/figstyle.py` | Figures in `figures/`, drawn at ACL print width (column 7.7 cm, text block 16 cm) with no text below 7 pt |
 | `analysis/lite_window.py` | The rule that selects the Figure 1 window, shared by both scripts |
@@ -91,7 +85,7 @@ If any check fails, the script lists every failure and does not publish new numb
 - Differences between models are named so the value is nonnegative, for example `\LunaMinusJevInForce`. If the data change which model is ahead, the macro name changes and the paper fails to compile. The primary score is identified by the `Auc` suffix; `InForce` denotes the fixed 2 s diagnostic.
 - Load `generated/numbers.tex` before `generated/tables.tex`. The paper defines the model labels, such as `\LunaLabel`, before loading the tables.
 - The inputs are `data/lite/v1` (dataset hash `fdfdd55d…`), `runs/lite-v1-*-retry-v1/` and `docs/lite/results/*/`. Number and figure generation treat these inputs as read only; `lite_reports.py` rebuilds the published analyses from the frozen recordings.
-- Hosted settings have one recorded pass; self-hosted results average three independently evaluated passes, including compositions with the same hosted recording. Latency summaries average per-pass quantiles. Comparisons remain descriptive. Network-removed scores always appear with their range and the assumption behind them. Timing ceilings and delay scaling are labelled as counterfactual replays.
+- All manuscript settings average three independently evaluated passes; compositions pair matching pass indices. Latency summaries average per-pass quantiles. Comparisons remain descriptive. Network-removed scores always appear with their range and the assumption behind them. Timing ceilings and delay scaling are labelled as counterfactual replays.
 - The validity audit was run by LLM agents. It is not human validation.
 
 
@@ -99,11 +93,11 @@ If any check fails, the script lists every failure and does not publish new numb
 
 `analysis/evaluation_policy.json` declares the primary normalized log-AUC over 0.5–8 s, plus linear 0.5–8 s and the five other log ranges formed by lower bounds 0.1, 0.5 and 1 s and upper bounds 4 and 8 s. Equal multiplicative ranges have equal weight; each family averages scenarios equally, and the macro score averages families equally. `src/streamdecisionbench/lite/interval_scoring.py` integrates scenario fractions on nested grids, refining until all metrics change by at most 0.001 percentage point. This is numerical convergence, not statistical uncertainty.
 
-The aggregation rule was adopted after inspecting the recorded passes, not preregistered. All six manuscript hosted and nine self-hosted settings were recorded at 2 s. For Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and a disjoint two-scenario presenter pass were recorded in separate sessions and merged; merged artifacts retain both sessions. Astra low was recorded in one session covering all eight scenarios (2026-09-29 16:51–17:07 UTC). The two additional public Cloudflare settings also use complete eight-scenario passes at 2 s. No existing response was re-queried or excluded for this evaluation.
+The aggregation rule was adopted after inspecting the recorded passes, not preregistered. All six manuscript hosted and nine self-hosted settings were recorded at 2 s. In pass 1 of Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and a disjoint two-scenario presenter pass were recorded in separate sessions and merged; merged artifacts retain both sessions. Each repeat covers all eight scenarios in one session. Astra low pass 1 was recorded in one session covering all eight scenarios (2026-09-29 16:51–17:07 UTC). The two additional public Cloudflare settings also use complete eight-scenario passes at 2 s. All three complete passes are evaluated without excluding valid responses.
 
 Each per-setting `analysis.json` has `auc.primary` and `auc.sensitivity`; `scores` and `network_adjustment` describe fixed 2 s diagnostics. Network-removal methods, ranges and adjusted figures are confined to the appendix. `fig_pace` plots the aggregate curve and the four family curves on log interval axes in one main-text figure; `fig_errortime` integrates the partition with the primary score's weights. `fig_trajectory` illustrates presenter voice control (presenter A) on the 2 s recording-cadence replay: every public ASR change in the window on the shared time axis, quoted where the composed reference decision changes, the reference fields that change, and the decisions in force of Luna low, Terra low and Jev in the error-time classes, with each setting's correct share of the window and two brackets measured at the slide change.
 
-The separate composition reports contain `standalone`, `systems`, `controls` and provenance. `lite_openweight.py` verifies all seventeen public settings' original-clock time partitions, validates input audits and published standalone areas, and analytically integrates the nine local/Terra-none pairs under every existing rule. Its self-hosted inputs are exposed through exact file allowlists in `runs/`; no GPU or model runtime is needed. `fig_openweight_hybrids` and the full local tables are in the appendix.
+The separate composition reports contain `standalone`, `systems`, `controls` and provenance. `lite_openweight.py` verifies all registered public settings' original-clock time partitions, validates input audits and published standalone areas, and analytically integrates the nine local/Terra-none pairs under every existing rule. Its self-hosted inputs are exposed through exact file allowlists in `runs/`; no GPU or model runtime is needed. `fig_openweight_hybrids` and the full local tables are in the appendix.
 
 To rebuild a merged recording (the five merged settings) in a fresh directory:
 
@@ -116,4 +110,4 @@ uv run python scripts/lite/lite_report.py --run runs/<fresh-merged-dir> \
   --out /tmp/sdb-<setting>-report
 ```
 
-The generic report command above writes recording-cadence diagnostics to a scratch folder; do not point it at `docs/lite/results/four-family/`, whose reports it would overwrite. Run `paper/analysis/lite_reports.py` to produce the complete primary AUC reports for all seventeen public settings.
+The generic report command above writes recording-cadence diagnostics to a scratch folder; do not point it at `docs/lite/results/four-family/`, whose reports it would overwrite. Run `paper/analysis/lite_reports.py` to produce the complete primary AUC reports for all registered public settings.
