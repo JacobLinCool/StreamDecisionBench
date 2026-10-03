@@ -43,7 +43,9 @@ verified figure data and shared model colors, with continuous acceleration throu
 a small overshoot, and settling. Changing rank labels crossfade. The square social-video
 layout leads with the benchmark name and shows six nearby ranks with large labels and
 score bars below each name. It supports every rank, including the last entry, and keeps
-the Log-AUC explanation below the rankings. Only the source is versioned; generated videos are Git-ignored.
+the metric explanation below the rankings. `--metric in-force` (the default) ranks by
+normalized log-AUC; `--metric untimed` re-ranks by untimed accuracy. Each video names its
+metric above the rows. Only the source is versioned; generated videos are Git-ignored.
 
 Install FFmpeg with the `libx264` encoder and the pinned Node dependencies above, then run:
 

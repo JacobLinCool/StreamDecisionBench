@@ -56,8 +56,8 @@ test('insertion crosses the destination without stopping and settles continuousl
 
 test('every published setting has a full nearby window and enters at its true rank', () => {
   const published = JSON.parse(readFileSync(new URL('./data.json', import.meta.url), 'utf8'));
-  for (const item of published.series) {
-    const payload = animationData(published, item.id, 6);
+  for (const metric of ['in-force', 'untimed']) for (const item of published.series) {
+    const payload = animationData(published, item.id, 6, metric);
     assert.equal(payload.previous.length, 5);
     const ranks = [...payload.previous, payload.featured].map(row => row.rank).sort((a, b) => a - b);
     assert.deepEqual(ranks, Array.from({length: 6}, (_, i) => payload.start + i + 1));
@@ -67,4 +67,26 @@ test('every published setting has a full nearby window and enters at its true ra
     assert.ok(position(2) > targetY, 'even the final rank has an entrance');
     assert.ok(position(2) < 880, 'entry stays above the metric footer');
   }
+});
+
+
+test('untimed animation re-ranks all rows and never labels its score as log-AUC', () => {
+  const input = {...data, series: [
+    {...row('Perplexity', 63.37), untimed_pct: 70},
+    {...row('Jev', 58.5), untimed_pct: 90},
+  ]};
+  const payload = animationData(input, 'Perplexity', 6, 'untimed');
+  assert.equal(payload.featured.rank, 2);
+  assert.equal(payload.featured.score, 70);
+  assert.equal(payload.previous[0].id, 'Jev');
+  assert.equal(payload.previous[0].rank, 1);
+  const svg = renderFrame(payload, 6);
+  assert.match(svg, />Untimed accuracy</);
+  assert.match(svg, />70\.00%</);
+  assert.doesNotMatch(svg, /Log-AUC|In-force accuracy/);
+  const inForce = animationData(input, 'Perplexity', 6, 'in-force');
+  assert.equal(inForce.featured.rank, 1);
+  assert.match(renderFrame(inForce, 6), />In-force accuracy</);
+  assert.match(renderFrame(inForce, 6), /Log-AUC/);
+  assert.throws(() => animationData(input, 'Perplexity', 6, 'missing'), /Unknown metric/);
 });

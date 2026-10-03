@@ -10,7 +10,14 @@ import {dirname, extname, join, resolve} from 'node:path';
 import {parseArgs} from 'node:util';
 import {names, colors} from './identity.mjs';
 
-export function animationData(data, setting, seconds) {
+const metrics = {
+  'in-force': {field: 'log_auc_pct', label: 'In-force accuracy', footer: 'Log-AUC · higher is better'},
+  untimed: {field: 'untimed_pct', label: 'Untimed accuracy', footer: 'Higher is better'},
+};
+
+export function animationData(data, setting, seconds, metric = 'in-force') {
+  if (!Object.hasOwn(metrics, metric)) throw new Error(`Unknown metric: ${metric}`);
+  const selectedMetric = metrics[metric];
   if (!Number.isFinite(seconds) || seconds < 5 || seconds > 6) {
     throw new Error('Duration must be between 5 and 6 seconds');
   }
@@ -19,21 +26,20 @@ export function animationData(data, setting, seconds) {
   const rows = data.series.map((row, index) => {
     if (ids.has(row.id) || !(row.id in names) || !(row.id in colors) ||
         !Number.isFinite(row.log_auc_pct) || row.log_auc_pct < 0 || row.log_auc_pct > 100 ||
-        !Number.isFinite(row.untimed_pct) || !Number.isInteger(row.passes) || row.passes < 1 ||
+        !Number.isFinite(row.untimed_pct) || row.untimed_pct < 0 || row.untimed_pct > 100 || !Number.isInteger(row.passes) || row.passes < 1 ||
         (index && row.log_auc_pct > data.series[index - 1].log_auc_pct)) {
       throw new Error(`Invalid published leaderboard row: ${row.id}`);
     }
     ids.add(row.id);
     return {id: row.id, name: names[row.id], color: colors[row.id],
-      score: row.log_auc_pct, sd: row.log_auc_sd_pct, untimed: row.untimed_pct,
-      passes: row.passes, deployment: row.deployment, rank: index + 1};
-  });
+      score: row[selectedMetric.field]};
+  }).sort((a, b) => b.score - a.score).map((row, index) => ({...row, rank: index + 1}));
   const featured = rows.find(row => row.id === setting);
   if (!featured) throw new Error(`Setting is absent from the published leaderboard: ${setting}`);
   const start = Math.max(0, Math.min(featured.rank - 3, rows.length - 6));
   const previous = rows.filter(row => row.id !== setting)
     .map((row, index) => ({...row, previousRank: index + 1})).slice(start, start + 5);
-  return {benchmark: data.benchmark, seconds, total: rows.length, featured, previous, start};
+  return {seconds, metric: selectedMetric, featured, previous, start};
 }
 
 const clamp = x => Math.max(0, Math.min(1, x));
@@ -86,11 +92,11 @@ export function renderFrame(data, seconds) {
     rect(0, 0, 1080, 1080, '#ffffff') +
     text(64, 133, 'StreamDecisionBench', 76, '#142536', 700) +
     text(68, 193, data.featured.name, 36, data.featured.color, 600) +
-    text(64, 277, 'New result', 26, '#516271', 500) +
+    text(64, 277, data.metric.label, 26, '#516271', 500) +
     `<line x1="64" y1="302" x2="1016" y2="302" stroke="#dae3e8"/>` +
     existing + row(data.featured, incomingY, data.featured.rank, true) +
     `<line x1="64" y1="925" x2="1016" y2="925" stroke="#dae3e8"/>` +
-    text(64, 976, 'Log-AUC · higher is better', 26, '#516271') + '</svg>';
+    text(64, 976, data.metric.footer, 26, '#516271') + '</svg>';
 }
 
 export async function renderVideo(payload, output) {
@@ -128,11 +134,12 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const {values} = parseArgs({options: {
     setting: {type: 'string', default: 'Perplexity'}, seconds: {type: 'string', default: '6'},
     out: {type: 'string'}, data: {type: 'string'},
+    metric: {type: 'string', default: 'in-force'},
   }});
   const input = values.data ? resolve(values.data) : new URL('./data.json', import.meta.url);
   const data = JSON.parse(readFileSync(input, 'utf8'));
   const output = values.out ? resolve(values.out) : fileURLToPath(new URL('./leaderboard-update.mp4', import.meta.url));
-  const payload = animationData(data, values.setting, Number(values.seconds));
+  const payload = animationData(data, values.setting, Number(values.seconds), values.metric);
   await renderVideo(payload, output);
-  console.log(`Wrote ${output}: ${payload.seconds}s at 60 fps, ${payload.featured.name} enters at #${payload.featured.rank}`);
+  console.log(`Wrote ${output}: ${payload.seconds}s at 60 fps, ${payload.featured.name} enters at #${payload.featured.rank} (${payload.metric.label})`);
 }
