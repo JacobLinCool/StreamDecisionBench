@@ -38,7 +38,7 @@ the exported data's provenance and produces SVGs using ECharts' server-side rend
 
 ## Leaderboard update animation
 
-[Play the eight-second Perplexity insertion](leaderboard-update.html). The self-contained
+Generate an eight-second Perplexity insertion locally. The self-contained
 HTML animation uses the verified figure data and shared model colors. It shows the board
 before the new entry, grows its measured score bar, moves it to its actual rank, and holds
 the final result. Playback, replay and scrubbing work without external assets; reduced-motion
@@ -49,7 +49,8 @@ npm run --prefix docs/figures animate -- --setting Perplexity --seconds 8
 ```
 
 Use any registered setting ID and a duration from 5 to 10 seconds. Rebuild `data.json` first
-after changing the leaderboard. The output defaults to `docs/figures/leaderboard-update.html`;
+after changing the leaderboard. The generated HTML is Git-ignored; only its source is versioned.
+The output defaults to `docs/figures/leaderboard-update.html`;
 `--out <path>` writes a separate animation. Open the HTML in a browser, or serve it with
 `python3 -m http.server 8765 --bind 127.0.0.1 --directory docs/figures` and visit
 `http://127.0.0.1:8765/leaderboard-update.html`.

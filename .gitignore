@@ -266,6 +266,7 @@ cython_debug/
 *.zh-tw.md
 .chart-data-*/
 /docs/figures/node_modules/
+/docs/figures/leaderboard-update.html
 # Secrets: only the template is versioned.
 .env.*
 !.env.example
