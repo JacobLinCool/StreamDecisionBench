@@ -12,7 +12,7 @@ without smoothing. All settings retain their original recorded release clocks, s
 latencies and commit lag. Scenarios receive equal weights within each family, then families receive
 equal weights. Primary areas come from the verified published analyses, independently of the display grid.
 
-Hosted settings have one recorded pass; self-hosted scores and curves average three passes. Retiming assumes latency remains fixed when request rates
+Scores and curves average two passes for Astra low and three for every other setting. Latency summaries average within-pass quantiles. [Hosted repeat results](../lite/results/hosted-api-repeats-20261003/README.md) preserve individual scores and variation. Retiming assumes latency remains fixed when request rates
 change. Winnow uses RunPod RTX PRO 6000; the other self-hosted settings use the lab RTX PRO 6000.
 Hosted API and same-host GPU latency describe different deployments; these figures do
 not isolate architecture speed. Qwen uses direct option logits, and Nimble processes fields sequentially.
@@ -20,6 +20,7 @@ not isolate architecture speed. Qwen uses direct option logits, and Nimble proce
 Regenerate from the repository root, using Python 3.12/3.13, uv and Node.js:
 
 ```bash
+uv run python paper/analysis/lite_hosted.py --reports
 uv run --group paper python paper/analysis/lite_openweight.py
 uv run python docs/figures/prepare.py
 npm ci --prefix docs/figures --ignore-scripts

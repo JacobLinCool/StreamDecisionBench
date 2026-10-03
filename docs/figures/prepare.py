@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "paper/analysis"))
 
 from leaderboard_models import HOSTED_MODELS
+from lite_hosted import load_summary
 from lite_openweight import verified_run, verify_standalone
 from trajectory_replay import aggregate, evaluate, prepare
 
@@ -25,6 +26,7 @@ def sha(path: Path) -> str:
 
 def build() -> dict:
     summary = json.loads(SUMMARY.read_text())
+    hosted_summary = load_summary()
     for filename, expected in summary["sources_sha256"].items():
         if sha(ROOT / filename) != expected:
             raise ValueError(f"Stale analysis source: {filename}; regenerate the analysis first")
@@ -40,8 +42,8 @@ def build() -> dict:
     series = []
     for name in names:
         hosted = name in summary["hosted"]
-        row = summary["hosted"][name] if hosted else summary["standalone"][name]
-        sources = [summary["provenance"][name]] if hosted else [p["provenance"] for p in row["passes"]]
+        row = hosted_summary["hosted"][name] if hosted else summary["standalone"][name]
+        sources = [p["provenance"] for p in row["passes"]]
         curves, areas = [], []
         for source in sources:
             run, hashes = verified_run(ROOT / source["run"])
@@ -73,19 +75,21 @@ def build() -> dict:
         provenance[name] = sources
         label = row["label"] if hosted else row["spec"]["label"]
         series.append({"id": name, "label": label, "deployment": "hosted" if hosted else "self-hosted",
-                       "passes": len(sources), "latency_s": report["latency_s"] if hosted else row["latency_s"], "log_auc_pct": 100 * expected, "untimed_pct": 100 * row["untimed"],
+                       "passes": len(sources), "latency_s": row["latency_s"], "log_auc_pct": 100 * expected,
+                       "log_auc_sd_pct": 100 * float(np.std(areas, ddof=1)), "untimed_pct": 100 * row["untimed"],
                        "accuracy_pct": (100 * np.mean(curves, axis=0)).tolist(),
-                       "report": sources[0]["published_report"]["path"] if hosted else "docs/research/openweight-hybrids/README.md"})
+                       "report": "docs/lite/results/hosted-api-repeats-20261003/README.md" if hosted else "docs/research/openweight-hybrids/README.md"})
         print(f"Verified {name}: {100 * expected:.2f}% log-AUC; {len(sources)} passes", flush=True)
     series.sort(key=lambda row: -row["log_auc_pct"])
     sources = ["docs/figures/prepare.py", "paper/analysis/leaderboard_models.py", "paper/analysis/lite_openweight.py",
-               "paper/analysis/trajectory_replay.py", "paper/analysis/evaluation_policy.json"]
+               "paper/analysis/trajectory_replay.py", "paper/analysis/evaluation_policy.json", "paper/analysis/lite_hosted.py"]
     return {"benchmark": "StreamDecisionBench", "metric": "Normalized log-AUC over 0.5–8 s (%)",
-            "states": 480, "scenarios": 8, "families": 4, "passes_per_setting": {"hosted": 1, "self-hosted": 3},
+            "states": 480, "scenarios": 8, "families": 4, "passes_per_setting": {row["id"]: row["passes"] for row in series},
             "clock": "original recorded release clock; successful-attempt latency and commit lag retained",
             "weighting": "equal scenarios within each family, then equal families; logarithmic interval weighting",
             "intervals_s": intervals, "series": series, "provenance": provenance,
             "summary": {"path": str(SUMMARY.relative_to(ROOT)), "sha256": sha(SUMMARY)},
+            "hosted_summary": {"path": "docs/lite/results/hosted-api-repeats-20261003/analysis.json", "sha256": sha(ROOT / "docs/lite/results/hosted-api-repeats-20261003/analysis.json")},
             "sources_sha256": {filename: sha(ROOT / filename) for filename in sources}}
 
 

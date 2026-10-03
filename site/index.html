@@ -111,7 +111,7 @@ footer { color: var(--text-3); font-size: 13px; margin-top: 32px; }
 
 <section class="card" aria-labelledby="curve-title">
   <h2 id="curve-title">In-force accuracy across update intervals</h2>
-  <p class="sub">Curves replay recorded answers and latencies at update intervals from 0.5 to 8 s; self-hosted curves average three passes.
+  <p class="sub">Curves replay recorded answers and latencies at update intervals from 0.5 to 8 s; Astra averages two passes and every other setting averages three.
   The selected range also sets the in-force leaderboard above.</p>
   <div class="controls">
     <span><span class="label">From</span><select id="range-lo" aria-label="Range start"></select></span>
@@ -197,8 +197,9 @@ function renderBoard() {
       trigger: "item", confine: true,
       formatter: (p) => {
         const s = ordered[p.dataIndex];
-        return `<b>${s.label}</b> · ${s.deployment}<br>In-force log-AUC ${range}: <b>${pct(inforce(s))}%</b>` +
-          `<br>Untimed accuracy: <b>${pct(s.untimed_pct)}%</b><br>Median / p95 latency: ${s.p50_s.toFixed(3)} / ${s.p95_s.toFixed(3)} s`;
+        return `<b>${s.label}</b> · ${s.deployment}<br>Mean in-force log-AUC ${range}: <b>${pct(inforce(s))}%</b>` +
+          (isPrimary() ? `<br>Across-pass sample SD: ${pct(s.log_auc_sd_pct)} percentage points` : "") +
+          `<br>Untimed accuracy: <b>${pct(s.untimed_pct)}%</b><br>${s.passes} passes · Mean median / p95 latency: ${s.p50_s.toFixed(3)} / ${s.p95_s.toFixed(3)} s`;
       },
     },
     xAxis: { type: "value", min: 0, max: 100, axisLabel: { color: text3, formatter: "{value}%" },
@@ -213,10 +214,10 @@ function renderBoard() {
       label: { show: true, position: "right", color: text2, fontSize: 12, formatter: (p) => pct(p.value) } }],
   }, true);
   const t = document.getElementById("board-table");
-  t.innerHTML = `<thead><tr><th>#</th><th>Setting</th><th>Deployment</th><th>In-force log-AUC ${range} (%)</th>` +
-    `<th>Untimed (%)</th><th>Median latency (s)</th><th>p95 latency (s)</th></tr></thead><tbody>` +
-    rows.map((s, i) => `<tr><td>${i + 1}</td><td>${s.label}</td><td>${s.deployment}</td><td>${pct(inforce(s))}</td>` +
-      `<td>${pct(s.untimed_pct)}</td><td>${s.p50_s.toFixed(3)}</td><td>${s.p95_s.toFixed(3)}</td></tr>`).join("") + "</tbody>";
+  t.innerHTML = `<thead><tr><th>#</th><th>Setting</th><th>Deployment</th><th>Mean in-force log-AUC ${range} (%)${isPrimary() ? " ± SD" : ""}</th>` +
+    `<th>Passes</th><th>Mean untimed (%)</th><th>Mean median latency (s)</th><th>Mean p95 latency (s)</th></tr></thead><tbody>` +
+    rows.map((s, i) => `<tr><td>${i + 1}</td><td>${s.label}</td><td>${s.deployment}</td><td>${pct(inforce(s))}${isPrimary() ? ` ± ${pct(s.log_auc_sd_pct)}` : ""}</td>` +
+      `<td>${s.passes}</td><td>${pct(s.untimed_pct)}</td><td>${s.p50_s.toFixed(3)}</td><td>${s.p95_s.toFixed(3)}</td></tr>`).join("") + "</tbody>";
 }
 
 function renderCurves() {
@@ -323,11 +324,12 @@ function wire() {
 
 function notes() {
   const items = [
-    `One pass per hosted setting and three per self-hosted setting, each over all ${D.states} states (${D.scenarios} scenarios in ${D.families} families), recorded at a ${D.recording_interval_s} s time-step interval.`,
+    `Astra low averages two passes; every other hosted and self-hosted setting averages three. Each pass covers all ${D.states} states (${D.scenarios} scenarios in ${D.families} families), recorded at a ${D.recording_interval_s} s time-step interval.`,
     "The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights within each family and then equal family weights. Each doubling of the interval receives equal weight.",
     "Interval evaluations keep the recorded answers and latencies; they assume service latency does not change with the request rate.",
+    "At the primary 0.5–8 s range, table and tooltip SD values are sample standard deviations across passes, in percentage points. Scores give each pass equal weight; latency summaries average within-pass quantiles.",
     "Hosted API latency includes the remote service and the internet round trip from the benchmark client. Self-hosted settings run benchmark and model on the same RTX PRO 6000 host; the two groups are not a controlled hardware comparison.",
-    "Qwen3.5-4B uses direct option logits with thinking disabled; Bespoke Nimble-9B scores each field sequentially. Winnow uses the native CUDA runtime on RunPod RTX PRO 6000; the other self-hosted settings use the lab RTX PRO 6000. Self-hosted scores and latency quantiles are means of per-pass values; hosted results use one pass. Adjacent states are dependent, so small differences do not establish stable rankings.",
+    "Qwen3.5-4B uses direct option logits with thinking disabled; Bespoke Nimble-9B scores each field sequentially. Winnow uses the native CUDA runtime on RunPod RTX PRO 6000; the other self-hosted settings use the lab RTX PRO 6000. All scores and latency quantiles are means of per-pass values. Adjacent states are dependent, so small differences do not establish stable rankings.",
     `Leaderboard values for custom ranges integrate the published ${D.intervals_s.length}-point curves (trapezoidal on the log axis); over 0.5–8 s this agrees with the exact primary score within ${D.sampled_auc_max_deviation_pct < 0.001 ? "0.001" : D.sampled_auc_max_deviation_pct.toFixed(3)} points.`,
   ];
   document.getElementById("notes").innerHTML = items.map((t) => `<li>${t}</li>`).join("");

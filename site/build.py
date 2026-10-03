@@ -33,6 +33,7 @@ def build(out: Path) -> dict:
         settings.append({
             "passes": series["passes"], "id": series["id"], "label": series["label"], "deployment": series["deployment"],
             "log_auc_pct": series["log_auc_pct"], "untimed_pct": series["untimed_pct"],
+            "log_auc_sd_pct": series["log_auc_sd_pct"],
             "p50_s": latency["p50"], "p95_s": latency["p95"], "curve_pct": curve,
         })
     if deviation > 0.05:

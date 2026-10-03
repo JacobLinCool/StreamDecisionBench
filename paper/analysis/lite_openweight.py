@@ -318,10 +318,10 @@ def hybrid_summary(data):
     return lines
 
 
-def render_results(data):
+def render_results(data, *, hosted):
     improved = ["Jev"] + [row["spec"]["label"] for name, row in data["standalone"].items()
         if data["systems"][name]["freshest"]["integrated"]["overall"]["accuracy"] > data["controls"]["TerraNone"]["overall"]["accuracy"]]
-    lines = ["## Results", "", "One hosted pass and three self-hosted passes per setting, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s",
+    lines = ["## Results", "", "Two passes for Astra low and three for every other hosted and self-hosted setting, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s",
         "time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights",
         "within each family and then equal family weights. Interval evaluations retain the recorded answers",
         "and latencies; they assume service latency does not change with the request rate.", "",
@@ -329,10 +329,10 @@ def render_results(data):
         "Each doubling interval receives equal log weight, balancing faster and slower conditions around that cadence.",
         "These bounds define a controlled evaluation domain; deployment-specific event rates can motivate other ranges.", "",
         "### Hosted APIs", "", "Latency includes the remote service and internet round trip from the benchmark client.", "",
-        "| Setting | Model | Log-AUC 0.5–8 s (%) | Untimed (%) | Median latency (s) |", "|---|---|---:|---:|---:|"]
-    for row in sorted(data["hosted"].values(), key=lambda r: -r["accuracy"]):
-        lines.append(f"| {row['label']} | `{row['model']}` | {100*row['accuracy']:.2f} | {100*row['untimed']:.2f} | {row['median_s']:.3f} |")
-    lines += ["", "[Family scores and hosted reports](docs/lite/results/four-family/README.md).", "",
+        "| Setting | Model | Passes | Mean log-AUC ± SD (%) | Mean untimed (%) | Mean median latency (s) |", "|---|---|---:|---:|---:|---:|"]
+    for row in sorted(hosted.values(), key=lambda r: -r["accuracy"]):
+        lines.append(f"| {row['label']} | `{row['model']}` | {len(row['passes'])} | {100*row['accuracy']:.2f} ± {100*row['auc_sample_sd']:.2f} | {100*row['untimed']:.2f} | {row['latency_s']['p50']:.3f} |")
+    lines += ["", "[Family scores](docs/lite/results/four-family/README.md); [individual hosted passes and repeat variation](docs/lite/results/hosted-api-repeats-20261003/README.md). SD is sample standard deviation across passes, in percentage points.", "",
         "### Self-hosted open-weight settings", "", *standalone_table(data), "",
         f"All {len(data['standalone'])} settings use BF16 backbones and native decision readouts, each on one RTX PRO 6000. Benchmark and",
         "model run on the same GPU host; latency includes request processing, runtime queueing and inference, and excludes",
@@ -344,7 +344,8 @@ def render_results(data):
         "Winnow-12B and Winnow-E4B were measured on RunPod; the other nine self-hosted settings used the lab host.",
         "Winnow uses the native CUDA runtime with BF16 GGUF weights and F16 KV cache.",
         "[Winnow deployment, calibration and three-pass results](docs/lite/results/winnow-pro6000-20261003/README.md).", "",
-        "### Provisional decisions with corrections", "", *hybrid_summary(data), "",
+        "### Provisional decisions with corrections", "",
+        "These compositions retain the original single hosted recordings; their controls differ from the hosted leaderboard means above.", "", *hybrid_summary(data), "",
         "Both components receive each state. A provisional answer never moves the active source backward;",
         "the correction wins equal-source ties and, under the **freshest-source** rule used above, cannot",
         "overwrite a newer source. These are counterfactual compositions of independent recordings on",
@@ -356,10 +357,10 @@ def render_results(data):
         "even though its recorded median latency exceeds Terra none's.", "",
         "[Complete local/policy matrix, curves and provenance](docs/research/openweight-hybrids/README.md);",
         "[all five Jev/GPT pairs and three arbitration policies](docs/research/trajectory-value/README.md).",
-        "Self-hosted values are means over three passes; latency summaries are means of per-pass quantiles. Hosted values use one pass.",
+        "Standalone values average the declared passes; latency summaries average within-pass quantiles. Compositions average three self-hosted passes paired with the original hosted recording.",
         "Adjacent states are dependent; differences do not establish stable rankings.", "",
         "Regenerate the verified summary, paper tables and composition curves without model calls:", "",
-        "```bash", "uv run --group paper python paper/analysis/lite_openweight.py", "```"]
+        "```bash", "uv run python paper/analysis/lite_hosted.py --reports", "uv run --group paper python paper/analysis/lite_openweight.py", "```"]
     return "\n".join(lines)
 
 
@@ -481,7 +482,8 @@ def main():
     (OUT / "analysis.json").write_text(json.dumps(data, indent=2, allow_nan=False) + "\n")
     (OUT / "README.md").write_text(render_report(data))
     write_tex(data)
-    path.write_text(before + RESULT_START + "\n" + render_results(data) + "\n" + RESULT_END + after)
+    from lite_hosted import load_summary
+    path.write_text(before + RESULT_START + "\n" + render_results(data, hosted=load_summary()["hosted"]) + "\n" + RESULT_END + after)
     plot(data)
     print(f"Wrote {OUT.relative_to(ROOT)}", flush=True)
 

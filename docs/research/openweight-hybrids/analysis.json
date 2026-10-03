@@ -127913,12 +127913,12 @@
     "max_nominal_recorded_gap_points": 0.01732767322237816
   },
   "sources_sha256": {
-    "paper/analysis/lite_openweight.py": "3395ce63478f04cc16054930a378ec0107e79884be3c9a52e6331caf95655ace",
+    "paper/analysis/lite_openweight.py": "17351cf7b1d826ad8016946c30ae358a24da90ba99ebfdfa0b3b55491cd5ad6e",
     "paper/analysis/openweight_policy.json": "238b0cb65b0f3d7edff958c6494ffff520493c54e4ab9c0bbcb1d2fe7c565355",
     "paper/analysis/lite_trajectory_value.py": "fea66b556faae61adb6d74780d30c9b6e6e6ac0cbc47b2dbc4b4a2a491fce764",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
     "paper/analysis/lite_numbers.py": "944f9b645bf30e14556b97e755dd4b57594541880f7c264cadd40adc54569cba",
-    "paper/analysis/leaderboard_models.py": "59dd400b281b7423a505aa77a7f533401fe5db2aff0cd8b68eaf93246b2edec8",
+    "paper/analysis/leaderboard_models.py": "f2520cd2fc5e71df0ac8a725b83067e68db3027c038355b89f3cc5513b81d904",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616",
     "paper/analysis/figstyle.py": "e6278862b795d054107f8e47988d09c7c1743794a514860e75a72a7783f742da",
     "src/streamdecisionbench/lite/__main__.py": "9e397ff23bfb44c796d22d5f80d13d80af9bb12b65992a47fc3bd430a3483f7e",

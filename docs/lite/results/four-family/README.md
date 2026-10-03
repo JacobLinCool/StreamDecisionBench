@@ -6,16 +6,16 @@ The domain spans update rates four times faster and slower than the recording ca
 
 ## Hosted APIs
 
-| Setting | IDE | Assembly | Support | Presenter | Macro log-AUC | Untimed | Report |
-|---|---:|---:|---:|---:|---:|---:|---|
-| Luna low | 46.70% | 43.28% | 45.72% | 45.36% | 45.26% | 88.75% | [report](gpt-5.6-luna-low/REPORT.md) |
-| Luna none | 14.31% | 19.52% | 43.31% | 45.53% | 30.67% | 43.75% | [report](gpt-5.6-luna-none/REPORT.md) |
-| Terra low | 44.63% | 46.61% | 50.32% | 50.59% | 48.04% | 95.42% | [report](gpt-5.6-terra-low/REPORT.md) |
-| Terra none | 48.84% | 49.91% | 56.18% | 61.48% | 54.11% | 82.08% | [report](gpt-5.6-terra-none/REPORT.md) |
-| Astra low | 45.58% | 47.16% | 39.20% | 48.66% | 45.15% | 99.79% | [report](gpt-6-astra-low/REPORT.md) |
-| Jev | 41.30% | 62.79% | 67.95% | 66.46% | 59.63% | 63.75% | [report](jev-latest/REPORT.md) |
-| Clef | 34.53% | 13.51% | 58.20% | 17.58% | 30.96% | 38.96% | [report](clef/REPORT.md) |
-| Clef Flash | 12.80% | 24.13% | 28.38% | 13.44% | 19.69% | 21.67% | [report](clef-flash/REPORT.md) |
+| Setting | Passes | IDE | Assembly | Support | Presenter | Mean log-AUC ± SD | Mean untimed | Report |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| Jev | 3 | 38.80% | 61.16% | 67.84% | 66.21% | 58.50% ± 1.10 | 62.36% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Terra none | 3 | 50.02% | 50.36% | 59.50% | 61.98% | 55.46% ± 1.29 | 81.88% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Terra low | 3 | 51.92% | 49.34% | 54.56% | 52.40% | 52.06% ± 3.48 | 95.76% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Astra low | 2 | 46.98% | 47.38% | 43.92% | 50.73% | 47.25% ± 2.97 | 99.90% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Luna low | 3 | 48.03% | 44.04% | 44.40% | 45.33% | 45.45% ± 0.70 | 89.93% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Clef | 3 | 35.22% | 13.60% | 59.25% | 17.48% | 31.39% ± 0.41 | 38.96% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Luna none | 3 | 13.16% | 19.62% | 44.04% | 46.65% | 30.87% ± 1.12 | 43.54% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Clef Flash | 3 | 13.27% | 23.71% | 28.67% | 13.90% | 19.89% ± 0.19 | 21.67% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 
 ## Self-hosted settings
 
@@ -30,8 +30,10 @@ The domain spans update rates four times faster and slower than the recording ca
 | Kev-27B | 41.41% | 67.38% | 71.69% | 67.38% | 61.97% | 72.50% | [report](../pro6000-lab-20261001/kev-27b/REPORT.md) |
 | Bespoke Nimble-9B | 0.17% | 11.05% | 24.45% | 23.24% | 14.72% | 22.50% | [report](../pro6000-lab-20261001/nimble-9b/REPORT.md) |
 | Qwen3.5-4B direct-logit | 0.00% | 12.40% | 27.09% | 22.36% | 15.46% | 17.71% | [report](../pro6000-lab-20261001/semif-qwen35-4b/REPORT.md) |
+| Winnow-12B | 12.49% | 33.64% | 77.79% | 48.66% | 43.15% | 46.46% | [report](../winnow-pro6000-20261003/winnow-12b-pass1/REPORT.md) |
+| Winnow-E4B | 11.18% | 16.22% | 11.35% | 37.09% | 18.96% | 19.79% | [report](../winnow-pro6000-20261003/winnow-e4b-pass1/REPORT.md) |
 
-Each setting has one complete pass over all 480 states. For Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and the two presenter scenarios were recorded in separate sessions; Astra low, Clef and Clef Flash each used one session covering all eight scenarios. Clef Flash's two failed attempts were retried successfully; raw failures remain in its report. No new model query was made for this evaluation.
+Hosted scores average two passes for Astra low and three for every other setting, each over all 480 states. SD is sample standard deviation across passes, in percentage points. The original Luna, Terra and Jev passes combine disjoint six-scenario and presenter sessions. All 15 additional passes completed without retries; Clef Flash's original pass retains its two recovered timeout attempts. The self-hosted table shows the referenced individual recordings; the public leaderboard averages their three passes. No model query is made by this analysis.
 
 Each analysis contains `auc.primary`, six `auc.sensitivity` conditions, and fixed 2 s diagnostics in `scores`. The physical wall-clock trace and secondary network-removal estimate are separate. The integration rule was adopted after inspecting the recorded passes; comparisons are descriptive and do not establish stable rankings.
 

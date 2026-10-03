@@ -51,6 +51,8 @@ for (const [path, expected] of Object.entries(data.sources_sha256)) {
 }
 assert(createHash('sha256').update(readFileSync(new URL(data.summary.path, root))).digest('hex')
   === data.summary.sha256, 'The verified analysis changed; rerun prepare.py');
+assert(createHash('sha256').update(readFileSync(new URL(data.hosted_summary.path, root))).digest('hex')
+  === data.hosted_summary.sha256, 'The hosted repeat analysis changed; rerun prepare.py');
 for (const row of data.series) {
   assert(row.id in names && row.id in colors, `Missing visual identity: ${row.id}`);
   assert(Number.isFinite(row.log_auc_pct) && row.log_auc_pct >= 0 && row.log_auc_pct <= 100,

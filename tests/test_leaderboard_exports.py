@@ -8,7 +8,8 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "paper/analysis"))
-from leaderboard_models import HOSTED_MODELS
+from leaderboard_models import HOSTED_MODELS, HOSTED_PASSES
+from lite_hosted import load_summary as load_hosted_summary
 from lite_numbers import MODELS
 from lite_openweight import write_tex
 
@@ -44,13 +45,11 @@ def test_site_preserves_every_setting_and_exact_cloudflare_measurements(tmp_path
     assert len(rows) == len(data["settings"])
     assert {row["id"] for row in rows.values() if row["deployment"] == "hosted"} == hosted
     assert {row["id"] for row in rows.values() if row["deployment"] == "self-hosted"} == local
-    for name, folder, _ in HOSTED_MODELS:
-        if name not in {"Clef", "ClefFlash"}:
-            continue
-        report = json.loads((ROOT / "docs/lite/results" / folder / "analysis.json").read_text())
+    for name, report in load_hosted_summary()["hosted"].items():
         row = rows[name]
-        assert row["log_auc_pct"] == 100 * report["auc"]["primary"]["overall"]["accuracy"]
-        assert row["untimed_pct"] == 100 * report["scores"]["overall"]["untimed_decision_accuracy"]
+        assert row["passes"] == len(report["passes"]) == len(HOSTED_PASSES[name])
+        assert row["log_auc_pct"] == 100 * report["accuracy"]
+        assert row["untimed_pct"] == 100 * report["untimed"]
         assert row["p50_s"] == report["latency_s"]["p50"]
         assert row["p95_s"] == report["latency_s"]["p95"]
         assert len(row["curve_pct"]) == len(data["intervals_s"])
@@ -122,7 +121,7 @@ def test_omitting_completed_winnow_recording_cannot_publish(missing, tmp_path, m
 def test_generated_markdown_tables_have_consistent_columns():
     from lite_openweight import render_report, render_results
     summary = json.loads(figure_data.SUMMARY.read_text())
-    for text in (render_results(summary), render_report(summary)):
+    for text in (render_results(summary, hosted=load_hosted_summary()["hosted"]), render_report(summary)):
         columns = None
         for line in text.splitlines():
             if not line.startswith("|"):
@@ -132,3 +131,44 @@ def test_generated_markdown_tables_have_consistent_columns():
             if columns is None:
                 columns = count
             assert count == columns
+
+
+def test_hosted_exports_average_independent_pass_scores_and_latencies(tmp_path):
+    summary = load_hosted_summary()
+    site = site_build.build(tmp_path)
+    rows = {r["id"]: r for r in site["settings"]}
+    for name, result in summary["hosted"].items():
+        records = result["passes"]
+        count = 2 if name == "Astra" else 3
+        assert rows[name]["passes"] == len(records) == count
+        assert len({r["provenance"]["run"] for r in records}) == count
+        assert rows[name]["log_auc_pct"] == pytest.approx(
+            100 * sum(r["primary"]["overall"]["accuracy"] for r in records) / count)
+        assert rows[name]["log_auc_sd_pct"] == pytest.approx(100 * result["auc_sample_sd"])
+        for q in ("p50", "p95"):
+            assert rows[name][q + "_s"] == pytest.approx(sum(r["latency_s"][q] for r in records) / count)
+        assert site["passes_per_setting"][name] == count
+
+
+def test_hosted_summary_rejects_a_missing_repeat(tmp_path, monkeypatch):
+    import lite_hosted
+    data = json.loads((lite_hosted.OUT / "analysis.json").read_text())
+    data["hosted"]["Astra"]["passes"].pop()
+    (tmp_path / "analysis.json").write_text(json.dumps(data))
+    monkeypatch.setattr(lite_hosted, "OUT", tmp_path)
+    with pytest.raises(ValueError, match="incorrect repeat count"):
+        lite_hosted.load_summary()
+
+
+@pytest.mark.parametrize("metric", ["accuracy", "latency_s"])
+def test_hosted_summary_rejects_an_aggregate_that_disagrees_with_passes(metric, tmp_path, monkeypatch):
+    import lite_hosted
+    data = json.loads((lite_hosted.OUT / "analysis.json").read_text())
+    if metric == "accuracy":
+        data["hosted"]["Astra"][metric] += .01
+    else:
+        data["hosted"]["Astra"][metric]["p50"] += .1
+    (tmp_path / "analysis.json").write_text(json.dumps(data))
+    monkeypatch.setattr(lite_hosted, "OUT", tmp_path)
+    with pytest.raises(ValueError, match="aggregate differs"):
+        lite_hosted.load_summary()

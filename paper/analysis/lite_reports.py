@@ -136,9 +136,11 @@ def evaluate_one(run: Path, out: Path, label: str | None) -> None:
 def write_index() -> None:
     """Render the published index and cohort summaries from verified reports."""
     local_policy = json.loads((ROOT / "paper/analysis/openweight_policy.json").read_text())
+    from lite_hosted import load_summary
+    hosted = load_summary()["hosted"]
     groups = [
         ("Hosted APIs", [(HOSTED_LABELS[name], folder, run) for name, folder, run in HOSTED_MODELS]),
-        ("Self-hosted settings", [(spec["label"], spec["run"].replace("/runs/", "/"), spec["run"])
+        ("Self-hosted settings", [(spec["label"], spec["reports"][0] if "reports" in spec else spec["run"].replace("/runs/", "/"), spec["run"])
                                   for spec in local_policy["settings"]]),
     ]
     index_dir = ROOT / "docs/lite/results/four-family"
@@ -150,6 +152,17 @@ def write_index() -> None:
         "with equal log weight on each side. It defines a controlled evaluation domain; deployment-specific "
         "event rates can motivate other ranges.", ""]
     for title, settings in groups:
+        if title == "Hosted APIs":
+            lines += [f"## {title}", "",
+                "| Setting | Passes | IDE | Assembly | Support | Presenter | Mean log-AUC ± SD | Mean untimed | Report |",
+                "|---|---:|---:|---:|---:|---:|---:|---:|---|"]
+            for row in sorted(hosted.values(), key=lambda r: -r["accuracy"]):
+                families = [f"{100*row['by_family'][family]['accuracy']:.2f}%" for _, family in FAMILIES]
+                lines.append("| " + " | ".join([row["label"], str(len(row["passes"])), *families,
+                    f"{100*row['accuracy']:.2f}% ± {100*row['auc_sample_sd']:.2f}", f"{100*row['untimed']:.2f}%",
+                    "[repeat reports](../hosted-api-repeats-20261003/README.md)"]) + " |")
+            lines += [""]
+            continue
         lines += [f"## {title}", "", *HEADER]
         for label, folder, run in settings:
             path = ROOT / "docs/lite/results" / folder / "analysis.json"
@@ -166,11 +179,12 @@ def write_index() -> None:
             lines.append("| " + " | ".join([label, *[f"{100*v:.2f}%" for v in values], f"[report]({link})"]) + " |")
         lines += [""]
     lines += [
-        "Each setting has one complete pass over all 480 states. For Luna low, Luna none, Terra low, Terra none "
-        "and Jev, the original six scenarios and the two presenter scenarios were recorded in separate sessions; "
-        "Astra low, Clef and Clef Flash each used one session covering all eight scenarios. "
-        "Clef Flash's two failed attempts were retried successfully; raw failures remain in its report. "
-        "No new model query was made for this evaluation.", "",
+        "Hosted scores average two passes for Astra low and three for every other setting, each over all 480 states. "
+        "SD is sample standard deviation across passes, in percentage points. The original Luna, Terra and Jev passes "
+        "combine disjoint six-scenario and presenter sessions. All 15 additional passes completed without retries; "
+        "Clef Flash's original pass retains its two recovered timeout attempts. "
+        "The self-hosted table shows the referenced individual recordings; the public leaderboard averages their three passes. "
+        "No model query is made by this analysis.", "",
         "Each analysis contains `auc.primary`, six `auc.sensitivity` conditions, and fixed 2 s diagnostics in `scores`. "
         "The physical wall-clock trace and secondary network-removal estimate are separate. The integration rule "
         "was adopted after inspecting the recorded passes; comparisons are descriptive and do not establish stable rankings.", "",
@@ -179,9 +193,6 @@ def write_index() -> None:
         "[Evaluation policy](../../../../paper/analysis/evaluation_policy.json). "
         "Regenerate: `uv run python paper/analysis/lite_reports.py`.", ""]
     (index_dir / "README.md").write_text("\n".join(lines))
-    for cohort in sorted({Path(run).parts[0] for spec in local_policy["settings"]
-                          for run in [spec["run"], *spec.get("repeats", [])]}):
-        refresh_cohort_summary(ROOT / "docs/lite/results" / cohort)
 
 
 def main():
@@ -199,10 +210,21 @@ def main():
         parser.error("--out and --label need --run")
     for name, folder, run in HOSTED_MODELS:
         write_setting(HOSTED_LABELS[name], folder, run)
+    from leaderboard_models import HOSTED_PASSES
+    from lite_hosted import analyze as analyze_hosted, publish as publish_hosted
+    for name, specs in HOSTED_PASSES.items():
+        for index, (folder, run) in enumerate(specs[1:], 2):
+            write_setting(f"{HOSTED_LABELS[name]} — pass {index}", folder, run)
+    publish_hosted(analyze_hosted())
     local_policy = json.loads((ROOT / "paper/analysis/openweight_policy.json").read_text())
     for spec in local_policy["settings"]:
-        for run in [spec["run"], *spec.get("repeats", [])]:
-            write_setting(spec["label"], run.replace("/runs/", "/"), run)
+        runs = [spec["run"], *spec.get("repeats", [])]
+        reports = spec["reports"] if "reports" in spec else [run.replace("/runs/", "/") for run in runs]
+        for run, folder in zip(runs, reports, strict=True):
+            write_setting(spec["label"], folder, run)
+    for cohort in sorted({Path(run).parts[0] for spec in local_policy["settings"]
+                          for run in [spec["run"], *spec.get("repeats", [])]}):
+        refresh_cohort_summary(ROOT / "docs/lite/results" / cohort)
     write_index()
 
 

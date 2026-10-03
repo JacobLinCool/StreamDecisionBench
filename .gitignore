@@ -308,3 +308,14 @@ _site/
 !/runs/winnow-pro6000-20261003/cleanup.json
 /output/winnow-pro6000-20261003.tar.gz
 /output/winnow-pro6000-20261003.tar.gz.sha256
+
+# Hosted repeats: frozen research evidence only; queue state and logs stay local.
+!/runs/hosted-api-repeats-20261003/
+/runs/hosted-api-repeats-20261003/*
+!/runs/hosted-api-repeats-20261003/plan.json
+!/runs/hosted-api-repeats-20261003/bench-requirements.txt
+!/runs/hosted-api-repeats-20261003/pass*/
+/runs/hosted-api-repeats-20261003/pass*/*/*
+!/runs/hosted-api-repeats-20261003/pass*/*/run.json
+!/runs/hosted-api-repeats-20261003/pass*/*/episodes.json
+!/runs/hosted-api-repeats-20261003/pass*/*/events.jsonl

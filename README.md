@@ -24,7 +24,7 @@ normalized log-AUC. [Figure data and regeneration](docs/figures/README.md).
 <!-- BEGIN GENERATED SDB RESULTS -->
 ## Results
 
-One hosted pass and three self-hosted passes per setting, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s
+Two passes for Astra low and three for every other hosted and self-hosted setting, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s
 time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights
 within each family and then equal family weights. Interval evaluations retain the recorded answers
 and latencies; they assume service latency does not change with the request rate.
@@ -37,18 +37,18 @@ These bounds define a controlled evaluation domain; deployment-specific event ra
 
 Latency includes the remote service and internet round trip from the benchmark client.
 
-| Setting | Model | Log-AUC 0.5–8 s (%) | Untimed (%) | Median latency (s) |
-|---|---|---:|---:|---:|
-| Jev | `jev-latest` | 59.63 | 63.75 | 0.253 |
-| Terra none | `gpt-5.6-terra` | 54.11 | 82.08 | 1.493 |
-| Terra low | `gpt-5.6-terra` | 48.04 | 95.42 | 2.439 |
-| Luna low | `gpt-5.6-luna` | 45.26 | 88.75 | 2.405 |
-| Astra low | `gpt-6-astra` | 45.15 | 99.79 | 2.671 |
-| Clef | `clef` | 30.96 | 38.96 | 0.947 |
-| Luna none | `gpt-5.6-luna` | 30.67 | 43.75 | 1.318 |
-| Clef Flash | `clef-flash` | 19.69 | 21.67 | 0.537 |
+| Setting | Model | Passes | Mean log-AUC ± SD (%) | Mean untimed (%) | Mean median latency (s) |
+|---|---|---:|---:|---:|---:|
+| Jev | `jev-latest` | 3 | 58.50 ± 1.10 | 62.36 | 0.232 |
+| Terra none | `gpt-5.6-terra` | 3 | 55.46 ± 1.29 | 81.88 | 1.360 |
+| Terra low | `gpt-5.6-terra` | 3 | 52.06 ± 3.48 | 95.76 | 2.134 |
+| Astra low | `gpt-6-astra` | 2 | 47.25 ± 2.97 | 99.90 | 2.524 |
+| Luna low | `gpt-5.6-luna` | 3 | 45.45 ± 0.70 | 89.93 | 2.443 |
+| Clef | `clef` | 3 | 31.39 ± 0.41 | 38.96 | 0.885 |
+| Luna none | `gpt-5.6-luna` | 3 | 30.87 ± 1.12 | 43.54 | 1.312 |
+| Clef Flash | `clef-flash` | 3 | 19.89 ± 0.19 | 21.67 | 0.437 |
 
-[Family scores and hosted reports](docs/lite/results/four-family/README.md).
+[Family scores](docs/lite/results/four-family/README.md); [individual hosted passes and repeat variation](docs/lite/results/hosted-api-repeats-20261003/README.md). SD is sample standard deviation across passes, in percentage points.
 
 ### Self-hosted open-weight settings
 
@@ -81,6 +81,8 @@ Winnow uses the native CUDA runtime with BF16 GGUF weights and F16 KV cache.
 
 ### Provisional decisions with corrections
 
+These compositions retain the original single hosted recordings; their controls differ from the hosted leaderboard means above.
+
 | System | Log-AUC 0.5–8 s (%) |
 |---|---:|
 | Terra none alone | 54.11 |
@@ -110,12 +112,13 @@ even though its recorded median latency exceeds Terra none's.
 
 [Complete local/policy matrix, curves and provenance](docs/research/openweight-hybrids/README.md);
 [all five Jev/GPT pairs and three arbitration policies](docs/research/trajectory-value/README.md).
-Self-hosted values are means over three passes; latency summaries are means of per-pass quantiles. Hosted values use one pass.
+Standalone values average the declared passes; latency summaries average within-pass quantiles. Compositions average three self-hosted passes paired with the original hosted recording.
 Adjacent states are dependent; differences do not establish stable rankings.
 
 Regenerate the verified summary, paper tables and composition curves without model calls:
 
 ```bash
+uv run python paper/analysis/lite_hosted.py --reports
 uv run --group paper python paper/analysis/lite_openweight.py
 ```
 <!-- END GENERATED SDB RESULTS -->
