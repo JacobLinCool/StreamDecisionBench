@@ -30,7 +30,7 @@ export function animationData(data, setting, seconds) {
   });
   const featured = rows.find(row => row.id === setting);
   if (!featured) throw new Error(`Setting is absent from the published leaderboard: ${setting}`);
-  const start = Math.max(0, featured.rank - 3);
+  const start = Math.max(0, Math.min(featured.rank - 3, rows.length - 6));
   const previous = rows.filter(row => row.id !== setting)
     .map((row, index) => ({...row, previousRank: index + 1})).slice(start, start + 5);
   return {benchmark: data.benchmark, seconds, total: rows.length, featured, previous, start};
@@ -78,18 +78,19 @@ export function renderFrame(data, seconds) {
     return row(item, 354 + 92 * (initial + (target - initial) * shift),
       item.rank, false, item.previousRank);
   }).join('');
-  const incomingY = 354 + 92 * (5 + (data.featured.rank - 1 - data.start - 5) * move);
+  const targetSlot = data.featured.rank - 1 - data.start;
+  // Even a new last-place result enters with motion, within the six-row viewport.
+  const entrySlot = Math.max(data.previous.length, targetSlot + .35);
+  const incomingY = 354 + 92 * (entrySlot + (targetSlot - entrySlot) * move);
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" font-family="Arial, sans-serif">` +
     rect(0, 0, 1080, 1080, '#ffffff') +
-    text(64, 133, data.featured.rank === 1 ? 'A new leader.' : 'A new contender.', 82, '#142536', 700) +
+    text(64, 133, 'StreamDecisionBench', 76, '#142536', 700) +
     text(68, 193, data.featured.name, 36, data.featured.color, 600) +
-    text(64, 277, 'StreamDecisionBench', 26, '#253e50', 600) +
-    text(1016, 277, 'Log-AUC · higher is better', 22, '#516271', 500, 'end') +
+    text(64, 277, 'New result', 26, '#516271', 500) +
     `<line x1="64" y1="302" x2="1016" y2="302" stroke="#dae3e8"/>` +
     existing + row(data.featured, incomingY, data.featured.rank, true) +
     `<line x1="64" y1="925" x2="1016" y2="925" stroke="#dae3e8"/>` +
-    text(64, 976, '0.5–8 s decision window', 26, '#516271') +
-    text(1016, 976, data.featured.passes + ' benchmark runs', 26, '#516271', 500, 'end') + '</svg>';
+    text(64, 976, 'Log-AUC · higher is better', 26, '#516271') + '</svg>';
 }
 
 export async function renderVideo(payload, output) {

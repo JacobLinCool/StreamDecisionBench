@@ -41,12 +41,16 @@ the exported data's provenance and produces SVGs using ECharts' server-side rend
 Generate a six-second MP4 of a measured result entering the leaderboard. The video uses
 verified figure data and shared model colors, with continuous acceleration through insertion,
 a small overshoot, and settling. Changing rank labels crossfade. The square social-video
-layout shows six nearby ranks with large labels and score bars below each name. Only the source is versioned; generated videos are Git-ignored.
+layout leads with the benchmark name and shows six nearby ranks with large labels and
+score bars below each name. It supports every rank, including the last entry, and keeps
+the Log-AUC explanation below the rankings. Only the source is versioned; generated videos are Git-ignored.
 
 Install FFmpeg with the `libx264` encoder and the pinned Node dependencies above, then run:
 
 ```bash
 npm run --prefix docs/figures animate -- --setting Perplexity --seconds 6
+# A result in the middle of the leaderboard uses the same animation.
+npm run --prefix docs/figures animate -- --setting ClefFlash --out docs/figures/clef-flash.mp4
 ```
 
 Use any registered setting ID and a duration from 5 to 6 seconds. Rebuild `data.json` first
