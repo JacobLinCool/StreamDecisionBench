@@ -11,7 +11,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "paper/analysis"))
 
-from leaderboard_models import HOSTED_MODELS
+from leaderboard_models import HOSTED_MODELS, HOSTED_PASSES
 from lite_hosted import load_summary
 from lite_openweight import verified_run, verify_standalone
 from trajectory_replay import aggregate, evaluate, prepare
@@ -31,17 +31,18 @@ def build() -> dict:
         if sha(ROOT / filename) != expected:
             raise ValueError(f"Stale analysis source: {filename}; regenerate the analysis first")
     specs = summary["policy"]["settings"]
-    names = [*summary["hosted"], *summary["standalone"]]
+    names = [*hosted_summary["hosted"], *summary["standalone"]]
     hosted_names = {name for name, _, _ in HOSTED_MODELS}
     local_names = {spec["name"] for spec in specs}
     if (set(summary["hosted"]) != hosted_names or set(summary["standalone"]) != local_names
+            or set(hosted_summary["hosted"]) != set(HOSTED_PASSES)
             or len(names) != len(set(names))):
         raise ValueError("The leaderboard requires every registered hosted and self-hosted setting exactly once")
     provenance = {}
     intervals = sorted(set(np.geomspace(.5, 8, 161).tolist()) | {.5, 1., 2., 4., 8.})
     series = []
     for name in names:
-        hosted = name in summary["hosted"]
+        hosted = name in hosted_summary["hosted"]
         row = hosted_summary["hosted"][name] if hosted else summary["standalone"][name]
         sources = [p["provenance"] for p in row["passes"]]
         curves, areas = [], []
@@ -76,9 +77,10 @@ def build() -> dict:
         label = row["label"] if hosted else row["spec"]["label"]
         series.append({"id": name, "label": label, "deployment": "hosted" if hosted else "self-hosted",
                        "passes": len(sources), "latency_s": row["latency_s"], "log_auc_pct": 100 * expected,
-                       "log_auc_sd_pct": 100 * float(np.std(areas, ddof=1)), "untimed_pct": 100 * row["untimed"],
+                       "log_auc_sd_pct": 100 * float(np.std(areas, ddof=1)) if len(areas) > 1 else None, "untimed_pct": 100 * row["untimed"],
                        "accuracy_pct": (100 * np.mean(curves, axis=0)).tolist(),
-                       "report": "docs/lite/results/hosted-api-repeats-20261003/README.md" if hosted else "docs/research/openweight-hybrids/README.md"})
+                       "workers": report["config"].get("workers"),
+                       "report": f"docs/lite/results/{row['report']}" if hosted else "docs/research/openweight-hybrids/README.md"})
         print(f"Verified {name}: {100 * expected:.2f}% log-AUC; {len(sources)} passes", flush=True)
     series.sort(key=lambda row: -row["log_auc_pct"])
     sources = ["docs/figures/prepare.py", "paper/analysis/leaderboard_models.py", "paper/analysis/lite_openweight.py",

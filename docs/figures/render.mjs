@@ -17,7 +17,7 @@ const HEIGHT = Math.max(950, 340 + data.series.length * 36);
 const names = {
   Jev: 'Jev', TerraNone: 'GPT-5.6-Terra · none', Terra: 'GPT-5.6-Terra · low',
   Luna: 'GPT-5.6-Luna · low', Astra: 'GPT-6-Astra · low', LunaNone: 'GPT-5.6-Luna · none',
-  Clef: 'Cloudflare Clef', ClefFlash: 'Cloudflare Clef Flash',
+  Clef: 'Cloudflare Clef', ClefFlash: 'Cloudflare Clef Flash', WityAuto: 'Wity · auto', WityOff: 'Wity · off',
   Winnow12B: 'Winnow-12B', WinnowE4B: 'Winnow-E4B',
   DJev: 'DJev / DiffusionGemma', Kev: 'Kev-4B', KevNine: 'Kev-9B', KevTwentySeven: 'Kev-27B', QwenLogits: 'Qwen3.5-4B · direct logits',
   Nimble: 'Bespoke Nimble-9B', LayaTyped: 'Laya · typed decisions',
@@ -26,7 +26,7 @@ const names = {
 const colors = {
   Jev: '#0F766E', TerraNone: '#2563EB', Terra: '#6387CA',
   Luna: '#7C3AED', Astra: '#475569', LunaNone: '#A17CC5',
-  Clef: '#E27602', ClefFlash: '#D94A21',
+  Clef: '#E27602', ClefFlash: '#D94A21', WityAuto: '#447A95', WityOff: '#7B6040',
   Winnow12B: '#087F8C', WinnowE4B: '#9564A8',
   DJev: '#B45309', Kev: '#CA8A04', KevNine: '#0891B2', KevTwentySeven: '#DC2626', QwenLogits: '#BE185D', Nimble: '#60813B',
   LayaTyped: '#8A9CAF', LayaEnglish: '#64748B', LayaMultilingual: '#334155',
@@ -186,7 +186,7 @@ function save(name, option, description) {
       .replace(/(<svg\b[^>]*>)/,
         `$1\n<title id="chart-title">StreamDecisionBench — ${description}</title>\n`
         + `<desc id="chart-description">${ids.size} single-model settings, ${hostedCount} cloud APIs and ${localCount} self-hosted open-weight settings. `
-        + 'Normalized log-AUC over update intervals of 0.5–8 seconds; one pass per hosted setting and means of three passes per self-hosted setting.</desc>');
+        + 'Normalized log-AUC over update intervals of 0.5–8 seconds; one pass for each Wity mode, two for Astra and three for other settings.</desc>');
     assert(!svg.includes('NaN'), `${name}: invalid SVG geometry`);
     writeFileSync(new URL(name, directory), svg + '\n');
     console.log(`Rendered ${fileURLToPath(new URL(name, directory))}`);

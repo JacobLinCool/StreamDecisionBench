@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
+from streamdecisionbench.adapters.base import RateLimitError
 from streamdecisionbench.jev import ContractError, committed_answer, validate_response
 from streamdecisionbench.lite.core import compose, decode, digest, request_for, sources
 from streamdecisionbench.lite.scoring import episode_scores, summarize
@@ -35,7 +36,7 @@ def run_episode(episode: dict, factory: Callable, log: Callable, *, workers: int
     """One pipelined request per release, across-episode concurrency exactly one.
 
     The returned state is committed inside the worker, not reconstructed later.
-    Only connectivity errors are retried. Every attempt is logged, while actual
+    Connectivity errors and explicit rate limits are retried. Every attempt is logged, while actual
     wall-clock acceptance remains separate from retry-excluded scoring.
     """
     if workers < 1:
@@ -51,6 +52,7 @@ def run_episode(episode: dict, factory: Callable, log: Callable, *, workers: int
     session = uuid.uuid4().hex
     horizon = len(episode["steps"]) * episode["tick_seconds"]
     latest = -1
+    retry_not_before = 0.0
     start = time.monotonic()
 
     def persist(event: dict) -> None:
@@ -62,13 +64,19 @@ def run_episode(episode: dict, factory: Callable, log: Callable, *, workers: int
             raise
 
     def execute(step: dict, release_s: float) -> None:
-        nonlocal latest
+        nonlocal latest, retry_not_before
         request = request_for(episode, step)
         r = {"episode_id": episode["episode_id"], "t": step["t"], "release_s": release_s,
              "request_hash": digest(request), "ok": False, "accepted": False,
              "discard_reason": "request_failed", "started_s": time.monotonic() - start,
              "attempts": []}
         for number in range(1, max_attempts + 1):
+            # A server rate limit pauses new dispatches across this episode's workers.
+            while not stop.is_set():
+                with lock:
+                    cooldown_s = max(0.0, retry_not_before - time.monotonic())
+                if cooldown_s == 0 or stop.wait(cooldown_s):
+                    break
             if stop.is_set():
                 break
             attempt = {"attempt": number, "started_s": time.monotonic() - start,
@@ -94,7 +102,16 @@ def run_episode(episode: dict, factory: Callable, log: Callable, *, workers: int
                          decision=decision, model=response.get("model"), usage=response.get("usage"))
             except Exception as error:
                 # Never persist exception bodies, which may echo private inputs.
-                attempt.update(error_type=type(error).__name__, retryable=is_transport_error(error))
+                rate_limited = isinstance(error, RateLimitError)
+                attempt.update(error_type=type(error).__name__, retryable=is_transport_error(error) or rate_limited)
+                if rate_limited:
+                    delay = max(1.0, min(retry_delay_s * 2 ** min(number - 1, 10), 8.0))
+                    if error.retry_after_s is not None:
+                        delay = max(delay, error.retry_after_s)
+                        attempt["retry_after_s"] = error.retry_after_s
+                    attempt["retry_delay_s"] = delay
+                    with lock:
+                        retry_not_before = max(retry_not_before, time.monotonic() + delay)
                 if isinstance(error, ContractError) and response is not None:
                     # Model output only, kept to diagnose contract failures.
                     attempt["invalid_answers"] = response.get("answers")
@@ -110,7 +127,8 @@ def run_episode(episode: dict, factory: Callable, log: Callable, *, workers: int
                 break
             if not attempt["retryable"] or number == max_attempts:
                 r["error_type"] = attempt["error_type"]
-                r["failure_reason"] = "transport_retry_exhausted" if attempt["retryable"] else "non_retryable_error"
+                r["failure_reason"] = ("rate_limit_retry_exhausted" if attempt["error_type"] == "RateLimitError"
+                                       else "transport_retry_exhausted") if attempt["retryable"] else "non_retryable_error"
                 with lock:
                     failures.append(r["failure_reason"])
                 stop.set()

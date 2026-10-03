@@ -19,6 +19,19 @@ import lite_compare
 import lite_report
 
 
+@pytest.mark.parametrize('timeout', [None, 3600])
+def test_native_report_only_describes_recorded_process_timeout(tmp_path, timeout):
+    run = tmp_path / 'run'
+    _write_recording(run)
+    data = lite_report.analyze(run)
+    data['config'].update(transport='native_library', request_timeout_s=None)
+    if timeout is not None:
+        data['config']['setting_process_timeout_s'] = timeout
+    text = lite_report.render_report(data, tmp_path / 'report')
+    assert 'Native calls have no network timeout.' in text
+    assert ('process timeout is 3600 s.' in text) == (timeout is not None)
+
+
 def test_negative_latency_intercept_is_preserved_but_cannot_remove_negative_delay(tmp_path, monkeypatch):
     import numpy as np
     import network

@@ -20,7 +20,7 @@ def aggregate_passes(name: str, model: str, records: list[dict]) -> dict:
     aucs = [r["primary"]["overall"]["accuracy"] for r in records]
     return {"label": HOSTED_LABELS[name], "model": model,
         "report": f"{HOSTED_REPEAT_COHORT}/README.md", "passes": records,
-        "accuracy": statistics.mean(aucs), "auc_sample_sd": statistics.stdev(aucs),
+        "accuracy": statistics.mean(aucs), "auc_sample_sd": statistics.stdev(aucs) if len(aucs) > 1 else None,
         "untimed": statistics.mean(r["untimed"] for r in records), "by_family": families,
         "latency_s": {q: statistics.mean(r["latency_s"][q] for r in records) for q in records[0]["latency_s"]}}
 
@@ -108,15 +108,16 @@ def publish(data: dict) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "analysis.json").write_text(json.dumps(data, indent=2, allow_nan=False) + "\n")
     lines = ["# Hosted API repeated measurements", "",
-        "Astra low has two complete passes; every other hosted setting has three. Each pass covers the same 480 states in eight scenarios and four families. All 7,200 additional requests succeeded without retries.", "",
-        "Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is sample standard deviation across passes, in percentage points. Latency values average within-pass quantiles.", "",
+        "Wity auto and off each have one complete pass, Astra low has two, and the other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts.", "",
+        "Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is sample standard deviation across passes, in percentage points; it is unavailable for a single pass. Latency values average within-pass quantiles.", "",
         "| Setting | Passes | Mean log-AUC ± SD (%) | Mean untimed (%) | Mean p50 / p95 (s) | Individual log-AUC (%) |",
         "|---|---:|---:|---:|---:|---|"]
     for row in sorted(data["hosted"].values(), key=lambda r: -r["accuracy"]):
         links = [f"[{100*r['primary']['overall']['accuracy']:.2f}]({Path(r['provenance']['published_report']['path']).relative_to(OUT.relative_to(ROOT)).with_name('REPORT.md')})"
                  if r["pass"] > 1 else f"[{100*r['primary']['overall']['accuracy']:.2f}](../{Path(r['provenance']['published_report']['path']).relative_to('docs/lite/results').with_name('REPORT.md')})"
                  for r in row["passes"]]
-        lines.append(f"| {row['label']} | {len(row['passes'])} | {100*row['accuracy']:.2f} ± {100*row['auc_sample_sd']:.2f} | "
+        lines.append(f"| {row['label']} | {len(row['passes'])} | {100*row['accuracy']:.2f}"
+                     + (f" ± {100*row['auc_sample_sd']:.2f}" if row['auc_sample_sd'] is not None else " (one pass)") + " | "
                      f"{100*row['untimed']:.2f} | {row['latency_s']['p50']:.3f} / {row['latency_s']['p95']:.3f} | {', '.join(links)} |")
     lines += ["", "These are descriptive measurements on a fixed dataset; two or three passes do not establish stable rankings. Served model identifiers are preserved in each analysis; Jev returned `jev-1.13.0` on every pass. Matching identifiers do not guarantee immutable provider backends.", "",
         "The manuscript and counterfactual composition analyses retain their original hosted recordings. Their single-pass controls are distinct from these public leaderboard means.", "",

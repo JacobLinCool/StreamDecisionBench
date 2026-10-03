@@ -16,6 +16,8 @@ The domain spans update rates four times faster and slower than the recording ca
 | Clef | 3 | 35.22% | 13.60% | 59.25% | 17.48% | 31.39% ± 0.41 | 38.96% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Luna none | 3 | 13.16% | 19.62% | 44.04% | 46.65% | 30.87% ± 1.12 | 43.54% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Clef Flash | 3 | 13.27% | 23.71% | 28.67% | 13.90% | 19.89% ± 0.19 | 21.67% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Wity off | 1 | 0.00% | 3.01% | 22.59% | 8.85% | 8.61% (one pass) | 10.21% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Wity auto | 1 | 0.69% | 1.68% | 2.50% | 5.66% | 2.64% (one pass) | 27.50% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 
 ## Self-hosted settings
 
@@ -33,7 +35,7 @@ The domain spans update rates four times faster and slower than the recording ca
 | Winnow-12B | 12.49% | 33.64% | 77.79% | 48.66% | 43.15% | 46.46% | [report](../winnow-pro6000-20261003/winnow-12b-pass1/REPORT.md) |
 | Winnow-E4B | 11.18% | 16.22% | 11.35% | 37.09% | 18.96% | 19.79% | [report](../winnow-pro6000-20261003/winnow-e4b-pass1/REPORT.md) |
 
-Hosted scores average two passes for Astra low and three for every other setting, each over all 480 states. SD is sample standard deviation across passes, in percentage points. The original Luna, Terra and Jev passes combine disjoint six-scenario and presenter sessions. All 15 additional passes completed without retries; Clef Flash's original pass retains its two recovered timeout attempts. The self-hosted table shows the referenced individual recordings; the public leaderboard averages their three passes. No model query is made by this analysis.
+Wity auto/off each have one pass with 16 workers and Retry-After recovery; other hosted scores average two passes for Astra low and three for the remaining settings, each over all 480 states with 32 workers. SD is sample standard deviation across passes, in percentage points; unavailable for one pass. The original Luna, Terra and Jev passes combine disjoint six-scenario and presenter sessions. All 15 additional passes completed without retries; Clef Flash's original pass retains its two recovered timeout attempts. The self-hosted table shows the referenced individual recordings; the public leaderboard averages their three passes. No model query is made by this analysis.
 
 Each analysis contains `auc.primary`, six `auc.sensitivity` conditions, and fixed 2 s diagnostics in `scores`. The physical wall-clock trace and secondary network-removal estimate are separate. The integration rule was adopted after inspecting the recorded passes; comparisons are descriptive and do not establish stable rankings.
 

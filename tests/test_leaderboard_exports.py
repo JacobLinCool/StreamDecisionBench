@@ -40,7 +40,7 @@ def test_site_preserves_every_setting_and_exact_cloudflare_measurements(tmp_path
     data = site_build.build(tmp_path)
     rows = {row["id"]: row for row in data["settings"]}
     policy = json.loads((ROOT / "paper/analysis/openweight_policy.json").read_text())
-    hosted = {name for name, _, _ in HOSTED_MODELS}
+    hosted = set(HOSTED_PASSES)
     local = {spec["name"] for spec in policy["settings"]}
     assert len(rows) == len(data["settings"])
     assert {row["id"] for row in rows.values() if row["deployment"] == "hosted"} == hosted
@@ -139,12 +139,15 @@ def test_hosted_exports_average_independent_pass_scores_and_latencies(tmp_path):
     rows = {r["id"]: r for r in site["settings"]}
     for name, result in summary["hosted"].items():
         records = result["passes"]
-        count = 2 if name == "Astra" else 3
+        count = len(HOSTED_PASSES[name])
         assert rows[name]["passes"] == len(records) == count
         assert len({r["provenance"]["run"] for r in records}) == count
         assert rows[name]["log_auc_pct"] == pytest.approx(
             100 * sum(r["primary"]["overall"]["accuracy"] for r in records) / count)
-        assert rows[name]["log_auc_sd_pct"] == pytest.approx(100 * result["auc_sample_sd"])
+        if result["auc_sample_sd"] is None:
+            assert rows[name]["log_auc_sd_pct"] is None and count == 1
+        else:
+            assert rows[name]["log_auc_sd_pct"] == pytest.approx(100 * result["auc_sample_sd"])
         for q in ("p50", "p95"):
             assert rows[name][q + "_s"] == pytest.approx(sum(r["latency_s"][q] for r in records) / count)
         assert site["passes_per_setting"][name] == count
@@ -172,3 +175,19 @@ def test_hosted_summary_rejects_an_aggregate_that_disagrees_with_passes(metric, 
     monkeypatch.setattr(lite_hosted, "OUT", tmp_path)
     with pytest.raises(ValueError, match="aggregate differs"):
         lite_hosted.load_summary()
+
+
+@pytest.mark.parametrize('name,mode', [('WityAuto', 'auto'), ('WityOff', 'off')])
+def test_wity_single_pass_exports_preserve_configuration_and_no_invented_sd(name, mode, tmp_path):
+    row = load_hosted_summary()['hosted'][name]
+    assert len(row['passes']) == 1 and row['auc_sample_sd'] is None
+    record = row['passes'][0]
+    run = json.loads((ROOT / record['provenance']['run'] / 'run.json').read_text())
+    assert run['status'] == 'complete'
+    assert run['config']['reasoning'] == mode and run['config']['workers'] == 16
+    assert run['config']['rate_limit_policy'] == 'http429_retry_after_shared_cooldown_v1'
+    exported = next(r for r in site_build.build(tmp_path)['settings'] if r['id'] == name)
+    assert exported['passes'] == 1 and exported['workers'] == 16
+    assert exported['log_auc_sd_pct'] is None
+    assert exported['log_auc_pct'] == pytest.approx(100 * record['primary']['overall']['accuracy'])
+    assert record['retry_reliability']['successful_logical_requests'] == 480

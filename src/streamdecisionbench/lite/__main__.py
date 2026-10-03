@@ -148,10 +148,11 @@ def main() -> None:
     run = commands.add_parser("run")
     run.add_argument("--data", type=Path, required=True)
     run.add_argument("--out", type=Path, required=True)
-    run.add_argument("--provider", choices=("openai", "typesafe", "cloudflare"), default="openai")
+    run.add_argument("--provider", choices=("openai", "typesafe", "cloudflare", "wity"), default="openai")
     run.add_argument("--model", required=True)
     run.add_argument("--effort", help="reasoning effort for openai (e.g. none, low); omit it for a model or compatible endpoint without reasoning effort; only accepted for openai")
-    run.add_argument("--timeout", type=float, default=20.0)
+    run.add_argument("--reasoning", choices=("auto", "off", "always"), help="Wity reasoning mode (default: auto); only accepted for wity")
+    run.add_argument("--timeout", type=float, help="request timeout in seconds (default: 60 for Wity, 20 otherwise)")
     run.add_argument("--max-attempts", type=int, default=5)
     run.add_argument("--retry-delay", type=float, default=0.5)
     subset = run.add_mutually_exclusive_group()
@@ -175,12 +176,19 @@ def main() -> None:
 
         load_dotenv()
         openai = args.provider == "openai"
+        if args.timeout is None:
+            args.timeout = 60.0 if args.provider == "wity" else 20.0
         credentials = {"openai": ("OPENAI_API_KEY",), "typesafe": ("TYPESAFE_API_KEY",),
+                       "wity": ("WITY_API_KEY",),
                        "cloudflare": ("CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_AUTH_TOKEN")}
         for key in credentials[args.provider]:
             if not os.environ.get(key):
                 parser.error(f"{key} is required")
-        endpoint = {"openai": "OPENAI_BASE_URL", "typesafe": "TYPESAFE_BASE_URL"}.get(args.provider)
+        endpoint = {"openai": "OPENAI_BASE_URL", "typesafe": "TYPESAFE_BASE_URL", "wity": "WITY_BASE_URL"}.get(args.provider)
+        if args.reasoning is not None and args.provider != "wity":
+            parser.error(f"--reasoning is not accepted for {args.provider}")
+        if args.provider == "wity" and args.model != "wity-1":
+            parser.error("Wity model must be wity-1; the API does not select models")
         if not openai and args.effort is not None:
             parser.error(f"--effort is not accepted for {args.provider}")
         if args.provider == "cloudflare" and args.model not in {"clef", "clef-flash"}:
@@ -199,13 +207,16 @@ def main() -> None:
         except ValueError as error:
             parser.error(str(error))
         config = {"provider": args.provider, "model": args.model, "reasoning_effort": args.effort,
-                  "protocol": RETRY_PROTOCOL, "workers": 32,
+                  "protocol": RETRY_PROTOCOL, "workers": 16 if args.provider == "wity" else 32,
                   "episode_concurrency": 1, "request_timeout_s": args.timeout,
                   "max_attempts": args.max_attempts, "retry_delay_s": args.retry_delay,
                   "sdk_retries": 0, "custom_endpoint": bool(endpoint and os.environ.get(endpoint)),
                   "untimed": "one final successful response per state; failed transport attempts excluded from model timing"}
         if families or episode_ids:
             config["selection"] = {"families": families} if families else {"episodes": episode_ids}
+        if args.provider == "wity":
+            config["reasoning"] = args.reasoning or "auto"
+            config["rate_limit_policy"] = "http429_retry_after_shared_cooldown_v1"
         if openai:
             from streamdecisionbench.adapters.llm import OpenAIAdapter
 
@@ -214,6 +225,10 @@ def main() -> None:
             from streamdecisionbench.adapters.remote import TypeSafeAdapter
 
             factory = lambda: TypeSafeAdapter(model=args.model, timeout=args.timeout, max_retries=0)
+        elif args.provider == "wity":
+            from streamdecisionbench.adapters.wity import WityAdapter
+
+            factory = lambda: WityAdapter(model=args.model, reasoning=config["reasoning"], timeout=args.timeout)
         else:
             from streamdecisionbench.adapters.cloudflare import CloudflareAdapter
 

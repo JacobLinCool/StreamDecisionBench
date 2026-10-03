@@ -321,7 +321,7 @@ def hybrid_summary(data):
 def render_results(data, *, hosted):
     improved = ["Jev"] + [row["spec"]["label"] for name, row in data["standalone"].items()
         if data["systems"][name]["freshest"]["integrated"]["overall"]["accuracy"] > data["controls"]["TerraNone"]["overall"]["accuracy"]]
-    lines = ["## Results", "", "Two passes for Astra low and three for every other hosted and self-hosted setting, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s",
+    lines = ["## Results", "", "One pass each for Wity auto/off, two for Astra low, and three for all other settings, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s",
         "time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights",
         "within each family and then equal family weights. Interval evaluations retain the recorded answers",
         "and latencies; they assume service latency does not change with the request rate.", "",
@@ -331,8 +331,8 @@ def render_results(data, *, hosted):
         "### Hosted APIs", "", "Latency includes the remote service and internet round trip from the benchmark client.", "",
         "| Setting | Model | Passes | Mean log-AUC ± SD (%) | Mean untimed (%) | Mean median latency (s) |", "|---|---|---:|---:|---:|---:|"]
     for row in sorted(hosted.values(), key=lambda r: -r["accuracy"]):
-        lines.append(f"| {row['label']} | `{row['model']}` | {len(row['passes'])} | {100*row['accuracy']:.2f} ± {100*row['auc_sample_sd']:.2f} | {100*row['untimed']:.2f} | {row['latency_s']['p50']:.3f} |")
-    lines += ["", "[Family scores](docs/lite/results/four-family/README.md); [individual hosted passes and repeat variation](docs/lite/results/hosted-api-repeats-20261003/README.md). SD is sample standard deviation across passes, in percentage points.", "",
+        lines.append(f"| {row['label']} | `{row['model']}` | {len(row['passes'])} | {100*row['accuracy']:.2f}{(' ± ' + format(100*row['auc_sample_sd'], '.2f')) if row['auc_sample_sd'] is not None else ' (one pass)'} | {100*row['untimed']:.2f} | {row['latency_s']['p50']:.3f} |")
+    lines += ["", "[Family scores](docs/lite/results/four-family/README.md); [individual hosted passes and repeat variation](docs/lite/results/hosted-api-repeats-20261003/README.md). SD is sample standard deviation across passes, in percentage points; unavailable for one pass. Wity uses 16 workers and the recorded Retry-After policy; other hosted providers use 32.", "",
         "### Self-hosted open-weight settings", "", *standalone_table(data), "",
         f"All {len(data['standalone'])} settings use BF16 backbones and native decision readouts, each on one RTX PRO 6000. Benchmark and",
         "model run on the same GPU host; latency includes request processing, runtime queueing and inference, and excludes",

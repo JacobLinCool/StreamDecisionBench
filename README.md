@@ -24,7 +24,7 @@ normalized log-AUC. [Figure data and regeneration](docs/figures/README.md).
 <!-- BEGIN GENERATED SDB RESULTS -->
 ## Results
 
-Two passes for Astra low and three for every other hosted and self-hosted setting, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s
+One pass each for Wity auto/off, two for Astra low, and three for all other settings, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s
 time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights
 within each family and then equal family weights. Interval evaluations retain the recorded answers
 and latencies; they assume service latency does not change with the request rate.
@@ -47,8 +47,10 @@ Latency includes the remote service and internet round trip from the benchmark c
 | Clef | `clef` | 3 | 31.39 ± 0.41 | 38.96 | 0.885 |
 | Luna none | `gpt-5.6-luna` | 3 | 30.87 ± 1.12 | 43.54 | 1.312 |
 | Clef Flash | `clef-flash` | 3 | 19.89 ± 0.19 | 21.67 | 0.437 |
+| Wity off | `wity-1` | 1 | 8.61 (one pass) | 10.21 | 1.291 |
+| Wity auto | `wity-1` | 1 | 2.64 (one pass) | 27.50 | 63.534 |
 
-[Family scores](docs/lite/results/four-family/README.md); [individual hosted passes and repeat variation](docs/lite/results/hosted-api-repeats-20261003/README.md). SD is sample standard deviation across passes, in percentage points.
+[Family scores](docs/lite/results/four-family/README.md); [individual hosted passes and repeat variation](docs/lite/results/hosted-api-repeats-20261003/README.md). SD is sample standard deviation across passes, in percentage points; unavailable for one pass. Wity uses 16 workers and the recorded Retry-After policy; other hosted providers use 32.
 
 ### Self-hosted open-weight settings
 
@@ -159,7 +161,7 @@ cp .env.example .env   # then fill in the credentials for your provider
 ### 2. Record a pass
 
 A pass sends one request per state: 480 requests, published every 2 s whether or not earlier
-requests are still pending (up to 32 in flight). The eight scenarios run back to back, so a full
+requests are still pending (up to 32 in flight; 16 for Wity). The eight scenarios run back to back, so a full
 pass takes about 16–20 minutes. Every pass needs a new output folder.
 
 ```bash
@@ -182,7 +184,26 @@ uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
 # Clef Flash uses the same native decision API
 uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
   --out runs/my-clef-flash --provider cloudflare --model clef-flash
+
+# Wity native decisions with adaptive reasoning
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-wity-auto --provider wity --model wity-1 --reasoning auto
 ```
+
+Wity requires `WITY_API_KEY`; `WITY_BASE_URL` optionally overrides its native endpoint.
+Its [System One API](https://wity.alphanimble.com/docs/api) uses the existing benchmark
+questions and answer contract directly. `--reasoning auto` is the default; use `off` for
+a direct pass or `always` to reason on every question, with a separate output folder for
+each setting. The mode is saved in `run.json`. Wity defaults to a 60 s request timeout;
+`--timeout` overrides it. The timeout bounds the HTTP request, not the scoring deadline.
+Wity uses 16 workers to leave headroom below the service's concurrency limit after observed
+HTTP 429 failures. This limit is recorded as `config.workers` in `run.json`; queued requests
+can affect measured latency. Other providers use 32 workers.
+Wity HTTP 429 responses are retried within `--max-attempts`, respecting `Retry-After`
+(seconds or an HTTP date) and a cooldown shared by the episode's workers. If the header
+is absent, the declared bounded backoff starts at 1 s. Each rejection and server delay
+is recorded; successful-attempt scoring excludes failed attempts and waiting, while the
+raw wall-clock trace retains them. `config.rate_limit_policy` identifies this policy.
 
 Cloudflare requires `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_AUTH_TOKEN`. Create a Workers AI
 API token scoped to that account with Workers AI Read and Edit permissions. The adapter calls the

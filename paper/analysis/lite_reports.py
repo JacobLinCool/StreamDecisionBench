@@ -159,7 +159,7 @@ def write_index() -> None:
             for row in sorted(hosted.values(), key=lambda r: -r["accuracy"]):
                 families = [f"{100*row['by_family'][family]['accuracy']:.2f}%" for _, family in FAMILIES]
                 lines.append("| " + " | ".join([row["label"], str(len(row["passes"])), *families,
-                    f"{100*row['accuracy']:.2f}% ± {100*row['auc_sample_sd']:.2f}", f"{100*row['untimed']:.2f}%",
+                    f"{100*row['accuracy']:.2f}%" + (f" ± {100*row['auc_sample_sd']:.2f}" if row["auc_sample_sd"] is not None else " (one pass)"), f"{100*row['untimed']:.2f}%",
                     "[repeat reports](../hosted-api-repeats-20261003/README.md)"]) + " |")
             lines += [""]
             continue
@@ -179,8 +179,8 @@ def write_index() -> None:
             lines.append("| " + " | ".join([label, *[f"{100*v:.2f}%" for v in values], f"[report]({link})"]) + " |")
         lines += [""]
     lines += [
-        "Hosted scores average two passes for Astra low and three for every other setting, each over all 480 states. "
-        "SD is sample standard deviation across passes, in percentage points. The original Luna, Terra and Jev passes "
+        "Wity auto/off each have one pass with 16 workers and Retry-After recovery; other hosted scores average two passes for Astra low and three for the remaining settings, each over all 480 states with 32 workers. "
+        "SD is sample standard deviation across passes, in percentage points; unavailable for one pass. The original Luna, Terra and Jev passes "
         "combine disjoint six-scenario and presenter sessions. All 15 additional passes completed without retries; "
         "Clef Flash's original pass retains its two recovered timeout attempts. "
         "The self-hosted table shows the referenced individual recordings; the public leaderboard averages their three passes. "

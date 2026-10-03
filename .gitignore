@@ -319,3 +319,15 @@ _site/
 !/runs/hosted-api-repeats-20261003/pass*/*/run.json
 !/runs/hosted-api-repeats-20261003/pass*/*/episodes.json
 !/runs/hosted-api-repeats-20261003/pass*/*/events.jsonl
+
+!/runs/wity-1-auto-workers16-retry-after-20261003-pass1/
+/runs/wity-1-auto-workers16-retry-after-20261003-pass1/*
+!/runs/wity-1-auto-workers16-retry-after-20261003-pass1/run.json
+!/runs/wity-1-auto-workers16-retry-after-20261003-pass1/episodes.json
+!/runs/wity-1-auto-workers16-retry-after-20261003-pass1/events.jsonl
+
+!/runs/wity-1-off-workers16-retry-after-20261003-pass1/
+/runs/wity-1-off-workers16-retry-after-20261003-pass1/*
+!/runs/wity-1-off-workers16-retry-after-20261003-pass1/run.json
+!/runs/wity-1-off-workers16-retry-after-20261003-pass1/episodes.json
+!/runs/wity-1-off-workers16-retry-after-20261003-pass1/events.jsonl

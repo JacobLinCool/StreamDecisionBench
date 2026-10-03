@@ -56,6 +56,7 @@ def _latencies(records: list[dict], *, successful_attempt: bool = False) -> dict
 def _retry_report_lines(data: dict) -> list[str]:
     reliability = data["retry_reliability"]
     raw, latency = data["raw_wallclock_scores"], data["raw_wallclock_latency_s"]
+    rate_limits = data["config"].get("rate_limit_policy") == "http429_retry_after_shared_cooldown_v1"
     return [
         "## Transport reliability and raw-clock diagnostics", "",
         f"- Attempt error rate: {reliability['attempt_error_rate']:.2%} "
@@ -69,6 +70,11 @@ def _retry_report_lines(data: dict) -> list[str]:
         "Requests can overlap, so these sums are not the recording's wall-clock duration.",
         f"- At most {data['config']['max_attempts']} attempts per request; the first retry is immediate, "
         f"then backoff starts at {data['config']['retry_delay_s']:g} s and is capped at 8 s. SDK retries are disabled.",
+        *(["- The immediate-first-retry rule above applies to transport failures. HTTP 429 uses "
+           "Retry-After (delay-seconds or HTTP-date) as a minimum wait, with a shared episode cooldown. "
+           "Without that header, bounded backoff starts at 1 s. The server's delay is not capped at 8 s. "
+           f"Concurrency is limited to {data['config']['workers']} workers; rate-limit attempts count toward the same attempt budget."]
+          if rate_limits else []),
         "", "The raw clock retains failures, waits and actual late deliveries. It is a separate diagnostic:", "",
         "| Scope | Raw in-force accuracy | Raw segment-balanced accuracy |", "|---|---:|---:|",
         f"| Overall | {raw['overall']['time_accuracy']:.2%} | {raw['overall']['segment_time_accuracy']:.2%} |",
@@ -76,7 +82,7 @@ def _retry_report_lines(data: dict) -> list[str]:
           for family, row in raw["by_family"].items()],
         "", f"Raw logical request duration, including failed attempts and retry waits: p50 {latency['p50']:.3f} s, "
         f"p95 {latency['p95']:.3f} s; {sum(row['accepted_updates'] for row in raw['per_episode'])} accepted raw-clock updates.",
-        "", "Exhausted retries or non-transport errors make a run incomplete; no complete primary score is published. "
+        "", "Exhausted retries or nonretryable errors make a run incomplete; no complete primary score is published. "
         "API and response validity determine success. Reference-answer correctness never triggers a retry.", "",
     ]
 
@@ -184,6 +190,9 @@ def render_report(data: dict, output: Path) -> str:
     timing_label = "In-force accuracy (transport retries excluded)" if normalized else "In-force accuracy (raw clock)"
     request_description = ("One final valid response per state; transport failures are retried as configured."
                            if normalized else "Each state is queried once.")
+    if config.get("rate_limit_policy") == "http429_retry_after_shared_cooldown_v1":
+        timing_label = "In-force accuracy (failed attempts and retry waits excluded)"
+        request_description += " HTTP 429 honors Retry-After through a shared cooldown within the attempt budget."
     duration_text = "/".join(f"{duration:g}" for duration in sorted({e["duration_s"] for e in data["episode_specs"]}))
     tick_text = "/".join(f"{tick:g}" for tick in sorted({e["tick_seconds"] for e in data["episode_specs"]}))
     command = shlex.join(["uv", "run", "python", "scripts/lite/lite_report.py", "--run", command_path(ROOT / data["run"]),
@@ -232,7 +241,9 @@ def render_report(data: dict, output: Path) -> str:
               f"- {data['accepted_updates']} updates accepted on the {'reconstructed timeline' if normalized else 'raw clock'}; rejected responses: {json.dumps(data['discarded_updates'], ensure_ascii=False)}.",
               "- Pipelined execution dispatches a request at every release. A complete newer-source response becomes active atomically; older arrivals cannot overwrite it. Scenarios execute serially.",
               "- Untimed accuracy uses the same responses without another model pass. "
-              + (f"Native calls have no network timeout; the setting's process timeout is {config['setting_process_timeout_s']:g} s."
+              + ("Native calls have no network timeout."
+                 + (f" The setting's process timeout is {config['setting_process_timeout_s']:g} s."
+                    if 'setting_process_timeout_s' in config else "")
                  if config.get('transport') == 'native_library'
                  else f"SDK retries: {config['sdk_retries']}; network timeout: {config['request_timeout_s']:g} s."),
               f"- Protocol: {config['protocol']}; at most {config['workers']} request workers; scenario concurrency {config['episode_concurrency']}.",
