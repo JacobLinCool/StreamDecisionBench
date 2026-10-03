@@ -50,10 +50,12 @@ Install FFmpeg with the `libx264` encoder and the pinned Node dependencies above
 ```bash
 npm run --prefix docs/figures animate -- --setting Perplexity --seconds 6
 # A result in the middle of the leaderboard uses the same animation.
-npm run --prefix docs/figures animate -- --setting ClefFlash --out docs/figures/clef-flash.mp4
+npm run --prefix docs/figures animate -- --setting ClefFlash --out clef-flash.mp4
 ```
 
 Use any registered setting ID and a duration from 5 to 6 seconds. Rebuild `data.json` first
-after changing the leaderboard. The default output is `docs/figures/leaderboard-update.mp4`;
-`--out <path.mp4>` writes to another existing directory. Frames are rendered directly from
+after changing the leaderboard. Use `--data <path.json>` to supply a verified leaderboard
+snapshot containing a new result before publishing the main figure data. The default output is `docs/figures/leaderboard-update.mp4`;
+`--out <path.mp4>` writes to another existing directory. Relative paths resolve from
+`docs/figures` when using the npm commands above; absolute paths also work. Frames are rendered directly from
 SVG and encoded as H.264 at 1080 × 1080, 60 fps, with `yuv420p` and fast-start metadata.

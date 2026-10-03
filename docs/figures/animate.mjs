@@ -127,9 +127,10 @@ export async function renderVideo(payload, output) {
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const {values} = parseArgs({options: {
     setting: {type: 'string', default: 'Perplexity'}, seconds: {type: 'string', default: '6'},
-    out: {type: 'string'},
+    out: {type: 'string'}, data: {type: 'string'},
   }});
-  const data = JSON.parse(readFileSync(new URL('./data.json', import.meta.url), 'utf8'));
+  const input = values.data ? resolve(values.data) : new URL('./data.json', import.meta.url);
+  const data = JSON.parse(readFileSync(input, 'utf8'));
   const output = values.out ? resolve(values.out) : fileURLToPath(new URL('./leaderboard-update.mp4', import.meta.url));
   const payload = animationData(data, values.setting, Number(values.seconds));
   await renderVideo(payload, output);

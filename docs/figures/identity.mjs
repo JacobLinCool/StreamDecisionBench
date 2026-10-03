@@ -1,6 +1,7 @@
 /** Shared visual identity for leaderboard figures and animations. */
 export const names = {
   Perplexity: 'Perplexity Decider 27B',
+  Glide: 'GLiDE (Fastino)',
   Jev: 'Jev', TerraNone: 'GPT-5.6-Terra · none', Terra: 'GPT-5.6-Terra · low',
   Luna: 'GPT-5.6-Luna · low', Astra: 'GPT-6-Astra · low', LunaNone: 'GPT-5.6-Luna · none',
   Clef: 'Cloudflare Clef', ClefFlash: 'Cloudflare Clef Flash', WityAuto: 'Wity-1 (auto)', WityOff: 'Wity-1 (off)',
@@ -17,6 +18,7 @@ export const names = {
 };
 export const colors = {
   Perplexity: '#0E7490',
+  Glide: '#059669',
   Jev: '#0F766E', TerraNone: '#2563EB', Terra: '#6387CA',
   Luna: '#7C3AED', Astra: '#475569', LunaNone: '#A17CC5',
   Clef: '#E27602', ClefFlash: '#D94A21', WityAuto: '#447A95', WityOff: '#7B6040',
