@@ -208,13 +208,12 @@ def main():
         return
     if args.out or args.label:
         parser.error("--out and --label need --run")
-    for name, folder, run in HOSTED_MODELS:
-        write_setting(HOSTED_LABELS[name], folder, run)
     from leaderboard_models import HOSTED_PASSES
     from lite_hosted import analyze as analyze_hosted, publish as publish_hosted
     for name, specs in HOSTED_PASSES.items():
-        for index, (folder, run) in enumerate(specs[1:], 2):
-            write_setting(f"{HOSTED_LABELS[name]} — pass {index}", folder, run)
+        for index, (folder, run) in enumerate(specs, 1):
+            label = HOSTED_LABELS[name] if index == 1 else f"{HOSTED_LABELS[name]} — pass {index}"
+            write_setting(label, folder, run)
     publish_hosted(analyze_hosted())
     local_policy = json.loads((ROOT / "paper/analysis/openweight_policy.json").read_text())
     for spec in local_policy["settings"]:

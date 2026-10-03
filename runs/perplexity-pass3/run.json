@@ -1,0 +1,211 @@
+{
+  "started_at_utc": "2026-10-03T15:14:42.016536+00:00",
+  "status": "complete",
+  "config": {
+    "provider": "perplexity",
+    "model": "pplx-decider-v1-27b",
+    "reasoning_effort": null,
+    "protocol": "retry_excluded_successful_attempt_v1",
+    "workers": 32,
+    "episode_concurrency": 1,
+    "request_timeout_s": 30.0,
+    "max_attempts": 5,
+    "retry_delay_s": 0.5,
+    "sdk_retries": 0,
+    "custom_endpoint": false,
+    "untimed": "one final successful response per state; failed transport attempts excluded from model timing",
+    "rate_limit_policy": "http429_retry_after_shared_cooldown_v1"
+  },
+  "dataset_manifest": {
+    "schema_version": "sdb-lite/0.1",
+    "episodes": [
+      {
+        "episode_id": "lite_debugging_a",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 20,
+        "routes_seen": [
+          "delegate",
+          "inspect",
+          "ready",
+          "rerun",
+          "wait"
+        ],
+        "routes_unseen": [
+          "control"
+        ],
+        "public_hash": "d5269620543a02225bbb7a32b29197b3436558b99f17f37261d186c8eb96e979"
+      },
+      {
+        "episode_id": "lite_debugging_b",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 21,
+        "routes_seen": [
+          "control",
+          "delegate",
+          "inspect",
+          "ready",
+          "rerun",
+          "wait"
+        ],
+        "routes_unseen": [],
+        "public_hash": "ba7ee8a898f0fe101c53f08d389667e72dffe3a4818b6220b7376fc142c27cbd"
+      },
+      {
+        "episode_id": "lite_assembly_a",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 21,
+        "routes_seen": [
+          "advance",
+          "escalate",
+          "handoff",
+          "hold",
+          "release",
+          "repair",
+          "wait"
+        ],
+        "routes_unseen": [],
+        "public_hash": "d21b5e8d96317964cd9b3b400a2a64ec99f35d9350543463837a13c66eff6580"
+      },
+      {
+        "episode_id": "lite_assembly_b",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 23,
+        "routes_seen": [
+          "advance",
+          "escalate",
+          "handoff",
+          "hold",
+          "release",
+          "repair",
+          "wait"
+        ],
+        "routes_unseen": [],
+        "public_hash": "b2dea04150d4146b0bccbf7494c06ffeee938c9e8d3b0abe1cec8f54ec89cc88"
+      },
+      {
+        "episode_id": "lite_support_a",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 22,
+        "routes_seen": [
+          "hold",
+          "payment",
+          "service",
+          "wrap"
+        ],
+        "routes_unseen": [],
+        "public_hash": "ff02247857c9bf2744acad7f4931ef3f48c9a2219178d4c631926c968d4621de"
+      },
+      {
+        "episode_id": "lite_support_b",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 24,
+        "routes_seen": [
+          "cancel",
+          "closed",
+          "delivery",
+          "hold_return",
+          "hold_wait",
+          "repair"
+        ],
+        "routes_unseen": [],
+        "public_hash": "58f27118b2f8eb27e20abe82e7a63b5e53db2996f6ebf758b9032734ea944397"
+      },
+      {
+        "episode_id": "lite_presenter_a",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 24,
+        "routes_seen": [
+          "clip",
+          "closed",
+          "questions",
+          "talk"
+        ],
+        "routes_unseen": [],
+        "public_hash": "627ba38004dae1b3a33e86cbda1c23e3c02231ece848dde035a873be7075decc"
+      },
+      {
+        "episode_id": "lite_presenter_b",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 22,
+        "routes_seen": [
+          "clip",
+          "closed",
+          "questions",
+          "talk"
+        ],
+        "routes_unseen": [],
+        "public_hash": "81f4d0bb57ff96a65d6ffd9aab103963e7dd85267d52e0ef8d18e2cd301f7b56"
+      }
+    ],
+    "hashes": {
+      "lite_debugging_a": "df7d0703f937a005f2c8530515b0491dc285110a5bd612d115c69b36fff786da",
+      "lite_debugging_b": "53fd9ce08a4de5cc618e9065123f4bfa2f7830cd4d8893fe73d3cdee314919ce",
+      "lite_assembly_a": "4b513874a06f59750dd447b2f23928e4f29e7a52b19b99a07cf26dbfe1b87973",
+      "lite_assembly_b": "8113c218bee0a52325182599a37f9313e3ac34d1e2f58d09816a4aa0cd77d870",
+      "lite_support_a": "427e0819efce15e5f88d4da06db6192e18ad3303f6fa5e26696f217bbf3f4cfe",
+      "lite_support_b": "85b70aa9f9351c0f4491c7e78b70fb1b39bb557c52022643f84a58833795ce0f",
+      "lite_presenter_a": "b95e74e0c963de0d6205ea101b1e33abe2c526ca755142bb18d75e8e9d18c864",
+      "lite_presenter_b": "d7c787a4562c67f52d02d8a5d7ce902f92a11931714d333398cf3e3c53311307"
+    },
+    "generator_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "afc1b8c824cf0a9dd9e36268841b312174ec0ad2a9310778b1a5fd9468398418",
+      "lite/core.py": "6e792b226e43126cccef80107f296c7897eedecb0a57ba53a35d324e053baa70",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/presenter.py": "2148486ab6339d73b41d9d30259d0301352809b3ac1320eb3f60c4128f67d0c3",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8"
+    },
+    "reference_validation": "public-only executable reference agreement; not independent human adjudication",
+    "dataset_hash": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af"
+  },
+  "run_sources": {
+    "adapters/__init__.py": "808c150f2e51af4cf33fe3267a2b040ba533c37cad0b6a13dc80a09a5b7366af",
+    "adapters/base.py": "5fd62ec5d30651803d52e3df837356329113f6246bac2404d18886102d0e4510",
+    "adapters/cloudflare.py": "5306cd4c9641b2b73122f7d6d965993960f5df065fde59b5279cc4079ebddd4f",
+    "adapters/fastino.py": "06a56e82bbc97816dc24ec9f45789d75a400b733fcc191a74023a2a3f6b49ed7",
+    "adapters/llm.py": "14a64eb0c3ee6b6b7d755ea55bd52cb87aaa56356c800a740fe71a4b79fa8ae2",
+    "adapters/local.py": "d4b0295cda3d576174db082fc9bb461639ace56863795885cae37ed8adde10f9",
+    "adapters/perplexity.py": "eb5363085a6230b33f51e8e4c4bbb937cf1111112642b33d5b583f78988b13ea",
+    "adapters/remote.py": "7e823a7ef5eef18b53c24c7d96340bfd8b5e0241f40b2e5f649a3036478db1e1",
+    "adapters/wity.py": "5432f1c1ec36703e97c2aeeeb2ac70d3fb36f0d4ab6dc3c6cdbbc5548242218d",
+    "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+    "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+    "lite/__main__.py": "dcdebc08e8f1bbfd44e5d27956b250fefb989dbf62e6c7efddac87d09405dba8",
+    "lite/core.py": "bdefc99a8ff0cc83bbe8627d21e1b7c9f8f7be0f9fd231d03d2db025bc841598",
+    "lite/interval_scoring.py": "ce3eda9c2fe2efcd84b75a02ce329e8fc7bf7f21b9abd65e65fd10bf3d9a6eb3",
+    "lite/reference_scoring.py": "14036a3799c453fef6c19baca3935f30d63f01aec6241cf785235eb966cd969d",
+    "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+    "lite/runtime.py": "40a0f868c6def29224578eb66694ee0bac03f36758b6b88187b33a6185914454",
+    "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+    "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+    "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+    "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+    "lite/tasks/presenter.py": "2148486ab6339d73b41d9d30259d0301352809b3ac1320eb3f60c4128f67d0c3",
+    "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8"
+  },
+  "events_sha256": "d6c87eaedcad9e3d6f4bce4c3eaffcc0b7cbc87b8abbab858100cc8ea40ddfef",
+  "finished_at_utc": "2026-10-03T15:30:42.212322+00:00"
+}

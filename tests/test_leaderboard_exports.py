@@ -217,3 +217,31 @@ def test_astra_exports_include_exactly_three_distinct_passes(tmp_path):
     assert exported["passes"] == 3
     assert exported["log_auc_pct"] == pytest.approx(
         100 * sum(r["primary"]["overall"]["accuracy"] for r in result["passes"]) / 3)
+
+
+def test_perplexity_exports_preserve_three_complete_native_passes(tmp_path):
+    result = load_hosted_summary()["hosted"]["Perplexity"]
+    assert len(result["passes"]) == len(HOSTED_PASSES["Perplexity"]) == 3
+    assert result["model"] == "pplx-decider-v1-27b"
+    assert result["untimed"] == pytest.approx(.7)
+    assert 100 * result["accuracy"] == pytest.approx(63.37162388299664)
+    for record in result["passes"]:
+        frozen = json.loads((ROOT / record["provenance"]["run"] / "run.json").read_text())
+        assert frozen["status"] == "complete"
+        assert frozen["config"]["provider"] == "perplexity"
+        assert frozen["config"]["workers"] == 32
+        assert frozen["config"]["request_timeout_s"] == 30
+        assert record["retry_reliability"]["successful_logical_requests"] == 480
+    site = site_build.build(tmp_path)
+    row = next(r for r in site["settings"] if r["id"] == "Perplexity")
+    assert row["passes"] == 3
+    assert row["log_auc_pct"] == pytest.approx(100 * result["accuracy"])
+    assert row["log_auc_sd_pct"] == pytest.approx(100 * result["auc_sample_sd"])
+
+
+def test_omitting_perplexity_from_hosted_summary_cannot_publish(monkeypatch):
+    summary = load_hosted_summary()
+    del summary["hosted"]["Perplexity"]
+    monkeypatch.setattr(figure_data, "load_summary", lambda: summary)
+    with pytest.raises(ValueError, match="every registered"):
+        figure_data.build()

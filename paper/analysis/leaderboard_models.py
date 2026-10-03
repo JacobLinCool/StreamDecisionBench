@@ -35,3 +35,9 @@ HOSTED_PASSES.update({
     "WityAuto": (("wity-20261003/auto", "wity-1-auto-workers16-retry-after-20261003-pass1"),),
     "WityOff": (("wity-20261003/off", "wity-1-off-workers16-retry-after-20261003-pass1"),),
 })
+
+HOSTED_LABELS["Perplexity"] = "Perplexity Decider v1 27B"
+HOSTED_PASSES["Perplexity"] = tuple(
+    (f"perplexity-20261003/pass{index}", f"perplexity-pass{index}")
+    for index in range(1, 4)
+)

@@ -39,6 +39,7 @@ Latency includes the remote service and internet round trip from the benchmark c
 
 | Setting | Model | Passes | Mean log-AUC ± SD (%) | Mean untimed (%) | Mean median latency (s) |
 |---|---|---:|---:|---:|---:|
+| Perplexity Decider v1 27B | `pplx-decider-v1-27b` | 3 | 63.37 ± 0.27 | 70.00 | 0.379 |
 | Jev | `jev-latest` | 3 | 58.50 ± 1.10 | 62.36 | 0.232 |
 | Terra none | `gpt-5.6-terra` | 3 | 55.46 ± 1.29 | 81.88 | 1.360 |
 | Terra low | `gpt-5.6-terra` | 3 | 52.06 ± 3.48 | 95.76 | 2.134 |
@@ -204,7 +205,32 @@ uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
 # Wity native decisions with adaptive reasoning
 uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
   --out runs/my-wity-auto --provider wity --model wity-1 --reasoning auto
+
+# Perplexity native Decisions API
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-perplexity --provider perplexity --model pplx-decider-v1-27b
 ```
+
+Perplexity requires `PERPLEXITY_API_KEY`; `PERPLEXITY_BASE_URL` optionally overrides the
+API origin. Its [Decisions API](https://docs.perplexity.ai/docs/decisions/quickstart)
+receives the existing `state` and `questions` unchanged, with the model added, and returns
+native probabilities. It uses a 30 s timeout and 32 workers, with SDK retries disabled.
+The published dataset releases one request every 2 s, below the documented organization
+limit of 10 requests/s; other clients sharing the organization and retry bursts can still
+cause HTTP 429. The runner respects `Retry-After` through its shared episode cooldown and
+records request IDs and HTTP failures per attempt. HTTP 5xx and transport failures use the
+runner's bounded retry policy; invalid requests and responses stop the run.
+
+Use the same frozen dataset, conditional decision composition, and normalized log-AUC over
+0.5–8 s as the other hosted settings. `choice` commits to the returned option, `noul` uses
+0.5, and `score` commits to the most probable level, rather than rounding the expected score.
+The current Lite dataset uses only `choice` questions. Start with `--episodes lite_assembly_a`
+(60 requests), then record a full 480-request pass in a fresh directory. Score and report it
+with the commands below. A compatibility probe is not a benchmark pass.
+
+As documented on October 3, 2026, Perplexity charges $0.04 per million input tokens and
+no output fee. Compute actual cost from recorded `usage.input_tokens`; 1.48M input tokens
+would cost about $0.059, but provider token counts can differ.
 
 Wity requires `WITY_API_KEY`; `WITY_BASE_URL` optionally overrides its native endpoint.
 Its [System One API](https://wity.alphanimble.com/docs/api) uses the existing benchmark

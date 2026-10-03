@@ -270,6 +270,13 @@ cython_debug/
 .env.*
 !.env.example
 .envrc
+
+# Perplexity: exact immutable recording evidence; local reports and probes stay ignored.
+!/runs/perplexity-pass[123]/
+/runs/perplexity-pass[123]/*
+!/runs/perplexity-pass[123]/run.json
+!/runs/perplexity-pass[123]/episodes.json
+!/runs/perplexity-pass[123]/events.jsonl
 # Agent-local state.
 .claude/settings.local.json
 .claude/scheduled_tasks.lock

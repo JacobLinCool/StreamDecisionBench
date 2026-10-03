@@ -14,35 +14,7 @@ const GRID = '#E8EDF4';
 const WIDTH = 1240;
 const HEIGHT = Math.max(950, 340 + data.series.length * 36);
 
-const names = {
-  Jev: 'Jev', TerraNone: 'GPT-5.6-Terra · none', Terra: 'GPT-5.6-Terra · low',
-  Luna: 'GPT-5.6-Luna · low', Astra: 'GPT-6-Astra · low', LunaNone: 'GPT-5.6-Luna · none',
-  Clef: 'Cloudflare Clef', ClefFlash: 'Cloudflare Clef Flash', WityAuto: 'Wity-1 (auto)', WityOff: 'Wity-1 (off)',
-  Winnow12B: 'Winnow-12B', WinnowE4B: 'Winnow-E4B',
-  DecisionKai: 'Decision 2.0 Kai-0.6B',
-  DecisionEos: 'Decision 2.0 Eos-0.8B',
-  DecisionSol: 'Decision 2.0 Sol-2B',
-  DecisionNox: 'Decision 2.0 Nox-4B',
-  DecisionLux: 'Decision 2.0 Lux-9B',
-  DecisionVega: 'Decision 2.0 Vega-27B',
-  DJev: 'DJev / DiffusionGemma', Kev: 'Kev-4B', KevNine: 'Kev-9B', KevTwentySeven: 'Kev-27B', QwenLogits: 'Qwen3.5-4B · direct logits',
-  Nimble: 'Bespoke Nimble-9B', LayaTyped: 'Laya · typed decisions',
-  LayaEnglish: 'Laya · English', LayaMultilingual: 'Laya · multilingual',
-};
-const colors = {
-  Jev: '#0F766E', TerraNone: '#2563EB', Terra: '#6387CA',
-  Luna: '#7C3AED', Astra: '#475569', LunaNone: '#A17CC5',
-  Clef: '#E27602', ClefFlash: '#D94A21', WityAuto: '#447A95', WityOff: '#7B6040',
-  Winnow12B: '#087F8C', WinnowE4B: '#9564A8',
-  DecisionKai: '#168875',
-  DecisionEos: '#646CC9',
-  DecisionSol: '#AB6B28',
-  DecisionNox: '#C04774',
-  DecisionLux: '#388AB0',
-  DecisionVega: '#758A28',
-  DJev: '#B45309', Kev: '#CA8A04', KevNine: '#0891B2', KevTwentySeven: '#DC2626', QwenLogits: '#BE185D', Nimble: '#60813B',
-  LayaTyped: '#8A9CAF', LayaEnglish: '#64748B', LayaMultilingual: '#334155',
-};
+import {names, colors} from "./identity.mjs";
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);

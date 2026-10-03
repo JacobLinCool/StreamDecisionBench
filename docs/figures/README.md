@@ -1,8 +1,8 @@
 # StreamDecisionBench README figures
 
-These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all twenty-seven
-completed single-model settings: ten hosted API settings and seventeen self-hosted open-weight settings,
-including Wity auto/off, Cloudflare Clef and Clef Flash, Winnow-12B, Winnow-E4B and all six Decision 2.0 models.
+These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all twenty-eight
+completed single-model settings: eleven hosted API settings and seventeen self-hosted open-weight settings,
+including Perplexity Decider v1 27B, Wity auto/off, Cloudflare Clef and Clef Flash, Winnow-12B, Winnow-E4B and all six Decision 2.0 models.
 Bars start at zero and rank settings by normalized log-AUC over 0.5–8 seconds.
 
 The second figure plots **in-force accuracy against the time-step interval**, on a logarithmic
@@ -35,3 +35,21 @@ the exported data's provenance and produces SVGs using ECharts' server-side rend
 - [Interval curves](interval-curves.svg)
 - [Full-precision figure data and provenance](data.json)
 - [Verified source analysis](../research/openweight-hybrids/analysis.json)
+
+## Leaderboard update animation
+
+[Play the eight-second Perplexity insertion](leaderboard-update.html). The self-contained
+HTML animation uses the verified figure data and shared model colors. It shows the board
+before the new entry, grows its measured score bar, moves it to its actual rank, and holds
+the final result. Playback, replay and scrubbing work without external assets; reduced-motion
+preferences show the final frame first.
+
+```bash
+npm run --prefix docs/figures animate -- --setting Perplexity --seconds 8
+```
+
+Use any registered setting ID and a duration from 5 to 10 seconds. Rebuild `data.json` first
+after changing the leaderboard. The output defaults to `docs/figures/leaderboard-update.html`;
+`--out <path>` writes a separate animation. Open the HTML in a browser, or serve it with
+`python3 -m http.server 8765 --bind 127.0.0.1 --directory docs/figures` and visit
+`http://127.0.0.1:8765/leaderboard-update.html`.

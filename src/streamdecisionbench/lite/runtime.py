@@ -93,6 +93,8 @@ def run_episode(episode: dict, factory: Callable, log: Callable, *, workers: int
                     local.adapter = adapter
                 response = local.adapter.system_one(copy.deepcopy(request))
                 attempt["received_s"] = time.monotonic() - start
+                if response.get("request_id") is not None:
+                    attempt["request_id"] = response["request_id"]
                 validate_response(response, episode["questions"])
                 wire = {k: committed_answer(q, response["answers"][k]) for k, q in episode["questions"].items()}
                 pred = decode(episode, wire)
@@ -118,6 +120,9 @@ def run_episode(episode: dict, factory: Callable, log: Callable, *, workers: int
                 status = getattr(error, "status_code", None)
                 if isinstance(status, int):
                     attempt["http_status"] = status
+                request_id = getattr(error, "request_id", None)
+                if request_id is not None:
+                    attempt["request_id"] = request_id
             attempt["completed_s"] = time.monotonic() - start
             r["attempts"].append(attempt)
             with lock:

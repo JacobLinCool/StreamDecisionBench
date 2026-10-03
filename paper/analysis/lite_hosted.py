@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 import statistics
 
@@ -108,13 +109,12 @@ def publish(data: dict) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "analysis.json").write_text(json.dumps(data, indent=2, allow_nan=False) + "\n")
     lines = ["# Hosted API repeated measurements", "",
-        "Wity auto and off each have one complete pass; all other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Astra low has a further third pass; its transport attempts are preserved in the individual report. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts.", "",
+        "Wity auto and off each have one complete pass; all other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Astra low has a further third pass; its transport attempts are preserved in the individual report. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts. Perplexity's first pass recovered 12 timeouts and three HTTP 503 failures; its second and third passes had no failed attempts.", "",
         "Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is sample standard deviation across passes, in percentage points; it is unavailable for a single pass. Latency values average within-pass quantiles.", "",
         "| Setting | Passes | Mean log-AUC ± SD (%) | Mean untimed (%) | Mean p50 / p95 (s) | Individual log-AUC (%) |",
         "|---|---:|---:|---:|---:|---|"]
     for row in sorted(data["hosted"].values(), key=lambda r: -r["accuracy"]):
-        links = [f"[{100*r['primary']['overall']['accuracy']:.2f}]({Path(r['provenance']['published_report']['path']).relative_to(OUT.relative_to(ROOT)).with_name('REPORT.md')})"
-                 if r["pass"] > 1 else f"[{100*r['primary']['overall']['accuracy']:.2f}](../{Path(r['provenance']['published_report']['path']).relative_to('docs/lite/results').with_name('REPORT.md')})"
+        links = [f"[{100*r['primary']['overall']['accuracy']:.2f}]({Path(os.path.relpath((ROOT / r['provenance']['published_report']['path']).with_name('REPORT.md'), OUT)).as_posix()})"
                  for r in row["passes"]]
         lines.append(f"| {row['label']} | {len(row['passes'])} | {100*row['accuracy']:.2f}"
                      + (f" ± {100*row['auc_sample_sd']:.2f}" if row['auc_sample_sd'] is not None else " (one pass)") + " | "
@@ -127,12 +127,12 @@ def publish(data: dict) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--reports", action="store_true", help="recompute all additional pass reports from raw events")
+    parser.add_argument("--reports", action="store_true", help="recompute all hosted pass reports from raw events")
     args = parser.parse_args()
     if args.reports:
         from lite_reports import evaluate_one
         for name, specs in HOSTED_PASSES.items():
-            for index, (folder, run) in enumerate(specs[1:], 2):
+            for index, (folder, run) in enumerate(specs, 1):
                 evaluate_one(ROOT / "runs" / run, ROOT / "docs/lite/results" / folder,
                              f"{HOSTED_LABELS[name]} — pass {index}")
     publish(analyze())

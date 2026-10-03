@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "render": "node render.mjs"
+    "render": "node render.mjs",
+    "animate": "node animate.mjs"
   },
   "dependencies": {
     "echarts": "6.1.0"

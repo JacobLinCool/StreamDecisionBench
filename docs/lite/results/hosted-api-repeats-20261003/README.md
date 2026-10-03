@@ -1,11 +1,12 @@
 # Hosted API repeated measurements
 
-Wity auto and off each have one complete pass; all other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Astra low has a further third pass; its transport attempts are preserved in the individual report. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts.
+Wity auto and off each have one complete pass; all other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Astra low has a further third pass; its transport attempts are preserved in the individual report. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts. Perplexity's first pass recovered 12 timeouts and three HTTP 503 failures; its second and third passes had no failed attempts.
 
 Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is sample standard deviation across passes, in percentage points; it is unavailable for a single pass. Latency values average within-pass quantiles.
 
 | Setting | Passes | Mean log-AUC ± SD (%) | Mean untimed (%) | Mean p50 / p95 (s) | Individual log-AUC (%) |
 |---|---:|---:|---:|---:|---|
+| Perplexity Decider v1 27B | 3 | 63.37 ± 0.27 | 70.00 | 0.379 / 0.554 | [63.07](../perplexity-20261003/pass1/REPORT.md), [63.60](../perplexity-20261003/pass2/REPORT.md), [63.45](../perplexity-20261003/pass3/REPORT.md) |
 | Jev | 3 | 58.50 ± 1.10 | 62.36 | 0.232 / 0.366 | [59.63](../four-family/jev-latest/REPORT.md), [57.43](pass2/jev-latest/REPORT.md), [58.45](pass3/jev-latest/REPORT.md) |
 | Terra none | 3 | 55.46 ± 1.29 | 81.88 | 1.360 / 1.824 | [54.11](../four-family/gpt-5.6-terra-none/REPORT.md), [55.62](pass2/gpt-5.6-terra-none/REPORT.md), [56.67](pass3/gpt-5.6-terra-none/REPORT.md) |
 | Terra low | 3 | 52.06 ± 3.48 | 95.76 | 2.134 / 3.251 | [48.04](../four-family/gpt-5.6-terra-low/REPORT.md), [54.03](pass2/gpt-5.6-terra-low/REPORT.md), [54.10](pass3/gpt-5.6-terra-low/REPORT.md) |
