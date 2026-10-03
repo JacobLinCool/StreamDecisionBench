@@ -14,8 +14,8 @@ Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is
 | Clef | 3 | 31.39 ± 0.41 | 38.96 | 0.885 / 1.349 | [30.96](../four-family/clef/REPORT.md), [31.76](pass2/clef/REPORT.md), [31.44](pass3/clef/REPORT.md) |
 | Luna none | 3 | 30.87 ± 1.12 | 43.54 | 1.312 / 1.777 | [30.67](../four-family/gpt-5.6-luna-none/REPORT.md), [32.08](pass2/gpt-5.6-luna-none/REPORT.md), [29.86](pass3/gpt-5.6-luna-none/REPORT.md) |
 | Clef Flash | 3 | 19.89 ± 0.19 | 21.67 | 0.437 / 0.954 | [19.69](../four-family/clef-flash/REPORT.md), [19.92](pass2/clef-flash/REPORT.md), [20.06](pass3/clef-flash/REPORT.md) |
-| Wity off | 1 | 8.61 (one pass) | 10.21 | 1.291 / 6.214 | [8.61](../wity-20261003/off/REPORT.md) |
-| Wity auto | 1 | 2.64 (one pass) | 27.50 | 63.534 / 124.721 | [2.64](../wity-20261003/auto/REPORT.md) |
+| Wity-1 (off) | 1 | 8.61 (one pass) | 10.21 | 1.291 / 6.214 | [8.61](../wity-20261003/off/REPORT.md) |
+| Wity-1 (auto) | 1 | 2.64 (one pass) | 27.50 | 63.534 / 124.721 | [2.64](../wity-20261003/auto/REPORT.md) |
 
 These are descriptive measurements on a fixed dataset; two or three passes do not establish stable rankings. Served model identifiers are preserved in each analysis; Jev returned `jev-1.13.0` on every pass. Matching identifiers do not guarantee immutable provider backends.
 

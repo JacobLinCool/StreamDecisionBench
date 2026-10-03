@@ -137,12 +137,12 @@
 <path d="M-1 -3l173.4 0l0 15l-173.4 0Z" transform="translate(900 450)" fill="none" pointer-events="visible" ecmeta_series_index="12" ecmeta_data_index="7" ecmeta_ssr_type="legend" ecmeta_silent="true" class="zr1-cls-1"></path>
 <path d="M0 4.5L27 4.5" transform="translate(900 483)" fill="#000" stroke="#7B6040" stroke-width="2" stroke-linecap="butt" stroke-miterlimit="10" class="zr1-cls-1"></path>
 <path d="M13.5 0.9L17.1 8.1L9.9 8.1Z" transform="translate(900 483)" fill="#7B6040" class="zr1-cls-1"></path>
-<text dominant-baseline="central" text-anchor="start" style="font-size:15px;font-family:Arial, Helvetica, sans-serif;" xml:space="preserve" x="32" y="4.5" transform="translate(900 483)" fill="#15253B">Wity · off</text>
-<path d="M-1 -3l102.3 0l0 15l-102.3 0Z" transform="translate(900 483)" fill="none" pointer-events="visible" ecmeta_series_index="16" ecmeta_data_index="8" ecmeta_ssr_type="legend" ecmeta_silent="true" class="zr1-cls-1"></path>
+<text dominant-baseline="central" text-anchor="start" style="font-size:15px;font-family:Arial, Helvetica, sans-serif;" xml:space="preserve" x="32" y="4.5" transform="translate(900 483)" fill="#15253B">Wity-1 (off)</text>
+<path d="M-1 -3l106.4 0l0 15l-106.3 0Z" transform="translate(900 483)" fill="none" pointer-events="visible" ecmeta_series_index="16" ecmeta_data_index="8" ecmeta_ssr_type="legend" ecmeta_silent="true" class="zr1-cls-1"></path>
 <path d="M0 4.5L27 4.5" transform="translate(900 516)" fill="#000" stroke="#447A95" stroke-width="2" stroke-linecap="butt" stroke-miterlimit="10" class="zr1-cls-1"></path>
 <path d="M13.5 0.9L17.1 4.5L13.5 8.1L9.9 4.5Z" transform="translate(900 516)" fill="#447A95" class="zr1-cls-1"></path>
-<text dominant-baseline="central" text-anchor="start" style="font-size:15px;font-family:Arial, Helvetica, sans-serif;" xml:space="preserve" x="32" y="4.5" transform="translate(900 516)" fill="#15253B">Wity · auto</text>
-<path d="M-1 -3l114.9 0l0 15l-114.9 0Z" transform="translate(900 516)" fill="none" pointer-events="visible" ecmeta_series_index="17" ecmeta_data_index="9" ecmeta_ssr_type="legend" ecmeta_silent="true" class="zr1-cls-1"></path>
+<text dominant-baseline="central" text-anchor="start" style="font-size:15px;font-family:Arial, Helvetica, sans-serif;" xml:space="preserve" x="32" y="4.5" transform="translate(900 516)" fill="#15253B">Wity-1 (auto)</text>
+<path d="M-1 -3l119 0l0 15l-119 0Z" transform="translate(900 516)" fill="none" pointer-events="visible" ecmeta_series_index="17" ecmeta_data_index="9" ecmeta_ssr_type="legend" ecmeta_silent="true" class="zr1-cls-1"></path>
 <path d="M0 4.5L27 4.5" transform="translate(900 591)" fill="#000" stroke="#DC2626" stroke-width="2" stroke-dasharray="8,4" stroke-linecap="butt" stroke-miterlimit="10" class="zr1-cls-1"></path>
 <path d="M17.1 4.5A3.6 3.6 0 1 1 17.1 4.1A3.6 3.6 0 0 1 17.1 4.5" transform="translate(900 591)" fill="#DC2626" class="zr1-cls-1"></path>
 <text dominant-baseline="central" text-anchor="start" style="font-size:15px;font-family:Arial, Helvetica, sans-serif;" x="32" y="4.5" transform="translate(900 591)" fill="#15253B">Kev-27B</text>

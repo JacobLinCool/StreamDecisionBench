@@ -16,8 +16,8 @@ The domain spans update rates four times faster and slower than the recording ca
 | Clef | 3 | 35.22% | 13.60% | 59.25% | 17.48% | 31.39% ± 0.41 | 38.96% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Luna none | 3 | 13.16% | 19.62% | 44.04% | 46.65% | 30.87% ± 1.12 | 43.54% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Clef Flash | 3 | 13.27% | 23.71% | 28.67% | 13.90% | 19.89% ± 0.19 | 21.67% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
-| Wity off | 1 | 0.00% | 3.01% | 22.59% | 8.85% | 8.61% (one pass) | 10.21% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
-| Wity auto | 1 | 0.69% | 1.68% | 2.50% | 5.66% | 2.64% (one pass) | 27.50% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Wity-1 (off) | 1 | 0.00% | 3.01% | 22.59% | 8.85% | 8.61% (one pass) | 10.21% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Wity-1 (auto) | 1 | 0.69% | 1.68% | 2.50% | 5.66% | 2.64% (one pass) | 27.50% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 
 ## Self-hosted settings
 

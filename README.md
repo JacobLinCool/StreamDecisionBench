@@ -47,8 +47,8 @@ Latency includes the remote service and internet round trip from the benchmark c
 | Clef | `clef` | 3 | 31.39 ± 0.41 | 38.96 | 0.885 |
 | Luna none | `gpt-5.6-luna` | 3 | 30.87 ± 1.12 | 43.54 | 1.312 |
 | Clef Flash | `clef-flash` | 3 | 19.89 ± 0.19 | 21.67 | 0.437 |
-| Wity off | `wity-1` | 1 | 8.61 (one pass) | 10.21 | 1.291 |
-| Wity auto | `wity-1` | 1 | 2.64 (one pass) | 27.50 | 63.534 |
+| Wity-1 (off) | `wity-1` | 1 | 8.61 (one pass) | 10.21 | 1.291 |
+| Wity-1 (auto) | `wity-1` | 1 | 2.64 (one pass) | 27.50 | 63.534 |
 
 [Family scores](docs/lite/results/four-family/README.md); [individual hosted passes and repeat variation](docs/lite/results/hosted-api-repeats-20261003/README.md). SD is sample standard deviation across passes, in percentage points; unavailable for one pass. Wity uses 16 workers and the recorded Retry-After policy; other hosted providers use 32.
 

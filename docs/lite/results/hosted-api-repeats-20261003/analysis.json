@@ -35984,7 +35984,7 @@
       }
     },
     "WityAuto": {
-      "label": "Wity auto",
+      "label": "Wity-1 (auto)",
       "model": "wity-1",
       "report": "hosted-api-repeats-20261003/README.md",
       "passes": [
@@ -38874,7 +38874,7 @@
       }
     },
     "WityOff": {
-      "label": "Wity off",
+      "label": "Wity-1 (off)",
       "model": "wity-1",
       "report": "hosted-api-repeats-20261003/README.md",
       "passes": [
@@ -40484,7 +40484,7 @@
   "aggregation": "equal mean of per-pass metrics; mean of within-pass latency quantiles; sample SD across passes",
   "sources_sha256": {
     "paper/analysis/lite_hosted.py": "49120010129866debec94a343d5974b25f21f184a47164bfb12dc82fb2c20a7f",
-    "paper/analysis/leaderboard_models.py": "d1e2d30551e24765c6e752edb3eb19475039217713d1751c7456e9bcf7dab6b7",
+    "paper/analysis/leaderboard_models.py": "6efcd38573a243fead4e1f8dc49d0623924f5ba8039444a914547252dccf2fc5",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616",
     "paper/analysis/lite_openweight.py": "24a59c78778a74dbf6be6b680c5d532b295c5f8255a1cd66fc86442b5ad97633",
     "paper/analysis/lite_trajectory_value.py": "fea66b556faae61adb6d74780d30c9b6e6e6ac0cbc47b2dbc4b4a2a491fce764",

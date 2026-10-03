@@ -17,7 +17,7 @@ const HEIGHT = Math.max(950, 340 + data.series.length * 36);
 const names = {
   Jev: 'Jev', TerraNone: 'GPT-5.6-Terra · none', Terra: 'GPT-5.6-Terra · low',
   Luna: 'GPT-5.6-Luna · low', Astra: 'GPT-6-Astra · low', LunaNone: 'GPT-5.6-Luna · none',
-  Clef: 'Cloudflare Clef', ClefFlash: 'Cloudflare Clef Flash', WityAuto: 'Wity · auto', WityOff: 'Wity · off',
+  Clef: 'Cloudflare Clef', ClefFlash: 'Cloudflare Clef Flash', WityAuto: 'Wity-1 (auto)', WityOff: 'Wity-1 (off)',
   Winnow12B: 'Winnow-12B', WinnowE4B: 'Winnow-E4B',
   DJev: 'DJev / DiffusionGemma', Kev: 'Kev-4B', KevNine: 'Kev-9B', KevTwentySeven: 'Kev-27B', QwenLogits: 'Qwen3.5-4B · direct logits',
   Nimble: 'Bespoke Nimble-9B', LayaTyped: 'Laya · typed decisions',

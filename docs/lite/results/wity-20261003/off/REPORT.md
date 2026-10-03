@@ -1,4 +1,4 @@
-# SDB log-AUC: Wity off (16 workers)
+# SDB log-AUC: Wity-1 (off)
 
 Primary normalized log-AUC over 0.5–8 s: **8.61%**; untimed accuracy: 10.21%.
 Equal multiplicative interval ranges receive equal weight. This is a benchmark weighting rule, not an empirical usage distribution.
@@ -148,7 +148,7 @@ The difference between timed and untimed accuracy is descriptive, not a causal e
 From the repository root, reproduce the report and local baselines without model calls:
 
 ```sh
-uv run python paper/analysis/lite_reports.py --run runs/wity-1-off-workers16-retry-after-20261003-pass1 --out docs/lite/results/wity-20261003/off --label 'Wity off (16 workers)'
+uv run python paper/analysis/lite_reports.py --run runs/wity-1-off-workers16-retry-after-20261003-pass1 --out docs/lite/results/wity-20261003/off --label 'Wity-1 (off)'
 ```
 
 Token usage includes cached input. Only returned usage is summed; usage for failed requests that returned none is unknown. No cost estimate is inferred here.

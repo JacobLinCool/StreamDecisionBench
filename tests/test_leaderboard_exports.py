@@ -187,6 +187,7 @@ def test_wity_single_pass_exports_preserve_configuration_and_no_invented_sd(name
     assert run['config']['reasoning'] == mode and run['config']['workers'] == 16
     assert run['config']['rate_limit_policy'] == 'http429_retry_after_shared_cooldown_v1'
     exported = next(r for r in site_build.build(tmp_path)['settings'] if r['id'] == name)
+    assert exported['label'] == f'Wity-1 ({mode})'
     assert exported['passes'] == 1 and exported['workers'] == 16
     assert exported['log_auc_sd_pct'] is None
     assert exported['log_auc_pct'] == pytest.approx(100 * record['primary']['overall']['accuracy'])

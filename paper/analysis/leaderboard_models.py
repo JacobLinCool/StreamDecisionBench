@@ -30,7 +30,7 @@ HOSTED_PASSES = {
 }
 
 # Wity has one authorized complete pass per reasoning mode.
-HOSTED_LABELS.update(WityAuto="Wity auto", WityOff="Wity off")
+HOSTED_LABELS.update(WityAuto="Wity-1 (auto)", WityOff="Wity-1 (off)")
 HOSTED_PASSES.update({
     "WityAuto": (("wity-20261003/auto", "wity-1-auto-workers16-retry-after-20261003-pass1"),),
     "WityOff": (("wity-20261003/off", "wity-1-off-workers16-retry-after-20261003-pass1"),),

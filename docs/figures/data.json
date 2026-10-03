@@ -3076,7 +3076,7 @@
     },
     {
       "id": "WityOff",
-      "label": "Wity off",
+      "label": "Wity-1 (off)",
       "deployment": "hosted",
       "passes": 1,
       "latency_s": {
@@ -3256,7 +3256,7 @@
     },
     {
       "id": "WityAuto",
-      "label": "Wity auto",
+      "label": "Wity-1 (auto)",
       "deployment": "hosted",
       "passes": 1,
       "latency_s": {
@@ -5698,15 +5698,15 @@
   },
   "summary": {
     "path": "docs/research/openweight-hybrids/analysis.json",
-    "sha256": "c9d9f2132324130a4af657b6de111523ad5efa710b56fb1467190d7c9955b7b7"
+    "sha256": "65e183266f1adfd4bb82d98dbaa35fb56fef90fce91a3cf4dd0e3d377d4244b3"
   },
   "hosted_summary": {
     "path": "docs/lite/results/hosted-api-repeats-20261003/analysis.json",
-    "sha256": "190d9f6b7988c7b75733ec6c735bd2dd2455bfd45d61546952b3b62e53e4c294"
+    "sha256": "abc11b948d217f8ea6e6e6acaa78c27a3bad8b37989a3ff926f270488c70ca7a"
   },
   "sources_sha256": {
     "docs/figures/prepare.py": "c4dde8b026ef9f79a3ce92681162fa6a7729ca17e2fdeea0a3268a7cf1d48014",
-    "paper/analysis/leaderboard_models.py": "d1e2d30551e24765c6e752edb3eb19475039217713d1751c7456e9bcf7dab6b7",
+    "paper/analysis/leaderboard_models.py": "6efcd38573a243fead4e1f8dc49d0623924f5ba8039444a914547252dccf2fc5",
     "paper/analysis/lite_openweight.py": "24a59c78778a74dbf6be6b680c5d532b295c5f8255a1cd66fc86442b5ad97633",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616",
