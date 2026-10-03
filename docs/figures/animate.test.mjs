@@ -13,12 +13,12 @@ test('animation ranks and displays the published measurement', () => {
   assert.equal(payload.previous[0].rank, 2);
   assert.equal(payload.previous[0].previousRank, 1);
   const final = renderFrame(payload, 6);
-  assert.match(final, /translate\(0,278\)" opacity="1"/);
-  assert.match(final, /translate\(0,348\)" opacity="1"/);
+  assert.match(final, /translate\(0,354\)" opacity="1"/);
+  assert.match(final, /translate\(0,446\)" opacity="1"/);
   assert.match(final, />#1<\/text>/);
   assert.match(final, />63\.37%<\/text>/);
   assert.doesNotMatch(final, />New<\/text>/);
-  assert.match(renderFrame(payload, 0), /translate\(0,838\)" opacity="0"/);
+  assert.match(renderFrame(payload, 0), /translate\(0,814\)" opacity="0"/);
   assert.match(renderFrame(payload, 2), />New<\/text>/);
 });
 
@@ -36,17 +36,18 @@ test('invalid duration, missing setting and reordered scores are rejected', () =
   assert.throws(() => animationData({...data, series: [...data.series].reverse()}, 'Perplexity', 6), /Invalid/);
 });
 
-test('60 fps insertion has bounded frame movement and settles exactly', () => {
+test('insertion crosses the destination without stopping and settles continuously', () => {
   const payload = animationData(data, 'Perplexity', 6);
   const positions = Array.from({length: 360}, (_, frame) => {
     const groups = [...renderFrame(payload, frame / 60).matchAll(/translate\(0,([\d.e+-]+)\)/g)];
     return Number(groups.at(-1)[1]);
   });
   const steps = positions.slice(1).map((y, i) => y - positions[i]);
-  assert.ok(Math.max(...steps.map(Math.abs)) < 10, 'travel stays below ten pixels per frame');
-  for (const boundary of [.34, .40, .64, .80]) {
-    const frame = Math.round(boundary * 360);
-    assert.ok(Math.abs(steps[frame] - steps[frame - 1]) < 1, 'phase transitions keep velocity continuous');
-  }
-  assert.equal(positions.at(-1), 278);
+  const crossing = positions.findIndex(y => y < 354);
+  assert.ok(crossing > 0, 'arrival flows directly into overshoot');
+  assert.ok(steps[crossing - 1] < -.5, 'arrival retains velocity across the destination');
+  assert.ok(Math.min(...positions) > 336, 'overshoot stays restrained');
+  assert.ok(Math.max(...steps.slice(1).map((v, i) => Math.abs(v - steps[i]))) < 1,
+    'velocity changes continuously across every frame, including landing');
+  assert.equal(positions.at(-1), 354);
 });

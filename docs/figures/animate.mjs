@@ -30,17 +30,20 @@ export function animationData(data, setting, seconds) {
   });
   const featured = rows.find(row => row.id === setting);
   if (!featured) throw new Error(`Setting is absent from the published leaderboard: ${setting}`);
-  const start = Math.max(0, featured.rank - 4);
+  const start = Math.max(0, featured.rank - 3);
   const previous = rows.filter(row => row.id !== setting)
-    .map((row, index) => ({...row, previousRank: index + 1})).slice(start, start + 8);
+    .map((row, index) => ({...row, previousRank: index + 1})).slice(start, start + 5);
   return {benchmark: data.benchmark, seconds, total: rows.length, featured, previous, start};
 }
 
 const clamp = x => Math.max(0, Math.min(1, x));
 const smooth = x => { x = clamp(x); return x * x * (3 - 2 * x); };
-function settle(t, start, duration, amplitude) {
-  const x = (t - start) / duration;
-  return x <= 0 || x >= 1 ? 0 : -amplitude * Math.sin(x * Math.PI * 2) ** 3 * Math.exp(-4 * x) * (1 - smooth(x));
+// One continuous trajectory crosses the destination before settling. Its first
+// two derivatives vanish at the endpoints; crossing the destination retains velocity.
+export function arrivalProgress(t, start, duration) {
+  const u = clamp((t - start) / duration);
+  return u ** 3 * (10 - 15 * u + 6 * u ** 2) +
+    28 * u ** 3 * (1 - u) ** 3 * (u - .2);
 }
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;')
   .replaceAll('>', '&gt;').replaceAll('"', '&quot;');
@@ -51,43 +54,42 @@ const rect = (x, y, width, height, fill, radius = 0) =>
 
 export function renderFrame(data, seconds) {
   const t = clamp(seconds / data.seconds);
-  const move = smooth((t - .40) / .24);
+  const move = arrivalProgress(t, .34, .40);
   const grow = 1 - (1 - clamp((t - .24) / .17)) ** 3;
-  const row = (item, y, rank, featured = false) => {
-    const isNew = featured && move <= .8;
+  const row = (item, y, rank, featured = false, previousRank = rank) => {
+    const labelMix = smooth((t - .59) / .06);
+    const rankColor = featured ? item.color : '#71818f';
+    const oldLabel = featured ? rect(58, -25, 72, 36, '#d4edf1', 8) +
+      text(94, 1, 'New', 19, rankColor, 600, 'middle') :
+      text(94, 1, '#' + previousRank, 25, rankColor, 600, 'middle');
     return `<g transform="translate(0,${y})" opacity="${featured ? smooth((t - .17) / .13) : 1}">` +
-      (featured ? rect(80, -39, 1280, 62, '#eaf6f8', 12) : '') +
-      (isNew ? rect(92, -27, 76, 40, '#d4edf1', 8) : '') +
-      text(130, 3, isNew ? 'New' : '#' + rank, isNew ? 19 : 25,
-        featured ? item.color : '#71818f', 600, 'middle') +
-      text(196, 3, item.name, 26, '#253e50', 600) +
-      rect(590, -25, item.score * 6.2 * (featured ? grow : 1), 38, item.color, 8) +
-      text(1336, 3, item.score.toFixed(2) + '%', 30, '#253e50', 700, 'end') + '</g>';
+      (featured ? rect(48, -42, 984, 86, '#eaf6f8', 14) : '') +
+      (labelMix < 1 ? `<g opacity="${1 - labelMix}" transform="translate(0 ${-30 * labelMix})">${oldLabel}</g>` : '') +
+      (labelMix > 0 ? `<g opacity="${labelMix}" transform="translate(0 ${30 * (1 - labelMix)})">` +
+        text(94, 1, '#' + rank, 25, rankColor, 600, 'middle') + '</g>' : '') +
+      text(152, 0, item.name, 34, '#253e50', 600) +
+      rect(152, 21, item.score * 7.5 * (featured ? grow : 1), 8, item.color, 4) +
+      text(994, 0, item.score.toFixed(2) + '%', 36, '#253e50', 700, 'end') + '</g>';
   };
   const existing = data.previous.map((item, index) => {
     const initial = item.previousRank - 1 - data.start;
     const target = item.rank - 1 - data.start;
-    const start = .41 + index * .004;
-    const shift = smooth((t - start) / .22);
-    const bounce = initial === target ? 0 : settle(t, start + .22, .14, 6);
-    return row(item, 278 + 70 * (initial + (target - initial) * shift) + bounce,
-      shift > .5 ? item.rank : item.previousRank);
+    const shift = arrivalProgress(t, .35 + index * .004, .37);
+    return row(item, 354 + 92 * (initial + (target - initial) * shift),
+      item.rank, false, item.previousRank);
   }).join('');
-  const incomingY = 278 + 70 * (8 + (data.featured.rank - 1 - data.start - 8) * move) +
-    8 * Math.sin(clamp((t - .34) / .06) * Math.PI) ** 2 + settle(t, .64, .16, 16);
-  const axis = [0, 50, 100].map(value => {
-    const x = 590 + value * 6.2;
-    return `<line x1="${x}" y1="237" x2="${x}" y2="918" stroke="#e8edf1" stroke-width="2"/>` +
-      text(x, 957, value + '%', 20, '#71818f', 500, 'middle');
-  }).join('');
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1080" viewBox="0 0 1440 1080" font-family="Arial, sans-serif">` +
-    rect(0, 0, 1440, 1080, '#ffffff') + rect(80, 52, 8, 100, data.featured.color, 4) +
-    text(112, 79, 'StreamDecisionBench', 22, '#647687', 700) +
-    text(112, 136, 'A new result joins the leaderboard', 46, '#142536', 700) +
-    text(80, 207, 'Published single-model measurements', 20, '#647687', 700) +
-    text(1350, 207, 'Log-AUC', 20, '#647687', 700, 'end') + axis + existing +
-    row(data.featured, incomingY, data.featured.rank, true) +
-    text(80, 1020, '0.5–8 s · logarithmic interval weighting · higher is better', 25, '#516271') + '</svg>';
+  const incomingY = 354 + 92 * (5 + (data.featured.rank - 1 - data.start - 5) * move);
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" font-family="Arial, sans-serif">` +
+    rect(0, 0, 1080, 1080, '#ffffff') +
+    text(64, 133, data.featured.rank === 1 ? 'A new leader.' : 'A new contender.', 82, '#142536', 700) +
+    text(68, 193, data.featured.name, 36, data.featured.color, 600) +
+    text(64, 277, 'StreamDecisionBench', 26, '#253e50', 600) +
+    text(1016, 277, 'Log-AUC · higher is better', 22, '#516271', 500, 'end') +
+    `<line x1="64" y1="302" x2="1016" y2="302" stroke="#dae3e8"/>` +
+    existing + row(data.featured, incomingY, data.featured.rank, true) +
+    `<line x1="64" y1="925" x2="1016" y2="925" stroke="#dae3e8"/>` +
+    text(64, 976, '0.5–8 s decision window', 26, '#516271') +
+    text(1016, 976, data.featured.passes + ' benchmark runs', 26, '#516271', 500, 'end') + '</svg>';
 }
 
 export async function renderVideo(payload, output) {

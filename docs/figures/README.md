@@ -39,8 +39,9 @@ the exported data's provenance and produces SVGs using ECharts' server-side rend
 ## Leaderboard update animation
 
 Generate a six-second MP4 of a measured result entering the leaderboard. The video uses
-verified figure data and shared model colors, with a brief anticipation, fast insertion,
-and restrained settling. Only the source is versioned; generated videos are Git-ignored.
+verified figure data and shared model colors, with continuous acceleration through insertion,
+a small overshoot, and settling. Changing rank labels crossfade. The square social-video
+layout shows six nearby ranks with large labels and score bars below each name. Only the source is versioned; generated videos are Git-ignored.
 
 Install FFmpeg with the `libx264` encoder and the pinned Node dependencies above, then run:
 
@@ -51,4 +52,4 @@ npm run --prefix docs/figures animate -- --setting Perplexity --seconds 6
 Use any registered setting ID and a duration from 5 to 6 seconds. Rebuild `data.json` first
 after changing the leaderboard. The default output is `docs/figures/leaderboard-update.mp4`;
 `--out <path.mp4>` writes to another existing directory. Frames are rendered directly from
-SVG and encoded as H.264 at 1440 × 1080, 60 fps, with `yuv420p` and fast-start metadata.
+SVG and encoded as H.264 at 1080 × 1080, 60 fps, with `yuv420p` and fast-start metadata.
