@@ -1,6 +1,6 @@
 # Hosted API repeated measurements
 
-Wity auto and off each have one complete pass, Astra low has two, and the other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts.
+Wity auto and off each have one complete pass; all other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Astra low has a further third pass; its transport attempts are preserved in the individual report. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts.
 
 Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is sample standard deviation across passes, in percentage points; it is unavailable for a single pass. Latency values average within-pass quantiles.
 
@@ -9,7 +9,7 @@ Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is
 | Jev | 3 | 58.50 ± 1.10 | 62.36 | 0.232 / 0.366 | [59.63](../four-family/jev-latest/REPORT.md), [57.43](pass2/jev-latest/REPORT.md), [58.45](pass3/jev-latest/REPORT.md) |
 | Terra none | 3 | 55.46 ± 1.29 | 81.88 | 1.360 / 1.824 | [54.11](../four-family/gpt-5.6-terra-none/REPORT.md), [55.62](pass2/gpt-5.6-terra-none/REPORT.md), [56.67](pass3/gpt-5.6-terra-none/REPORT.md) |
 | Terra low | 3 | 52.06 ± 3.48 | 95.76 | 2.134 / 3.251 | [48.04](../four-family/gpt-5.6-terra-low/REPORT.md), [54.03](pass2/gpt-5.6-terra-low/REPORT.md), [54.10](pass3/gpt-5.6-terra-low/REPORT.md) |
-| Astra low | 2 | 47.25 ± 2.97 | 99.90 | 2.524 / 4.073 | [45.15](../four-family/gpt-6-astra-low/REPORT.md), [49.35](pass2/gpt-6-astra-low/REPORT.md) |
+| Astra low | 3 | 49.51 ± 4.44 | 99.86 | 2.353 / 3.668 | [45.15](../four-family/gpt-6-astra-low/REPORT.md), [49.35](pass2/gpt-6-astra-low/REPORT.md), [54.03](pass3/gpt-6-astra-low/REPORT.md) |
 | Luna low | 3 | 45.45 ± 0.70 | 89.93 | 2.443 / 3.976 | [45.26](../four-family/gpt-5.6-luna-low/REPORT.md), [46.23](pass2/gpt-5.6-luna-low/REPORT.md), [44.86](pass3/gpt-5.6-luna-low/REPORT.md) |
 | Clef | 3 | 31.39 ± 0.41 | 38.96 | 0.885 / 1.349 | [30.96](../four-family/clef/REPORT.md), [31.76](pass2/clef/REPORT.md), [31.44](pass3/clef/REPORT.md) |
 | Luna none | 3 | 30.87 ± 1.12 | 43.54 | 1.312 / 1.777 | [30.67](../four-family/gpt-5.6-luna-none/REPORT.md), [32.08](pass2/gpt-5.6-luna-none/REPORT.md), [29.86](pass3/gpt-5.6-luna-none/REPORT.md) |

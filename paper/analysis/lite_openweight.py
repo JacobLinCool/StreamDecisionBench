@@ -321,7 +321,7 @@ def hybrid_summary(data):
 def render_results(data, *, hosted):
     improved = ["Jev"] + [row["spec"]["label"] for name, row in data["standalone"].items()
         if data["systems"][name]["freshest"]["integrated"]["overall"]["accuracy"] > data["controls"]["TerraNone"]["overall"]["accuracy"]]
-    lines = ["## Results", "", "One pass each for Wity auto/off, two for Astra low, and three for all other settings, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s",
+    lines = ["## Results", "", "One pass each for Wity auto/off and three for all other settings, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s",
         "time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights",
         "within each family and then equal family weights. Interval evaluations retain the recorded answers",
         "and latencies; they assume service latency does not change with the request rate.", "",

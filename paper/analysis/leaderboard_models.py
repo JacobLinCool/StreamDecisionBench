@@ -24,7 +24,7 @@ HOSTED_PASSES = {
     name: ((report, run), *(
         (f"{HOSTED_REPEAT_COHORT}/pass{index}/{HOSTED_SETTING_IDS[name]}",
          f"{HOSTED_REPEAT_COHORT}/pass{index}/{HOSTED_SETTING_IDS[name]}")
-        for index in range(2, 3 if name == "Astra" else 4)
+        for index in range(2, 4)
     ))
     for name, report, run in HOSTED_MODELS
 }

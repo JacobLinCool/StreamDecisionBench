@@ -192,3 +192,14 @@ def test_wity_single_pass_exports_preserve_configuration_and_no_invented_sd(name
     assert exported['log_auc_sd_pct'] is None
     assert exported['log_auc_pct'] == pytest.approx(100 * record['primary']['overall']['accuracy'])
     assert record['retry_reliability']['successful_logical_requests'] == 480
+
+
+def test_astra_exports_include_exactly_three_distinct_passes(tmp_path):
+    result = load_hosted_summary()["hosted"]["Astra"]
+    assert len(HOSTED_PASSES["Astra"]) == len(result["passes"]) == 3
+    assert [r["pass"] for r in result["passes"]] == [1, 2, 3]
+    assert len({r["provenance"]["run"] for r in result["passes"]}) == 3
+    exported = next(r for r in site_build.build(tmp_path)["settings"] if r["id"] == "Astra")
+    assert exported["passes"] == 3
+    assert exported["log_auc_pct"] == pytest.approx(
+        100 * sum(r["primary"]["overall"]["accuracy"] for r in result["passes"]) / 3)

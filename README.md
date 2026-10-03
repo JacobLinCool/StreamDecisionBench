@@ -24,7 +24,7 @@ normalized log-AUC. [Figure data and regeneration](docs/figures/README.md).
 <!-- BEGIN GENERATED SDB RESULTS -->
 ## Results
 
-One pass each for Wity auto/off, two for Astra low, and three for all other settings, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s
+One pass each for Wity auto/off and three for all other settings, each over all 480 states (8 scenarios in 4 families), recorded at a 2 s
 time-step interval. The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights
 within each family and then equal family weights. Interval evaluations retain the recorded answers
 and latencies; they assume service latency does not change with the request rate.
@@ -42,7 +42,7 @@ Latency includes the remote service and internet round trip from the benchmark c
 | Jev | `jev-latest` | 3 | 58.50 ± 1.10 | 62.36 | 0.232 |
 | Terra none | `gpt-5.6-terra` | 3 | 55.46 ± 1.29 | 81.88 | 1.360 |
 | Terra low | `gpt-5.6-terra` | 3 | 52.06 ± 3.48 | 95.76 | 2.134 |
-| Astra low | `gpt-6-astra` | 2 | 47.25 ± 2.97 | 99.90 | 2.524 |
+| Astra low | `gpt-6-astra` | 3 | 49.51 ± 4.44 | 99.86 | 2.353 |
 | Luna low | `gpt-5.6-luna` | 3 | 45.45 ± 0.70 | 89.93 | 2.443 |
 | Clef | `clef` | 3 | 31.39 ± 0.41 | 38.96 | 0.885 |
 | Luna none | `gpt-5.6-luna` | 3 | 30.87 ± 1.12 | 43.54 | 1.312 |

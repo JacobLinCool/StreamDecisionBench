@@ -11,7 +11,7 @@ The domain spans update rates four times faster and slower than the recording ca
 | Jev | 3 | 38.80% | 61.16% | 67.84% | 66.21% | 58.50% ± 1.10 | 62.36% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Terra none | 3 | 50.02% | 50.36% | 59.50% | 61.98% | 55.46% ± 1.29 | 81.88% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Terra low | 3 | 51.92% | 49.34% | 54.56% | 52.40% | 52.06% ± 3.48 | 95.76% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
-| Astra low | 2 | 46.98% | 47.38% | 43.92% | 50.73% | 47.25% ± 2.97 | 99.90% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Astra low | 3 | 49.80% | 49.09% | 46.96% | 52.18% | 49.51% ± 4.44 | 99.86% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Luna low | 3 | 48.03% | 44.04% | 44.40% | 45.33% | 45.45% ± 0.70 | 89.93% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Clef | 3 | 35.22% | 13.60% | 59.25% | 17.48% | 31.39% ± 0.41 | 38.96% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Luna none | 3 | 13.16% | 19.62% | 44.04% | 46.65% | 30.87% ± 1.12 | 43.54% | [repeat reports](../hosted-api-repeats-20261003/README.md) |

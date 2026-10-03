@@ -313,6 +313,7 @@ _site/
 !/runs/hosted-api-repeats-20261003/
 /runs/hosted-api-repeats-20261003/*
 !/runs/hosted-api-repeats-20261003/plan.json
+!/runs/hosted-api-repeats-20261003/astra-pass3-plan.json
 !/runs/hosted-api-repeats-20261003/bench-requirements.txt
 !/runs/hosted-api-repeats-20261003/pass*/
 /runs/hosted-api-repeats-20261003/pass*/*/*

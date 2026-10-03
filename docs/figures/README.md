@@ -12,7 +12,7 @@ without smoothing. All settings retain their original recorded release clocks, s
 latencies and commit lag. Scenarios receive equal weights within each family, then families receive
 equal weights. Primary areas come from the verified published analyses, independently of the display grid.
 
-Wity auto/off each have one pass; scores and curves average two passes for Astra low and three for other settings. Wity uses 16 workers and Retry-After recovery; other hosted providers use 32. Single-pass SD is unavailable. Latency summaries average within-pass quantiles. [Hosted repeat results](../lite/results/hosted-api-repeats-20261003/README.md) preserve individual scores and variation. Retiming assumes latency remains fixed when request rates
+Wity auto/off each have one pass; scores and curves average three passes for all other settings. Wity uses 16 workers and Retry-After recovery; other hosted providers use 32. Single-pass SD is unavailable. Latency summaries average within-pass quantiles. [Hosted repeat results](../lite/results/hosted-api-repeats-20261003/README.md) preserve individual scores and variation. Retiming assumes latency remains fixed when request rates
 change. Winnow uses RunPod RTX PRO 6000; the other self-hosted settings use the lab RTX PRO 6000.
 Hosted API and same-host GPU latency describe different deployments; these figures do
 not isolate architecture speed. Qwen uses direct option logits, and Nimble processes fields sequentially.

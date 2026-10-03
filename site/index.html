@@ -111,7 +111,7 @@ footer { color: var(--text-3); font-size: 13px; margin-top: 32px; }
 
 <section class="card" aria-labelledby="curve-title">
   <h2 id="curve-title">In-force accuracy across update intervals</h2>
-  <p class="sub">Curves replay recorded answers and latencies at update intervals from 0.5 to 8 s; Wity auto/off each have one pass, Astra averages two, and other settings average three.
+  <p class="sub">Curves replay recorded answers and latencies at update intervals from 0.5 to 8 s; Wity auto/off each have one pass; other settings average three.
   The selected range also sets the in-force leaderboard above.</p>
   <div class="controls">
     <span><span class="label">From</span><select id="range-lo" aria-label="Range start"></select></span>
@@ -324,7 +324,7 @@ function wire() {
 
 function notes() {
   const items = [
-    `Wity auto/off each have one pass; Astra low averages two and other settings average three. Wity uses 16 workers with Retry-After recovery; other hosted providers use 32. Each pass covers all ${D.states} states (${D.scenarios} scenarios in ${D.families} families), recorded at a ${D.recording_interval_s} s time-step interval.`,
+    `Wity auto/off each have one pass; other settings average three. Wity uses 16 workers with Retry-After recovery; other hosted providers use 32. Each pass covers all ${D.states} states (${D.scenarios} scenarios in ${D.families} families), recorded at a ${D.recording_interval_s} s time-step interval.`,
     "The primary score is normalized log-AUC over 0.5–8 s, with equal scenario weights within each family and then equal family weights. Each doubling of the interval receives equal weight.",
     "Interval evaluations keep the recorded answers and latencies; they assume service latency does not change with the request rate.",
     "At the primary 0.5–8 s range, table and tooltip SD values are sample standard deviations across passes, in percentage points. Single-pass settings have no SD. Scores give each pass equal weight; latency summaries average within-pass quantiles.",
