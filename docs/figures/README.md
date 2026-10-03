@@ -38,19 +38,17 @@ the exported data's provenance and produces SVGs using ECharts' server-side rend
 
 ## Leaderboard update animation
 
-Generate an eight-second Perplexity insertion locally. The self-contained
-HTML animation uses the verified figure data and shared model colors. It shows the board
-before the new entry, grows its measured score bar, moves it to its actual rank, and holds
-the final result. Playback, replay and scrubbing work without external assets; reduced-motion
-preferences show the final frame first.
+Generate a six-second MP4 of a measured result entering the leaderboard. The video uses
+verified figure data and shared model colors, with a brief anticipation, fast insertion,
+and restrained settling. Only the source is versioned; generated videos are Git-ignored.
+
+Install FFmpeg with the `libx264` encoder and the pinned Node dependencies above, then run:
 
 ```bash
-npm run --prefix docs/figures animate -- --setting Perplexity --seconds 8
+npm run --prefix docs/figures animate -- --setting Perplexity --seconds 6
 ```
 
-Use any registered setting ID and a duration from 5 to 10 seconds. Rebuild `data.json` first
-after changing the leaderboard. The generated HTML is Git-ignored; only its source is versioned.
-The output defaults to `docs/figures/leaderboard-update.html`;
-`--out <path>` writes a separate animation. Open the HTML in a browser, or serve it with
-`python3 -m http.server 8765 --bind 127.0.0.1 --directory docs/figures` and visit
-`http://127.0.0.1:8765/leaderboard-update.html`.
+Use any registered setting ID and a duration from 5 to 6 seconds. Rebuild `data.json` first
+after changing the leaderboard. The default output is `docs/figures/leaderboard-update.mp4`;
+`--out <path.mp4>` writes to another existing directory. Frames are rendered directly from
+SVG and encoded as H.264 at 1440 × 1080, 60 fps, with `yuv420p` and fast-start metadata.

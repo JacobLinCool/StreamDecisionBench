@@ -1,13 +1,18 @@
-/** Build a self-contained 5–10 second leaderboard insertion animation. */
-import {readFileSync, writeFileSync} from 'node:fs';
+/** Render a deterministic 5–6 second leaderboard insertion MP4. */
+import {readFileSync} from 'node:fs';
+import {mkdtemp, rename, rm} from 'node:fs/promises';
+import {spawn} from 'node:child_process';
+import {Readable} from 'node:stream';
+import {pipeline} from 'node:stream/promises';
+import {Resvg} from '@resvg/resvg-js';
 import {fileURLToPath} from 'node:url';
-import {resolve} from 'node:path';
+import {dirname, extname, join, resolve} from 'node:path';
 import {parseArgs} from 'node:util';
 import {names, colors} from './identity.mjs';
 
 export function animationData(data, setting, seconds) {
-  if (!Number.isFinite(seconds) || seconds < 5 || seconds > 10) {
-    throw new Error('Duration must be between 5 and 10 seconds');
+  if (!Number.isFinite(seconds) || seconds < 5 || seconds > 6) {
+    throw new Error('Duration must be between 5 and 6 seconds');
   }
   if (!Array.isArray(data.series) || !data.series.length) throw new Error('No published settings');
   const ids = new Set();
@@ -31,65 +36,99 @@ export function animationData(data, setting, seconds) {
   return {benchmark: data.benchmark, seconds, total: rows.length, featured, previous, start};
 }
 
-export function renderAnimation(payload) {
-  const encoded = JSON.stringify(payload).replaceAll('<', '\\u003c');
-  return `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>StreamDecisionBench · leaderboard update</title>
-<style>
-*{box-sizing:border-box}body{margin:0;padding:24px;background:#edf2f6;color:#142536;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-main{max-width:1440px;margin:auto}svg{display:block;width:100%;height:auto;border-radius:20px;box-shadow:0 16px 65px #18334d15;background:white}
-.controls{display:flex;align-items:center;gap:16px;padding:18px 0}button{border:0;border-radius:10px;background:#0e7490;color:white;padding:10px 20px;font:600 15px inherit;cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #14b8a6;outline-offset:3px}input{flex:1;accent-color:#0e7490}.time{font-variant-numeric:tabular-nums;min-width:75px}p{margin:0;color:#516271;font-size:14px}
-</style></head><body><main>
-<svg id="scene" viewBox="0 0 1440 1080" role="img" aria-labelledby="scene-title scene-description">
-<title id="scene-title">StreamDecisionBench leaderboard update</title>
-<desc id="scene-description">A new measured result enters the published leaderboard, then moves to its ranked position.</desc>
-</svg>
-<div class="controls"><button id="play" type="button">Pause</button><label for="seek">Timeline</label><input id="seek" type="range" min="0" max="${payload.seconds}" step="0.01" value="0"><span class="time" id="time"></span></div>
-<p>Watch the new result enter the board. Replay or scrub to explore the transition.</p>
-</main><script>
-const data=${encoded};
-const svg=document.querySelector('#scene');
-const NS='http://www.w3.org/2000/svg';
-function node(tag,attrs={},value,parent=svg){const e=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);if(value!==undefined)e.textContent=value;parent.append(e);return e;}
-function text(x,y,value,size=28,fill='#253e50',weight=500,parent=svg){return node('text',{x,y,fill,'font-size':size,'font-weight':weight,'font-family':'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'},value,parent);}
-function rect(x,y,width,height,fill,radius=0,parent=svg){return node('rect',{x,y,width,height,fill,rx:radius},undefined,parent);}
-rect(0,0,1440,1080,'#ffffff');rect(80,52,8,100,data.featured.color,4);
-text(112,79,'STREAMDECISIONBENCH',22,'#647687',700);
-text(112,136,'A new result joins the leaderboard',46,'#142536',700);
-text(80,207,'PUBLISHED SINGLE-MODEL MEASUREMENTS',20,'#647687',700);
-text(1350,207,'LOG-AUC',20,'#647687',700).setAttribute('text-anchor','end');
-for(const value of [0,50,100]){const x=590+value*6.2;node('line',{x1:x,y1:237,x2:x,y2:918,stroke:'#e8edf1','stroke-width':2});text(x,957,String(value)+'%',20,'#71818f').setAttribute('text-anchor','middle');}
-const layer=node('g');
-function makeRow(row){const g=node('g',{},undefined,layer);const bg=rect(80,-39,1280,62,'transparent',12,g);const tag=rect(92,-27,76,40,'#d4edf1',8,g);tag.setAttribute('opacity',0);const rank=text(130,3,'',25,'#71818f',600,g);rank.setAttribute('text-anchor','middle');text(196,3,row.name,26,'#253e50',600,g);const bar=rect(590,-25,0,38,row.color,8,g);text(1336,3,row.score.toFixed(2)+'%',30,'#253e50',700,g).setAttribute('text-anchor','end');return {row,g,bg,tag,rank,bar};}
-const existing=data.previous.map(makeRow);
-const incoming=makeRow(data.featured);
-incoming.bg.setAttribute('fill','#eaf6f8');
-text(80,1020,'0.5–8 s · logarithmic interval weighting · higher is better',25,'#516271');
-const clamp=x=>Math.max(0,Math.min(1,x));const smooth=x=>{x=clamp(x);return x*x*(3-2*x);};
-const accelerate=x=>{x=clamp(x);return x<.5?16*x**5:1-(-2*x+2)**5/2;};
-function settle(t,start,duration,amplitude){const x=(t-start)/duration;if(x<=0||x>=1)return 0;return -amplitude*Math.sin(x*Math.PI*4)*Math.exp(-5*x)*(1-smooth(x));}
-function draw(seconds){const t=seconds/data.seconds;const appear=smooth((t-.17)/.13);const grow=1-(1-clamp((t-.24)/.17))**3;const move=accelerate((t-.43)/.14);
- for(const [index,item] of existing.entries()){const initial=item.row.previousRank-1-data.start;const target=item.row.rank-1-data.start;const start=.44+index*.006;const shift=accelerate((t-start)/.10);const bounce=initial===target?0:settle(t,start+.10,.14,6);item.g.setAttribute('transform','translate(0,'+(278+70*(initial+(target-initial)*shift)+bounce)+')');item.rank.textContent='#'+(shift>.5?item.row.rank:item.row.previousRank);item.bar.setAttribute('width',item.row.score*6.2);}
- const anticipation=12*Math.sin(clamp((t-.37)/.06)*Math.PI);const landing=settle(t,.57,.17,24);const ranked=move>.8;
- incoming.g.setAttribute('opacity',appear);incoming.g.setAttribute('transform','translate(0,'+(278+70*(8+(data.featured.rank-1-data.start-8)*move)+anticipation+landing)+')');incoming.rank.textContent=ranked?'#'+data.featured.rank:'NEW';incoming.rank.setAttribute('font-size',ranked?25:19);incoming.tag.setAttribute('opacity',ranked?0:1);incoming.rank.setAttribute('fill',data.featured.color);incoming.bar.setAttribute('width',data.featured.score*6.2*grow);
- document.querySelector('#seek').value=seconds;document.querySelector('#time').textContent=seconds.toFixed(1)+' / '+data.seconds+' s';}
-let running=!matchMedia('(prefers-reduced-motion: reduce)').matches;let current=running?0:data.seconds;let anchor=performance.now()-current*1000;
-const play=document.querySelector('#play');function syncButton(){play.textContent=running?'Pause':current>=data.seconds?'Replay':'Play';}
-play.addEventListener('click',()=>{if(running){running=false;}else{if(current>=data.seconds)current=0;anchor=performance.now()-current*1000;running=true;}syncButton();});
-document.querySelector('#seek').addEventListener('input',e=>{current=Number(e.target.value);running=false;draw(current);syncButton();});
-function frame(now){if(running){current=Math.min(data.seconds,(now-anchor)/1000);if(current>=data.seconds){running=false;syncButton();}}draw(current);requestAnimationFrame(frame);}draw(current);syncButton();requestAnimationFrame(frame);
-</script></body></html>\n`;
+const clamp = x => Math.max(0, Math.min(1, x));
+const smooth = x => { x = clamp(x); return x * x * (3 - 2 * x); };
+function settle(t, start, duration, amplitude) {
+  const x = (t - start) / duration;
+  return x <= 0 || x >= 1 ? 0 : -amplitude * Math.sin(x * Math.PI * 2) ** 3 * Math.exp(-4 * x) * (1 - smooth(x));
+}
+const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;')
+  .replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+const text = (x, y, value, size = 28, fill = '#253e50', weight = 500, anchor = 'start') =>
+  `<text x="${x}" y="${y}" fill="${fill}" font-size="${size}" font-weight="${weight}" text-anchor="${anchor}">${escape(value)}</text>`;
+const rect = (x, y, width, height, fill, radius = 0) =>
+  `<rect x="${x}" y="${y}" width="${width}" height="${height}" fill="${fill}" rx="${radius}"/>`;
+
+export function renderFrame(data, seconds) {
+  const t = clamp(seconds / data.seconds);
+  const move = smooth((t - .40) / .24);
+  const grow = 1 - (1 - clamp((t - .24) / .17)) ** 3;
+  const row = (item, y, rank, featured = false) => {
+    const isNew = featured && move <= .8;
+    return `<g transform="translate(0,${y})" opacity="${featured ? smooth((t - .17) / .13) : 1}">` +
+      (featured ? rect(80, -39, 1280, 62, '#eaf6f8', 12) : '') +
+      (isNew ? rect(92, -27, 76, 40, '#d4edf1', 8) : '') +
+      text(130, 3, isNew ? 'New' : '#' + rank, isNew ? 19 : 25,
+        featured ? item.color : '#71818f', 600, 'middle') +
+      text(196, 3, item.name, 26, '#253e50', 600) +
+      rect(590, -25, item.score * 6.2 * (featured ? grow : 1), 38, item.color, 8) +
+      text(1336, 3, item.score.toFixed(2) + '%', 30, '#253e50', 700, 'end') + '</g>';
+  };
+  const existing = data.previous.map((item, index) => {
+    const initial = item.previousRank - 1 - data.start;
+    const target = item.rank - 1 - data.start;
+    const start = .41 + index * .004;
+    const shift = smooth((t - start) / .22);
+    const bounce = initial === target ? 0 : settle(t, start + .22, .14, 6);
+    return row(item, 278 + 70 * (initial + (target - initial) * shift) + bounce,
+      shift > .5 ? item.rank : item.previousRank);
+  }).join('');
+  const incomingY = 278 + 70 * (8 + (data.featured.rank - 1 - data.start - 8) * move) +
+    8 * Math.sin(clamp((t - .34) / .06) * Math.PI) ** 2 + settle(t, .64, .16, 16);
+  const axis = [0, 50, 100].map(value => {
+    const x = 590 + value * 6.2;
+    return `<line x1="${x}" y1="237" x2="${x}" y2="918" stroke="#e8edf1" stroke-width="2"/>` +
+      text(x, 957, value + '%', 20, '#71818f', 500, 'middle');
+  }).join('');
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1080" viewBox="0 0 1440 1080" font-family="Arial, sans-serif">` +
+    rect(0, 0, 1440, 1080, '#ffffff') + rect(80, 52, 8, 100, data.featured.color, 4) +
+    text(112, 79, 'StreamDecisionBench', 22, '#647687', 700) +
+    text(112, 136, 'A new result joins the leaderboard', 46, '#142536', 700) +
+    text(80, 207, 'Published single-model measurements', 20, '#647687', 700) +
+    text(1350, 207, 'Log-AUC', 20, '#647687', 700, 'end') + axis + existing +
+    row(data.featured, incomingY, data.featured.rank, true) +
+    text(80, 1020, '0.5–8 s · logarithmic interval weighting · higher is better', 25, '#516271') + '</svg>';
+}
+
+export async function renderVideo(payload, output) {
+  if (extname(output).toLowerCase() !== '.mp4') throw new Error('Output must have an .mp4 extension');
+  const fps = 60;
+  const frames = Math.round(payload.seconds * fps);
+  const directory = await mkdtemp(join(dirname(output), '.animation-'));
+  const temporary = join(directory, 'video.mp4');
+  const encoder = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y',
+    '-f', 'image2pipe', '-vcodec', 'png', '-framerate', String(fps), '-i', 'pipe:0',
+    '-an', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
+    '-movflags', '+faststart', temporary], {stdio: ['pipe', 'ignore', 'pipe']});
+  let diagnostic = '';
+  encoder.stderr.setEncoding('utf8');
+  encoder.stderr.on('data', chunk => { diagnostic = (diagnostic + chunk).slice(-8000); });
+  const exited = new Promise((resolveExit, reject) => {
+    encoder.once('error', reject);
+    encoder.once('close', code => code === 0 ? resolveExit() : reject(new Error(`FFmpeg exited ${code}: ${diagnostic}`)));
+  });
+  async function* images() {
+    for (let frame = 0; frame < frames; frame++) {
+      yield new Resvg(renderFrame(payload, frame / fps), {font: {defaultFontFamily: 'Arial'}}).render().asPng();
+    }
+  }
+  try {
+    await Promise.all([pipeline(Readable.from(images()), encoder.stdin), exited]);
+    await rename(temporary, output);
+  } finally {
+    if (encoder.exitCode === null) encoder.kill();
+    await rm(directory, {recursive: true, force: true});
+  }
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const {values} = parseArgs({options: {
-    setting: {type: 'string', default: 'Perplexity'}, seconds: {type: 'string', default: '8'},
+    setting: {type: 'string', default: 'Perplexity'}, seconds: {type: 'string', default: '6'},
     out: {type: 'string'},
   }});
   const data = JSON.parse(readFileSync(new URL('./data.json', import.meta.url), 'utf8'));
-  const output = values.out ? resolve(values.out) : fileURLToPath(new URL('./leaderboard-update.html', import.meta.url));
+  const output = values.out ? resolve(values.out) : fileURLToPath(new URL('./leaderboard-update.mp4', import.meta.url));
   const payload = animationData(data, values.setting, Number(values.seconds));
-  writeFileSync(output, renderAnimation(payload));
-  console.log(`Wrote ${output}: ${payload.seconds}s, ${payload.featured.name} enters at #${payload.featured.rank}`);
+  await renderVideo(payload, output);
+  console.log(`Wrote ${output}: ${payload.seconds}s at 60 fps, ${payload.featured.name} enters at #${payload.featured.rank}`);
 }

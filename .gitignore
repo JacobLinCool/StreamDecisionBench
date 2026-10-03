@@ -267,6 +267,8 @@ cython_debug/
 .chart-data-*/
 /docs/figures/node_modules/
 /docs/figures/leaderboard-update.html
+/docs/figures/*.mp4
+/docs/figures/.animation-*/
 # Secrets: only the template is versioned.
 .env.*
 !.env.example
