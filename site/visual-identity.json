@@ -1,0 +1,147 @@
+{
+  "Jev": {
+    "light": "#2a78d6",
+    "dark": "#3987e5",
+    "dash": "solid"
+  },
+  "Terra": {
+    "light": "#eb6834",
+    "dark": "#d95926",
+    "dash": "solid"
+  },
+  "TerraNone": {
+    "light": "#eb6834",
+    "dark": "#d95926",
+    "dash": "dashed"
+  },
+  "Luna": {
+    "light": "#1baf7a",
+    "dark": "#199e70",
+    "dash": "solid"
+  },
+  "LunaNone": {
+    "light": "#1baf7a",
+    "dark": "#199e70",
+    "dash": "dashed"
+  },
+  "Astra": {
+    "light": "#eda100",
+    "dark": "#c98500",
+    "dash": "solid"
+  },
+  "KevTwentySeven": {
+    "light": "#e87ba4",
+    "dark": "#d55181",
+    "dash": "solid"
+  },
+  "KevNine": {
+    "light": "#e87ba4",
+    "dark": "#d55181",
+    "dash": "dashed"
+  },
+  "Kev": {
+    "light": "#e87ba4",
+    "dark": "#d55181",
+    "dash": "dotted"
+  },
+  "Clef": {
+    "light": "#e27602",
+    "dark": "#f49b3e",
+    "dash": "solid"
+  },
+  "ClefFlash": {
+    "light": "#d94a21",
+    "dark": "#ef7958",
+    "dash": "solid"
+  },
+  "WityAuto": {
+    "light": "#447a95",
+    "dark": "#73a9c5",
+    "dash": "solid"
+  },
+  "WityOff": {
+    "light": "#7b6040",
+    "dark": "#c29b70",
+    "dash": "solid"
+  },
+  "Winnow12B": {
+    "light": "#087f8c",
+    "dark": "#48b9c5",
+    "dash": "solid"
+  },
+  "WinnowE4B": {
+    "light": "#087f8c",
+    "dark": "#48b9c5",
+    "dash": "dashed"
+  },
+  "DecisionKai": {
+    "light": "#168875",
+    "dark": "#5bbdaa",
+    "dash": "solid"
+  },
+  "DecisionEos": {
+    "light": "#646CC9",
+    "dark": "#9b9fec",
+    "dash": "solid"
+  },
+  "DecisionSol": {
+    "light": "#AB6B28",
+    "dark": "#d9a66b",
+    "dash": "solid"
+  },
+  "DecisionNox": {
+    "light": "#C04774",
+    "dark": "#ea8fb3",
+    "dash": "solid"
+  },
+  "DecisionLux": {
+    "light": "#388AB0",
+    "dark": "#79bbda",
+    "dash": "solid"
+  },
+  "DecisionVega": {
+    "light": "#758A28",
+    "dark": "#b2c66a",
+    "dash": "solid"
+  },
+  "DJev": {
+    "light": "#008300",
+    "dark": "#008300",
+    "dash": "solid"
+  },
+  "QwenLogits": {
+    "light": "#4a3aa7",
+    "dark": "#9085e9",
+    "dash": "solid"
+  },
+  "Nimble": {
+    "light": "#e34948",
+    "dark": "#e66767",
+    "dash": "solid"
+  },
+  "LayaEnglish": {
+    "light": "#8a8984",
+    "dark": "#7c7b75",
+    "dash": "solid"
+  },
+  "LayaTyped": {
+    "light": "#8a8984",
+    "dark": "#7c7b75",
+    "dash": "dashed"
+  },
+  "LayaMultilingual": {
+    "light": "#8a8984",
+    "dark": "#7c7b75",
+    "dash": "dotted"
+  },
+  "Perplexity": {
+    "light": "#0e7490",
+    "dark": "#5ec0d4",
+    "dash": "solid"
+  },
+  "Glide": {
+    "light": "#059669",
+    "dark": "#42c99a",
+    "dash": "solid"
+  }
+}

@@ -9,24 +9,16 @@
 <style>
 :root {
   color-scheme: light;
+  --model-theme: light;
   --bg: #f6f5f2; --surface: #fcfcfb; --border: #e3e1dc; --grid: #ecebe7;
   --text: #0b0b0b; --text-2: #52514e; --text-3: #75746f; --accent: #2a78d6;
-  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
-  --s5: #e87ba4; --s6: #008300; --s7: #4a3aa7; --s8: #e34948; --s0: #8a8984;
-  --s9: #e27602; --s10: #d94a21;
-  --s12: #447a95; --s13: #7b6040; --s11: #087f8c;
-  --s14: #168875; --s15: #646CC9; --s16: #AB6B28; --s17: #C04774; --s18: #388AB0; --s19: #758A28;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
+    --model-theme: dark;
     --bg: #121211; --surface: #1a1a19; --border: #2f2f2c; --grid: #2a2a28;
     --text: #ffffff; --text-2: #c3c2b7; --text-3: #9a998f; --accent: #3987e5;
-    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
-    --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767; --s0: #7c7b75;
-    --s9: #f49b3e; --s10: #ef7958;
-    --s11: #48b9c5; --s12: #73a9c5; --s13: #c29b70;
-    --s14: #5bbdaa; --s15: #9b9fec; --s16: #d9a66b; --s17: #ea8fb3; --s18: #79bbda; --s19: #b2c66a;
   }
 }
 * { box-sizing: border-box; }
@@ -184,26 +176,13 @@ footer { color: var(--text-3); font-size: 13px; margin-top: 32px; }
 </main>
 
 <script>
-const STYLE = {
-  Jev: [1, "solid"], Terra: [2, "solid"], TerraNone: [2, "dashed"], Luna: [3, "solid"], LunaNone: [3, "dashed"],
-  Astra: [4, "solid"], KevTwentySeven: [5, "solid"], KevNine: [5, "dashed"], Kev: [5, "dotted"],
-  Clef: [9, "solid"], ClefFlash: [10, "solid"], WityAuto: [12, "solid"], WityOff: [13, "solid"],
-  Winnow12B: [11, "solid"], WinnowE4B: [11, "dashed"],
-  DecisionKai: [14, "solid"],
-  DecisionEos: [15, "solid"],
-  DecisionSol: [16, "solid"],
-  DecisionNox: [17, "solid"],
-  DecisionLux: [18, "solid"],
-  DecisionVega: [19, "solid"],
-  DJev: [6, "solid"], QwenLogits: [7, "solid"], Nimble: [8, "solid"],
-  LayaEnglish: [0, "solid"], LayaTyped: [0, "dashed"], LayaMultilingual: [0, "dotted"],
-};
+let STYLE;
 const DASH = { solid: "", dashed: "6 4", dotted: "2 3" };
 const state = { metric: "inforce", lo: 0.5, hi: 8, selected: new Set() };
 let D, board, curves;
 
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-const color = (id) => css(`--s${STYLE[id][0]}`);
+const color = (id) => STYLE[id][css("--model-theme")];
 const fmtS = (x) => (x < 1 ? x.toFixed(2) : x.toFixed(x < 4 ? 2 : 1)).replace(/\.?0+$/, "") + " s";
 const pct = (x) => x.toFixed(2);
 
@@ -284,7 +263,7 @@ function renderCurves() {
       splitLine: { lineStyle: { color: grid } } },
     series: chosen.map((s) => ({
       name: s.label, type: "line", showSymbol: false, smooth: false,
-      lineStyle: { width: 2, type: STYLE[s.id][1], color: color(s.id) }, itemStyle: { color: color(s.id) },
+      lineStyle: { width: 2, type: STYLE[s.id].dash, color: color(s.id) }, itemStyle: { color: color(s.id) },
       emphasis: { focus: "series" },
       endLabel: { show: label, formatter: "{a}", color: text2, fontSize: 12 },
       data: xs.map((x, i) => [x, s.curve_pct[i]]).filter(([x]) => x >= state.lo - 1e-9 && x <= state.hi + 1e-9),
@@ -297,7 +276,7 @@ function renderCurves() {
 }
 
 function swatch(id) {
-  const [, dash] = STYLE[id];
+  const {dash} = STYLE[id];
   return `<svg width="22" height="8" aria-hidden="true"><line x1="1" y1="4" x2="21" y2="4" stroke="${color(id)}"` +
     ` stroke-width="2.5" stroke-dasharray="${DASH[dash]}" stroke-linecap="round"/></svg>`;
 }
@@ -381,8 +360,7 @@ function notes() {
 (async () => {
   D = await (await fetch("data.json")).json();
   document.getElementById("astra-untimed").textContent = pct(D.settings.find((s) => s.id === "Astra").untimed_pct);
-  for (const setting of D.settings)
-    if (!(setting.id in STYLE)) throw new Error(`Missing visual identity: ${setting.id}`);
+  STYLE = Object.fromEntries(D.settings.map((setting) => [setting.id, setting.visual]));
   board = echarts.init(document.getElementById("board"), null, { renderer: "svg" });
   curves = echarts.init(document.getElementById("curves"), null, { renderer: "svg" });
   state.selected = new Set(D.settings.filter((s) => s.deployment === "hosted").map((s) => s.id));

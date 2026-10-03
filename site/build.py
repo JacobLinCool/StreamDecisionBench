@@ -6,11 +6,13 @@ import argparse
 import json
 import math
 import os
+import re
 from pathlib import Path
 import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
 FIGURES = ROOT / "docs/figures/data.json"
+VISUAL_IDENTITY = ROOT / "site/visual-identity.json"
 
 
 def log_auc(xs, ys):
@@ -22,15 +24,23 @@ def log_auc(xs, ys):
 
 def build(out: Path) -> dict:
     figures = json.loads(FIGURES.read_text())
+    identities = json.loads(VISUAL_IDENTITY.read_text())
     keep = [0] + [i for i in range(1, len(figures["intervals_s"]))
                   if figures["intervals_s"][i] - figures["intervals_s"][i - 1] > 1e-9]
     intervals = [figures["intervals_s"][i] for i in keep]
     settings, deviation = [], 0.0
     for series in figures["series"]:
+        visual = identities.get(series["id"])
+        if not isinstance(visual, dict) or set(visual) != {"light", "dark", "dash"}:
+            raise ValueError(f"Missing or incomplete visual identity: {series['id']}")
+        if any(not isinstance(visual[theme], str) or not re.fullmatch(r"#[0-9a-fA-F]{6}", visual[theme])
+               for theme in ("light", "dark")) or visual["dash"] not in ("solid", "dashed", "dotted"):
+            raise ValueError(f"Invalid visual identity: {series['id']}")
         curve = [series["accuracy_pct"][i] for i in keep]
         deviation = max(deviation, abs(log_auc(intervals, curve) - series["log_auc_pct"]))
         latency = series["latency_s"]
         settings.append({
+            "visual": visual,
             "workers": series["workers"], "passes": series["passes"], "id": series["id"], "label": series["label"], "deployment": series["deployment"],
             "log_auc_pct": series["log_auc_pct"], "untimed_pct": series["untimed_pct"],
             "log_auc_sd_pct": series["log_auc_sd_pct"],

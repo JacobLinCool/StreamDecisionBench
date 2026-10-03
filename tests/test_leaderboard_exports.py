@@ -245,3 +245,29 @@ def test_omitting_perplexity_from_hosted_summary_cannot_publish(monkeypatch):
     monkeypatch.setattr(figure_data, "load_summary", lambda: summary)
     with pytest.raises(ValueError, match="every registered"):
         figure_data.build()
+
+
+@pytest.mark.parametrize("broken", [None, {"light": "#0e7490"},
+    {"light": "invalid", "dark": "#5ec0d4", "dash": "solid"}])
+def test_site_rejects_missing_or_invalid_visual_identity_before_publishing(tmp_path, monkeypatch, broken):
+    identities = json.loads(site_build.VISUAL_IDENTITY.read_text())
+    if broken is None:
+        del identities["Perplexity"]
+    else:
+        identities["Perplexity"] = broken
+    source = tmp_path / "identities.json"
+    source.write_text(json.dumps(identities))
+    monkeypatch.setattr(site_build, "VISUAL_IDENTITY", source)
+    output = tmp_path / "site"
+    with pytest.raises(ValueError, match="visual identity: Perplexity"):
+        site_build.build(output)
+    assert not output.exists()
+
+
+def test_site_ships_valid_visual_identity_for_every_published_setting(tmp_path):
+    identities = json.loads(site_build.VISUAL_IDENTITY.read_text())
+    data = site_build.build(tmp_path)
+    for row in data["settings"]:
+        assert row["visual"] == identities[row["id"]]
+    assert next(row for row in data["settings"] if row["id"] == "Perplexity")["visual"] == {
+        "light": "#0e7490", "dark": "#5ec0d4", "dash": "solid"}
