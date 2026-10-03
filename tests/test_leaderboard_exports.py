@@ -271,3 +271,28 @@ def test_site_ships_valid_visual_identity_for_every_published_setting(tmp_path):
         assert row["visual"] == identities[row["id"]]
     assert next(row for row in data["settings"] if row["id"] == "Perplexity")["visual"] == {
         "light": "#0e7490", "dark": "#5ec0d4", "dash": "solid"}
+
+
+def test_glide_exports_match_all_three_native_passes(tmp_path):
+    result = load_hosted_summary()["hosted"]["Glide"]
+    assert len(result["passes"]) == len(HOSTED_PASSES["Glide"]) == 3
+    assert result["model"] == "fastino/GLiDE"
+    repeat = json.loads((ROOT / "docs/lite/results/glide-20261003/repeats.json").read_text())
+    assert 100 * result["accuracy"] == pytest.approx(repeat["primary"]["mean_log_auc_pct"])
+    assert 100 * result["auc_sample_sd"] == pytest.approx(repeat["primary"]["sample_sd_log_auc_points"])
+    assert 100 * result["untimed"] == pytest.approx(repeat["untimed"]["mean_accuracy_pct"])
+    for record in result["passes"]:
+        frozen = json.loads((ROOT / record["provenance"]["run"] / "run.json").read_text())
+        assert frozen["status"] == "complete"
+        assert frozen["config"]["provider"] == "fastino"
+        assert frozen["config"]["score_mapping"] == "expected_level_to_score_v1"
+        assert record["retry_reliability"]["successful_logical_requests"] == 480
+        assert record["retry_reliability"]["failed_attempts"] == 0
+    site = site_build.build(tmp_path)
+    row = next(row for row in site["settings"] if row["id"] == "Glide")
+    assert row["passes"] == 3
+    assert row["log_auc_pct"] == pytest.approx(39.42690905472751)
+    assert row["untimed_pct"] == pytest.approx(80.48611111111111)
+    assert row["visual"]["light"] == "#059669"
+    assert sorted(site["settings"], key=lambda row: -row["log_auc_pct"])[8]["id"] == "Glide"
+    assert sorted(site["settings"], key=lambda row: -row["untimed_pct"])[4]["id"] == "Glide"

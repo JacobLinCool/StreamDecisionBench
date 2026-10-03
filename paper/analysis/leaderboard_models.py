@@ -41,3 +41,10 @@ HOSTED_PASSES["Perplexity"] = tuple(
     (f"perplexity-20261003/pass{index}", f"perplexity-pass{index}")
     for index in range(1, 4)
 )
+
+HOSTED_LABELS["Glide"] = "GLiDE (Fastino)"
+HOSTED_PASSES["Glide"] = (
+    ("glide-20261003", "lite-v1-glide-20261003-pass1-retry-v1"),
+    ("glide-20261003/pass2", "lite-v1-glide-20261003-pass2-retry-v1"),
+    ("glide-20261003/pass3", "lite-v1-glide-20261003-pass3-retry-v1"),
+)

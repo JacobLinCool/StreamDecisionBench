@@ -366,3 +366,10 @@ _site/
 !/runs/wity-1-off-workers16-retry-after-20261003-pass1/run.json
 !/runs/wity-1-off-workers16-retry-after-20261003-pass1/episodes.json
 !/runs/wity-1-off-workers16-retry-after-20261003-pass1/events.jsonl
+
+# GLiDE: publish only the three immutable recording inputs.
+!/runs/lite-v1-glide-20261003-pass[123]-retry-v1/
+/runs/lite-v1-glide-20261003-pass[123]-retry-v1/*
+!/runs/lite-v1-glide-20261003-pass[123]-retry-v1/run.json
+!/runs/lite-v1-glide-20261003-pass[123]-retry-v1/episodes.json
+!/runs/lite-v1-glide-20261003-pass[123]-retry-v1/events.jsonl

@@ -16,14 +16,25 @@ class FatalAdapterError(RuntimeError):
     parameters). The evaluator stops the run instead of scoring it as wrong answers."""
 
 
-class RateLimitError(RuntimeError):
+class RetryableHTTPError(RuntimeError):
+    """A transient HTTP failure with an optional minimum server delay."""
+
+    def __init__(self, status_code: int, retry_after_s: float | None,
+                 request_id: str | None = None):
+        self.status_code = status_code
+        self.retry_after_s = retry_after_s
+        self.request_id = request_id
+        super().__init__(f"API temporarily unavailable (HTTP {status_code})")
+
+
+class RateLimitError(RetryableHTTPError):
     """A retryable HTTP 429; an optional server delay is a minimum wait."""
 
     status_code = 429
 
     def __init__(self, retry_after_s: float | None):
-        self.retry_after_s = retry_after_s
-        super().__init__("API rate limit exceeded (HTTP 429)")
+        super().__init__(429, retry_after_s)
+        self.args = ("API rate limit exceeded (HTTP 429)",)
 
 
 class Adapter(Protocol):

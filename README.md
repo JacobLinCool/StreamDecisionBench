@@ -45,6 +45,7 @@ Latency includes the remote service and internet round trip from the benchmark c
 | Terra low | `gpt-5.6-terra` | 3 | 52.06 ± 3.48 | 95.76 | 2.134 |
 | Astra low | `gpt-6-astra` | 3 | 49.51 ± 4.44 | 99.86 | 2.353 |
 | Luna low | `gpt-5.6-luna` | 3 | 45.45 ± 0.70 | 89.93 | 2.443 |
+| GLiDE (Fastino) | `fastino/GLiDE` | 3 | 39.43 ± 2.11 | 80.49 | 5.546 |
 | Clef | `clef` | 3 | 31.39 ± 0.41 | 38.96 | 0.885 |
 | Luna none | `gpt-5.6-luna` | 3 | 30.87 ± 1.12 | 43.54 | 1.312 |
 | Clef Flash | `clef-flash` | 3 | 19.89 ± 0.19 | 21.67 | 0.437 |
@@ -209,7 +210,22 @@ uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
 # Perplexity native Decisions API
 uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
   --out runs/my-perplexity --provider perplexity --model pplx-decider-v1-27b
+
+# Fastino GLiDE native System One API
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-glide --provider fastino --model fastino/GLiDE
 ```
+
+Fastino requires `FASTINO_API_KEY`; `FASTINO_BASE_URL` optionally overrides the API
+origin. The adapter calls its [native System One API](https://docs.fastino.ai/inference/systemone)
+with `X-API-Key`, preserves decision probabilities, and maps Score `expected_level` to
+the benchmark's weighted `score`, retaining the native winning index as `native_score`.
+It uses a 300 s timeout and 32 workers, with HTTP client retries disabled. The runner
+retries HTTP 425, 429, and 503 within the declared attempt budget, honoring `Retry-After`
+through the shared episode cooldown. HTTP 425 waits at least 60 s for model warmup.
+Every failed attempt is recorded; retry waits are excluded from normalized model timing
+and retained in the raw wall-clock trace. The documentation does not specify numerical
+request-rate or concurrency limits. The standard pass still releases one state every 2 s.
 
 Perplexity requires `PERPLEXITY_API_KEY`; `PERPLEXITY_BASE_URL` optionally overrides the
 API origin. Its [Decisions API](https://docs.perplexity.ai/docs/decisions/quickstart)

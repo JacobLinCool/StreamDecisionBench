@@ -148,11 +148,11 @@ def main() -> None:
     run = commands.add_parser("run")
     run.add_argument("--data", type=Path, required=True)
     run.add_argument("--out", type=Path, required=True)
-    run.add_argument("--provider", choices=("openai", "typesafe", "cloudflare", "wity", "perplexity"), default="openai")
+    run.add_argument("--provider", choices=("openai", "typesafe", "cloudflare", "wity", "perplexity", "fastino"), default="openai")
     run.add_argument("--model", required=True)
     run.add_argument("--effort", help="reasoning effort for openai (e.g. none, low); omit it for a model or compatible endpoint without reasoning effort; only accepted for openai")
     run.add_argument("--reasoning", choices=("auto", "off", "always"), help="Wity reasoning mode (default: auto); only accepted for wity")
-    run.add_argument("--timeout", type=float, help="request timeout in seconds (default: 60 for Wity, 30 for Perplexity, 20 otherwise)")
+    run.add_argument("--timeout", type=float, help="request timeout in seconds (default: 300 for Fastino, 60 for Wity, 30 for Perplexity, 20 otherwise)")
     run.add_argument("--max-attempts", type=int, default=5)
     run.add_argument("--retry-delay", type=float, default=0.5)
     subset = run.add_mutually_exclusive_group()
@@ -177,16 +177,17 @@ def main() -> None:
         load_dotenv()
         openai = args.provider == "openai"
         if args.timeout is None:
-            args.timeout = {"wity": 60.0, "perplexity": 30.0}.get(args.provider, 20.0)
+            args.timeout = {"wity": 60.0, "perplexity": 30.0, "fastino": 300.0}.get(args.provider, 20.0)
         credentials = {"openai": ("OPENAI_API_KEY",), "typesafe": ("TYPESAFE_API_KEY",),
                        "wity": ("WITY_API_KEY",),
                        "perplexity": ("PERPLEXITY_API_KEY",),
+                       "fastino": ("FASTINO_API_KEY",),
                        "cloudflare": ("CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_AUTH_TOKEN")}
         for key in credentials[args.provider]:
             if not os.environ.get(key):
                 parser.error(f"{key} is required")
         endpoint = {"openai": "OPENAI_BASE_URL", "typesafe": "TYPESAFE_BASE_URL", "wity": "WITY_BASE_URL",
-                    "perplexity": "PERPLEXITY_BASE_URL"}.get(args.provider)
+                    "perplexity": "PERPLEXITY_BASE_URL", "fastino": "FASTINO_BASE_URL"}.get(args.provider)
         if args.reasoning is not None and args.provider != "wity":
             parser.error(f"--reasoning is not accepted for {args.provider}")
         if args.provider == "wity" and args.model != "wity-1":
@@ -197,6 +198,8 @@ def main() -> None:
             parser.error("Cloudflare model must be clef or clef-flash")
         if args.provider == "perplexity" and args.model != "pplx-decider-v1-27b":
             parser.error("Perplexity Decisions model must be pplx-decider-v1-27b")
+        if args.provider == "fastino" and args.model != "fastino/GLiDE":
+            parser.error("Fastino decision model must be fastino/GLiDE")
         if not math.isfinite(args.timeout) or args.timeout <= 0:
             parser.error("timeout must be positive and finite")
         if args.max_attempts < 1:
@@ -222,6 +225,9 @@ def main() -> None:
             config["reasoning"] = args.reasoning or "auto"
         if args.provider in {"wity", "perplexity"}:
             config["rate_limit_policy"] = "http429_retry_after_shared_cooldown_v1"
+        if args.provider == "fastino":
+            config["rate_limit_policy"] = "http425_429_503_retry_after_shared_cooldown_v1"
+            config["score_mapping"] = "expected_level_to_score_v1"
         if openai:
             from streamdecisionbench.adapters.llm import OpenAIAdapter
 
@@ -238,6 +244,10 @@ def main() -> None:
             from streamdecisionbench.adapters.perplexity import PerplexityAdapter
 
             factory = lambda: PerplexityAdapter(model=args.model, timeout=args.timeout)
+        elif args.provider == "fastino":
+            from streamdecisionbench.adapters.fastino import FastinoAdapter
+
+            factory = lambda: FastinoAdapter(model=args.model, timeout=args.timeout)
         else:
             from streamdecisionbench.adapters.cloudflare import CloudflareAdapter
 

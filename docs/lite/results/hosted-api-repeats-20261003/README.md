@@ -1,6 +1,6 @@
 # Hosted API repeated measurements
 
-Wity auto and off each have one complete pass; all other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Astra low has a further third pass; its transport attempts are preserved in the individual report. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts. Perplexity's first pass recovered 12 timeouts and three HTTP 503 failures; its second and third passes had no failed attempts.
+Wity auto and off each have one complete pass; all other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Astra low has a further third pass; its transport attempts are preserved in the individual report. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts. Perplexity's first pass recovered 12 timeouts and three HTTP 503 failures; its second and third passes had no failed attempts. GLiDE completed all 1,440 logical requests across three passes without failed attempts or retries.
 
 Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is sample standard deviation across passes, in percentage points; it is unavailable for a single pass. Latency values average within-pass quantiles.
 
@@ -12,6 +12,7 @@ Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is
 | Terra low | 3 | 52.06 ± 3.48 | 95.76 | 2.134 / 3.251 | [48.04](../four-family/gpt-5.6-terra-low/REPORT.md), [54.03](pass2/gpt-5.6-terra-low/REPORT.md), [54.10](pass3/gpt-5.6-terra-low/REPORT.md) |
 | Astra low | 3 | 49.51 ± 4.44 | 99.86 | 2.353 / 3.668 | [45.15](../four-family/gpt-6-astra-low/REPORT.md), [49.35](pass2/gpt-6-astra-low/REPORT.md), [54.03](pass3/gpt-6-astra-low/REPORT.md) |
 | Luna low | 3 | 45.45 ± 0.70 | 89.93 | 2.443 / 3.976 | [45.26](../four-family/gpt-5.6-luna-low/REPORT.md), [46.23](pass2/gpt-5.6-luna-low/REPORT.md), [44.86](pass3/gpt-5.6-luna-low/REPORT.md) |
+| GLiDE (Fastino) | 3 | 39.43 ± 2.11 | 80.49 | 5.546 / 17.324 | [39.50](../glide-20261003/REPORT.md), [37.28](../glide-20261003/pass2/REPORT.md), [41.50](../glide-20261003/pass3/REPORT.md) |
 | Clef | 3 | 31.39 ± 0.41 | 38.96 | 0.885 / 1.349 | [30.96](../four-family/clef/REPORT.md), [31.76](pass2/clef/REPORT.md), [31.44](pass3/clef/REPORT.md) |
 | Luna none | 3 | 30.87 ± 1.12 | 43.54 | 1.312 / 1.777 | [30.67](../four-family/gpt-5.6-luna-none/REPORT.md), [32.08](pass2/gpt-5.6-luna-none/REPORT.md), [29.86](pass3/gpt-5.6-luna-none/REPORT.md) |
 | Clef Flash | 3 | 19.89 ± 0.19 | 21.67 | 0.437 / 0.954 | [19.69](../four-family/clef-flash/REPORT.md), [19.92](pass2/clef-flash/REPORT.md), [20.06](pass3/clef-flash/REPORT.md) |

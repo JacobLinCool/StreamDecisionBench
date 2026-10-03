@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
-from streamdecisionbench.adapters.base import RateLimitError
+from streamdecisionbench.adapters.base import RetryableHTTPError
 from streamdecisionbench.jev import ContractError, committed_answer, validate_response
 from streamdecisionbench.lite.core import compose, decode, digest, request_for, sources
 from streamdecisionbench.lite.scoring import episode_scores, summarize
@@ -104,9 +104,9 @@ def run_episode(episode: dict, factory: Callable, log: Callable, *, workers: int
                          decision=decision, model=response.get("model"), usage=response.get("usage"))
             except Exception as error:
                 # Never persist exception bodies, which may echo private inputs.
-                rate_limited = isinstance(error, RateLimitError)
-                attempt.update(error_type=type(error).__name__, retryable=is_transport_error(error) or rate_limited)
-                if rate_limited:
+                transient_http = isinstance(error, RetryableHTTPError)
+                attempt.update(error_type=type(error).__name__, retryable=is_transport_error(error) or transient_http)
+                if transient_http:
                     delay = max(1.0, min(retry_delay_s * 2 ** min(number - 1, 10), 8.0))
                     if error.retry_after_s is not None:
                         delay = max(delay, error.retry_after_s)
@@ -133,6 +133,7 @@ def run_episode(episode: dict, factory: Callable, log: Callable, *, workers: int
             if not attempt["retryable"] or number == max_attempts:
                 r["error_type"] = attempt["error_type"]
                 r["failure_reason"] = ("rate_limit_retry_exhausted" if attempt["error_type"] == "RateLimitError"
+                                       else "http_retry_exhausted" if transient_http
                                        else "transport_retry_exhausted") if attempt["retryable"] else "non_retryable_error"
                 with lock:
                     failures.append(r["failure_reason"])

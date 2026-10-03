@@ -56,7 +56,10 @@ def _latencies(records: list[dict], *, successful_attempt: bool = False) -> dict
 def _retry_report_lines(data: dict) -> list[str]:
     reliability = data["retry_reliability"]
     raw, latency = data["raw_wallclock_scores"], data["raw_wallclock_latency_s"]
-    rate_limits = data["config"].get("rate_limit_policy") == "http429_retry_after_shared_cooldown_v1"
+    policy = data["config"].get("rate_limit_policy")
+    fastino = policy == "http425_429_503_retry_after_shared_cooldown_v1"
+    rate_limits = fastino or policy == "http429_retry_after_shared_cooldown_v1"
+    statuses = "425, 429, and 503" if fastino else "429"
     return [
         "## Transport reliability and raw-clock diagnostics", "",
         f"- Attempt error rate: {reliability['attempt_error_rate']:.2%} "
@@ -70,11 +73,13 @@ def _retry_report_lines(data: dict) -> list[str]:
         "Requests can overlap, so these sums are not the recording's wall-clock duration.",
         f"- At most {data['config']['max_attempts']} attempts per request; the first retry is immediate, "
         f"then backoff starts at {data['config']['retry_delay_s']:g} s and is capped at 8 s. SDK retries are disabled.",
-        *(["- The immediate-first-retry rule above applies to transport failures. HTTP 429 uses "
+        *([f"- The immediate-first-retry rule above applies to transport failures. HTTP {statuses} uses "
            "Retry-After (delay-seconds or HTTP-date) as a minimum wait, with a shared episode cooldown. "
            "Without that header, bounded backoff starts at 1 s. The server's delay is not capped at 8 s. "
            f"Concurrency is limited to {data['config']['workers']} workers; rate-limit attempts count toward the same attempt budget."]
           if rate_limits else []),
+        *(["- Fastino HTTP 425 waits at least 60 s for model warmup; all transient HTTP attempts "
+           "share the same cooldown and bounded attempt budget."] if fastino else []),
         "", "The raw clock retains failures, waits and actual late deliveries. It is a separate diagnostic:", "",
         "| Scope | Raw in-force accuracy | Raw segment-balanced accuracy |", "|---|---:|---:|",
         f"| Overall | {raw['overall']['time_accuracy']:.2%} | {raw['overall']['segment_time_accuracy']:.2%} |",
