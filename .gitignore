@@ -262,6 +262,7 @@ cython_debug/
 /paper/notes/abstract_study.md
 # Local caches, editing notes and tool leftovers.
 .cache/
+/output/submission-*/
 *.shadow.md
 *.zh-tw.md
 .chart-data-*/

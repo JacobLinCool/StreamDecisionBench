@@ -169,14 +169,14 @@ def render_report(data: dict, output: Path) -> str:
     if (net := data.get("network_adjustment")):
         span = lambda r: f"{pct(r['estimate'])} ({pct(r['low'])}–{pct(r['high'])})"
         na, nb = net["network_s"]["baseline"], net["network_s"]["candidate"]
-        lines += ["", "## Network-removed estimate (secondary)", "",
+        lines += ["", "## Fitted-remainder removal (secondary)", "",
                   "Estimate the token-independent latency from each recording's fast envelope, subtract it from "
-                  "each response and replay. This assumes network + prefill + decode where applicable; the remainder "
-                  "can include fixed service time, so it is an upper bound on the network effect. "
-                  f"Baseline network estimate {na['estimate']:.3f} s ({na['low']:.3f}–{na['high']:.3f}); "
+                  "each response and replay. The fitted remainder can include network delay, fixed service time "
+                  "and model misspecification; it does not identify network delay or guarantee an upper bound on its effect. "
+                  f"Baseline fitted remainder {na['estimate']:.3f} s ({na['low']:.3f}–{na['high']:.3f}); "
                   f"candidate {nb['estimate']:.3f} s ({nb['low']:.3f}–{nb['high']:.3f}). "
                   "Parentheses show bootstrap ranges. Primary scores remain unchanged.", "",
-                  "| Scope | Baseline network removed | Candidate network removed | Estimated difference | Ranges overlap |",
+                  "| Scope | Baseline remainder removed | Candidate remainder removed | Estimated difference | Ranges overlap |",
                   "|---|---:|---:|---:|---|"]
         for name, row in [("Overall", net["overall"]), *[(NAMES[f], r) for f, r in net["by_family"].items()]]:
             lines.append(f"| {name} | {span(row['baseline'])} | {span(row['candidate'])} | "

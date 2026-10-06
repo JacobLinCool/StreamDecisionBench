@@ -114320,6 +114320,238 @@
         "Nimble": 0.004328339920642299,
         "QwenLogits": 0.0003308828622095028
       },
+      "laya_diagnostics": {
+        "LayaEnglish": {
+          "per_episode": [
+            {
+              "episode_id": "lite_debugging_a",
+              "states": 60,
+              "route_correct": 6,
+              "field_correct": 56,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_debugging_b",
+              "states": 60,
+              "route_correct": 4,
+              "field_correct": 45,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_a",
+              "states": 60,
+              "route_correct": 6,
+              "field_correct": 35,
+              "fields": 193,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_b",
+              "states": 60,
+              "route_correct": 12,
+              "field_correct": 33,
+              "fields": 190,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_a",
+              "states": 60,
+              "route_correct": 28,
+              "field_correct": 41,
+              "fields": 231,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_b",
+              "states": 60,
+              "route_correct": 2,
+              "field_correct": 20,
+              "fields": 226,
+              "composed_correct": 2
+            },
+            {
+              "episode_id": "lite_presenter_a",
+              "states": 60,
+              "route_correct": 16,
+              "field_correct": 63,
+              "fields": 248,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_presenter_b",
+              "states": 60,
+              "route_correct": 11,
+              "field_correct": 30,
+              "fields": 254,
+              "composed_correct": 0
+            }
+          ],
+          "states": 480,
+          "route_correct": 85,
+          "fields": 1740,
+          "field_correct": 323,
+          "composed_correct": 2
+        },
+        "LayaTyped": {
+          "per_episode": [
+            {
+              "episode_id": "lite_debugging_a",
+              "states": 60,
+              "route_correct": 4,
+              "field_correct": 55,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_debugging_b",
+              "states": 60,
+              "route_correct": 2,
+              "field_correct": 42,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_a",
+              "states": 60,
+              "route_correct": 10,
+              "field_correct": 47,
+              "fields": 193,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_b",
+              "states": 60,
+              "route_correct": 12,
+              "field_correct": 42,
+              "fields": 190,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_a",
+              "states": 60,
+              "route_correct": 36,
+              "field_correct": 82,
+              "fields": 231,
+              "composed_correct": 1
+            },
+            {
+              "episode_id": "lite_support_b",
+              "states": 60,
+              "route_correct": 15,
+              "field_correct": 68,
+              "fields": 226,
+              "composed_correct": 1
+            },
+            {
+              "episode_id": "lite_presenter_a",
+              "states": 60,
+              "route_correct": 23,
+              "field_correct": 108,
+              "fields": 248,
+              "composed_correct": 5
+            },
+            {
+              "episode_id": "lite_presenter_b",
+              "states": 60,
+              "route_correct": 18,
+              "field_correct": 74,
+              "fields": 254,
+              "composed_correct": 0
+            }
+          ],
+          "states": 480,
+          "route_correct": 120,
+          "fields": 1740,
+          "field_correct": 518,
+          "composed_correct": 7
+        },
+        "LayaMultilingual": {
+          "per_episode": [
+            {
+              "episode_id": "lite_debugging_a",
+              "states": 60,
+              "route_correct": 6,
+              "field_correct": 55,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_debugging_b",
+              "states": 60,
+              "route_correct": 8,
+              "field_correct": 56,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_a",
+              "states": 60,
+              "route_correct": 18,
+              "field_correct": 56,
+              "fields": 193,
+              "composed_correct": 1
+            },
+            {
+              "episode_id": "lite_assembly_b",
+              "states": 60,
+              "route_correct": 7,
+              "field_correct": 32,
+              "fields": 190,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_a",
+              "states": 60,
+              "route_correct": 25,
+              "field_correct": 73,
+              "fields": 231,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_b",
+              "states": 60,
+              "route_correct": 24,
+              "field_correct": 61,
+              "fields": 226,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_presenter_a",
+              "states": 60,
+              "route_correct": 12,
+              "field_correct": 70,
+              "fields": 248,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_presenter_b",
+              "states": 60,
+              "route_correct": 29,
+              "field_correct": 77,
+              "fields": 254,
+              "composed_correct": 0
+            }
+          ],
+          "states": 480,
+          "route_correct": 129,
+          "fields": 1740,
+          "field_correct": 480,
+          "composed_correct": 1
+        }
+      },
+      "local_measurement_seconds": {
+        "LayaEnglish": 960.814676,
+        "LayaTyped": 960.743391,
+        "LayaMultilingual": 961.144416,
+        "DJev": 960.93151,
+        "Kev": 960.682653,
+        "KevNine": 960.488076,
+        "KevTwentySeven": 961.86438,
+        "Nimble": 998.558418,
+        "QwenLogits": 967.208119
+      },
       "regression_example": {
         "episode_id": "lite_presenter_a",
         "start_s": 60.399600042030215,
@@ -215991,6 +216223,238 @@
         "KevTwentySeven": 0.00015597747349271884,
         "Nimble": 0.0031798202211545668,
         "QwenLogits": 0.00024865961317233065
+      },
+      "laya_diagnostics": {
+        "LayaEnglish": {
+          "per_episode": [
+            {
+              "episode_id": "lite_debugging_a",
+              "states": 60,
+              "route_correct": 6,
+              "field_correct": 56,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_debugging_b",
+              "states": 60,
+              "route_correct": 4,
+              "field_correct": 45,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_a",
+              "states": 60,
+              "route_correct": 6,
+              "field_correct": 35,
+              "fields": 193,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_b",
+              "states": 60,
+              "route_correct": 12,
+              "field_correct": 33,
+              "fields": 190,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_a",
+              "states": 60,
+              "route_correct": 28,
+              "field_correct": 41,
+              "fields": 231,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_b",
+              "states": 60,
+              "route_correct": 2,
+              "field_correct": 20,
+              "fields": 226,
+              "composed_correct": 2
+            },
+            {
+              "episode_id": "lite_presenter_a",
+              "states": 60,
+              "route_correct": 16,
+              "field_correct": 63,
+              "fields": 248,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_presenter_b",
+              "states": 60,
+              "route_correct": 11,
+              "field_correct": 30,
+              "fields": 254,
+              "composed_correct": 0
+            }
+          ],
+          "states": 480,
+          "route_correct": 85,
+          "fields": 1740,
+          "field_correct": 323,
+          "composed_correct": 2
+        },
+        "LayaTyped": {
+          "per_episode": [
+            {
+              "episode_id": "lite_debugging_a",
+              "states": 60,
+              "route_correct": 4,
+              "field_correct": 55,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_debugging_b",
+              "states": 60,
+              "route_correct": 2,
+              "field_correct": 42,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_a",
+              "states": 60,
+              "route_correct": 10,
+              "field_correct": 47,
+              "fields": 193,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_b",
+              "states": 60,
+              "route_correct": 12,
+              "field_correct": 42,
+              "fields": 190,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_a",
+              "states": 60,
+              "route_correct": 36,
+              "field_correct": 82,
+              "fields": 231,
+              "composed_correct": 1
+            },
+            {
+              "episode_id": "lite_support_b",
+              "states": 60,
+              "route_correct": 15,
+              "field_correct": 68,
+              "fields": 226,
+              "composed_correct": 1
+            },
+            {
+              "episode_id": "lite_presenter_a",
+              "states": 60,
+              "route_correct": 23,
+              "field_correct": 108,
+              "fields": 248,
+              "composed_correct": 5
+            },
+            {
+              "episode_id": "lite_presenter_b",
+              "states": 60,
+              "route_correct": 18,
+              "field_correct": 74,
+              "fields": 254,
+              "composed_correct": 0
+            }
+          ],
+          "states": 480,
+          "route_correct": 120,
+          "fields": 1740,
+          "field_correct": 518,
+          "composed_correct": 7
+        },
+        "LayaMultilingual": {
+          "per_episode": [
+            {
+              "episode_id": "lite_debugging_a",
+              "states": 60,
+              "route_correct": 6,
+              "field_correct": 55,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_debugging_b",
+              "states": 60,
+              "route_correct": 8,
+              "field_correct": 56,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_a",
+              "states": 60,
+              "route_correct": 18,
+              "field_correct": 56,
+              "fields": 193,
+              "composed_correct": 1
+            },
+            {
+              "episode_id": "lite_assembly_b",
+              "states": 60,
+              "route_correct": 7,
+              "field_correct": 32,
+              "fields": 190,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_a",
+              "states": 60,
+              "route_correct": 25,
+              "field_correct": 73,
+              "fields": 231,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_b",
+              "states": 60,
+              "route_correct": 24,
+              "field_correct": 61,
+              "fields": 226,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_presenter_a",
+              "states": 60,
+              "route_correct": 12,
+              "field_correct": 70,
+              "fields": 248,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_presenter_b",
+              "states": 60,
+              "route_correct": 29,
+              "field_correct": 77,
+              "fields": 254,
+              "composed_correct": 0
+            }
+          ],
+          "states": 480,
+          "route_correct": 129,
+          "fields": 1740,
+          "field_correct": 480,
+          "composed_correct": 1
+        }
+      },
+      "local_measurement_seconds": {
+        "LayaEnglish": 960.48074,
+        "LayaTyped": 960.446091,
+        "LayaMultilingual": 960.441953,
+        "DJev": 960.584381,
+        "Kev": 960.472542,
+        "KevNine": 960.555147,
+        "KevTwentySeven": 960.41848,
+        "Nimble": 1048.474783,
+        "QwenLogits": 960.56182
       }
     },
     {
@@ -317791,6 +318255,238 @@
         "KevTwentySeven": 0.00018285936147499626,
         "Nimble": 0.0002559274497770936,
         "QwenLogits": 0.00012939136770362403
+      },
+      "laya_diagnostics": {
+        "LayaEnglish": {
+          "per_episode": [
+            {
+              "episode_id": "lite_debugging_a",
+              "states": 60,
+              "route_correct": 6,
+              "field_correct": 56,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_debugging_b",
+              "states": 60,
+              "route_correct": 4,
+              "field_correct": 45,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_a",
+              "states": 60,
+              "route_correct": 6,
+              "field_correct": 35,
+              "fields": 193,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_b",
+              "states": 60,
+              "route_correct": 12,
+              "field_correct": 33,
+              "fields": 190,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_a",
+              "states": 60,
+              "route_correct": 28,
+              "field_correct": 41,
+              "fields": 231,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_b",
+              "states": 60,
+              "route_correct": 2,
+              "field_correct": 20,
+              "fields": 226,
+              "composed_correct": 2
+            },
+            {
+              "episode_id": "lite_presenter_a",
+              "states": 60,
+              "route_correct": 16,
+              "field_correct": 63,
+              "fields": 248,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_presenter_b",
+              "states": 60,
+              "route_correct": 11,
+              "field_correct": 30,
+              "fields": 254,
+              "composed_correct": 0
+            }
+          ],
+          "states": 480,
+          "route_correct": 85,
+          "fields": 1740,
+          "field_correct": 323,
+          "composed_correct": 2
+        },
+        "LayaTyped": {
+          "per_episode": [
+            {
+              "episode_id": "lite_debugging_a",
+              "states": 60,
+              "route_correct": 4,
+              "field_correct": 55,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_debugging_b",
+              "states": 60,
+              "route_correct": 2,
+              "field_correct": 42,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_a",
+              "states": 60,
+              "route_correct": 10,
+              "field_correct": 47,
+              "fields": 193,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_b",
+              "states": 60,
+              "route_correct": 12,
+              "field_correct": 42,
+              "fields": 190,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_a",
+              "states": 60,
+              "route_correct": 36,
+              "field_correct": 82,
+              "fields": 231,
+              "composed_correct": 1
+            },
+            {
+              "episode_id": "lite_support_b",
+              "states": 60,
+              "route_correct": 15,
+              "field_correct": 68,
+              "fields": 226,
+              "composed_correct": 1
+            },
+            {
+              "episode_id": "lite_presenter_a",
+              "states": 60,
+              "route_correct": 23,
+              "field_correct": 108,
+              "fields": 248,
+              "composed_correct": 5
+            },
+            {
+              "episode_id": "lite_presenter_b",
+              "states": 60,
+              "route_correct": 18,
+              "field_correct": 74,
+              "fields": 254,
+              "composed_correct": 0
+            }
+          ],
+          "states": 480,
+          "route_correct": 120,
+          "fields": 1740,
+          "field_correct": 518,
+          "composed_correct": 7
+        },
+        "LayaMultilingual": {
+          "per_episode": [
+            {
+              "episode_id": "lite_debugging_a",
+              "states": 60,
+              "route_correct": 6,
+              "field_correct": 55,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_debugging_b",
+              "states": 60,
+              "route_correct": 8,
+              "field_correct": 56,
+              "fields": 199,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_assembly_a",
+              "states": 60,
+              "route_correct": 18,
+              "field_correct": 56,
+              "fields": 193,
+              "composed_correct": 1
+            },
+            {
+              "episode_id": "lite_assembly_b",
+              "states": 60,
+              "route_correct": 7,
+              "field_correct": 32,
+              "fields": 190,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_a",
+              "states": 60,
+              "route_correct": 25,
+              "field_correct": 73,
+              "fields": 231,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_support_b",
+              "states": 60,
+              "route_correct": 24,
+              "field_correct": 61,
+              "fields": 226,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_presenter_a",
+              "states": 60,
+              "route_correct": 12,
+              "field_correct": 70,
+              "fields": 248,
+              "composed_correct": 0
+            },
+            {
+              "episode_id": "lite_presenter_b",
+              "states": 60,
+              "route_correct": 29,
+              "field_correct": 77,
+              "fields": 254,
+              "composed_correct": 0
+            }
+          ],
+          "states": 480,
+          "route_correct": 129,
+          "fields": 1740,
+          "field_correct": 480,
+          "composed_correct": 1
+        }
+      },
+      "local_measurement_seconds": {
+        "LayaEnglish": 960.463678,
+        "LayaTyped": 960.450583,
+        "LayaMultilingual": 960.459291,
+        "DJev": 961.21674,
+        "Kev": 960.445089,
+        "KevNine": 960.450019,
+        "KevTwentySeven": 960.43539,
+        "Nimble": 987.072244,
+        "QwenLogits": 966.630407
       }
     }
   ],
@@ -387229,17 +387925,153 @@
       "composition": "same ordinal pass paired before equal averaging; separately recorded components"
     }
   },
+  "pairing_sensitivity": {
+    "arbitration": "freshest",
+    "matchings": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        3,
+        2
+      ],
+      [
+        2,
+        1,
+        3
+      ],
+      [
+        2,
+        3,
+        1
+      ],
+      [
+        3,
+        1,
+        2
+      ],
+      [
+        3,
+        2,
+        1
+      ]
+    ],
+    "provenance": "matrix rows/columns index passes[*].provenance for fast/slow; components recorded separately",
+    "pairs": {
+      "KevTwentySeven+TerraNone": {
+        "fast": "KevTwentySeven",
+        "slow": "TerraNone",
+        "auc_matrix": [
+          [
+            0.6651869936228585,
+            0.6626858064819741,
+            0.6662054481770734
+          ],
+          [
+            0.6680709476500529,
+            0.6665218674478509,
+            0.6702931483145091
+          ],
+          [
+            0.6694083318950687,
+            0.6679699256080387,
+            0.6717616385742593
+          ]
+        ],
+        "matching_means": [
+          0.6678234998816562,
+          0.6678166891818021,
+          0.6675061309020954,
+          0.667462428897184,
+          0.6674154404783883,
+          0.667378549173331
+        ],
+        "min": 0.667378549173331,
+        "max": 0.6678234998816562
+      },
+      "Jev+TerraNone": {
+        "fast": "Jev",
+        "slow": "TerraNone",
+        "auc_matrix": [
+          [
+            0.6621170706783827,
+            0.6684420455486789,
+            0.6693771414043327
+          ],
+          [
+            0.6473646747191972,
+            0.6550338891465122,
+            0.6551224880178436
+          ],
+          [
+            0.6541895503207211,
+            0.6606486918979777,
+            0.6612228049107628
+          ]
+        ],
+        "matching_means": [
+          0.6594579215785525,
+          0.6592960835314013,
+          0.659009841726213,
+          0.6592513612957479,
+          0.6591301693405025,
+          0.6595335269571887
+        ],
+        "min": 0.659009841726213,
+        "max": 0.6595335269571887
+      },
+      "Jev+Terra": {
+        "fast": "Jev",
+        "slow": "Terra",
+        "auc_matrix": [
+          [
+            0.6512884195839608,
+            0.6735315376344315,
+            0.672838799787496
+          ],
+          [
+            0.6343146026546423,
+            0.6573690888195121,
+            0.6570261097075396
+          ],
+          [
+            0.6425388337598252,
+            0.6643216323599,
+            0.6642391204039574
+          ]
+        ],
+        "matching_means": [
+          0.6576322096024767,
+          0.6575453872171335,
+          0.6573617535643438,
+          0.6576988270339321,
+          0.6571583449340128,
+          0.6575822407889444
+        ],
+        "min": 0.6571583449340128,
+        "max": 0.6576988270339321
+      }
+    }
+  },
+  "measurement_budget": {
+    "local_run_hours": 7.250693060277778,
+    "scope": "sum of 27 measured local run durations; excludes downloads, initialization, audits, warmups and other experiments"
+  },
+  "selection_annotation": "The frozen evaluation policy describes the original AUC-selection stage. The current manuscript subsequently includes all three complete passes per setting; no valid response or complete pass from the fixed manuscript cohort is excluded.",
   "sources_sha256": {
-    "paper/analysis/lite_repeated.py": "c18fa256e99bd3d1b96a74eca8d5021056fded8d3cbe01edfdc0b93630bd1fa3",
-    "paper/analysis/lite_numbers.py": "93e0b389605d8a6fda10bccd6fc5847451b1bdfe5d566c90ffcdfd668651f170",
+    "paper/analysis/lite_repeated.py": "72c0c3a936f15ff20b0abc85031f843bc717dd74a3046d6d30a8d39f8f10e275",
+    "paper/analysis/lite_numbers.py": "78932e85dd80d451446d6a11169f2841124feb2acb1f7c3493fc95df98e867eb",
     "paper/analysis/lite_auc.py": "39d2fb0830b6308f7a5607a4fb087e45b688b1e649719e0ed266f4799b2ac7e9",
-    "paper/analysis/lite_figures.py": "283b197ec172347d4dac3ca348272c93e404ede99edcc8e771a4aafe382863ed",
+    "paper/analysis/lite_figures.py": "bb8ef254643325bba48dcef35a22bec5963daed2b6dc2250e74514a86647fdbb",
     "paper/analysis/lite_trajectory_value.py": "272f9f38169f679cd076e2ffcc759ec5154914d1cbd85f116eeb6b072965c679",
     "paper/analysis/lite_openweight.py": "dc35c7d44af809a99e744554d964c029087458281d89b5e4575a01876f8f2ccf",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616",
     "paper/analysis/trajectory_policy.json": "fcd30260b6467be2f07b61c19e0d77c9df814107485172f843b60aef8efb0862",
-    "scripts/lite/network.py": "99a70d78dae1ac1180e7eb4102e2b91b8ed37b3c94baba1689f7d2780e6814bc",
+    "scripts/lite/network.py": "f1357a8bec69f7c2de27c21708de956ca826d3446df505d9fac936f0d8f8e9a9",
     "src/streamdecisionbench/lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
     "src/streamdecisionbench/lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
     "src/streamdecisionbench/lite/interval_scoring.py": "ce3eda9c2fe2efcd84b75a02ce329e8fc7bf7f21b9abd65e65fd10bf3d9a6eb3"

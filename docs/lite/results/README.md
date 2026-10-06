@@ -45,8 +45,7 @@ timeline that excludes transport retries.
 | GPT-5.6-Terra none | 80.28% | 57.42% | 74.14% (70.28–75.36%) | 1.21 (0.94–1.30) | 1.52 / 2.15 | [report](gpt-5.6-terra-none/REPORT.md), [vs Terra low](gpt-5.6-terra-none/COMPARISON.md) |
 | Jev (`jev-latest`, served `jev-1.13.0`) | 60.83% | 58.26% | 60.14% (60.01–60.22%) | 0.19 (0.17–0.19) | 0.24 / 0.36 | [report](jev-latest/REPORT.md), [vs Luna](jev-latest/COMPARISON.md) |
 
-All five runs had 0 failed attempts out of 360. The network-removed column is a secondary estimate that bounds the
-network effect from above (see [the protocol](../PROTOCOL.md)); correct duration is the main fixed-cadence diagnostic for these historical recordings. The current leaderboard uses four-family log-AUC. Adjacent
+All five runs had 0 failed attempts out of 360. The network-removed column is a historical sensitivity estimate obtained by removing a fitted non-token remainder. That remainder can include fixed server time and does not identify or bound the network-only effect (see [the protocol](../PROTOCOL.md)); correct duration is the main fixed-cadence diagnostic for these historical recordings. The current leaderboard uses four-family log-AUC. Adjacent
 states are dependent and each setting has one recording, so differences describe these runs only.
 
 ### Recording contract history

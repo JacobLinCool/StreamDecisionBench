@@ -592,7 +592,7 @@ def latency_data(data: dict) -> dict:
 
 # Stacking order of the median request; prefill and decode share a token-proportional
 # component, and Jev has no decode term. Names follow the paper: the non-token remainder is the
-# fit's intercept, an upper bound on fixed network delay. Components are grey so that no
+# fit's intercept, which can also absorb fixed server time. Components are grey so that no
 # colour here repeats a setting's colour from the other figures.
 COMPONENTS = [
     ("network_s", "Non-token remainder", {"facecolor": "#7A7A7A"}),
@@ -958,7 +958,7 @@ def fig_map(data: dict) -> dict:
                (Line2D([], [], marker="|", markersize=8, markeredgewidth=0.8, color=ink, linestyle="none"),
                 Line2D([], [], marker="o", markersize=3.5, markerfacecolor=_tint(ink, MAP_TINT), markeredgecolor=ink,
                        markeredgewidth=0.8, linestyle="none"))]
-    fig.legend(handles=handles, labels=["Untimed", "In force", "Network removed (range)"],
+    fig.legend(handles=handles, labels=["Untimed", "In force", "Remainder removed (range)"],
                handler_map={tuple: HandlerTuple(ndivide=1, pad=0.0)},
                loc="outside upper center", ncol=3, fontsize=SMALL, handlelength=1.2, columnspacing=0.8,
                handletextpad=0.3)
@@ -1024,9 +1024,10 @@ def fig_pace(data: dict) -> dict:
         ax.set_ylim(0, 100)
         ax.set_yticks(range(0, 101, 20))
         ax.set_xticks([.5, 1, 2, 4, 8], [".5", "1", "2", "4", "8"])
+        ax.tick_params(axis="both", labelsize=8)
         ax.xaxis.set_minor_locator(mpl.ticker.NullLocator())
         ax.annotate(f"({'abcde'[i]}) {name}", xy=(0, 1), xycoords="axes fraction", xytext=(0, 2.5),
-                    textcoords="offset points", ha="left", va="bottom", fontsize=SMALL,
+                    textcoords="offset points", ha="left", va="bottom", fontsize=8,
                     fontweight="bold" if i == 0 else "normal")
         if i:
             ax.tick_params(labelleft=False)
@@ -1043,8 +1044,8 @@ def fig_pace(data: dict) -> dict:
                               markerfacecolor=colour if low_effort(model.key) else "white", label=model.name))
     handles.append(Line2D([], [], color=RECORDED_INK, linewidth=0.6, dashes=(1, 1.6),
                           label=f"Recording interval ({values['recorded_interval_s']:g} s)"))
-    fig.legend(handles=handles, loc="outside upper center", ncol=len(handles), fontsize=SMALL, handlelength=1.6,
-               columnspacing=1.1, handletextpad=0.4)
+    fig.legend(handles=handles, loc="outside upper center", ncol=len(handles), fontsize=8, handlelength=1.3,
+               columnspacing=0.65, handletextpad=0.3)
     save(fig, str(OUT / "fig_pace"))
     return values
 

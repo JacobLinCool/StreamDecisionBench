@@ -1,11 +1,10 @@
-"""Network-removed in-force scores: a secondary estimate from recorded runs only.
+"""Fitted-remainder removal: a secondary replay from recorded runs only.
 
-Assumption: the time before a response is received is network + prefill + decode.
-Prefill is proportional to uncached input tokens and decode to output tokens (only
-for models that generate text); the per-run remainder that does not scale with
-tokens is treated as network. Queueing only adds time, so the remainder is taken
-from the fast envelope (a low-quantile regression intercept), with nonnegative
-token slopes. A moving-block bootstrap within each scenario gives the range.
+Fit send-to-receipt latency with a token-independent intercept and nonnegative
+slopes for uncached input tokens and, for text-generating models, output tokens.
+The low-quantile intercept can mix network delay, fixed server time and model
+misspecification; it does not identify network delay or guarantee an upper bound.
+A moving-block bootstrap within each scenario gives the estimator's range.
 """
 
 from __future__ import annotations
@@ -156,9 +155,9 @@ def network_adjustment(episodes: list[dict], responses: dict, releases: dict, *,
                 "by_family": {f: row["time_accuracy"] for f, row in untimed["by_family"].items()}}
     return {
         "method": METHOD,
-        "assumption": "latency before receipt = network + prefill (proportional to uncached input tokens) "
-                      "+ decode (proportional to output tokens, text-generating models only); the per-run "
-                      "remainder that does not scale with tokens is treated as network",
+        "assumption": "send-to-receipt latency is approximated by a token-independent intercept plus "
+                      "nonnegative slopes for uncached input tokens and, for text-generating models, output "
+                      "tokens; the fitted lower-quantile intercept is removed only in a secondary replay",
         "estimator": f"{TAU:.2f}-quantile regression intercept with nonnegative token slopes; 95% range from "
                      f"{resamples} moving-block bootstrap resamples ({BLOCK} consecutive releases within each scenario, seed {seed})",
         "network_s": {"estimate": estimate, "low": low, "high": high},
@@ -172,8 +171,9 @@ def network_adjustment(episodes: list[dict], responses: dict, releases: dict, *,
         "observed": observed,
         "untimed_ceiling": {"overall": untimed["overall"]["untimed_decision_accuracy"],
                             "by_family": {f: row["untimed_decision_accuracy"] for f, row in untimed["by_family"].items()}},
-        "interpretation": "Secondary estimate. By assumption everything not proportional to tokens is network; it can "
-                          "include fixed server time, so this bounds the network effect from above. Negative fitted "
+        "interpretation": "Secondary sensitivity analysis. The fitted remainder can include network delay, fixed "
+                          "server time and model misspecification; it does not identify network delay or guarantee "
+                          "an upper bound on its effect. Negative fitted "
                           "intercepts are retained as diagnostics and projected to zero removable delay for replay. "
                           "The range reflects estimator uncertainty only. The observed in-force score remains primary.",
     }

@@ -115,18 +115,19 @@ from observed deployment behavior. The original physical trace and a separate
 `raw_wallclock_metrics.json` retain actual elapsed time and update acceptance.
 Segment-balanced duration accuracy is reported on both timelines.
 
-Reports add a secondary network-removed estimate computed only from each run's
-own records. The time before a response is received is modelled as network +
-prefill (proportional to uncached input tokens) + decode (proportional to output
-tokens, for models that generate text); the per-run remainder that does not scale
-with tokens is treated as network. Queueing only adds time, so this remainder is
-the intercept of a 10th-percentile quantile regression with nonnegative token
-slopes. Every response is replayed with it removed, never below its receipt time,
-and a moving-block bootstrap within each scenario gives the reported range. The
-remainder can include fixed server time, so the estimate bounds the network effect
-from above; it never replaces the primary score and never rejects a run. The observable
-episode starts at the first actual evidence release and ends at the scheduled
-120-second horizon.
+Reports add a secondary sensitivity analysis using each run's own records. A
+10th-percentile quantile regression models the time before receipt with a fitted
+intercept, a prefill term proportional to uncached input tokens and, for
+text-generating models, a decode term proportional to output tokens. Token
+slopes are nonnegative. The intercept is a non-token remainder that may include
+network transfer, fixed server time and omitted processing costs; it neither
+identifies network delay nor guarantees an upper bound on it. Every response is
+replayed with this remainder removed, clamping the send-to-receipt duration at
+zero while retaining postprocessing and commit lag.
+A moving-block bootstrap within each scenario gives the reported fit-uncertainty
+range. This analysis never replaces the primary score or rejects a run. The
+observable episode starts at the first actual evidence release and ends at the
+scheduled 120-second horizon.
 
 The scorer classifies every observed instant by two conditions of the decision in
 force: whether its source state is still current (its reference decision equals
@@ -260,14 +261,12 @@ All frozen requests use a 2 s recording cadence. The paper's primary summary is 
 
 The integration uses nested trapezoidal grids in log interval, starting at 128 subintervals and doubling until every scenario metric changes by at most 0.001 percentage point. Nonconvergence at 4096 subintervals is an error. The same normalized weights apply to error partitions and oracle metrics. Current-source judgment in the integrated factorization is the ratio of integrated current-correct and current-source shares. The approximation averages the scenario-wise untimed-times-oracle product, not the product of two overall means.
 
-Main-text figures show both aggregate and family curves. Appendix sensitivity conditions use linear weighting over 0.5–8 s and the five other log ranges formed by lower bounds 0.1, 0.5 and 1 s and upper bounds 4 and 8 s. Fixed 2 s and 8 s comparisons remain diagnostic. A larger interval need not improve accuracy for arbitrary wrong predictions, and 8 s is a controlled slow-update condition, not a validated response budget. The aggregation rule was adopted after inspecting the recorded passes; one pass per setting does not establish a stable ranking.
+Main-text figures show both aggregate and family curves. Appendix sensitivity conditions use linear weighting over 0.5–8 s and the five other log ranges formed by lower bounds 0.1, 0.5 and 1 s and upper bounds 4 and 8 s. Fixed 2 s and 8 s comparisons remain diagnostic. A larger interval need not improve accuracy for arbitrary wrong predictions, and 8 s is a controlled slow-update condition, not a validated response budget. The aggregation rule was adopted after inspecting the original hosted passes. The current manuscript averages three complete passes for each of its fifteen settings; the repeats measure variation on the same fixed scenarios, not generalization to new scenarios.
 
-Reproduce the integrated reports without model requests:
+Reproduce the manuscript results without model requests:
 
 ```sh
-uv run python paper/analysis/lite_reports.py
-uv run python paper/analysis/lite_numbers.py
-uv run --group paper python paper/analysis/lite_figures.py
+uv run --group paper python paper/analysis/lite_repeated.py
 ```
 
 Each current `analysis.json` contains `auc.primary` and `auc.sensitivity`. Its `scores`, `raw_wallclock_scores` and `network_adjustment` remain separately labelled 2 s diagnostics. The network estimator fits physical token/latency observations and is used only for supplementary fixed-cadence estimates. `scripts/lite/lite_report.py` generates the recorded-cadence diagnostics; the paper's `lite_reports.py` adds the integrated evaluation and source digests.

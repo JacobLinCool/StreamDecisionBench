@@ -204255,7 +204255,7 @@
     "paper/analysis/openweight_policy.json": "f041530e4475fb04c6eb797142756c30fe2bd4ca4fb8786902014936c51d68b2",
     "paper/analysis/lite_trajectory_value.py": "272f9f38169f679cd076e2ffcc759ec5154914d1cbd85f116eeb6b072965c679",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
-    "paper/analysis/lite_numbers.py": "93e0b389605d8a6fda10bccd6fc5847451b1bdfe5d566c90ffcdfd668651f170",
+    "paper/analysis/lite_numbers.py": "78932e85dd80d451446d6a11169f2841124feb2acb1f7c3493fc95df98e867eb",
     "paper/analysis/leaderboard_models.py": "cabf0cad53a71df5a4a32c15b4c94e9e49d894a55713ed70d6a0df9647aaea63",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616",
     "paper/analysis/figstyle.py": "e6278862b795d054107f8e47988d09c7c1743794a514860e75a72a7783f742da",

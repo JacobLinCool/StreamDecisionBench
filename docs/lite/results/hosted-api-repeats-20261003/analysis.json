@@ -51390,12 +51390,12 @@
   },
   "aggregation": "equal mean of per-pass metrics; mean of within-pass latency quantiles; sample SD across passes",
   "sources_sha256": {
-    "paper/analysis/lite_hosted.py": "de7fd0373e4170e9d1d44f496246c3a41b1f59f600db01c2793faf752d5e655c",
+    "paper/analysis/lite_hosted.py": "f705290366878af1d65eb395a171569a09cff1bc8a776f16c255d1c70e1c7da2",
     "paper/analysis/leaderboard_models.py": "cabf0cad53a71df5a4a32c15b4c94e9e49d894a55713ed70d6a0df9647aaea63",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616",
     "paper/analysis/lite_openweight.py": "dc35c7d44af809a99e744554d964c029087458281d89b5e4575a01876f8f2ccf",
     "paper/analysis/lite_trajectory_value.py": "272f9f38169f679cd076e2ffcc759ec5154914d1cbd85f116eeb6b072965c679",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
-    "scripts/lite/lite_report.py": "63a3c5a82e9567dd3e53a1d48fcfbdba291e454e59cd14d6d9427f38f15610a3"
+    "scripts/lite/lite_report.py": "3fbe76e2dd44d0a2c4cb8fbe237c7cc5337c44fdb6a42db76bce978daecdcc45"
   }
 }

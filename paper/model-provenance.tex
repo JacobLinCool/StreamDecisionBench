@@ -1,0 +1,30 @@
+\paragraph{Model provenance.}
+Table~\ref{tab:model-provenance} identifies the self-hosted checkpoints; their model cards declare Apache-2.0 licenses.
+DJev uses the separately released runtime of \citet{mastracci2026djev}, revision \texttt{e5841cf4}, whose license is also Apache-2.0.
+Full checkpoint and base-model revisions, runtime commits and weight hashes are retained in the accompanying recording manifests.
+
+\begin{table*}[t]
+  \centering
+  \small
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{.31\textwidth}>{\raggedright\arraybackslash}p{.51\textwidth}l@{}}
+    \toprule
+    Setting and source & Hugging Face checkpoint identifier & Revision \\
+    \midrule
+    Laya English \citep{convai2026laya} & \texttt{convaiinnovations/laya} & \texttt{55cf4c4e} \\
+    Laya typed-decisions & \texttt{convaiinnovations/laya-typed-decisions} & \texttt{1a793eb5} \\
+    Laya multilingual & \texttt{convaiinnovations/laya-multilingual} & \texttt{e4e9ddf2} \\
+    \midrule
+    DJev / DiffusionGemma \citep{google2026diffusiongemma} & \texttt{google/diffusiongemma-26B-A4B-it} & \texttt{f7f5b7f5} \\
+    \midrule
+    Kev-4B \citep{palmer2026kev} & \texttt{jaredpalmer/kev-4b} & \texttt{139fdd94} \\
+    Kev-9B & \texttt{jaredpalmer/kev-9b} & \texttt{b5d8c18e} \\
+    Kev-27B & \texttt{jaredpalmer/kev-27b} & \texttt{ef78cc8a} \\
+    \midrule
+    Nimble-9B \citep{bespoke2026nimble} & \texttt{bespokelabs/Bespoke-Nimble-9B} & \texttt{bd792f44} \\
+    Qwen direct logits \citep{qwen2026qwen35} & \texttt{Qwen/Qwen3.5-4B} & \texttt{851bf6e8} \\
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Self-hosted results use fixed public checkpoints.}
+  Eight-character prefixes identify the recorded revisions. Kev-4B, Kev-9B and Nimble are adapters merged into their bases; Kev-27B supplies full weights.}
+  \label{tab:model-provenance}
+\end{table*}

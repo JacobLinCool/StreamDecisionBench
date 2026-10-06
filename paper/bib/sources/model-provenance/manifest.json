@@ -1,0 +1,92 @@
+{
+  "checked_on": "2026-10-04",
+  "checkpoints": [
+    {
+      "setting": "LayaEnglish",
+      "model": "convaiinnovations/laya",
+      "revision": "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+      "url": "https://huggingface.co/convaiinnovations/laya/raw/55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851/README.md",
+      "license": "apache-2.0",
+      "source_sha256": "00355613796b3f5860b0d5b20392381d26580ec242e04a1fd150c7f116858602",
+      "passes_checked": 3
+    },
+    {
+      "setting": "LayaTyped",
+      "model": "convaiinnovations/laya-typed-decisions",
+      "revision": "1a793eb568e6718f15941d08f85432581df534e3",
+      "url": "https://huggingface.co/convaiinnovations/laya-typed-decisions/raw/1a793eb568e6718f15941d08f85432581df534e3/README.md",
+      "license": "apache-2.0",
+      "source_sha256": "83e67a995a70a9a9ef6cc1f8c68da654f11eee081c9bb14de07c37b08fcc3113",
+      "passes_checked": 3
+    },
+    {
+      "setting": "LayaMultilingual",
+      "model": "convaiinnovations/laya-multilingual",
+      "revision": "e4e9ddf21a7b1903b7acffd8814ad4307bf63a67",
+      "url": "https://huggingface.co/convaiinnovations/laya-multilingual/raw/e4e9ddf21a7b1903b7acffd8814ad4307bf63a67/README.md",
+      "license": "apache-2.0",
+      "source_sha256": "e85d16c3fe35fe7094ef51a7cfa81144a5cc07558e5faddcff753a8153e38a0b",
+      "passes_checked": 3
+    },
+    {
+      "setting": "DJev",
+      "model": "google/diffusiongemma-26B-A4B-it",
+      "revision": "f7f5b7f5fa82ffc52addd066915886d497f5517b",
+      "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it/raw/f7f5b7f5fa82ffc52addd066915886d497f5517b/README.md",
+      "license": "apache-2.0",
+      "source_sha256": "3acbbf7e4c01297291113b1297732b6bcecf0d7769a2571fefeca4f0f5909747",
+      "passes_checked": 3
+    },
+    {
+      "setting": "Kev",
+      "model": "jaredpalmer/kev-4b",
+      "revision": "139fdd94f1b6a6ad80cc15e08fcb99cac885a101",
+      "url": "https://huggingface.co/jaredpalmer/kev-4b/raw/139fdd94f1b6a6ad80cc15e08fcb99cac885a101/README.md",
+      "license": "apache-2.0",
+      "source_sha256": "3eac08b65ac314e0ee1b4ae7ddda9440e39310effa5da3a2cdcb56a9f1249e76",
+      "passes_checked": 3
+    },
+    {
+      "setting": "KevNine",
+      "model": "jaredpalmer/kev-9b",
+      "revision": "b5d8c18e44c60888d138b65cb6507ff0a5a448a0",
+      "url": "https://huggingface.co/jaredpalmer/kev-9b/raw/b5d8c18e44c60888d138b65cb6507ff0a5a448a0/README.md",
+      "license": "apache-2.0",
+      "source_sha256": "168edeedf820c6fabdd496212ba4aac6fd1bfd9961233e8e23890385f06f145a",
+      "passes_checked": 3
+    },
+    {
+      "setting": "KevTwentySeven",
+      "model": "jaredpalmer/kev-27b",
+      "revision": "ef78cc8a34d5f426fb229c52089db189218cfe5c",
+      "url": "https://huggingface.co/jaredpalmer/kev-27b/raw/ef78cc8a34d5f426fb229c52089db189218cfe5c/README.md",
+      "license": "apache-2.0",
+      "source_sha256": "63063eed50b5cf2a5f1b397ac97c6b742df7d5c9966c5a7f0ec8fbdb0118bd92",
+      "passes_checked": 3
+    },
+    {
+      "setting": "Nimble",
+      "model": "bespokelabs/Bespoke-Nimble-9B",
+      "revision": "bd792f44ec8e265be861bfcdf4e05967ffe0e858",
+      "url": "https://huggingface.co/bespokelabs/Bespoke-Nimble-9B/raw/bd792f44ec8e265be861bfcdf4e05967ffe0e858/README.md",
+      "license": "apache-2.0",
+      "source_sha256": "1d968b0816997a7cfb31ed0cd7fc77f65b5ce725451bdde632ff5922abc1f250",
+      "passes_checked": 3
+    },
+    {
+      "setting": "QwenLogits",
+      "model": "Qwen/Qwen3.5-4B",
+      "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-4B/raw/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/README.md",
+      "license": "apache-2.0",
+      "source_sha256": "1406be1b6b8fd8a6545870da516912804756593628a1d0fb0a7965211e82a7bb",
+      "passes_checked": 3
+    }
+  ],
+  "djev_runtime": {
+    "revision": "e5841cf41e9211608e698492658685c36e24e77a",
+    "url": "https://raw.githubusercontent.com/mmastrac/djev/e5841cf41e9211608e698492658685c36e24e77a/LICENSE",
+    "license": "Apache-2.0",
+    "source_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  }
+}

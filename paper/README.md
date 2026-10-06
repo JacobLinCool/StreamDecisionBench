@@ -59,9 +59,9 @@ If any check fails, the script lists every failure and does not publish new numb
 
 | Path | Content |
 | --- | --- |
-| `main.tex`, `appendix.tex` | Paper and appendices |
+| `main.tex`, `appendix.tex`, `model-provenance.tex` | Paper, appendices and the pinned self-hosted model provenance table |
 | `submission.tex`, `preprint.tex`, `.latexmkrc` | Entry files and latexmk configuration |
-| `analysis/lite_repeated.py` | Three-pass manuscript manifest, matching-index compositions, and regeneration entry point |
+| `analysis/lite_repeated.py` | Three-pass manuscript manifest, matching-index compositions, all six pass-matchings for the headline pairs, field agreement analysis, and regeneration entry point; writes `generated/summary_tables.tex` |
 | `analysis/lite_numbers.py` | Writes `generated/numbers.tex` (one macro per stated number, each with its source) and `generated/tables.tex` (table bodies) |
 | `analysis/lite_figures.py`, `analysis/figstyle.py` | Figures in `figures/`, drawn at ACL print width (column 7.7 cm, text block 16 cm) with no text below 7 pt |
 | `analysis/lite_window.py` | The rule that selects the Figure 1 window, shared by both scripts |
@@ -81,11 +81,11 @@ If any check fails, the script lists every failure and does not publish new numb
 
 ## Evidence rules
 
-- Every measured number in the text is a macro from `generated/numbers.tex`. Percentages carry no `%` sign; write `\LunaAuc\%`.
+- Every measured number in the text is a macro from `generated/`. Percentages carry no `%` sign; write `\LunaAuc\%`.
 - Differences between models are named so the value is nonnegative, for example `\LunaMinusJevInForce`. If the data change which model is ahead, the macro name changes and the paper fails to compile. The primary score is identified by the `Auc` suffix; `InForce` denotes the fixed 2 s diagnostic.
 - Load `generated/numbers.tex` before `generated/tables.tex`. The paper defines the model labels, such as `\LunaLabel`, before loading the tables.
 - The inputs are `data/lite/v1` (dataset hash `fdfdd55d…`), `runs/lite-v1-*-retry-v1/` and `docs/lite/results/*/`. Number and figure generation treat these inputs as read only; `lite_reports.py` rebuilds the published analyses from the frozen recordings.
-- All manuscript settings average three independently evaluated passes; compositions pair matching pass indices. Latency summaries average per-pass quantiles. Comparisons remain descriptive. Network-removed scores always appear with their range and the assumption behind them. Timing ceilings and delay scaling are labelled as counterfactual replays.
+- All manuscript settings average three independently evaluated passes; compositions pair matching pass indices. Latency summaries average per-pass quantiles. Comparisons remain descriptive. Scores after removing the fitted non-token remainder always appear with their range and assumptions; the intercept is not an identified network delay or a guaranteed bound. Timing ceilings and delay scaling are labelled as counterfactual replays.
 - The validity audit was run by LLM agents. It is not human validation.
 
 
@@ -95,7 +95,7 @@ If any check fails, the script lists every failure and does not publish new numb
 
 The aggregation rule was adopted after inspecting the recorded passes, not preregistered. All six manuscript hosted and nine self-hosted settings were recorded at 2 s. In pass 1 of Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and a disjoint two-scenario presenter pass were recorded in separate sessions and merged; merged artifacts retain both sessions. Each repeat covers all eight scenarios in one session. Astra low pass 1 was recorded in one session covering all eight scenarios (2026-09-29 16:51–17:07 UTC). The two additional public Cloudflare settings also use complete eight-scenario passes at 2 s. All three complete passes are evaluated without excluding valid responses.
 
-Each per-setting `analysis.json` has `auc.primary` and `auc.sensitivity`; `scores` and `network_adjustment` describe fixed 2 s diagnostics. Network-removal methods, ranges and adjusted figures are confined to the appendix. `fig_pace` plots the aggregate curve and the four family curves on log interval axes in one main-text figure; `fig_errortime` integrates the partition with the primary score's weights. `fig_trajectory` illustrates presenter voice control (presenter A) on the 2 s recording-cadence replay: every public ASR change in the window on the shared time axis, quoted where the composed reference decision changes, the reference fields that change, and the decisions in force of Luna low, Terra low and Jev in the error-time classes, with each setting's correct share of the window and two brackets measured at the slide change.
+Each per-setting `analysis.json` has `auc.primary` and `auc.sensitivity`; `scores` and `network_adjustment` describe fixed 2 s diagnostics. The fitted-remainder analysis, its uncertainty ranges and adjusted figures are confined to the appendix. `fig_pace` plots the aggregate curve and the four family curves on log interval axes in one main-text figure; `fig_errortime` integrates the partition with the primary score's weights. `fig_trajectory` illustrates presenter voice control (presenter A) on the 2 s recording-cadence replay: every public ASR change in the window on the shared time axis, quoted where the composed reference decision changes, the reference fields that change, and the decisions in force of Luna low, Terra low and Jev in the error-time classes, with each setting's correct share of the window and two brackets measured at the slide change.
 
 The separate composition reports contain `standalone`, `systems`, `controls` and provenance. `lite_openweight.py` verifies all registered public settings' original-clock time partitions, validates input audits and published standalone areas, and analytically integrates the nine local/Terra-none pairs under every existing rule. Its self-hosted inputs are exposed through exact file allowlists in `runs/`; no GPU or model runtime is needed. `fig_openweight_hybrids` and the full local tables are in the appendix.
 
@@ -111,3 +111,22 @@ uv run python scripts/lite/lite_report.py --run runs/<fresh-merged-dir> \
 ```
 
 The generic report command above writes recording-cadence diagnostics to a scratch folder; do not point it at `docs/lite/results/four-family/`, whose reports it would overwrite. Run `paper/analysis/lite_reports.py` to produce the complete primary AUC reports for all registered public settings.
+
+## Anonymous review artifacts
+
+After regenerating the manuscript, build the manuscript-scoped review copies with:
+
+```sh
+uv run --group paper python scripts/paper/build_submission.py \
+  --out output/submission-2026-10-04 --reproduce --latex
+```
+
+The builder preserves the original research evidence, checks the manuscript input
+closure, redacts identifying metadata in copies and propagates their SHA-256 receipts.
+It produces separate `software.zip` and `data.zip` archives below the ARR size
+limit. `--reproduce` extracts and verifies the actual archives, blocks network
+access during analysis, and checks that regeneration preserves the manuscript's
+rendered values. `--latex` compiles those anonymous sources and exports
+`submission.pdf`. Use a fresh output directory for a new verification run.
+The review artifact's README describes its exact contents and the metadata
+redactions; author-only submission notes must remain outside both archives.

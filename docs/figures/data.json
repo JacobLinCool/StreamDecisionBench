@@ -9820,11 +9820,11 @@
   },
   "summary": {
     "path": "docs/research/openweight-hybrids/analysis.json",
-    "sha256": "a8b497437d89687d18af218d546d0ca8c88e31ccd0e428a3debfe3884db90d3d"
+    "sha256": "83c59e27370dfc072ef95c26bd872aae332e97c7d6d01be815e8f7bcdb4630c1"
   },
   "hosted_summary": {
     "path": "docs/lite/results/hosted-api-repeats-20261003/analysis.json",
-    "sha256": "7dc65802a89ea7c952d3dbead5cbe1173dbfdf511016ec28fa9720742aecc26a"
+    "sha256": "59dc153c553fc154ce5fd2d8e82accfda067b12925400916fe411ec062b3741a"
   },
   "sources_sha256": {
     "docs/figures/prepare.py": "c4dde8b026ef9f79a3ce92681162fa6a7729ca17e2fdeea0a3268a7cf1d48014",
@@ -9832,6 +9832,6 @@
     "paper/analysis/lite_openweight.py": "dc35c7d44af809a99e744554d964c029087458281d89b5e4575a01876f8f2ccf",
     "paper/analysis/trajectory_replay.py": "eb076eeb4c344987022ea782e6836659c5bf7aa34a97b572c85c86534407ee31",
     "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616",
-    "paper/analysis/lite_hosted.py": "de7fd0373e4170e9d1d44f496246c3a41b1f59f600db01c2793faf752d5e655c"
+    "paper/analysis/lite_hosted.py": "f705290366878af1d65eb395a171569a09cff1bc8a776f16c255d1c70e1c7da2"
   }
 }

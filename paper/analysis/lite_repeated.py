@@ -6,8 +6,10 @@ model calls. Public leaderboard cohorts remain separate from the fixed paper coh
 from __future__ import annotations
 
 from dataclasses import replace
+from datetime import datetime
 from decimal import Decimal
 import hashlib
+from itertools import permutations
 import json
 from pathlib import Path
 from statistics import mean, stdev
@@ -24,6 +26,61 @@ from trajectory_replay import prepare, evaluate, aggregate, METRICS
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'docs/research/manuscript-three-pass'
 REPORT = 'docs/research/manuscript-three-pass/analysis.json'
+DESIGN_COUNTS = frozenset({'RegimeSteps', 'RegimeDraws',
+                           *(f'Regime{name}Changes' for name, _, _ in n.REGIMES)})
+HEADLINE_SETTINGS = (('Jev', 'Jev'), ('TerraNone', 'Terra none'),
+                     ('KevTwentySeven', 'Kev-27B'),
+                     ('KevTwentySevenHybrid', 'Kev-27B + Terra none'))
+
+
+def decision_diagnostics(run):
+    """Count route, reference-consumed fields and composed decisions separately.
+
+    Field accuracy pools the fields consumed by the reference branch, including
+    the route. It is a diagnostic with its own denominator, not the benchmark
+    score; placeholders in inactive branches are excluded.
+    """
+    rows = []
+    for episode in run['episodes']:
+        spec = episode['decision_spec']; route = spec['route_question']
+        predictions = {r['t']: r['pred'] for r in run['responses'][episode['episode_id']]}
+        row = dict(episode_id=episode['episode_id'], states=len(episode['steps']),
+                   route_correct=0, field_correct=0, fields=0, composed_correct=0)
+        for step in episode['steps']:
+            gold, pred = step['gold'], predictions[step['t']]
+            keys = [route, *spec['always'], *spec['branches'][gold[route]]]
+            row['route_correct'] += pred[route] == gold[route]
+            row['field_correct'] += sum(pred[key] == gold[key] for key in keys)
+            row['fields'] += len(keys)
+            row['composed_correct'] += n.compose(spec, pred) == n.compose(spec, gold)
+        rows.append(row)
+    return {'per_episode': rows, **{key: sum(row[key] for row in rows)
+        for key in ('states', 'route_correct', 'fields', 'field_correct', 'composed_correct')}}
+
+
+def pairing_sensitivity(runs_by_pass, records, auc_policy):
+    """Evaluate every one-to-one pass matching for the headline comparisons."""
+    matchings = list(permutations(range(3)))
+    pairs = {}
+    for fast, slow in (('KevTwentySeven', 'TerraNone'), ('Jev', 'TerraNone'), ('Jev', 'Terra')):
+        matrix = []
+        for i in range(3):
+            values = []
+            for j in range(3):
+                if i == j:
+                    branch, key = ('hosted_systems', slow) if fast == 'Jev' else ('local_systems', fast)
+                    value = records[i][branch][key]['freshest']['integrated']['overall']['accuracy']
+                else:
+                    scenarios = prepare({fast: runs_by_pass[i][fast], slow: runs_by_pass[j][slow]})
+                    value = integrate(scenarios, fast, slow, 'freshest', auc_policy)['overall']['accuracy']
+                values.append(value)
+            matrix.append(values)
+        means = [mean(matrix[i][j] for i, j in enumerate(order)) for order in matchings]
+        pairs[fast+'+'+slow] = {'fast': fast, 'slow': slow, 'auc_matrix': matrix,
+                              'matching_means': means, 'min': min(means), 'max': max(means)}
+    return {'arbitration': 'freshest', 'matchings': [[j+1 for j in order] for order in matchings],
+            'provenance': 'matrix rows/columns index passes[*].provenance for fast/slow; components recorded separately',
+            'pairs': pairs}
 
 
 def compact_report(report):
@@ -139,7 +196,7 @@ def analyze():
     local = json.loads((ROOT / 'docs/research/openweight-hybrids/analysis.json').read_text())
     paper_names = local['policy']['manuscript_settings']
     specs = [s for s in local['policy']['settings'] if s['name'] in paper_names]
-    records = []
+    records, runs_by_pass = [], []
     for index in range(3):
         runs, reports, provenance = {}, {}, {}
         for name, _, _ in n.MODELS:
@@ -167,7 +224,15 @@ def analyze():
             provenance[name] = expected
         scenarios = prepare(runs)
         row = {'pass': index + 1, 'provenance': provenance, 'hosted_reports': {},
-               'standalone': {}, 'transition_errors': {}, 'hosted_systems': {}, 'local_systems': {}, 'gaps': {}}
+               'standalone': {}, 'transition_errors': {}, 'hosted_systems': {}, 'local_systems': {}, 'gaps': {},
+               'laya_diagnostics': {}, 'local_measurement_seconds': {}}
+        for spec in specs:
+            name = spec['name']; frozen = runs[name]['frozen']
+            row['local_measurement_seconds'][name] = (
+                datetime.fromisoformat(frozen['finished_at_utc']) -
+                datetime.fromisoformat(frozen['started_at_utc'])).total_seconds()
+            if name.startswith('Laya'):
+                row['laya_diagnostics'][name] = decision_diagnostics(runs[name])
         for name, run in runs.items():
             own, row['gaps'][name] = verify_standalone(scenarios, name, run)
             independently_integrated = integrate(own, name, None, 'freshest', auc['primary'])
@@ -194,6 +259,7 @@ def analyze():
                       for rule in ('freshest', 'arrival')}
             row['regression_example'] = regression_example({'traces': traces}, scenarios)
         records.append(row)
+        runs_by_pass.append(runs)
         print(f'Manuscript pass {index+1}: verified 15 recordings and all pair/rule replays', flush=True)
     trajectory = {'policy': policy, 'auc_policy': auc, 'standalone': {}, 'systems': {}, 'transition_errors': {},
                   'regression_example': records[0]['regression_example'], 'example_pass': 1,
@@ -234,6 +300,14 @@ def analyze():
                             'composition': 'same ordinal pass paired before equal averaging; separately recorded components'}
     result = {'aggregation': local['aggregation'], 'hosted': {name: mean_report([r['hosted_reports'][name] for r in records])
               for name, _, _ in n.MODELS}, 'passes': records, 'trajectory': trajectory, 'openweight': local}
+    result['pairing_sensitivity'] = pairing_sensitivity(runs_by_pass, records, auc['primary'])
+    result['measurement_budget'] = {
+        'local_run_hours': sum(seconds for row in records for seconds in row['local_measurement_seconds'].values()) / 3600,
+        'scope': 'sum of 27 measured local run durations; excludes downloads, initialization, audits, warmups and other experiments'}
+    result['selection_annotation'] = (
+        'The frozen evaluation policy describes the original AUC-selection stage. '
+        'The current manuscript subsequently includes all three complete passes per setting; '
+        'no valid response or complete pass from the fixed manuscript cohort is excluded.')
     finalize_analysis(result)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT/'analysis.json').write_text(json.dumps(result, indent=2, allow_nan=False)+'\n')
@@ -274,7 +348,11 @@ def aggregate_macros(groups):
             if not all(isinstance(v, n.NumericText) for v in values):
                 raise ValueError(f'{name}: inconsistent numeric formatting')
             raw = [v.number for v in values]
-            if name.endswith(('TokMin', 'LatencyFloor')):
+            if name in DESIGN_COUNTS:
+                if any(value != raw[0] for value in raw[1:]):
+                    raise ValueError(f'{name}: experimental design differs across passes')
+                value, operation = raw[0], 'fixed experimental design, identical across passes'
+            elif name.endswith(('TokMin', 'LatencyFloor')):
                 value, operation = min(raw), 'minimum across passes'
             elif name.endswith(('TokMax', 'LatencyMax', 'MaxDispatchLagSec', 'MaxResidual', 'MaxDeviation')):
                 value, operation = max(raw), 'maximum across passes'
@@ -289,6 +367,51 @@ def aggregate_macros(groups):
                 raise ValueError(f'{name}: conflicting nonnumeric macro')
             result.add(name, first, 'pass 1: '+groups[0].items[name].source if name.endswith(('EventsHash','RecordedUTC')) else source)
     return result
+
+
+def summary_macros(m, data):
+    """Publish compact comparisons and diagnostics from the same verified passes."""
+    m.add('ManuscriptPasses', n.count(len(data['passes'])), REPORT+':passes (count)')
+    for name, _ in HEADLINE_SETTINGS:
+        if name in ('Jev', 'TerraNone'):
+            values = [row['hosted_reports'][name]['auc']['primary']['overall']['accuracy'] for row in data['passes']]
+        elif name == 'KevTwentySeven':
+            values = [row['integrated']['overall']['accuracy'] for row in data['openweight']['standalone'][name]['passes']]
+        else:
+            values = [row['local_systems']['KevTwentySeven']['freshest']['integrated']['overall']['accuracy'] for row in data['passes']]
+        source = REPORT+':three independent pass scores for '+name
+        m.add('Headline'+name+'Auc', n.fixed(100*mean(values), 2), source+' (equal mean, %)')
+        m.add('Headline'+name+'SD', n.fixed(100*stdev(values), 2), source+' (sample SD, percentage points)')
+    m.add('OwMeasuredHours', n.fixed(data['measurement_budget']['local_run_hours'], 2),
+          REPORT+':measurement_budget.local_run_hours; measured runs only')
+    for name in data['passes'][0]['laya_diagnostics']:
+        values = [row['laya_diagnostics'][name] for row in data['passes']]
+        totals = {key: sum(row[key] for row in values)
+                  for key in ('states', 'route_correct', 'fields', 'field_correct', 'composed_correct')}
+        source = REPORT+':passes[*].laya_diagnostics.'+name
+        for suffix, numerator, denominator in [('Route', 'route_correct', 'states'),
+                                               ('GoldFields', 'field_correct', 'fields'),
+                                               ('Composed', 'composed_correct', 'states')]:
+            m.add(name+suffix, n.fixed(100*totals[numerator]/totals[denominator], 2),
+                  source+f': pooled {numerator}/{denominator}; gold-active fields include route')
+        m.add(name+'States', n.count(totals['states']), source+':total state evaluations')
+        m.add(name+'Fields', n.count(totals['fields']), source+':total gold-active fields, including route')
+    sensitivity = data['pairing_sensitivity']
+    m.add('PairingMatchings', n.count(len(sensitivity['matchings'])), REPORT+':pairing_sensitivity.matchings (count)')
+    for key, prefix in [('KevTwentySeven+TerraNone', 'KevTwentySeven'),
+                        ('Jev+TerraNone', 'JevTerraNone'), ('Jev+Terra', 'JevTerra')]:
+        for label, bound in [('Min', 'min'), ('Max', 'max')]:
+            m.add('Pairing'+prefix+label, n.fixed(100*sensitivity['pairs'][key][bound], 2),
+                  REPORT+':pairing_sensitivity.pairs.'+key+'.'+bound+' (%, six one-to-one matchings)')
+
+
+def write_summary_tables():
+    rows = ['% Generated by paper/analysis/lite_repeated.py; do not edit by hand.',
+            '% Source: '+REPORT, r'\newcommand{\TabHeadlineBody}{%']
+    rows += [f'  {label} & \\Headline{name}Auc & \\Headline{name}SD \\\\'
+             for name, label in HEADLINE_SETTINGS]
+    rows += ['}', '']
+    (ROOT/'paper/generated/summary_tables.tex').write_text('\n'.join(rows))
 
 
 def generate_numbers(args):
@@ -385,11 +508,13 @@ def generate_numbers(args):
                 macro=f'Pair{candidate}{baseline}{label}{baseline if key == 'BaselineOnly' else candidate if key == 'CandidateOnly' else ''}{'Only' if key.endswith('Only') else key}'
                 if macro in m.items:m.items[macro]=n.Macro(macro,n.count(value),REPORT+':same state and ordinal pass counts')
     n.claim_checks(m, average_models, checks)
+    summary_macros(m, data)
     if checks.failures:
         raise ValueError('\n'.join(checks.failures))
     inputs=[REPORT,*[p for p in data['sources_sha256']],f'{n.DATA}/manifest.json',n.AUDIT]
     n.write(m,inputs)
     n.write_facts(m,average_models,bench)
+    write_summary_tables()
     print(f'Three-pass manuscript: {checks.passed} checks; {len(m.items)} macros',flush=True)
     if args.list:
         for item in m.items.values():print(f'\\{item.name}\t{item.value}\t{item.source}')

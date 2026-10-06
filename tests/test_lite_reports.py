@@ -276,7 +276,7 @@ def test_network_estimate_recovers_a_known_delay_and_appears_as_a_secondary_sect
     assert net["observed"]["overall"] == data["scores"]["overall"]["time_accuracy"]
     assert net["scores"]["low"]["overall"]["time_accuracy"] <= net["scores"]["high"]["overall"]["time_accuracy"] <= net["untimed_ceiling"]["overall"]
     lite_report.report(data, tmp_path / "report")
-    assert "Network-removed estimate (secondary)" in (tmp_path / "report" / "REPORT.md").read_text()
+    assert "Fitted-remainder removal (secondary)" in (tmp_path / "report" / "REPORT.md").read_text()
     raw = tmp_path / "raw"
     _write_recording(raw, normalized=False)
     assert lite_report.analyze(raw)["network_adjustment"] is None

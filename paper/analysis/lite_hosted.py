@@ -120,7 +120,7 @@ def publish(data: dict) -> None:
                      + (f" ± {100*row['auc_sample_sd']:.2f}" if row['auc_sample_sd'] is not None else " (one pass)") + " | "
                      f"{100*row['untimed']:.2f} | {row['latency_s']['p50']:.3f} / {row['latency_s']['p95']:.3f} | {', '.join(links)} |")
     lines += ["", "These are descriptive measurements on a fixed dataset; two or three passes do not establish stable rankings. Served model identifiers are preserved in each analysis; Jev returned `jev-1.13.0` on every pass. Matching identifiers do not guarantee immutable provider backends.", "",
-        "The manuscript and counterfactual composition analyses retain their original hosted recordings. Their single-pass controls are distinct from these public leaderboard means.", "",
+        "The manuscript evaluates six hosted and nine self-hosted settings with three passes each, pairing matching pass indices for composition. Historical composition reports retain their original single-pass controls.", "",
         "Regenerate from frozen evidence without API calls:", "", "```bash", "uv run python paper/analysis/lite_hosted.py --reports", "```", ""]
     (OUT / "README.md").write_text("\n".join(lines))
 

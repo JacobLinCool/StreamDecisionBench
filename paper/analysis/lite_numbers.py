@@ -401,6 +401,20 @@ def saved_fields(got, saved):
     return got
 
 
+def network_measurements(report: dict) -> dict:
+    """Separate explanatory prose from the complete reproducible fit evidence.
+
+    Historical reports retain their original prose. Every other field, including
+    the method, estimator settings, coefficients, uncertainty and replay scores,
+    must still reproduce; unknown measurement fields are not discarded.
+    """
+    documentary = {'assumption', 'interpretation'}
+    for key in documentary:
+        if not isinstance(report.get(key), str) or not report[key].strip():
+            raise ValueError(f'Network report requires documentary field {key}')
+    return {key: value for key, value in report.items() if key not in documentary}
+
+
 def load_model(prefix: str, folder: str, run: str, bench: dict, checks: Checks) -> dict:
     analysis = Source(f"docs/lite/results/{folder}/analysis.json")
     run_rel = f"runs/{run}"
@@ -418,7 +432,8 @@ def load_model(prefix: str, folder: str, run: str, bench: dict, checks: Checks) 
                 saved_fields(verified["raw_wallclock_scores"], a["raw_wallclock_scores"]), a["raw_wallclock_scores"])
     net = network_adjustment(verified["episodes"], verified["responses"], verified["releases"],
                              generates_text=a["config"].get("provider", "openai") == "openai")
-    checks.same(f"{prefix} physical network fit vs analysis.json", net, a["network_adjustment"])
+    checks.same(f"{prefix} physical network fit vs analysis.json",
+                network_measurements(net), network_measurements(a["network_adjustment"]))
     recorded = verified
     checks.same(f"{prefix} evaluation policy", a["evaluation_policy"], POLICY)
     from lite_auc import compute_auc

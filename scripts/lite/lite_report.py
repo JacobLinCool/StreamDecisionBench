@@ -97,16 +97,15 @@ def _network_report_lines(net: dict) -> list[str]:
     n, s = net["network_s"], net["scores"]
     decode = (f"decode {1000 * net['decode_s_per_output_token']:.2f} ms/token"
               if net["decode_s_per_output_token"] is not None else "no decode term (the model does not generate text)")
-    lines = ["## Network-removed estimate (secondary)", "",
-             "Assume send-to-receipt latency = network + prefill (proportional to uncached input tokens) + "
-             "decode (proportional to output tokens, for text-generating models). The token-independent remainder "
-             "is treated as network. Queueing only adds time, so the estimate uses the fast envelope: the intercept "
+    lines = ["## Fitted-remainder removal (secondary)", "",
+             "Approximate send-to-receipt latency by a token-independent intercept plus slopes for uncached "
+             "input tokens and, for text-generating models, output tokens. This secondary replay removes the intercept "
              "of a 10th-percentile regression with nonnegative token slopes. The range uses 500 within-scenario "
              "bootstrap samples with blocks of 10 consecutive releases.", "",
-             f"Estimated network {n['estimate']:.3f} s (range {n['low']:.3f}–{n['high']:.3f} s); "
+             f"Fitted remainder {n['estimate']:.3f} s (range {n['low']:.3f}–{n['high']:.3f} s); "
              f"prefill {1000 * net['prefill_s_per_1k_input_tokens']:.1f} ms/1k tokens; {decode}; "
              f"fastest response {net['latency_floor_s']:.3f} s; {s['estimate']['clamped_requests']} requests clamped at receipt.", "",
-             "| Scope | Recorded-cadence score | Network removed (estimate) | Range | Untimed accuracy |", "|---|---:|---:|---:|---:|"]
+             "| Scope | Recorded-cadence score | Remainder removed (estimate) | Range | Untimed accuracy |", "|---|---:|---:|---:|---:|"]
     scopes = [("Overall", lambda block: block["overall"])]
     scopes += [(NAMES[f], lambda block, f=f: block["by_family"][f]) for f in s["estimate"]["by_family"]]
     for name, pick in scopes:
@@ -119,7 +118,8 @@ def _network_report_lines(net: dict) -> list[str]:
                   "Extrapolation to zero tokens can be negative; negative latency cannot be removed, so replay "
                   "projects it to zero. analysis.json retains the unconstrained estimate. Scores and recordings are unchanged."]
     lines += ["", "This secondary estimate leaves the primary score unchanged. The token-independent remainder "
-              "can include fixed server time, so it bounds the network effect from above. The range reflects "
+              "can include network delay, fixed server time and model misspecification; it does not identify "
+              "network delay or guarantee an upper bound on its effect. The range reflects "
               "estimator uncertainty, not variation across repeated model runs. Untimed accuracy is a state-level "
               "diagnostic, not an upper bound for arbitrary in-force trajectories.", ""]
     return lines

@@ -160,7 +160,7 @@ A valid response ends the retries even if its decision is wrong, and authenticat
 
 \paragraph{GPT requests.}
 The GPT models receive the fixed instruction below, followed by the request as JSON with the questions before the state so that the repeated policy text forms a cacheable prefix.
-No GPT pass reported cached input tokens (\LunaCachedTokTotal, \LunaNoneCachedTokTotal, \TerraCachedTokTotal, \TerraNoneCachedTokTotal{} and \AstraCachedTokTotal); with mean fitted prefill slopes of at most \LunaPrefillMsPerKTok\,ms per thousand tokens (Appendix~\ref{app:network}), caching would be expected to change little of the latency.
+No GPT pass reported cached input tokens (\LunaCachedTokTotal, \LunaNoneCachedTokTotal, \TerraCachedTokTotal, \TerraNoneCachedTokTotal{} and \AstraCachedTokTotal).
 Strict structured outputs restrict each answer to the question's option labels, sorted so that the schema reveals no display order, and responses are not stored.
 {\scriptsize
 \begin{verbatim}
@@ -179,6 +179,9 @@ Jev receives the same state and questions through its native interface and retur
 A response is valid if it answers every question exactly once with a distribution over the defined options that sums to one within rounding, and if the probability of the reported choice is within one reporting step (\JevReportStep) of the highest reported probability, since probabilities are reported to two decimals.
 This check only decides validity: the evaluated answer is always the choice Jev reported, which the event logs keep without the distributions, and every other validity and retry rule is the same for all models.
 
+\paragraph{Client conditions.}
+Hosted requests used a MacBook with an Apple M5 Pro chip over a stable network connection without a VPN. Client location is withheld for anonymous review; provider serving regions were not recorded. The latency measurements describe this client-to-service path.
+
 \paragraph{Reliability.}
 Table~\ref{tab:reliability} lists the \NumSettingsWord{} settings' reliability counts. Three complete passes per setting were recorded on \RecordingDatesUTC{} (UTC). In pass 1, the original six scenarios and the two presenter scenarios were recorded in separate sessions, except Astra low's single eight-scenario session; passes 2 and 3 each cover all eight scenarios in one session. The merged artifacts retain each part's start and end times, source hashes, requested and served model identifiers and event digest.
 All requests succeeded on their first attempt.
@@ -189,24 +192,8 @@ A partial Luna pass on an earlier build of the data, stopped when the wording of
 
 % ---------------------------------------------------------------------------
 \FloatBarrier
-\section{Network-Removed Estimate}
+\section{Non-Token Latency Analysis}
 \label{app:network}
-
-\begin{table}[b]
-  \centering
-  \small
-  \setlength{\tabcolsep}{2.5pt}
-  \begin{tabular}{lrlrrrr}
-    \toprule
-    Model & Net. & Range & Pre. & Dec. & p50 & p95 \\
-    \scriptsize & \scriptsize (s) & \scriptsize (s) & \scriptsize (ms/1k tok) & \scriptsize (ms/tok) & \scriptsize (s) & \scriptsize (s) \\
-    \midrule
-    \TabLatencyBody
-    \bottomrule
-  \end{tabular}
-  \caption{\textbf{The estimated non-token remainder is most of the latency without reasoning and close to Jev's latency floor.} Net.: mean remainder (averaged \NetRangeLevel\% endpoints); Pre./Dec.: slopes; p50/p95: latency.}
-  \label{tab:latency}
-\end{table}
 
 \begin{table*}[tp]
   \centering
@@ -219,7 +206,7 @@ A partial Luna pass on an earlier build of the data, stopped when the wording of
     Input & \LunaInputTokMedian & \LunaNoneInputTokMedian & \TerraInputTokMedian & \TerraNoneInputTokMedian & \AstraInputTokMedian & \JevInputTokMedian \\
     Output & \LunaOutputTokMedian & \LunaNoneOutputTokMedian & \TerraOutputTokMedian & \TerraNoneOutputTokMedian & \AstraOutputTokMedian & \JevOutputTokMedian \\
     Reasoning & \LunaReasoningTokMedian & \LunaNoneReasoningTokMedian & \TerraReasoningTokMedian & \TerraNoneReasoningTokMedian & \AstraReasoningTokMedian & \JevReasoningTokMedian \\
-    \multicolumn{7}{l}{\textit{Tokens per pass (total)}} \\
+    \multicolumn{7}{l}{\textit{Tokens across three passes (total)}} \\
     Input & \LunaInputTokTotal & \LunaNoneInputTokTotal & \TerraInputTokTotal & \TerraNoneInputTokTotal & \AstraInputTokTotal & \JevInputTokTotal \\
     Output & \LunaOutputTokTotal & \LunaNoneOutputTokTotal & \TerraOutputTokTotal & \TerraNoneOutputTokTotal & \AstraOutputTokTotal & \JevOutputTokTotal \\
     \multicolumn{7}{l}{\textit{Latency per request (s)}} \\
@@ -240,22 +227,22 @@ A partial Luna pass on an earlier build of the data, stopped when the wording of
 
 \paragraph{Model.}
 \label{sec:network}
-Network transfer is part of every response's latency, so in-force accuracy depends on where the client runs, and we evaluate a secondary network-removal diagnostic at the 2\,s recording cadence. All adjusted scores in this appendix are fixed-interval diagnostics, not the primary log-AUC.
+Network transfer and server processing both contribute to latency. We examine their combined non-token remainder by removing a fitted intercept at the 2\,s recording cadence. All adjusted scores in this appendix are fixed-interval sensitivity results.
 It models the time before response $i$ is received as
 \begin{equation}
-  \tau_i=\nu+\pi\,x_i+\delta\,o_i+\varepsilon_i,\qquad \varepsilon_i\ge 0,
+  \tau_i=\nu+\pi\,x_i+\delta\,o_i+\varepsilon_i,
   \label{eq:network}
 \end{equation}
-with $x_i$ uncached input tokens (prefill), $o_i$ output tokens including reasoning (decode, for text-generating models only) and $\varepsilon_i\ge0$ queueing and other waiting time.
-The remainder $\nu$ that does not scale with tokens is treated as network; because $\varepsilon_i$ only adds time, it is estimated from the fast envelope, as the intercept of a \NetQuantilePct{}th-percentile quantile regression with nonnegative slopes and a \NetRangeLevel\% block-bootstrap range.
+with $x_i$ uncached input tokens (prefill), $o_i$ output tokens including reasoning (decode, for text-generating models only) and $\varepsilon_i$ residual variation, including queueing.
+We estimate the non-token remainder $\nu$ from the fast envelope, as the intercept of a \NetQuantilePct{}th-percentile quantile regression with nonnegative slopes and a \NetRangeLevel\% block-bootstrap range.
 Every response is replayed with $\nu$, or either end of its range, removed from its time before receipt.
-The remainder can also contain fixed server time and the average cost of any term fitted as zero, so it bounds the fixed network delay from above.
-Figure~\ref{fig:map} places every setting at its median latency before and after removal; the nearly coincident Terra low, Astra low and Luna low are shifted by $-2$, $+2$ and $+4$\,pt for legibility, and Astra low's network-removed point, which nearly overlaps Terra low's, is drawn beneath it.
+The fitted intercept may absorb fixed server time and omitted token costs. Queueing can covary with token counts, so this fit neither identifies nor bounds network delay; the replay measures sensitivity to removing the fitted remainder.
+Figure~\ref{fig:map} places every setting at its median latency before and after removal; the nearly coincident Terra low, Astra low and Luna low are shifted by $-2$, $+2$ and $+4$\,pt for legibility, and Astra low's adjusted point, which nearly overlaps Terra low's, is drawn beneath it.
 
 \begin{figure}[tp]
   \centering
   \includegraphics[width=\linewidth]{figures/fig_map.pdf}
-  \caption{\textbf{Removing the non-token remainder, an upper bound on fixed network delay, can put Terra none above Jev at 2\,s.}
+  \caption{\textbf{Removing the fitted remainder can put Terra none above Jev at 2\,s.}
   Arrows subtract each remainder; dashed: the oracle of Equation~\eqref{eq:delay}, valid up to 2\,s.}
   \label{fig:map}
 \end{figure}
@@ -263,7 +250,7 @@ Figure~\ref{fig:map} places every setting at its median latency before and after
 \begin{figure}[tp]
   \centering
   \includegraphics[width=\linewidth]{figures/fig_latency.pdf}
-  \caption{\textbf{Decode dominates GPT latency at low effort, the non-token remainder without reasoning.}
+  \caption{\textbf{Fitted decode costs dominate at low effort, the non-token remainder without reasoning.}
   Whiskers average per-pass \NetRangeLevel\% endpoints; dashed: mean fits extrapolated to zero tokens.}
   \label{fig:latency}
 \end{figure}
@@ -277,11 +264,27 @@ The retained slopes vary across passes: Terra low and Luna none have zero prefil
 The bootstrap resamples blocks of \NetBootstrapBlock{} consecutive time steps with replacement within each scenario (\NetBootstrapResamples{} resamples, seed \NetBootstrapSeed), refits the intercept and takes its 2.5th and 97.5th percentiles.
 Each response is replayed with the estimate removed from its time before receipt, never by more than that time. At most \LunaNoneClampedRequests{} Luna none, \TerraNoneClampedRequests{} Terra none and \JevClampedRequests{} Jev requests are clamped, taking the maximum over the estimate and its two bounds. The estimate is fitted to the physical token/latency records and used on the 2\,s recording-cadence replay.
 
+\begin{table}[t]
+  \centering
+  \small
+  \setlength{\tabcolsep}{2.2pt}
+  \begin{tabular}{lrlrrrr}
+    \toprule
+    Model & Rem. & Range & Pre. & Dec. & p50 & p95 \\
+    \scriptsize & \scriptsize (s) & \scriptsize (s) & \scriptsize (ms/1k tok) & \scriptsize (ms/tok) & \scriptsize (s) & \scriptsize (s) \\
+    \midrule
+    \TabLatencyBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{The fitted remainder is close to Jev's latency floor.} Rem.: mean non-token remainder (averaged \NetRangeLevel\% endpoints); Pre./Dec.: slopes; p50/p95: latency.}
+  \label{tab:latency}
+\end{table}
+
 \paragraph{Estimates.}
 Figure~\ref{fig:latency} and Table~\ref{tab:latency} give the fitted components and Table~\ref{tab:tokens} the token counts.
 At low effort the fastest responses took \LunaLatencyFloor\,s (Luna), \TerraLatencyFloor\,s (Terra) and \AstraLatencyFloor\,s (Astra) before receipt, well above their remainders, consistent with decode time for even the shortest outputs; the shortest outputs have \LunaOutputTokMin, \TerraOutputTokMin{} and \AstraOutputTokMin{} tokens, so the intercept extrapolates below the observed range.
 Without reasoning the fastest responses took \LunaNoneLatencyFloor\,s (Luna) and \TerraNoneLatencyFloor\,s (Terra), and Terra's fitted prefill slope is \TerraNonePrefillMsPerKTok\,ms per thousand input tokens.
-Astra low reasons in only \AstraReasoningResponses{} of \AstraStates{} responses, so its outputs are as short as without reasoning; its latency includes substantial decode time and a non-token remainder; fitted prefill is positive in passes 2 and 3.
+Astra low reasons in only \AstraReasoningResponses{} of \AstraStates{} responses. Its fit assigns substantial latency to decode and a non-token remainder; fitted prefill is positive in passes 2 and 3.
 Jev's fastest response took \JevLatencyFloor\,s, close to its remainder, so for Jev the remainder is essentially its latency floor; its fitted prefill slope is \JevPrefillMsPerKTok\,ms per thousand input tokens.
 
 \begin{table}[tp]
@@ -290,7 +293,7 @@ Jev's fastest response took \JevLatencyFloor\,s, close to its remainder, so for 
   \setlength{\tabcolsep}{4pt}
   \begin{tabular}{lrrrl}
     \toprule
-    & & & \multicolumn{2}{c}{Network removed} \\
+    & & & \multicolumn{2}{c}{Remainder removed} \\
     \cmidrule(lr){4-5}
     Setting & Untimed & In force & Est. & Range \\
     \midrule
@@ -390,23 +393,6 @@ Table~\ref{tab:auc-decomposition} reports these quantities; the fixed-interval d
 \section{Per-Scenario Results and Time-Step Interval}
 \label{app:scenario}
 
-\begin{table}[!t]
-  \centering
-  \small
-  \setlength{\tabcolsep}{3.5pt}
-  \begin{tabular}{lrrrrrrr}
-    \toprule
-    & & \multicolumn{2}{c}{Luna} & \multicolumn{2}{c}{Terra} & Astra & \\
-    \cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-7}
-    Scale & Interval (s) & low & none & low & none & low & Jev \\
-    \midrule
-    \TabPaceBody
-    \bottomrule
-  \end{tabular}
-  \caption{\textbf{The order of the settings depends on the time-step interval.} In-force accuracy (\%) with every recorded latency scaled, equivalent to the interval shown; $\times$1 is the recording.}
-  \label{tab:pace}
-\end{table}
-
 \begin{table}[t]
   \centering
   \small
@@ -463,6 +449,23 @@ Table~\ref{tab:auc-decomposition} reports these quantities; the fixed-interval d
   \label{tab:paired}
 \end{table}
 
+\begin{table}[t]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3.5pt}
+  \begin{tabular}{lrrrrrrr}
+    \toprule
+    & & \multicolumn{2}{c}{Luna} & \multicolumn{2}{c}{Terra} & Astra & \\
+    \cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-7}
+    Scale & Interval (s) & low & none & low & none & low & Jev \\
+    \midrule
+    \TabPaceBody
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{The order of the settings depends on the time-step interval.} In-force accuracy (\%) with every recorded latency scaled, equivalent to the interval shown; $\times$1 is the recording.}
+  \label{tab:pace}
+\end{table}
+
 \begin{table*}[tp]
   \centering
   \small
@@ -501,7 +504,7 @@ The primary score integrates these evaluations over 0.5--8\,s; the fixed-interva
 
 This section reports fixed-interval diagnostics at the 2\,s recording cadence.
 
-\begin{figure}[tp]
+\begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{figures/fig_separability.pdf}
   \caption{\textbf{In every scenario, in-force accuracy is within \ProductMaxDeviation{} points of untimed accuracy times the oracle in-force accuracy.}
@@ -509,7 +512,7 @@ This section reports fixed-interval diagnostics at the 2\,s recording cadence.
   \label{fig:separability}
 \end{figure}
 
-\begin{table}[tp]
+\begin{table}[t]
   \centering
   \small
   \setlength{\tabcolsep}{3pt}
@@ -537,6 +540,8 @@ This section reports fixed-interval diagnostics at the 2\,s recording cadence.
   \label{tab:decomposition}
 \end{table}
 
+
+
 \begin{table*}[tp]
   \centering
   \small
@@ -547,7 +552,7 @@ This section reports fixed-interval diagnostics at the 2\,s recording cadence.
     \TabRegimeBody
     \bottomrule
   \end{tabular}
-  \caption{\textbf{In projection, how often the reference changes matters more than how the changes are arranged.} Untimed accuracy times the mean oracle in-force accuracy over \RegimeDraws{} resamples of each setting's latencies (\%), on \RegimeSteps{} time steps of \ReleaseIntervalSec\,s; the first row uses \sdb's own schedules.}
+  \caption{\textbf{In projection, change frequency matters more than its arrangement.} Untimed accuracy times mean oracle accuracy (\%): \RegimeDraws{} latency resamples per pass on \RegimeSteps{} time steps of \ReleaseIntervalSec\,s; first row: \sdb's schedules.}
   \label{tab:regime}
 \end{table*}
 
@@ -564,12 +569,12 @@ On \sdb's own schedules the projection is within \RegimeLiteMaxDiff{} points of 
 
 \paragraph{Procedure.}
 The audit asked whether each stored reference answer follows from the public rules and evidence of its state.
-For the original six IDE, assembly and support scenarios, two LLM agents worked blind, reading only the public states and questions and never the generator or reference code: one reimplemented the stated rules as an independent program and compared its output with the stored references, and the other derived the answers state by state by hand.
+For the original six IDE, assembly and support scenarios, two LLM agents worked blind, reading only the public states and questions and never the generator or reference code: one reimplemented the stated rules as an independent program and compared its output with the stored references, and the other derived the answers state by state.
 This gives \AuditRederivationsPerScenarioWord{} re-derivations per scenario and \AuditRederivations{} in total.
 Separate agents compared each family's reference code with its public rule text (\AuditCodeTextChecksWord{} audits) and checked the dataset's structure and deterministic regeneration (\AuditStructuralChecksWord{} check).
 Findings were grouped by rule, and each of the \AuditFindingGroups{} groups was judged by \AuditLensesWord{} agents.
 The \AuditReferenceFindingGroups{} groups about reference answers were judged by a literal reading of the rule text, a trace of the reference code on the state and a search for alternative readings a careful reader could adopt; the others, about documentation, narrative consistency or code paths, by reproduction, impact and counter-argument.
-The audit record in the accompanying materials lists every check with its reported agreement and every grouped finding with its three votes; it does not identify the model behind each agent.
+The released audit record lists each check's agreement and each grouped finding's three votes. It omits agent model versions, full prompts and independent evaluator programs, limiting reproduction of this audit; the benchmark reference and scoring procedures remain executable.
 
 \paragraph{Outcome.}
 Under its default reading of the rules, each of the \AuditRederivations{} re-derivations agreed with the stored reference at all \ReleasesPerScenario{} consumed decisions of its scenario; disagreements arose only under alternative readings that the agents evaluated.
@@ -750,6 +755,8 @@ All use BF16 backbones and native decision readouts. The benchmark and model sha
 Download, initialization, input audits and three unrelated synthetic warmups precede measurement.
 These are measurements of the configured deployments: differences with hosted APIs do not isolate architecture speed.
 
+\input{model-provenance.tex}
+
 \FloatBarrier
 \begin{table*}[t]
   \centering
@@ -810,6 +817,11 @@ Nimble instead falls from \OwNimbleUntimed\% untimed to \OwNimbleAuc\% log-AUC, 
 Exact composed decisions require all reference-active fields to agree; low composed accuracy is a result for this decision contract, not a claim about general language ability.
 The accompanying analysis retains the six time classes by scenario and family for every setting.
 
+\paragraph{Laya's component errors.}
+Laya English, typed-decisions and multilingual achieve route accuracies of \LayaEnglishRoute\%, \LayaTypedRoute\% and \LayaMultilingualRoute\%, respectively.
+Pooled accuracy over the reference-consumed fields, including the route, is \LayaEnglishGoldFields\%, \LayaTypedGoldFields\% and \LayaMultilingualGoldFields\%; each setting has \LayaEnglishStates{} state evaluations and \LayaEnglishFields{} consumed-field evaluations across three passes.
+Errors therefore occur before the exact-match composition step. The recorded native input audits check state and option coverage, and the warmups check response format; the measurements leave the cause of these errors open.
+
 \paragraph{Repeated passes.}
 We record three passes of each setting with the same GPU, configuration, checkpoints and dependency sets (Table~\ref{tab:openweight-repeats}). Self-hosted results and curves are equal means of independently evaluated passes; latency summaries average the per-pass quantiles.
 Across the three passes, a setting's log-AUC varies by at most \OwRepeatMaxAucRange{} points and its untimed accuracy by at most \OwRepeatMaxUntimedRange{} points. Every pass orders the self-hosted settings the same way, although Kev-4B and DJev stay within one point of each other, and every Kev-27B pass stays above all three Jev passes (\OwKevTwentySevenAuc\% on average).
@@ -821,6 +833,7 @@ Table~\ref{tab:openweight-hybrids} reports the mean and range for every pair and
 Nimble occupies the provisional slot as a control even though its median latency exceeds Terra none's.
 Under freshest-source arbitration, Jev plus Terra none reaches \OwJevTerraNoneAuc\%, while DJev, Kev-4B and Qwen direct-logit plus Terra none give \OwDJevFreshestAuc\%, \OwKevFreshestAuc\% and \OwQwenLogitsFreshestAuc\%, against \OwTerraNoneAuc\% for Terra none alone (Figure~\ref{fig:openweight-hybrids}).
 Kev-27B plus Terra none reaches \OwKevTwentySevenFreshestAuc\%, above both Kev-27B alone (\OwKevTwentySevenAuc\%) and Jev plus Terra none; Kev-9B plus Terra none gives \OwKevNineFreshestAuc\%.
+Across all six one-to-one matchings of component passes, the mean log-AUC of Kev-27B plus Terra none ranges from \PairingKevTwentySevenMin\% to \PairingKevTwentySevenMax\%, and Jev plus Terra none from \PairingJevTerraNoneMin\% to \PairingJevTerraNoneMax\%; their ordering is unchanged.
 The acceptance rule favors source recency, so a wrong new provisional answer can replace an earlier answer that still matches the reference.
 These interleaved exposure durations determine the composed score; neither faster service nor adding a correction guarantees improvement.
 
@@ -834,13 +847,13 @@ The fixed-delay replay assumes latency is unchanged when the interval changes; c
 \label{app:repro}
 
 \paragraph{Accompanying materials.}
-The accompanying materials, provided as supplementary material, contain the frozen dataset (\texttt{data/lite/v1}, dataset hash beginning \texttt{\DatasetHashShort}), the task generators and executable references, the runner and scorer, all recorded passes with their complete event logs, the audit record, and the scripts that produce every number, table and figure in this paper.
+The accompanying materials, provided as supplementary material, contain the frozen dataset (\texttt{data/lite/v1}, dataset hash beginning \texttt{\DatasetHashShort}), the task generators and executable references, the runner and scorer, all recorded passes with their complete event logs, the audit record, and the scripts that regenerate the numerical results and figures in this paper.
 Code and data are released under the MIT license and are intended for evaluating decision components; the synthetic scenarios and their rules are not a policy for any real deployment.
 The pass-1 event logs have SHA-256 digests beginning \texttt{\LunaEventsHash} and \texttt{\LunaNoneEventsHash} (Luna, low and none), \texttt{\TerraEventsHash} and \texttt{\TerraNoneEventsHash} (Terra), \texttt{\AstraEventsHash} (Astra) and \texttt{\JevEventsHash} (Jev).
-The three-pass analysis manifest lists all eighteen hosted and twenty-seven self-hosted recordings with their event hashes. Every number, table and figure in the paper is regenerated from these logs without any model call; regeneration verifies that recomputed scores match the published analyses and that the executable reference reproduces all \NumStates{} stored answers. The independent audit remains limited to its original six-scenario scope.
+The three-pass analysis manifest lists all eighteen hosted and twenty-seven self-hosted recordings with their event hashes. The analysis scripts regenerate the measured results from these logs without any model call, verify agreement with the published analyses, and check that the executable reference reproduces all \NumStates{} stored answers. The independent audit remains limited to its original six-scenario scope.
 A new pass needs access to the evaluated models: an OpenAI API key for the GPT models and access to \JevProvider's service for Jev.
-At the list prices of Table~\ref{tab:tokens}, OpenAI bills reasoning tokens as output and \JevProvider{} bills input tokens only; the eighteen hosted passes cost \CostTotalUSD{} USD in total. Actual billed charges can differ; the self-hosted passes ran on a laboratory GPU without provider charges.
-The self-hosted evidence contains original event logs, frozen scenarios and configurations, input audits and pinned native revisions; the release includes no model weights. Recomputing all standalone and composition results requires neither GPUs nor service credentials.
+At the list prices of Table~\ref{tab:tokens}, OpenAI bills reasoning tokens as output and \JevProvider{} bills input tokens only; the eighteen hosted passes cost \CostTotalUSD{} USD in total. Actual billed charges can differ. The twenty-seven self-hosted measurement windows total \OwMeasuredHours{} GPU-host hours, excluding setup, warmups, input audits and other experiments; a complete compute total was not retained.
+The self-hosted evidence contains recorded predictions and timing, frozen scenarios and configurations, input audits and pinned native revisions; the release includes no model weights. Recomputing all standalone and composition results requires neither GPUs nor service credentials.
 Hosted models may change or be retired; the logs record the requested and served model identifiers.
 
 \paragraph{Commands.}
@@ -864,8 +877,8 @@ uv run python -m streamdecisionbench.lite score \
   --run runs/<dir>
 uv run python scripts/lite/lite_report.py \
   --run runs/<dir> --out docs/lite/results/<name>
-# all primary AUC reports, diagnostics, numbers and figures
-uv run python paper/analysis/lite_reports.py
+# verify all manuscript passes; regenerate
+# diagnostics, numbers, tables and figures
 uv run --group paper \
   python paper/analysis/lite_repeated.py
 \end{verbatim}

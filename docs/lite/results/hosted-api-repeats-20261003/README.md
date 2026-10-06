@@ -21,7 +21,7 @@ Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is
 
 These are descriptive measurements on a fixed dataset; two or three passes do not establish stable rankings. Served model identifiers are preserved in each analysis; Jev returned `jev-1.13.0` on every pass. Matching identifiers do not guarantee immutable provider backends.
 
-The manuscript and counterfactual composition analyses retain their original hosted recordings. Their single-pass controls are distinct from these public leaderboard means.
+The manuscript evaluates six hosted and nine self-hosted settings with three passes each, pairing matching pass indices for composition. Historical composition reports retain their original single-pass controls.
 
 Regenerate from frozen evidence without API calls:
 
