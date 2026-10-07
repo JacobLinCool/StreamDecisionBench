@@ -104,6 +104,8 @@ def validate_response(response: dict[str, Any], questions: dict[str, dict[str, A
         answer = answers[key]
         if not isinstance(answer, dict) or answer.get("type") != question["type"]:
             raise ContractError(f"answer {key!r}: type does not match its question")
+        if is_refusal(answer):
+            continue
         if question["type"] == "noul":
             if not _probability(answer.get("noul")):
                 raise ContractError(f"answer {key!r}: noul must be a probability")
@@ -133,6 +135,11 @@ def validate_response(response: dict[str, Any], questions: dict[str, dict[str, A
                 raise ContractError(f"answer {key!r}: score is not the expected level")
 
 
+def is_refusal(answer: dict[str, Any]) -> bool:
+    """A provider's explicit refusal of one question: valid, but it commits to no option."""
+    return answer.get("refusal") is True and set(answer) == {"type", "refusal"}
+
+
 def score_level(answer: dict[str, Any]) -> int:
     """The level a score answer commits to: the most probable one (lowest on ties)."""
     probs = {int(k): v for k, v in answer["probabilities"].items()}
@@ -142,6 +149,8 @@ def score_level(answer: dict[str, Any]) -> int:
 
 def committed_answer(question: dict[str, Any], answer: dict[str, Any]) -> str | int | bool:
     """The discrete decision an answer commits to, in the question's own terms."""
+    if is_refusal(answer):
+        return INVALID
     if question["type"] == "choice":
         return answer["choice"]
     if question["type"] == "score":

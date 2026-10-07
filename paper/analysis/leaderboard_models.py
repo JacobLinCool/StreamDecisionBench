@@ -48,3 +48,10 @@ HOSTED_PASSES["Glide"] = (
     ("glide-20261003/pass2", "lite-v1-glide-20261003-pass2-retry-v1"),
     ("glide-20261003/pass3", "lite-v1-glide-20261003-pass3-retry-v1"),
 )
+
+HOSTED_LABELS["LunaDecisions"] = "GPT-6-Luna (Decisions API)"
+HOSTED_PASSES["LunaDecisions"] = (
+    ("gpt-6-luna-decisions-20261007", "lite-v1-gpt-6-luna-decisions-20261007-pass1-retry-v1"),
+    ("gpt-6-luna-decisions-20261007/pass2", "lite-v1-gpt-6-luna-decisions-20261007-pass2-retry-v1"),
+    ("gpt-6-luna-decisions-20261007/pass3", "lite-v1-gpt-6-luna-decisions-20261007-pass3-retry-v1"),
+)

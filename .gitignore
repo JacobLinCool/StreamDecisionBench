@@ -374,3 +374,10 @@ _site/
 !/runs/lite-v1-glide-20261003-pass[123]-retry-v1/run.json
 !/runs/lite-v1-glide-20261003-pass[123]-retry-v1/episodes.json
 !/runs/lite-v1-glide-20261003-pass[123]-retry-v1/events.jsonl
+
+# GPT-6-Luna Decisions API: publish only the three immutable recording inputs.
+!/runs/lite-v1-gpt-6-luna-decisions-20261007-pass[123]-retry-v1/
+/runs/lite-v1-gpt-6-luna-decisions-20261007-pass[123]-retry-v1/*
+!/runs/lite-v1-gpt-6-luna-decisions-20261007-pass[123]-retry-v1/run.json
+!/runs/lite-v1-gpt-6-luna-decisions-20261007-pass[123]-retry-v1/episodes.json
+!/runs/lite-v1-gpt-6-luna-decisions-20261007-pass[123]-retry-v1/events.jsonl

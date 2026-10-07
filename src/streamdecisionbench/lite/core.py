@@ -10,7 +10,7 @@ import random
 from pathlib import Path
 from typing import Any
 
-from streamdecisionbench.jev import validate_request
+from streamdecisionbench.jev import INVALID, validate_request
 from streamdecisionbench.lite import SCHEMA_VERSION
 
 
@@ -27,6 +27,9 @@ def compose(spec: dict, answers: dict) -> dict:
     """Keep the predicted route, its active fields, and globally used fields."""
     route_key = spec["route_question"]
     route = answers[route_key]
+    if route == INVALID:
+        # A refused route selects no branch; the decision cannot match any reference.
+        return {key: answers[key] for key in [route_key, *spec["always"]]}
     if route not in spec["branches"]:
         raise ValueError(f"unknown route: {route!r}")
     keys = [route_key, *spec["always"], *spec["branches"][route]]
@@ -36,7 +39,8 @@ def compose(spec: dict, answers: dict) -> dict:
 def decode(episode: dict, wire_answers: dict) -> dict:
     if set(wire_answers) != set(episode["questions"]):
         raise ValueError("answers must cover every question exactly once")
-    return {key: episode["option_semantics"][key][value] for key, value in wire_answers.items()}
+    return {key: INVALID if value == INVALID else episode["option_semantics"][key][value]
+            for key, value in wire_answers.items()}
 
 
 def encode_scenario(scenario: dict) -> dict:

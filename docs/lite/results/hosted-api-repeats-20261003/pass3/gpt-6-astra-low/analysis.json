@@ -51,27 +51,30 @@
   "events_sha256": "6a4caaa1f8b8350c12d396b8afbc44fa95afd4e49120acb171755f03e88edc5d",
   "analysis_sources": {
     "adapters/__init__.py": "808c150f2e51af4cf33fe3267a2b040ba533c37cad0b6a13dc80a09a5b7366af",
-    "adapters/base.py": "843abcec134df35c6b000b4389d060e3e63a66c4c2cbd2ea82884142df784003",
+    "adapters/base.py": "5fd62ec5d30651803d52e3df837356329113f6246bac2404d18886102d0e4510",
     "adapters/cloudflare.py": "5306cd4c9641b2b73122f7d6d965993960f5df065fde59b5279cc4079ebddd4f",
+    "adapters/fastino.py": "06a56e82bbc97816dc24ec9f45789d75a400b733fcc191a74023a2a3f6b49ed7",
     "adapters/llm.py": "14a64eb0c3ee6b6b7d755ea55bd52cb87aaa56356c800a740fe71a4b79fa8ae2",
     "adapters/local.py": "d4b0295cda3d576174db082fc9bb461639ace56863795885cae37ed8adde10f9",
+    "adapters/openai_decisions.py": "6ea2f5d5b701c477d14578009c63b9fa30a8ee98d0b676bca7f3619bf3466cd9",
+    "adapters/perplexity.py": "eb5363085a6230b33f51e8e4c4bbb937cf1111112642b33d5b583f78988b13ea",
     "adapters/remote.py": "7e823a7ef5eef18b53c24c7d96340bfd8b5e0241f40b2e5f649a3036478db1e1",
     "adapters/wity.py": "5432f1c1ec36703e97c2aeeeb2ac70d3fb36f0d4ab6dc3c6cdbbc5548242218d",
-    "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+    "jev.py": "249c5a9065f362b63cbd13ad711e83703a76d8b3ba3a671d8f282a55c3d1b83a",
     "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
-    "lite/__main__.py": "c13061795daa2733b04621dad776ed371e3cca87056664f8b1bba725c5dc98bc",
-    "lite/core.py": "bdefc99a8ff0cc83bbe8627d21e1b7c9f8f7be0f9fd231d03d2db025bc841598",
+    "lite/__main__.py": "d9d04bd1665726c6f26c1ccfb20eb2cb093d6ae205480f4757ad3ffb97f64860",
+    "lite/core.py": "93ed536d194e77355db77addd879a6406e89cbbbb91e967db4c56a796b1955a4",
     "lite/interval_scoring.py": "ce3eda9c2fe2efcd84b75a02ce329e8fc7bf7f21b9abd65e65fd10bf3d9a6eb3",
     "lite/reference_scoring.py": "14036a3799c453fef6c19baca3935f30d63f01aec6241cf785235eb966cd969d",
     "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
-    "lite/runtime.py": "da7cd3ef56a5d7db73fee8b42a74ecf9c38308f7821c4a45b97cc3a55bdbbc67",
+    "lite/runtime.py": "f6b0ee67e18e0f50126679a53944f7a8311a9e61f92818825556e4ebef470089",
     "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
     "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
     "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
     "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
     "lite/tasks/presenter.py": "2148486ab6339d73b41d9d30259d0301352809b3ac1320eb3f60c4128f67d0c3",
     "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8",
-    "scripts/lite/lite_report.py": "221d2f8a291b23bb7b63fb9bc86201824f65e3846658b0df69c46dba2aafdeae"
+    "scripts/lite/lite_report.py": "09eb3a898fe88ab61508700979a6e0cf334ce716bc7761938a37ff3f534014db"
   },
   "episode_order": [
     "lite_debugging_a",
@@ -22400,7 +22403,7 @@
   },
   "network_adjustment": {
     "method": "lower_envelope_network_removed_v1",
-    "assumption": "latency before receipt = network + prefill (proportional to uncached input tokens) + decode (proportional to output tokens, text-generating models only); the per-run remainder that does not scale with tokens is treated as network",
+    "assumption": "send-to-receipt latency is approximated by a token-independent intercept plus nonnegative slopes for uncached input tokens and, for text-generating models, output tokens; the fitted lower-quantile intercept is removed only in a secondary replay",
     "estimator": "0.10-quantile regression intercept with nonnegative token slopes; 95% range from 500 moving-block bootstrap resamples (10 consecutive releases within each scenario, seed 0)",
     "network_s": {
       "estimate": 0.8944187876770607,
@@ -22511,7 +22514,7 @@
         "presenter_voice_control": 1
       }
     },
-    "interpretation": "Secondary estimate. By assumption everything not proportional to tokens is network; it can include fixed server time, so this bounds the network effect from above. Negative fitted intercepts are retained as diagnostics and projected to zero removable delay for replay. The range reflects estimator uncertainty only. The observed in-force score remains primary."
+    "interpretation": "Secondary sensitivity analysis. The fitted remainder can include network delay, fixed server time and model misspecification; it does not identify network delay or guarantee an upper bound on its effect. Negative fitted intercepts are retained as diagnostics and projected to zero removable delay for replay. The range reflects estimator uncertainty only. The observed in-force score remains primary."
   },
   "models_returned": {
     "gpt-6-astra": 480
@@ -22549,6 +22552,7 @@
     "openai_sdk": "3.19.2"
   },
   "total_failed": 0,
+  "refused_answers": [],
   "accepted_updates": 475,
   "discarded_updates": {
     "older_than_active": 3,
@@ -36954,11 +36958,11 @@
     },
     "sources_sha256": {
       "paper/analysis/evaluation_policy.json": "80dd3f83ef7205664e0509c99c6466a45bf887eadc97f7c371d0f4e0c0301616",
-      "paper/analysis/lite_auc.py": "8ed7ab4e07f4f5259a6c3352f4a08b1fd7912fc423a665ec22df1759867a8e50",
+      "paper/analysis/lite_auc.py": "39d2fb0830b6308f7a5607a4fb087e45b688b1e649719e0ed266f4799b2ac7e9",
       "src/streamdecisionbench/lite/interval_scoring.py": "ce3eda9c2fe2efcd84b75a02ce329e8fc7bf7f21b9abd65e65fd10bf3d9a6eb3",
       "src/streamdecisionbench/lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
       "src/streamdecisionbench/lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
-      "src/streamdecisionbench/lite/core.py": "bdefc99a8ff0cc83bbe8627d21e1b7c9f8f7be0f9fd231d03d2db025bc841598"
+      "src/streamdecisionbench/lite/core.py": "93ed536d194e77355db77addd879a6406e89cbbbb91e967db4c56a796b1955a4"
     },
     "events_sha256": "6a4caaa1f8b8350c12d396b8afbc44fa95afd4e49120acb171755f03e88edc5d"
   }

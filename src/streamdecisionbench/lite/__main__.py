@@ -148,7 +148,7 @@ def main() -> None:
     run = commands.add_parser("run")
     run.add_argument("--data", type=Path, required=True)
     run.add_argument("--out", type=Path, required=True)
-    run.add_argument("--provider", choices=("openai", "typesafe", "cloudflare", "wity", "perplexity", "fastino"), default="openai")
+    run.add_argument("--provider", choices=("openai", "openai-decisions", "typesafe", "cloudflare", "wity", "perplexity", "fastino"), default="openai")
     run.add_argument("--model", required=True)
     run.add_argument("--effort", help="reasoning effort for openai (e.g. none, low); omit it for a model or compatible endpoint without reasoning effort; only accepted for openai")
     run.add_argument("--reasoning", choices=("auto", "off", "always"), help="Wity reasoning mode (default: auto); only accepted for wity")
@@ -178,7 +178,7 @@ def main() -> None:
         openai = args.provider == "openai"
         if args.timeout is None:
             args.timeout = {"wity": 60.0, "perplexity": 30.0, "fastino": 300.0}.get(args.provider, 20.0)
-        credentials = {"openai": ("OPENAI_API_KEY",), "typesafe": ("TYPESAFE_API_KEY",),
+        credentials = {"openai": ("OPENAI_API_KEY",), "openai-decisions": ("OPENAI_API_KEY",), "typesafe": ("TYPESAFE_API_KEY",),
                        "wity": ("WITY_API_KEY",),
                        "perplexity": ("PERPLEXITY_API_KEY",),
                        "fastino": ("FASTINO_API_KEY",),
@@ -186,7 +186,7 @@ def main() -> None:
         for key in credentials[args.provider]:
             if not os.environ.get(key):
                 parser.error(f"{key} is required")
-        endpoint = {"openai": "OPENAI_BASE_URL", "typesafe": "TYPESAFE_BASE_URL", "wity": "WITY_BASE_URL",
+        endpoint = {"openai": "OPENAI_BASE_URL", "openai-decisions": "OPENAI_BASE_URL", "typesafe": "TYPESAFE_BASE_URL", "wity": "WITY_BASE_URL",
                     "perplexity": "PERPLEXITY_BASE_URL", "fastino": "FASTINO_BASE_URL"}.get(args.provider)
         if args.reasoning is not None and args.provider != "wity":
             parser.error(f"--reasoning is not accepted for {args.provider}")
@@ -200,6 +200,8 @@ def main() -> None:
             parser.error("Perplexity Decisions model must be pplx-decider-v1-27b")
         if args.provider == "fastino" and args.model != "fastino/GLiDE":
             parser.error("Fastino decision model must be fastino/GLiDE")
+        if args.provider == "openai-decisions" and args.model != "gpt-6-luna":
+            parser.error("OpenAI Decisions model must be gpt-6-luna")
         if not math.isfinite(args.timeout) or args.timeout <= 0:
             parser.error("timeout must be positive and finite")
         if args.max_attempts < 1:
@@ -223,6 +225,8 @@ def main() -> None:
             config["selection"] = {"families": families} if families else {"episodes": episode_ids}
         if args.provider == "wity":
             config["reasoning"] = args.reasoning or "auto"
+        if args.provider == "openai-decisions":
+            config["rate_limit_policy"] = "http429_5xx_retry_after_shared_cooldown_v1"
         if args.provider in {"wity", "perplexity"}:
             config["rate_limit_policy"] = "http429_retry_after_shared_cooldown_v1"
         if args.provider == "fastino":
@@ -232,6 +236,10 @@ def main() -> None:
             from streamdecisionbench.adapters.llm import OpenAIAdapter
 
             factory = lambda: OpenAIAdapter(model=args.model, effort=args.effort, timeout=args.timeout, max_retries=0)
+        elif args.provider == "openai-decisions":
+            from streamdecisionbench.adapters.openai_decisions import OpenAIDecisionsAdapter
+
+            factory = lambda: OpenAIDecisionsAdapter(model=args.model, timeout=args.timeout)
         elif args.provider == "typesafe":
             from streamdecisionbench.adapters.remote import TypeSafeAdapter
 

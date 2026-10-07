@@ -181,7 +181,7 @@ def write_index() -> None:
     lines += [
         "Wity auto/off each have one pass with 16 workers and Retry-After recovery; all other hosted scores average three passes, each over all 480 states with 32 workers. "
         "SD is sample standard deviation across passes, in percentage points; unavailable for one pass. The original Luna, Terra and Jev passes "
-        "combine disjoint six-scenario and presenter sessions. GLiDE completed three passes without failed attempts; "
+        "combine disjoint six-scenario and presenter sessions. GLiDE and GPT-6-Luna through the Decisions API completed three passes without failed attempts; "
         "Clef Flash's original pass retains its two recovered timeout attempts. "
         "The self-hosted table shows the referenced individual recordings; the public leaderboard averages their three passes. "
         "No model query is made by this analysis.", "",

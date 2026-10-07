@@ -46,6 +46,7 @@ Latency includes the remote service and internet round trip from the benchmark c
 | Astra low | `gpt-6-astra` | 3 | 49.51 ± 4.44 | 99.86 | 2.353 |
 | Luna low | `gpt-5.6-luna` | 3 | 45.45 ± 0.70 | 89.93 | 2.443 |
 | GLiDE (Fastino) | `fastino/GLiDE` | 3 | 39.43 ± 2.11 | 80.49 | 5.546 |
+| GPT-6-Luna (Decisions API) | `gpt-6-luna` | 3 | 32.39 ± 0.70 | 36.04 | 0.344 |
 | Clef | `clef` | 3 | 31.39 ± 0.41 | 38.96 | 0.885 |
 | Luna none | `gpt-5.6-luna` | 3 | 30.87 ± 1.12 | 43.54 | 1.312 |
 | Clef Flash | `clef-flash` | 3 | 19.89 ± 0.19 | 21.67 | 0.437 |
@@ -214,7 +215,24 @@ uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
 # Fastino GLiDE native System One API
 uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
   --out runs/my-glide --provider fastino --model fastino/GLiDE
+
+# OpenAI Decisions API (public beta)
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-luna-decisions --provider openai-decisions --model gpt-6-luna
 ```
+
+The OpenAI Decisions provider uses `OPENAI_API_KEY` and the optional `OPENAI_BASE_URL`
+(default `https://api.openai.com/v1`). The adapter calls the
+[Decisions API](https://developers.openai.com/api/docs/guides/decisions) with `gpt-6-luna`,
+the only supported model. It sends the state as JSON text in `input` and each option as a
+`choice` whose `value` is the opaque label and whose `description` is the option text. It keeps
+the returned probabilities and confidence. The API can refuse one question while answering the
+rest; the refused question commits to no option and counts as wrong wherever the composed
+decision uses it. Refusals are recorded per response. The adapter uses a 20 s timeout and 32
+workers, with HTTP client retries disabled; HTTP 429 and 5xx are retried within the attempt
+budget, honoring `Retry-After` through the shared episode cooldown. As documented on October 7,
+2026, the endpoint charges $0.10 per million input tokens and nothing for output or caching;
+one 480-request pass used about 1.55M input tokens.
 
 Fastino requires `FASTINO_API_KEY`; `FASTINO_BASE_URL` optionally overrides the API
 origin. The adapter calls its [native System One API](https://docs.fastino.ai/inference/systemone)

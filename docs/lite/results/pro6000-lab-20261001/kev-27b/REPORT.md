@@ -36,13 +36,13 @@ Network-removed in-force accuracy (secondary estimate): 65.97% (range 64.87%–6
 
 The application decision contains the model's own route, globally required answers and fields used by that route. Incorrect inactive fields do not lower decision accuracy. The reconstructed timeline anchors each successful attempt's duration at its evidence release, retains postprocessing commit lag, excludes failed attempts, retry waits and dispatch queueing, and recomputes arrival order and acceptance. This differs from observed deployment time; raw-clock results appear separately. Family and overall recording-cadence scores give scenarios equal weight.
 
-## Network-removed estimate (secondary)
+## Fitted-remainder removal (secondary)
 
-Assume send-to-receipt latency = network + prefill (proportional to uncached input tokens) + decode (proportional to output tokens, for text-generating models). The token-independent remainder is treated as network. Queueing only adds time, so the estimate uses the fast envelope: the intercept of a 10th-percentile regression with nonnegative token slopes. The range uses 500 within-scenario bootstrap samples with blocks of 10 consecutive releases.
+Approximate send-to-receipt latency by a token-independent intercept plus slopes for uncached input tokens and, for text-generating models, output tokens. This secondary replay removes the intercept of a 10th-percentile regression with nonnegative token slopes. The range uses 500 within-scenario bootstrap samples with blocks of 10 consecutive releases.
 
-Estimated network 0.108 s (range 0.023–0.189 s); prefill 163.7 ms/1k tokens; no decode term (the model does not generate text); fastest response 0.409 s; 0 requests clamped at receipt.
+Fitted remainder 0.108 s (range 0.023–0.189 s); prefill 163.7 ms/1k tokens; no decode term (the model does not generate text); fastest response 0.409 s; 0 requests clamped at receipt.
 
-| Scope | Recorded-cadence score | Network removed (estimate) | Range | Untimed accuracy |
+| Scope | Recorded-cadence score | Remainder removed (estimate) | Range | Untimed accuracy |
 |---|---:|---:|---:|---:|
 | Overall | 64.58% | 65.97% | 64.87%–67.02% | 72.50% |
 | IDE debugging | 42.65% | 43.27% | 42.78%–43.75% | 46.67% |
@@ -50,7 +50,7 @@ Estimated network 0.108 s (range 0.023–0.189 s); prefill 163.7 ms/1k tokens; n
 | Support | 74.07% | 75.73% | 74.42%–76.99% | 80.83% |
 | Presenter voice control | 71.13% | 72.79% | 71.48%–74.04% | 82.50% |
 
-This secondary estimate leaves the primary score unchanged. The token-independent remainder can include fixed server time, so it bounds the network effect from above. The range reflects estimator uncertainty, not variation across repeated model runs. Untimed accuracy is a state-level diagnostic, not an upper bound for arbitrary in-force trajectories.
+This secondary estimate leaves the primary score unchanged. The token-independent remainder can include network delay, fixed server time and model misspecification; it does not identify network delay or guarantee an upper bound on its effect. The range reflects estimator uncertainty, not variation across repeated model runs. Untimed accuracy is a state-level diagnostic, not an upper bound for arbitrary in-force trajectories.
 
 ## Scenario results
 
@@ -73,7 +73,7 @@ This secondary estimate leaves the primary score unchanged. The token-independen
 - 138 states have only inactive-field errors, leaving the application decision correct.
 - 480 updates accepted on the reconstructed timeline; rejected responses: {}.
 - Pipelined execution dispatches a request at every release. A complete newer-source response becomes active atomically; older arrivals cannot overwrite it. Scenarios execute serially.
-- Untimed accuracy uses the same responses without another model pass. Native calls have no network timeout; the setting's process timeout is 3600 s.
+- Untimed accuracy uses the same responses without another model pass. Native calls have no network timeout. The setting's process timeout is 3600 s.
 - Protocol: retry_excluded_successful_attempt_v1; at most 32 request workers; scenario concurrency 1.
 - The analysis re-scores original events. Recorded-run and analysis-source manifests remain separate for traceability.
 
@@ -99,7 +99,7 @@ The raw clock retains failures, waits and actual late deliveries. It is a separa
 
 Raw logical request duration, including failed attempts and retry waits: p50 0.538 s, p95 0.916 s; 480 accepted raw-clock updates.
 
-Exhausted retries or non-transport errors make a run incomplete; no complete primary score is published. API and response validity determine success. Reference-answer correctness never triggers a retry.
+Exhausted retries or nonretryable errors make a run incomplete; no complete primary score is published. API and response validity determine success. Reference-answer correctness never triggers a retry.
 
 ## Simple baselines
 

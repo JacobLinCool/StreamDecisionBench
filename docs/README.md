@@ -19,9 +19,9 @@ The frozen [dataset manifest](../data/lite/v1/manifest.json) identifies eight sc
 | Document | Status and scope |
 |---|---|
 | [Results index](lite/results/README.md) | Entry point for current cohorts and retained historical evidence. |
-| [Hosted API results](lite/results/four-family/README.md) | Twelve complete settings, including GLiDE (Fastino), Perplexity, Wity auto/off, Cloudflare Clef and Clef Flash. The manuscript's hosted subset contains six settings. |
+| [Hosted API results](lite/results/four-family/README.md) | Thirteen complete settings, including GPT-6-Luna (Decisions API), GLiDE (Fastino), Perplexity, Wity auto/off, Cloudflare Clef and Clef Flash. The manuscript's hosted subset contains six settings. |
 | [RTX PRO 6000 lab results](lite/results/pro6000-lab-20261001/README.md) | Nine open-weight settings recorded on the same host; the current public and manuscript self-hosted cohort. |
-| [README figures](figures/README.md) | Provenance and reproduction of the combined 28-setting leaderboard and interval curves. |
+| [README figures](figures/README.md) | Provenance and reproduction of the combined 30-setting leaderboard and interval curves. |
 | [Run index](../runs/README.md) | Frozen recording paths, manifests, episode coverage, and recorded configurations. |
 
 Wity auto/off each have one recorded pass; all other registered settings have three. Hosted APIs and local GPU deployments have different latency paths; the combined leaderboard describes those deployments rather than isolating model architecture or hardware effects. Per-setting reports link original runs and analysis JSON. Recording-cadence and secondary network estimates remain separate from the primary log-AUC.

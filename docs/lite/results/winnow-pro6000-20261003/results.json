@@ -12,7 +12,11 @@
       "latency_p50_s": 0.32548337895423174,
       "latency_p95_s": 0.4553097256692124,
       "failed_attempts": 0,
-      "events_sha256": "8d1dec89681bbbcd571cd1c1ee076312c0c476e38d6882f306a752ea1aa002d5"
+      "events_sha256": "8d1dec89681bbbcd571cd1c1ee076312c0c476e38d6882f306a752ea1aa002d5",
+      "live_debugging_log_auc_pct": 12.487096912045882,
+      "presenter_voice_control_log_auc_pct": 48.65851526905389,
+      "procedural_coaching_log_auc_pct": 33.639906170680966,
+      "support_call_assist_log_auc_pct": 77.7949475742624
     },
     {
       "setting": "winnow-e4b-pass1",
@@ -24,7 +28,11 @@
       "latency_p50_s": 0.17052263370715082,
       "latency_p95_s": 0.2375228327233344,
       "failed_attempts": 0,
-      "events_sha256": "19816af493c8ff0095c3e0c76a9460249029a80410d879f3593cab462b4a9ff6"
+      "events_sha256": "19816af493c8ff0095c3e0c76a9460249029a80410d879f3593cab462b4a9ff6",
+      "live_debugging_log_auc_pct": 11.18252564864168,
+      "presenter_voice_control_log_auc_pct": 37.09260507660449,
+      "procedural_coaching_log_auc_pct": 16.222889092623234,
+      "support_call_assist_log_auc_pct": 11.350685115946167
     },
     {
       "setting": "winnow-12b-pass2",
@@ -36,7 +44,11 @@
       "latency_p50_s": 0.3315174689050764,
       "latency_p95_s": 0.45480760456994174,
       "failed_attempts": 0,
-      "events_sha256": "0e99ac73828a7d28919a4a78e2eeb9f68c8e09ff958de2b190a9a08799630dc4"
+      "events_sha256": "0e99ac73828a7d28919a4a78e2eeb9f68c8e09ff958de2b190a9a08799630dc4",
+      "live_debugging_log_auc_pct": 12.486364112401347,
+      "presenter_voice_control_log_auc_pct": 48.64064204107873,
+      "procedural_coaching_log_auc_pct": 33.62744954254933,
+      "support_call_assist_log_auc_pct": 77.79683761484897
     },
     {
       "setting": "winnow-e4b-pass2",
@@ -48,7 +60,11 @@
       "latency_p50_s": 0.1711964043788612,
       "latency_p95_s": 0.23460552166216073,
       "failed_attempts": 0,
-      "events_sha256": "fba8926e55e9b8ff64cac9ba90b5514facb5b2ce59ce52f46c27ce36d12de4ca"
+      "events_sha256": "fba8926e55e9b8ff64cac9ba90b5514facb5b2ce59ce52f46c27ce36d12de4ca",
+      "live_debugging_log_auc_pct": 11.181338269324852,
+      "presenter_voice_control_log_auc_pct": 37.12774169151183,
+      "procedural_coaching_log_auc_pct": 16.224202993098256,
+      "support_call_assist_log_auc_pct": 11.360685793969282
     },
     {
       "setting": "winnow-12b-pass3",
@@ -60,7 +76,11 @@
       "latency_p50_s": 0.3263399018906057,
       "latency_p95_s": 0.4502657448174431,
       "failed_attempts": 0,
-      "events_sha256": "87c43dd88b692d8b4c43af11548f16f1fd8091858d6242f7b3f07fba998eeb4e"
+      "events_sha256": "87c43dd88b692d8b4c43af11548f16f1fd8091858d6242f7b3f07fba998eeb4e",
+      "live_debugging_log_auc_pct": 12.48840957774629,
+      "presenter_voice_control_log_auc_pct": 48.67701102741252,
+      "procedural_coaching_log_auc_pct": 33.6686667242549,
+      "support_call_assist_log_auc_pct": 77.80532866281482
     },
     {
       "setting": "winnow-e4b-pass3",
@@ -72,7 +92,11 @@
       "latency_p50_s": 0.16930460394360125,
       "latency_p95_s": 0.23176283831708128,
       "failed_attempts": 0,
-      "events_sha256": "75a7cb096541fc0b91df9f56b73bcdca1d358a9fc9d399a06389f6d794186417"
+      "events_sha256": "75a7cb096541fc0b91df9f56b73bcdca1d358a9fc9d399a06389f6d794186417",
+      "live_debugging_log_auc_pct": 11.187592950519688,
+      "presenter_voice_control_log_auc_pct": 37.14211886617931,
+      "procedural_coaching_log_auc_pct": 16.22433539140421,
+      "support_call_assist_log_auc_pct": 11.358929815989047
     }
   ],
   "aggregate": [
@@ -94,5 +118,10 @@
       "log_auc_pct_min": 18.962176233453892,
       "log_auc_pct_max": 18.978244256023064
     }
-  ]
+  ],
+  "evaluation_domain": {
+    "min_s": 0.5,
+    "max_s": 8,
+    "weighting": "log"
+  }
 }

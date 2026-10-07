@@ -36,13 +36,13 @@ Network-removed in-force accuracy (secondary estimate): 67.34% (range 56.33%–8
 
 The application decision contains the model's own route, globally required answers and fields used by that route. Incorrect inactive fields do not lower decision accuracy. The reconstructed timeline anchors each successful attempt's duration at its evidence release, retains postprocessing commit lag, excludes failed attempts, retry waits and dispatch queueing, and recomputes arrival order and acceptance. This differs from observed deployment time; raw-clock results appear separately. Family and overall recording-cadence scores give scenarios equal weight.
 
-## Network-removed estimate (secondary)
+## Fitted-remainder removal (secondary)
 
-Assume send-to-receipt latency = network + prefill (proportional to uncached input tokens) + decode (proportional to output tokens, for text-generating models). The token-independent remainder is treated as network. Queueing only adds time, so the estimate uses the fast envelope: the intercept of a 10th-percentile regression with nonnegative token slopes. The range uses 500 within-scenario bootstrap samples with blocks of 10 consecutive releases.
+Approximate send-to-receipt latency by a token-independent intercept plus slopes for uncached input tokens and, for text-generating models, output tokens. This secondary replay removes the intercept of a 10th-percentile regression with nonnegative token slopes. The range uses 500 within-scenario bootstrap samples with blocks of 10 consecutive releases.
 
-Estimated network 0.854 s (range 0.262–1.943 s); prefill 18.4 ms/1k tokens; decode 24.26 ms/token; fastest response 1.717 s; 0 requests clamped at receipt.
+Fitted remainder 0.854 s (range 0.262–1.943 s); prefill 18.4 ms/1k tokens; decode 24.26 ms/token; fastest response 1.717 s; 0 requests clamped at receipt.
 
-| Scope | Recorded-cadence score | Network removed (estimate) | Range | Untimed accuracy |
+| Scope | Recorded-cadence score | Remainder removed (estimate) | Range | Untimed accuracy |
 |---|---:|---:|---:|---:|
 | Overall | 51.94% | 67.34% | 56.33%–88.18% | 100.00% |
 | IDE debugging | 53.17% | 67.91% | 57.64%–87.31% | 100.00% |
@@ -50,7 +50,7 @@ Estimated network 0.854 s (range 0.262–1.943 s); prefill 18.4 ms/1k tokens; de
 | Support | 52.60% | 68.68% | 57.20%–90.44% | 100.00% |
 | Presenter voice control | 54.83% | 70.24% | 58.79%–92.02% | 100.00% |
 
-This secondary estimate leaves the primary score unchanged. The token-independent remainder can include fixed server time, so it bounds the network effect from above. The range reflects estimator uncertainty, not variation across repeated model runs. Untimed accuracy is a state-level diagnostic, not an upper bound for arbitrary in-force trajectories.
+This secondary estimate leaves the primary score unchanged. The token-independent remainder can include network delay, fixed server time and model misspecification; it does not identify network delay or guarantee an upper bound on its effect. The range reflects estimator uncertainty, not variation across repeated model runs. Untimed accuracy is a state-level diagnostic, not an upper bound for arbitrary in-force trajectories.
 
 ## Scenario results
 
@@ -99,7 +99,7 @@ The raw clock retains failures, waits and actual late deliveries. It is a separa
 
 Raw logical request duration, including failed attempts and retry waits: p50 2.377 s, p95 3.700 s; 469 accepted raw-clock updates.
 
-Exhausted retries or non-transport errors make a run incomplete; no complete primary score is published. API and response validity determine success. Reference-answer correctness never triggers a retry.
+Exhausted retries or nonretryable errors make a run incomplete; no complete primary score is published. API and response validity determine success. Reference-answer correctness never triggers a retry.
 
 ## Simple baselines
 
@@ -145,7 +145,7 @@ The difference between timed and untimed accuracy is descriptive, not a causal e
 From the repository root, reproduce the report and local baselines without model calls:
 
 ```sh
-uv run python paper/analysis/lite_hosted.py --reports
+uv run python paper/analysis/lite_reports.py
 ```
 
 Token usage includes cached input. Only returned usage is summed; usage for failed requests that returned none is unknown. No cost estimate is inferred here.

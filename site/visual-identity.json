@@ -143,5 +143,10 @@
     "light": "#059669",
     "dark": "#42c99a",
     "dash": "solid"
+  },
+  "LunaDecisions": {
+    "light": "#c026d3",
+    "dark": "#e879f9",
+    "dash": "solid"
   }
 }

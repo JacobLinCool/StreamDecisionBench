@@ -58,8 +58,9 @@ def _retry_report_lines(data: dict) -> list[str]:
     raw, latency = data["raw_wallclock_scores"], data["raw_wallclock_latency_s"]
     policy = data["config"].get("rate_limit_policy")
     fastino = policy == "http425_429_503_retry_after_shared_cooldown_v1"
-    rate_limits = fastino or policy == "http429_retry_after_shared_cooldown_v1"
-    statuses = "425, 429, and 503" if fastino else "429"
+    server_errors = policy == "http429_5xx_retry_after_shared_cooldown_v1"
+    rate_limits = fastino or server_errors or policy == "http429_retry_after_shared_cooldown_v1"
+    statuses = "425, 429, and 503" if fastino else "429 and 5xx" if server_errors else "429"
     return [
         "## Transport reliability and raw-clock diagnostics", "",
         f"- Attempt error rate: {reliability['attempt_error_rate']:.2%} "
@@ -177,6 +178,9 @@ def analyze(run: Path) -> dict:
             "environment": {"python": platform.python_version(), "system": platform.system(),
                             "openai_sdk": importlib.metadata.version("openai")},
             "total_failed": sum(not r["ok"] for r in records),
+            "refused_answers": [{"episode_id": r["episode_id"], "t": r["t"], "questions": r["refused_questions"],
+                                 "decision_uses_refused": any(q in r["decision"] for q in r["refused_questions"])}
+                                for r in records if r.get("refused_questions")],
             "accepted_updates": sum(r["accepted_updates"] for r in per),
             "discarded_updates": dict(sum((Counter(r["discarded_updates"]) for r in per), Counter())),
             "error_seconds": {k: sum(r["error_seconds"][k] for r in per)
@@ -195,9 +199,10 @@ def render_report(data: dict, output: Path) -> str:
     timing_label = "In-force accuracy (transport retries excluded)" if normalized else "In-force accuracy (raw clock)"
     request_description = ("One final valid response per state; transport failures are retried as configured."
                            if normalized else "Each state is queried once.")
-    if config.get("rate_limit_policy") == "http429_retry_after_shared_cooldown_v1":
+    if config.get("rate_limit_policy") in {"http429_retry_after_shared_cooldown_v1", "http429_5xx_retry_after_shared_cooldown_v1"}:
+        statuses = "HTTP 429 and 5xx honor" if "5xx" in config["rate_limit_policy"] else "HTTP 429 honors"
         timing_label = "In-force accuracy (failed attempts and retry waits excluded)"
-        request_description += " HTTP 429 honors Retry-After through a shared cooldown within the attempt budget."
+        request_description += f" {statuses} Retry-After through a shared cooldown within the attempt budget."
     duration_text = "/".join(f"{duration:g}" for duration in sorted({e["duration_s"] for e in data["episode_specs"]}))
     tick_text = "/".join(f"{tick:g}" for tick in sorted({e["tick_seconds"] for e in data["episode_specs"]}))
     command = shlex.join(["uv", "run", "python", "scripts/lite/lite_report.py", "--run", command_path(ROOT / data["run"]),
@@ -243,6 +248,11 @@ def render_report(data: dict, output: Path) -> str:
                  else "includes client processing and the recorded service/network path."),
               f"- Maximum recorded release lag {data['max_release_lag_s']:.4f} s; maximum dispatch lag {data['max_dispatch_lag_s']:.4f} s.",
               f"- {scores['inactive_only_error_states']} states have only inactive-field errors, leaving the application decision correct.",
+              *([f"- {len(refused)} responses refused at least one question ("
+                 + ", ".join(f"{r['episode_id']} t={r['t']}: {', '.join(r['questions'])}" for r in refused)
+                 + "). A refused question commits to no option and is wrong wherever the decision uses it; "
+                 f"{sum(r['decision_uses_refused'] for r in refused)} of these decisions used a refused question."]
+                if (refused := data.get("refused_answers")) else []),
               f"- {data['accepted_updates']} updates accepted on the {'reconstructed timeline' if normalized else 'raw clock'}; rejected responses: {json.dumps(data['discarded_updates'], ensure_ascii=False)}.",
               "- Pipelined execution dispatches a request at every release. A complete newer-source response becomes active atomically; older arrivals cannot overwrite it. Scenarios execute serially.",
               "- Untimed accuracy uses the same responses without another model pass. "

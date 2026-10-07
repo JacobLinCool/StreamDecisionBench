@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Callable
 
 from streamdecisionbench.adapters.base import RetryableHTTPError
-from streamdecisionbench.jev import ContractError, committed_answer, validate_response
+from streamdecisionbench.jev import INVALID, ContractError, committed_answer, validate_response
 from streamdecisionbench.lite.core import compose, decode, digest, request_for, sources
 from streamdecisionbench.lite.scoring import episode_scores, summarize
 
@@ -102,6 +102,9 @@ def run_episode(episode: dict, factory: Callable, log: Callable, *, workers: int
                 attempt["ok"] = True
                 r.update(ok=True, received_s=attempt["received_s"], pred=pred, wire_answers=wire,
                          decision=decision, model=response.get("model"), usage=response.get("usage"))
+                refused = [k for k, v in wire.items() if v == INVALID]
+                if refused:
+                    r["refused_questions"] = refused
             except Exception as error:
                 # Never persist exception bodies, which may echo private inputs.
                 transient_http = isinstance(error, RetryableHTTPError)

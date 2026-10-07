@@ -36,13 +36,13 @@ Network-removed in-force accuracy (secondary estimate): 9.22% (range 9.22%–9.4
 
 The application decision contains the model's own route, globally required answers and fields used by that route. Incorrect inactive fields do not lower decision accuracy. The reconstructed timeline anchors each successful attempt's duration at its evidence release, retains postprocessing commit lag, excludes failed attempts, retry waits and dispatch queueing, and recomputes arrival order and acceptance. This differs from observed deployment time; raw-clock results appear separately. Family and overall recording-cadence scores give scenarios equal weight.
 
-## Network-removed estimate (secondary)
+## Fitted-remainder removal (secondary)
 
-Assume send-to-receipt latency = network + prefill (proportional to uncached input tokens) + decode (proportional to output tokens, for text-generating models). The token-independent remainder is treated as network. Queueing only adds time, so the estimate uses the fast envelope: the intercept of a 10th-percentile regression with nonnegative token slopes. The range uses 500 within-scenario bootstrap samples with blocks of 10 consecutive releases.
+Approximate send-to-receipt latency by a token-independent intercept plus slopes for uncached input tokens and, for text-generating models, output tokens. This secondary replay removes the intercept of a 10th-percentile regression with nonnegative token slopes. The range uses 500 within-scenario bootstrap samples with blocks of 10 consecutive releases.
 
-Estimated network 0.000 s (range 0.000–0.225 s); prefill 270.2 ms/1k tokens; no decode term (the model does not generate text); fastest response 0.529 s; 0 requests clamped at receipt.
+Fitted remainder 0.000 s (range 0.000–0.225 s); prefill 270.2 ms/1k tokens; no decode term (the model does not generate text); fastest response 0.529 s; 0 requests clamped at receipt.
 
-| Scope | Recorded-cadence score | Network removed (estimate) | Range | Untimed accuracy |
+| Scope | Recorded-cadence score | Remainder removed (estimate) | Range | Untimed accuracy |
 |---|---:|---:|---:|---:|
 | Overall | 9.22% | 9.22% | 9.22%–9.43% | 10.21% |
 | IDE debugging | 0.00% | 0.00% | 0.00%–0.00% | 0.00% |
@@ -52,7 +52,7 @@ Estimated network 0.000 s (range 0.000–0.225 s); prefill 270.2 ms/1k tokens; n
 
 Unconstrained intercept -0.063708 s (range -0.348572–0.225363 s). Extrapolation to zero tokens can be negative; negative latency cannot be removed, so replay projects it to zero. analysis.json retains the unconstrained estimate. Scores and recordings are unchanged.
 
-This secondary estimate leaves the primary score unchanged. The token-independent remainder can include fixed server time, so it bounds the network effect from above. The range reflects estimator uncertainty, not variation across repeated model runs. Untimed accuracy is a state-level diagnostic, not an upper bound for arbitrary in-force trajectories.
+This secondary estimate leaves the primary score unchanged. The token-independent remainder can include network delay, fixed server time and model misspecification; it does not identify network delay or guarantee an upper bound on its effect. The range reflects estimator uncertainty, not variation across repeated model runs. Untimed accuracy is a state-level diagnostic, not an upper bound for arbitrary in-force trajectories.
 
 ## Scenario results
 
@@ -148,7 +148,7 @@ The difference between timed and untimed accuracy is descriptive, not a causal e
 From the repository root, reproduce the report and local baselines without model calls:
 
 ```sh
-uv run python paper/analysis/lite_reports.py --run runs/wity-1-off-workers16-retry-after-20261003-pass1 --out docs/lite/results/wity-20261003/off --label 'Wity-1 (off)'
+uv run python paper/analysis/lite_reports.py
 ```
 
 Token usage includes cached input. Only returned usage is summed; usage for failed requests that returned none is unknown. No cost estimate is inferred here.

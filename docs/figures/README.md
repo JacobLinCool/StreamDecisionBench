@@ -1,8 +1,8 @@
 # StreamDecisionBench README figures
 
-These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all twenty-nine
-completed single-model settings: twelve hosted API settings and seventeen self-hosted open-weight settings,
-including GLiDE (Fastino), Perplexity Decider v1 27B, Wity auto/off, Cloudflare Clef and Clef Flash, Winnow-12B, Winnow-E4B and all six Decision 2.0 models.
+These two vector figures use Apache ECharts 6.1.0. The leaderboard includes all thirty
+completed single-model settings: thirteen hosted API settings and seventeen self-hosted open-weight settings,
+including GPT-6-Luna through the Decisions API, GLiDE (Fastino), Perplexity Decider v1 27B, Wity auto/off, Cloudflare Clef and Clef Flash, Winnow-12B, Winnow-E4B and all six Decision 2.0 models.
 Bars start at zero and rank settings by normalized log-AUC over 0.5–8 seconds.
 
 The second figure plots **in-force accuracy against the time-step interval**, on a logarithmic

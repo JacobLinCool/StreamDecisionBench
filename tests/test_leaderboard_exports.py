@@ -296,3 +296,29 @@ def test_glide_exports_match_all_three_native_passes(tmp_path):
     assert row["visual"]["light"] == "#059669"
     assert sorted(site["settings"], key=lambda row: -row["log_auc_pct"])[8]["id"] == "Glide"
     assert sorted(site["settings"], key=lambda row: -row["untimed_pct"])[4]["id"] == "Glide"
+
+
+def test_luna_decisions_exports_match_all_three_native_passes(tmp_path):
+    result = load_hosted_summary()["hosted"]["LunaDecisions"]
+    assert len(result["passes"]) == len(HOSTED_PASSES["LunaDecisions"]) == 3
+    assert result["model"] == "gpt-6-luna"
+    repeat = json.loads((ROOT / "docs/lite/results/gpt-6-luna-decisions-20261007/repeats.json").read_text())
+    assert 100 * result["accuracy"] == pytest.approx(repeat["primary"]["mean_log_auc_pct"])
+    assert 100 * result["auc_sample_sd"] == pytest.approx(repeat["primary"]["sample_sd_log_auc_points"])
+    assert 100 * result["untimed"] == pytest.approx(repeat["untimed"]["mean_accuracy_pct"])
+    assert repeat["refusals"]["responses_with_refusals"] == 6
+    assert repeat["refusals"]["decisions_using_refused_question"] == 0
+    for record in result["passes"]:
+        frozen = json.loads((ROOT / record["provenance"]["run"] / "run.json").read_text())
+        assert frozen["status"] == "complete"
+        assert frozen["config"]["provider"] == "openai-decisions"
+        assert frozen["config"]["rate_limit_policy"] == "http429_5xx_retry_after_shared_cooldown_v1"
+        assert record["retry_reliability"]["successful_logical_requests"] == 480
+        assert record["retry_reliability"]["failed_attempts"] == 0
+    site = site_build.build(tmp_path)
+    row = next(row for row in site["settings"] if row["id"] == "LunaDecisions")
+    assert row["passes"] == 3
+    assert row["log_auc_pct"] == pytest.approx(32.391318225827305)
+    assert row["untimed_pct"] == pytest.approx(36.041666666666664)
+    assert row["visual"]["light"] == "#c026d3"
+    assert sorted(site["settings"], key=lambda row: -row["log_auc_pct"])[9]["id"] == "LunaDecisions"
