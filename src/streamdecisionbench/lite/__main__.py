@@ -148,9 +148,10 @@ def main() -> None:
     run = commands.add_parser("run")
     run.add_argument("--data", type=Path, required=True)
     run.add_argument("--out", type=Path, required=True)
-    run.add_argument("--provider", choices=("openai", "openai-decisions", "typesafe", "cloudflare", "wity", "perplexity", "fastino"), default="openai")
+    run.add_argument("--provider", choices=("openai", "openai-decisions", "anthropic", "typesafe", "cloudflare", "wity", "perplexity", "fastino"), default="openai")
     run.add_argument("--model", required=True)
-    run.add_argument("--effort", help="reasoning effort for openai (e.g. none, low); omit it for a model or compatible endpoint without reasoning effort; only accepted for openai")
+    run.add_argument("--effort", help="reasoning effort for openai (e.g. none, low) or anthropic (low, medium, high, xhigh, max); omit it for the model's default or an endpoint without reasoning effort; only accepted for openai and anthropic")
+    run.add_argument("--thinking", choices=("adaptive", "disabled"), help="Claude thinking mode (default: adaptive); disabled needs effort high or lower; only accepted for anthropic")
     run.add_argument("--reasoning", choices=("auto", "off", "always"), help="Wity reasoning mode (default: auto); only accepted for wity")
     run.add_argument("--timeout", type=float, help="request timeout in seconds (default: 300 for Fastino, 60 for Wity, 30 for Perplexity, 20 otherwise)")
     run.add_argument("--max-attempts", type=int, default=5)
@@ -178,7 +179,8 @@ def main() -> None:
         openai = args.provider == "openai"
         if args.timeout is None:
             args.timeout = {"wity": 60.0, "perplexity": 30.0, "fastino": 300.0}.get(args.provider, 20.0)
-        credentials = {"openai": ("OPENAI_API_KEY",), "openai-decisions": ("OPENAI_API_KEY",), "typesafe": ("TYPESAFE_API_KEY",),
+        credentials = {"openai": ("OPENAI_API_KEY",), "openai-decisions": ("OPENAI_API_KEY",),
+                       "anthropic": ("ANTHROPIC_API_KEY",), "typesafe": ("TYPESAFE_API_KEY",),
                        "wity": ("WITY_API_KEY",),
                        "perplexity": ("PERPLEXITY_API_KEY",),
                        "fastino": ("FASTINO_API_KEY",),
@@ -186,14 +188,24 @@ def main() -> None:
         for key in credentials[args.provider]:
             if not os.environ.get(key):
                 parser.error(f"{key} is required")
-        endpoint = {"openai": "OPENAI_BASE_URL", "openai-decisions": "OPENAI_BASE_URL", "typesafe": "TYPESAFE_BASE_URL", "wity": "WITY_BASE_URL",
+        endpoint = {"openai": "OPENAI_BASE_URL", "openai-decisions": "OPENAI_BASE_URL",
+                    "anthropic": "ANTHROPIC_BASE_URL", "typesafe": "TYPESAFE_BASE_URL", "wity": "WITY_BASE_URL",
                     "perplexity": "PERPLEXITY_BASE_URL", "fastino": "FASTINO_BASE_URL"}.get(args.provider)
         if args.reasoning is not None and args.provider != "wity":
             parser.error(f"--reasoning is not accepted for {args.provider}")
         if args.provider == "wity" and args.model != "wity-1":
             parser.error("Wity model must be wity-1; the API does not select models")
-        if not openai and args.effort is not None:
+        if args.provider not in {"openai", "anthropic"} and args.effort is not None:
             parser.error(f"--effort is not accepted for {args.provider}")
+        if args.thinking is not None and args.provider != "anthropic":
+            parser.error(f"--thinking is not accepted for {args.provider}")
+        if args.provider == "anthropic":
+            from streamdecisionbench.adapters.anthropic_messages import EFFORTS
+
+            if args.effort is not None and args.effort not in EFFORTS:
+                parser.error(f"Anthropic effort must be one of {', '.join(EFFORTS)}")
+            if args.thinking == "disabled" and args.effort in {"xhigh", "max"}:
+                parser.error("Anthropic thinking cannot be disabled at xhigh or max effort")
         if args.provider == "cloudflare" and args.model not in {"clef", "clef-flash"}:
             parser.error("Cloudflare model must be clef or clef-flash")
         if args.provider == "perplexity" and args.model != "pplx-decider-v1-27b":
@@ -225,7 +237,9 @@ def main() -> None:
             config["selection"] = {"families": families} if families else {"episodes": episode_ids}
         if args.provider == "wity":
             config["reasoning"] = args.reasoning or "auto"
-        if args.provider == "openai-decisions":
+        if args.provider == "anthropic":
+            config["thinking"] = args.thinking or "adaptive"
+        if args.provider in {"openai-decisions", "anthropic"}:
             config["rate_limit_policy"] = "http429_5xx_retry_after_shared_cooldown_v1"
         if args.provider in {"wity", "perplexity"}:
             config["rate_limit_policy"] = "http429_retry_after_shared_cooldown_v1"
@@ -240,6 +254,11 @@ def main() -> None:
             from streamdecisionbench.adapters.openai_decisions import OpenAIDecisionsAdapter
 
             factory = lambda: OpenAIDecisionsAdapter(model=args.model, timeout=args.timeout)
+        elif args.provider == "anthropic":
+            from streamdecisionbench.adapters.anthropic_messages import AnthropicAdapter
+
+            factory = lambda: AnthropicAdapter(model=args.model, effort=args.effort, thinking=config["thinking"],
+                                               timeout=args.timeout)
         elif args.provider == "typesafe":
             from streamdecisionbench.adapters.remote import TypeSafeAdapter
 

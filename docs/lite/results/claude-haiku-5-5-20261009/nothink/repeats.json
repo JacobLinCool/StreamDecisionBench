@@ -1,0 +1,409 @@
+{
+  "model": "claude-haiku-5-5",
+  "provider": "anthropic",
+  "passes": [
+    {
+      "pass": 1,
+      "run": "runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass1-retry-v1",
+      "report": "docs/lite/results/claude-haiku-5-5-20261009/nothink/REPORT.md",
+      "analysis": "docs/lite/results/claude-haiku-5-5-20261009/nothink/analysis.json",
+      "analysis_sha256": "86951510d4376bffcabfef141d447920ecc32374c307c878b03b9f9ce9a05f42",
+      "events_sha256": "72250336f78625c51f525bdb05220ef4f69f45281d90828d8c657ca4a478541d",
+      "started_at_utc": "2026-10-08T18:13:02.827970+00:00",
+      "finished_at_utc": "2026-10-08T18:29:03.016545+00:00",
+      "served_models": [
+        "claude-haiku-5-5"
+      ],
+      "log_auc_pct": 20.49856831709432,
+      "untimed_accuracy_pct": 26.458333333333332,
+      "latency_s": {
+        "p50": 1.4509605830535293,
+        "p95": 1.7123623619787391,
+        "max": 3.8605957087129354
+      },
+      "retry_reliability": {
+        "logical_requests": 480,
+        "successful_logical_requests": 480,
+        "attempts": 480,
+        "failed_attempts": 0,
+        "retried_logical_requests": 0,
+        "failed_attempt_duration_s": 0,
+        "excluded_retry_s": 0.0,
+        "excluded_dispatch_s": 0.21492511872202158,
+        "attempt_error_rate": 0.0,
+        "attempt_error_rate_denominator": "all physical attempts, including final successes",
+        "retried_logical_rate": 0.0,
+        "retried_logical_rate_denominator": "all released logical requests",
+        "attempt_errors_by_type": {}
+      },
+      "usage": {
+        "input_tokens": 1400355,
+        "cached_tokens": 886461,
+        "output_tokens": 28179,
+        "reasoning_tokens": 0
+      },
+      "refused_answers": [],
+      "by_family_log_auc_pct": {
+        "live_debugging": 16.328839646178945,
+        "presenter_voice_control": 23.114021239462716,
+        "procedural_coaching": 11.289066594369414,
+        "support_call_assist": 31.262345788366204
+      }
+    },
+    {
+      "pass": 2,
+      "run": "runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass2-retry-v1",
+      "report": "docs/lite/results/claude-haiku-5-5-20261009/nothink/pass2/REPORT.md",
+      "analysis": "docs/lite/results/claude-haiku-5-5-20261009/nothink/pass2/analysis.json",
+      "analysis_sha256": "032741dfe9dcfbccdf1859415b3f82e8b220fa5da08ebdbe78ac5cff8ae7b387",
+      "events_sha256": "39c5c55631a3b3b6bb88b190b333e357654e6bf4c3e0f7ecc9ff280eeb394a26",
+      "started_at_utc": "2026-10-08T18:29:03.254595+00:00",
+      "finished_at_utc": "2026-10-08T18:45:03.471914+00:00",
+      "served_models": [
+        "claude-haiku-5-5"
+      ],
+      "log_auc_pct": 18.313010324253938,
+      "untimed_accuracy_pct": 25.208333333333332,
+      "latency_s": {
+        "p50": 1.4528778125531971,
+        "p95": 1.6912957546766845,
+        "max": 11.454024124890566
+      },
+      "retry_reliability": {
+        "logical_requests": 480,
+        "successful_logical_requests": 480,
+        "attempts": 480,
+        "failed_attempts": 0,
+        "retried_logical_requests": 0,
+        "failed_attempt_duration_s": 0,
+        "excluded_retry_s": 0.0,
+        "excluded_dispatch_s": 0.22869965620338917,
+        "attempt_error_rate": 0.0,
+        "attempt_error_rate_denominator": "all physical attempts, including final successes",
+        "retried_logical_rate": 0.0,
+        "retried_logical_rate_denominator": "all released logical requests",
+        "attempt_errors_by_type": {}
+      },
+      "usage": {
+        "input_tokens": 1400355,
+        "cached_tokens": 888540,
+        "output_tokens": 28191,
+        "reasoning_tokens": 0
+      },
+      "refused_answers": [],
+      "by_family_log_auc_pct": {
+        "live_debugging": 10.512812544239793,
+        "presenter_voice_control": 21.086535791441374,
+        "procedural_coaching": 11.770964078635705,
+        "support_call_assist": 29.881728882698887
+      }
+    },
+    {
+      "pass": 3,
+      "run": "runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass3-retry-v1",
+      "report": "docs/lite/results/claude-haiku-5-5-20261009/nothink/pass3/REPORT.md",
+      "analysis": "docs/lite/results/claude-haiku-5-5-20261009/nothink/pass3/analysis.json",
+      "analysis_sha256": "ad7f9091a46bdae53ab468312734d1e89aff12959e1adadc12ccba467e9a9679",
+      "events_sha256": "63468544b530098a95eb7402c38dcfd355f1da2d8405c0a287dd626c54c3417d",
+      "started_at_utc": "2026-10-08T18:45:03.714530+00:00",
+      "finished_at_utc": "2026-10-08T19:01:03.944988+00:00",
+      "served_models": [
+        "claude-haiku-5-5"
+      ],
+      "log_auc_pct": 19.328974585386188,
+      "untimed_accuracy_pct": 25.0,
+      "latency_s": {
+        "p50": 1.4132058955729008,
+        "p95": 1.6440509020350873,
+        "max": 3.1190788755193353
+      },
+      "retry_reliability": {
+        "logical_requests": 480,
+        "successful_logical_requests": 480,
+        "attempts": 480,
+        "failed_attempts": 0,
+        "retried_logical_requests": 0,
+        "failed_attempt_duration_s": 0,
+        "excluded_retry_s": 0.0,
+        "excluded_dispatch_s": 0.20859838090837002,
+        "attempt_error_rate": 0.0,
+        "attempt_error_rate_denominator": "all physical attempts, including final successes",
+        "retried_logical_rate": 0.0,
+        "retried_logical_rate_denominator": "all released logical requests",
+        "attempt_errors_by_type": {}
+      },
+      "usage": {
+        "input_tokens": 1400355,
+        "cached_tokens": 888540,
+        "output_tokens": 28256,
+        "reasoning_tokens": 0
+      },
+      "refused_answers": [],
+      "by_family_log_auc_pct": {
+        "live_debugging": 11.128995168802874,
+        "presenter_voice_control": 23.548352363576104,
+        "procedural_coaching": 11.9502448188699,
+        "support_call_assist": 30.688305990295873
+      }
+    }
+  ],
+  "config": {
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5",
+    "reasoning_effort": "low",
+    "protocol": "retry_excluded_successful_attempt_v1",
+    "workers": 32,
+    "episode_concurrency": 1,
+    "request_timeout_s": 20.0,
+    "max_attempts": 5,
+    "retry_delay_s": 0.5,
+    "sdk_retries": 0,
+    "custom_endpoint": false,
+    "untimed": "one final successful response per state; failed transport attempts excluded from model timing",
+    "thinking": "disabled",
+    "rate_limit_policy": "http429_5xx_retry_after_shared_cooldown_v1"
+  },
+  "dataset_manifest": {
+    "schema_version": "sdb-lite/0.1",
+    "episodes": [
+      {
+        "episode_id": "lite_debugging_a",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 20,
+        "routes_seen": [
+          "delegate",
+          "inspect",
+          "ready",
+          "rerun",
+          "wait"
+        ],
+        "routes_unseen": [
+          "control"
+        ],
+        "public_hash": "d5269620543a02225bbb7a32b29197b3436558b99f17f37261d186c8eb96e979"
+      },
+      {
+        "episode_id": "lite_debugging_b",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 21,
+        "routes_seen": [
+          "control",
+          "delegate",
+          "inspect",
+          "ready",
+          "rerun",
+          "wait"
+        ],
+        "routes_unseen": [],
+        "public_hash": "ba7ee8a898f0fe101c53f08d389667e72dffe3a4818b6220b7376fc142c27cbd"
+      },
+      {
+        "episode_id": "lite_assembly_a",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 21,
+        "routes_seen": [
+          "advance",
+          "escalate",
+          "handoff",
+          "hold",
+          "release",
+          "repair",
+          "wait"
+        ],
+        "routes_unseen": [],
+        "public_hash": "d21b5e8d96317964cd9b3b400a2a64ec99f35d9350543463837a13c66eff6580"
+      },
+      {
+        "episode_id": "lite_assembly_b",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 23,
+        "routes_seen": [
+          "advance",
+          "escalate",
+          "handoff",
+          "hold",
+          "release",
+          "repair",
+          "wait"
+        ],
+        "routes_unseen": [],
+        "public_hash": "b2dea04150d4146b0bccbf7494c06ffeee938c9e8d3b0abe1cec8f54ec89cc88"
+      },
+      {
+        "episode_id": "lite_support_a",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 22,
+        "routes_seen": [
+          "hold",
+          "payment",
+          "service",
+          "wrap"
+        ],
+        "routes_unseen": [],
+        "public_hash": "ff02247857c9bf2744acad7f4931ef3f48c9a2219178d4c631926c968d4621de"
+      },
+      {
+        "episode_id": "lite_support_b",
+        "questions": 7,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 24,
+        "routes_seen": [
+          "cancel",
+          "closed",
+          "delivery",
+          "hold_return",
+          "hold_wait",
+          "repair"
+        ],
+        "routes_unseen": [],
+        "public_hash": "58f27118b2f8eb27e20abe82e7a63b5e53db2996f6ebf758b9032734ea944397"
+      },
+      {
+        "episode_id": "lite_presenter_a",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 24,
+        "routes_seen": [
+          "clip",
+          "closed",
+          "questions",
+          "talk"
+        ],
+        "routes_unseen": [],
+        "public_hash": "627ba38004dae1b3a33e86cbda1c23e3c02231ece848dde035a873be7075decc"
+      },
+      {
+        "episode_id": "lite_presenter_b",
+        "questions": 6,
+        "steps": 60,
+        "duration_s": 120.0,
+        "decision_transitions": 22,
+        "routes_seen": [
+          "clip",
+          "closed",
+          "questions",
+          "talk"
+        ],
+        "routes_unseen": [],
+        "public_hash": "81f4d0bb57ff96a65d6ffd9aab103963e7dd85267d52e0ef8d18e2cd301f7b56"
+      }
+    ],
+    "hashes": {
+      "lite_debugging_a": "df7d0703f937a005f2c8530515b0491dc285110a5bd612d115c69b36fff786da",
+      "lite_debugging_b": "53fd9ce08a4de5cc618e9065123f4bfa2f7830cd4d8893fe73d3cdee314919ce",
+      "lite_assembly_a": "4b513874a06f59750dd447b2f23928e4f29e7a52b19b99a07cf26dbfe1b87973",
+      "lite_assembly_b": "8113c218bee0a52325182599a37f9313e3ac34d1e2f58d09816a4aa0cd77d870",
+      "lite_support_a": "427e0819efce15e5f88d4da06db6192e18ad3303f6fa5e26696f217bbf3f4cfe",
+      "lite_support_b": "85b70aa9f9351c0f4491c7e78b70fb1b39bb557c52022643f84a58833795ce0f",
+      "lite_presenter_a": "b95e74e0c963de0d6205ea101b1e33abe2c526ca755142bb18d75e8e9d18c864",
+      "lite_presenter_b": "d7c787a4562c67f52d02d8a5d7ce902f92a11931714d333398cf3e3c53311307"
+    },
+    "generator_sources": {
+      "adapters/llm.py": "be6289ef18a29f86f02b0fbd777b84e8099016fa566316ba93c1c010894b7a8f",
+      "jev.py": "f3c6494a9d7f7666fa04b719a1809015057264775be0e98f581a8c344193bb27",
+      "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+      "lite/__main__.py": "afc1b8c824cf0a9dd9e36268841b312174ec0ad2a9310778b1a5fd9468398418",
+      "lite/core.py": "6e792b226e43126cccef80107f296c7897eedecb0a57ba53a35d324e053baa70",
+      "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+      "lite/runtime.py": "a7bee88e00d9e97e1dd7506741af6b24ddcadd7fc5af7fe854d315b1538a4c8d",
+      "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+      "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+      "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+      "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+      "lite/tasks/presenter.py": "2148486ab6339d73b41d9d30259d0301352809b3ac1320eb3f60c4128f67d0c3",
+      "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8"
+    },
+    "reference_validation": "public-only executable reference agreement; not independent human adjudication",
+    "dataset_hash": "fdfdd55d0f304cfdd63a283ad073755750fb934d093309034d3051a5c6b7e1af"
+  },
+  "run_sources": {
+    "adapters/__init__.py": "808c150f2e51af4cf33fe3267a2b040ba533c37cad0b6a13dc80a09a5b7366af",
+    "adapters/anthropic_messages.py": "140f6f558041b3c72cdbe5e0a028b15c5e92dd4b00857844d813f48e039e4dcf",
+    "adapters/base.py": "5fd62ec5d30651803d52e3df837356329113f6246bac2404d18886102d0e4510",
+    "adapters/cloudflare.py": "5306cd4c9641b2b73122f7d6d965993960f5df065fde59b5279cc4079ebddd4f",
+    "adapters/fastino.py": "06a56e82bbc97816dc24ec9f45789d75a400b733fcc191a74023a2a3f6b49ed7",
+    "adapters/llm.py": "14a64eb0c3ee6b6b7d755ea55bd52cb87aaa56356c800a740fe71a4b79fa8ae2",
+    "adapters/local.py": "d4b0295cda3d576174db082fc9bb461639ace56863795885cae37ed8adde10f9",
+    "adapters/openai_decisions.py": "6ea2f5d5b701c477d14578009c63b9fa30a8ee98d0b676bca7f3619bf3466cd9",
+    "adapters/perplexity.py": "eb5363085a6230b33f51e8e4c4bbb937cf1111112642b33d5b583f78988b13ea",
+    "adapters/remote.py": "7e823a7ef5eef18b53c24c7d96340bfd8b5e0241f40b2e5f649a3036478db1e1",
+    "adapters/wity.py": "5432f1c1ec36703e97c2aeeeb2ac70d3fb36f0d4ab6dc3c6cdbbc5548242218d",
+    "jev.py": "249c5a9065f362b63cbd13ad711e83703a76d8b3ba3a671d8f282a55c3d1b83a",
+    "lite/__init__.py": "23bb3c3013e6537a6a27362db721e19ea100a2d977d35ee4790df172e493374e",
+    "lite/__main__.py": "26a8baa3966c81e6d15fef6977dc4b780df19850e5d28482f52df55be1c00822",
+    "lite/core.py": "93ed536d194e77355db77addd879a6406e89cbbbb91e967db4c56a796b1955a4",
+    "lite/interval_scoring.py": "ce3eda9c2fe2efcd84b75a02ce329e8fc7bf7f21b9abd65e65fd10bf3d9a6eb3",
+    "lite/reference_scoring.py": "14036a3799c453fef6c19baca3935f30d63f01aec6241cf785235eb966cd969d",
+    "lite/retry_scoring.py": "dac4bd01d62d6f746c5991aefc3ccddc451ce52899cf0e08aee9e78f622413b6",
+    "lite/runtime.py": "f6b0ee67e18e0f50126679a53944f7a8311a9e61f92818825556e4ebef470089",
+    "lite/scoring.py": "b9bb78b406458c35295c57acf5a5c0b48529cc3cc721e587cf7cbf71eb38e07c",
+    "lite/tasks/__init__.py": "89d59c216508b2796405ee2ab68ce1e3b5b3b5e9f0182e1b01d1b4dc43f77775",
+    "lite/tasks/assembly.py": "60afe3f7ddfe2e2dae36e6c3cac5bbfcc299f3e2660a77945eb028de3536506c",
+    "lite/tasks/debugging.py": "9e08a55b6033f5a112f362396779c1991829b14469b75ca79e41fb85c4575651",
+    "lite/tasks/presenter.py": "2148486ab6339d73b41d9d30259d0301352809b3ac1320eb3f60c4128f67d0c3",
+    "lite/tasks/support.py": "46091522d9b9d1b1b954c295efe59d787c9c47dd9ee872346baf127ada31fdb8"
+  },
+  "aggregation": "equal mean of per-pass metrics; sample SD across three passes (percentage points); latency values are means of within-pass quantiles",
+  "primary": {
+    "min_s": 0.5,
+    "max_s": 8,
+    "weighting": "log",
+    "network_s": 0,
+    "mean_log_auc_pct": 19.380184408911482,
+    "sample_sd_log_auc_points": 1.0936785494541987
+  },
+  "untimed": {
+    "mean_accuracy_pct": 25.555555555555554,
+    "sample_sd_accuracy_points": 0.7887372702500376
+  },
+  "latency_s": {
+    "p50": 1.4390147637265425,
+    "p95": 1.682569672896837
+  },
+  "reliability": {
+    "logical_requests": 1440,
+    "successful_logical_requests": 1440,
+    "attempts": 1440,
+    "failed_attempts": 0,
+    "retried_logical_requests": 0
+  },
+  "refusals": {
+    "responses_with_refusals": 0,
+    "decisions_using_refused_question": 0,
+    "scoring": "a safeguard refusal refuses every question of that state; a refused question commits to no option and is wrong wherever the composed decision uses it"
+  },
+  "by_family": {
+    "live_debugging": {
+      "mean_log_auc_pct": 12.656882453073871,
+      "sample_sd_log_auc_points": 3.1948978822022522,
+      "mean_untimed_accuracy_pct": 16.111111111111107
+    },
+    "presenter_voice_control": {
+      "mean_log_auc_pct": 22.582969798160065,
+      "sample_sd_log_auc_points": 1.3140193810182232,
+      "mean_untimed_accuracy_pct": 26.666666666666618
+    },
+    "procedural_coaching": {
+      "mean_log_auc_pct": 11.670091830625006,
+      "sample_sd_log_auc_points": 0.34193649842105556,
+      "mean_untimed_accuracy_pct": 15.277777777777727
+    },
+    "support_call_assist": {
+      "mean_log_auc_pct": 30.610793553786987,
+      "sample_sd_log_auc_points": 0.6935646281448884,
+      "mean_untimed_accuracy_pct": 44.16666666666679
+    }
+  }
+}

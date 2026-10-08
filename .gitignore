@@ -381,3 +381,17 @@ _site/
 !/runs/lite-v1-gpt-6-luna-decisions-20261007-pass[123]-retry-v1/run.json
 !/runs/lite-v1-gpt-6-luna-decisions-20261007-pass[123]-retry-v1/episodes.json
 !/runs/lite-v1-gpt-6-luna-decisions-20261007-pass[123]-retry-v1/events.jsonl
+
+# Claude Haiku 5.5 (low): publish only the three immutable recording inputs.
+!/runs/lite-v1-claude-haiku-5-5-low-20261009-pass[123]-retry-v1/
+/runs/lite-v1-claude-haiku-5-5-low-20261009-pass[123]-retry-v1/*
+!/runs/lite-v1-claude-haiku-5-5-low-20261009-pass[123]-retry-v1/run.json
+!/runs/lite-v1-claude-haiku-5-5-low-20261009-pass[123]-retry-v1/episodes.json
+!/runs/lite-v1-claude-haiku-5-5-low-20261009-pass[123]-retry-v1/events.jsonl
+
+# Claude Haiku 5.5 (nothink): publish only the three immutable recording inputs.
+!/runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass[123]-retry-v1/
+/runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass[123]-retry-v1/*
+!/runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass[123]-retry-v1/run.json
+!/runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass[123]-retry-v1/episodes.json
+!/runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass[123]-retry-v1/events.jsonl

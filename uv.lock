@@ -1277,6 +1277,7 @@ name = "streamdecisionbench"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "anthropic" },
     { name = "httpx" },
     { name = "jsonschema" },
     { name = "numpy" },
@@ -1285,9 +1286,6 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-anthropic = [
-    { name = "anthropic" },
-]
 audit = [
     { name = "scikit-learn" },
     { name = "sentence-transformers" },
@@ -1303,7 +1301,7 @@ paper = [
 
 [package.metadata]
 requires-dist = [
-    { name = "anthropic", marker = "extra == 'anthropic'", specifier = ">=0.40" },
+    { name = "anthropic", specifier = ">=1" },
     { name = "httpx", specifier = ">=0.27" },
     { name = "jsonschema", specifier = ">=4.26.0" },
     { name = "numpy", specifier = ">=1.26" },
@@ -1312,7 +1310,7 @@ requires-dist = [
     { name = "sentence-transformers", marker = "extra == 'audit'", specifier = ">=3.0" },
     { name = "typesafe-sdk", specifier = ">=0.7" },
 ]
-provides-extras = ["audit", "anthropic"]
+provides-extras = ["audit"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=8" }]

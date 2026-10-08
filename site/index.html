@@ -58,7 +58,7 @@ select { font: inherit; font-size: 13px; padding: 5px 8px; border-radius: 8px; b
 .chip[aria-pressed="false"] svg { opacity: .35; }
 .group-title { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-3); margin: 8px 0 2px; }
 .chart { width: 100%; }
-#board { height: 520px; } #curves { height: 470px; }
+#curves { height: 470px; }
 .note { font-size: 13px; color: var(--text-3); margin: 8px 0 0; }
 details { margin-top: 12px; } summary { cursor: pointer; font-size: 14px; color: var(--text-2); }
 .table-wrap { overflow-x: auto; }
@@ -70,7 +70,7 @@ ul.notes { color: var(--text-2); font-size: 14px; padding-left: 20px; margin: 8p
 ul.notes li { margin: 4px 0; }
 footer { color: var(--text-3); font-size: 13px; margin-top: 32px; }
 @media (max-width: 640px) {
-  header h1 { font-size: 24px; } #board { height: 560px; } #curves { height: 380px; }
+  header h1 { font-size: 24px; } #curves { height: 380px; }
   section.card { padding: 14px; }
 }
 </style>
@@ -177,6 +177,7 @@ footer { color: var(--text-3); font-size: 13px; margin-top: 32px; }
 
 <script>
 let STYLE;
+const BOARD_ROW_PX = 24;
 const DASH = { solid: "", dashed: "6 4", dotted: "2 3" };
 const state = { metric: "inforce", lo: 0.5, hi: 8, selected: new Set() };
 let D, board, curves;
@@ -210,6 +211,9 @@ function renderBoard() {
     ? `Normalized log-AUC of in-force accuracy over ${range}${isPrimary() ? " (primary score)" : " (computed from the published curves)"}. Ranked high to low.`
     : "Untimed accuracy: the share of states whose answer is correct, ignoring when it arrives. Ranked high to low.";
   const ordered = rows.slice().reverse();
+  // Every setting keeps its own labeled row: the chart grows with the leaderboard.
+  const height = `${ordered.length * BOARD_ROW_PX + 44}px`;
+  if (board.getDom().style.height !== height) { board.getDom().style.height = height; board.resize(); }
   board.setOption({
     animationDuration: 300,
     grid: { left: 8, right: 64, top: 8, bottom: 28, containLabel: true },
@@ -226,7 +230,7 @@ function renderBoard() {
       splitLine: { lineStyle: { color: grid } } },
     yAxis: { type: "category", data: ordered.map((s) => s.id), axisTick: { show: false },
       axisLine: { lineStyle: { color: grid } },
-      axisLabel: { formatter: (id) => { const s = D.settings.find((x) => x.id === id);
+      axisLabel: { interval: 0, formatter: (id) => { const s = D.settings.find((x) => x.id === id);
           return `{name|${s.label}}  {tag|${s.deployment === "hosted" ? "API" : "GPU"}}`; },
         rich: { name: { color: text, fontSize: 13 }, tag: { color: text3, fontSize: 11 } } } },
     series: [{ type: "bar", barMaxWidth: 18,

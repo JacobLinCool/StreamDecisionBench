@@ -148,5 +148,15 @@
     "light": "#c026d3",
     "dark": "#e879f9",
     "dash": "solid"
+  },
+  "HaikuLow": {
+    "light": "#4d7c0f",
+    "dark": "#a3e635",
+    "dash": "solid"
+  },
+  "HaikuNoThink": {
+    "light": "#4d7c0f",
+    "dark": "#a3e635",
+    "dash": "dashed"
   }
 }

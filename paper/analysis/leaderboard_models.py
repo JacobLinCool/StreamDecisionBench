@@ -55,3 +55,13 @@ HOSTED_PASSES["LunaDecisions"] = (
     ("gpt-6-luna-decisions-20261007/pass2", "lite-v1-gpt-6-luna-decisions-20261007-pass2-retry-v1"),
     ("gpt-6-luna-decisions-20261007/pass3", "lite-v1-gpt-6-luna-decisions-20261007-pass3-retry-v1"),
 )
+
+# Claude Haiku 5.5 through the Messages API: adaptive thinking at low effort, and thinking off at low effort.
+HOSTED_LABELS.update(HaikuLow="Claude Haiku 5.5 low", HaikuNoThink="Claude Haiku 5.5 thinking off")
+HOSTED_PASSES.update({
+    variant: tuple(
+        (f"claude-haiku-5-5-20261009/{folder}" + (f"/pass{index}" if index > 1 else ""),
+         f"lite-v1-claude-haiku-5-5-{folder}-20261009-pass{index}-retry-v1")
+        for index in range(1, 4))
+    for variant, folder in (("HaikuLow", "low"), ("HaikuNoThink", "nothink"))
+})

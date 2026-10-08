@@ -15,10 +15,12 @@ The domain spans update rates four times faster and slower than the recording ca
 | Astra low | 3 | 49.80% | 49.09% | 46.96% | 52.18% | 49.51% ± 4.44 | 99.86% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Luna low | 3 | 48.03% | 44.04% | 44.40% | 45.33% | 45.45% ± 0.70 | 89.93% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | GLiDE (Fastino) | 3 | 31.76% | 35.12% | 41.11% | 49.72% | 39.43% ± 2.11 | 80.49% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Claude Haiku 5.5 low | 3 | 37.45% | 32.26% | 39.93% | 36.61% | 36.56% ± 0.09 | 95.35% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | GPT-6-Luna (Decisions API) | 3 | 21.27% | 20.39% | 54.84% | 33.06% | 32.39% ± 0.70 | 36.04% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Clef | 3 | 35.22% | 13.60% | 59.25% | 17.48% | 31.39% ± 0.41 | 38.96% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Luna none | 3 | 13.16% | 19.62% | 44.04% | 46.65% | 30.87% ± 1.12 | 43.54% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Clef Flash | 3 | 13.27% | 23.71% | 28.67% | 13.90% | 19.89% ± 0.19 | 21.67% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
+| Claude Haiku 5.5 thinking off | 3 | 12.66% | 11.67% | 30.61% | 22.58% | 19.38% ± 1.09 | 25.56% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Wity-1 (off) | 1 | 0.00% | 3.01% | 22.59% | 8.85% | 8.61% (one pass) | 10.21% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Wity-1 (auto) | 1 | 0.69% | 1.68% | 2.50% | 5.66% | 2.64% (one pass) | 27.50% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 
@@ -44,7 +46,7 @@ The domain spans update rates four times faster and slower than the recording ca
 | Decision 2.0 Lux-9B | 7.24% | 23.98% | 41.10% | 25.24% | 24.39% | 29.58% | [report](../decision20-pro6000-20261003/lux-9b-pass1/REPORT.md) |
 | Decision 2.0 Vega-27B | 5.57% | 10.06% | 7.48% | 6.78% | 7.47% | 68.54% | [report](../decision20-pro6000-20261003/vega-27b-pass1/REPORT.md) |
 
-Wity auto/off each have one pass with 16 workers and Retry-After recovery; all other hosted scores average three passes, each over all 480 states with 32 workers. SD is sample standard deviation across passes, in percentage points; unavailable for one pass. The original Luna, Terra and Jev passes combine disjoint six-scenario and presenter sessions. GLiDE and GPT-6-Luna through the Decisions API completed three passes without failed attempts; Clef Flash's original pass retains its two recovered timeout attempts. The self-hosted table shows the referenced individual recordings; the public leaderboard averages their three passes. No model query is made by this analysis.
+Wity auto/off each have one pass with 16 workers and Retry-After recovery; all other hosted scores average three passes, each over all 480 states with 32 workers. SD is sample standard deviation across passes, in percentage points; unavailable for one pass. The original Luna, Terra and Jev passes combine disjoint six-scenario and presenter sessions. GLiDE and GPT-6-Luna through the Decisions API completed three passes without failed attempts; Claude Haiku 5.5 thinking off completed its three passes without failed attempts, and Claude Haiku 5.5 low recovered one timeout; Clef Flash's original pass retains its two recovered timeout attempts. The self-hosted table shows the referenced individual recordings; the public leaderboard averages their three passes. No model query is made by this analysis.
 
 Each analysis contains `auc.primary`, six `auc.sensitivity` conditions, and fixed 2 s diagnostics in `scores`. The physical wall-clock trace and secondary network-removal estimate are separate. The integration rule was adopted after inspecting the recorded passes; comparisons are descriptive and do not establish stable rankings.
 

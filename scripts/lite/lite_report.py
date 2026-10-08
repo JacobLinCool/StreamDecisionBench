@@ -28,7 +28,8 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def model_label(config: dict) -> str:
-    return " ".join(part for part in (config["model"], config["reasoning_effort"]) if part)
+    thinking = "thinking off" if config.get("thinking") == "disabled" else None
+    return " ".join(part for part in (config["model"], config["reasoning_effort"], thinking) if part)
 
 
 def relative_link(target: Path, output: Path) -> str:
@@ -213,6 +214,7 @@ def render_report(data: dict, output: Path) -> str:
              f"{len(scores['by_family'])} families, {scores['episodes']} scenarios; duration {duration_text} s per scenario, "
              f"evidence releases every {tick_text} s, {scores['states']} logical requests. {request_description} "
              f"Requested model: {config['model']}" + (f", reasoning effort {config['reasoning_effort']}" if config["reasoning_effort"] else "")
+             + (f", thinking {config['thinking']}" if config.get("thinking") else "")
              + ". All model scores use recorded responses.", "",
              f"**Untimed decision accuracy: {pct(scores['overall']['untimed_decision_accuracy'])}; "
              f"{timing_label}: {pct(scores['overall']['time_accuracy'])}.**", "",

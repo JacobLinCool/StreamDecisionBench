@@ -15,6 +15,7 @@ dependencies = [
     "httpx>=0.27",
     "openai>=2",
     "jsonschema>=4.26.0",
+    "anthropic>=1",
 ]
 
 [project.urls]
@@ -25,8 +26,6 @@ audit = [
     "scikit-learn>=1.4",
     "sentence-transformers>=3.0",
 ]
-# Legacy `sdb eval --model anthropic:<model>` adapter only; the current benchmark does not use it.
-anthropic = ["anthropic>=0.40"]
 
 [project.scripts]
 sdb = "streamdecisionbench.cli:main"

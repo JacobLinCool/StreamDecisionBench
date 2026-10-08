@@ -46,10 +46,12 @@ Latency includes the remote service and internet round trip from the benchmark c
 | Astra low | `gpt-6-astra` | 3 | 49.51 ± 4.44 | 99.86 | 2.353 |
 | Luna low | `gpt-5.6-luna` | 3 | 45.45 ± 0.70 | 89.93 | 2.443 |
 | GLiDE (Fastino) | `fastino/GLiDE` | 3 | 39.43 ± 2.11 | 80.49 | 5.546 |
+| Claude Haiku 5.5 low | `claude-haiku-5-5` | 3 | 36.56 ± 0.09 | 95.35 | 3.660 |
 | GPT-6-Luna (Decisions API) | `gpt-6-luna` | 3 | 32.39 ± 0.70 | 36.04 | 0.344 |
 | Clef | `clef` | 3 | 31.39 ± 0.41 | 38.96 | 0.885 |
 | Luna none | `gpt-5.6-luna` | 3 | 30.87 ± 1.12 | 43.54 | 1.312 |
 | Clef Flash | `clef-flash` | 3 | 19.89 ± 0.19 | 21.67 | 0.437 |
+| Claude Haiku 5.5 thinking off | `claude-haiku-5-5` | 3 | 19.38 ± 1.09 | 25.56 | 1.439 |
 | Wity-1 (off) | `wity-1` | 1 | 8.61 (one pass) | 10.21 | 1.291 |
 | Wity-1 (auto) | `wity-1` | 1 | 2.64 (one pass) | 27.50 | 63.534 |
 
@@ -219,6 +221,10 @@ uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
 # OpenAI Decisions API (public beta)
 uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
   --out runs/my-luna-decisions --provider openai-decisions --model gpt-6-luna
+
+# Claude models (Anthropic Messages API with strict structured outputs)
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-claude --provider anthropic --model claude-haiku-5-5 --effort low
 ```
 
 The OpenAI Decisions provider uses `OPENAI_API_KEY` and the optional `OPENAI_BASE_URL`
@@ -233,6 +239,16 @@ workers, with HTTP client retries disabled; HTTP 429 and 5xx are retried within 
 budget, honoring `Retry-After` through the shared episode cooldown. As documented on October 7,
 2026, the endpoint charges $0.10 per million input tokens and nothing for output or caching;
 one 480-request pass used about 1.55M input tokens.
+
+The Anthropic provider uses `ANTHROPIC_API_KEY` and the optional `ANTHROPIC_BASE_URL`. It sends
+the same system prompt as the OpenAI Responses adapter, with the questions and the state as two
+text blocks and a cache breakpoint after the questions, and constrains the reply with the same
+strict answer schema. `--effort` sets `output_config.effort` (`low` to `max`; the model's default
+when omitted), and `--thinking disabled` turns thinking off (accepted at `high` effort or lower;
+adaptive by default). A safeguard decline (`stop_reason: "refusal"`) refuses every question of that
+state, which then counts as wrong wherever the decision uses it. Timeout, workers and retries
+follow the OpenAI Decisions provider: 20 s, 32 workers, SDK retries off, HTTP 429/5xx retried
+with `Retry-After` through the shared cooldown.
 
 Fastino requires `FASTINO_API_KEY`; `FASTINO_BASE_URL` optionally overrides the API
 origin. The adapter calls its [native System One API](https://docs.fastino.ai/inference/systemone)
