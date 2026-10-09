@@ -575,6 +575,19 @@ def benchmark_macros(m: Macros, bench: dict, checks: Checks) -> None:
           f"{D}:steps[].gold composed by decision_spec (share of the most frequent decision, mean over scenarios)")
     m.add("BaselineBestConstantMin", pct(min(constant_share)), f"{D}:steps[].gold (most frequent decision share, minimum over scenarios)")
     m.add("BaselineBestConstantMax", pct(max(constant_share)), f"{D}:steps[].gold (most frequent decision share, maximum over scenarios)")
+    # Uniform random answering: the route and every consumed answer drawn uniformly from its options.
+    route_chance, uniform = [], []
+    for eid in order:
+        ep = eps[eid].data
+        spec, options = ep["decision_spec"], ep["option_semantics"]
+        route = spec["route_question"]
+        route_chance.append(1 / len(options[route]))
+        uniform.append(mean(math.prod(1 / len(options[q]) for q in [route, *spec["always"], *spec["branches"][s["gold"][route]]])
+                            for s in ep["steps"]))
+    m.add("BaselineUniformRoute", pct(mean(route_chance)),
+          f"{D}:option_semantics (uniform route choice, mean over scenarios)")
+    m.add("BaselineUniform", fixed(_dec(mean(uniform)) * 100, 2),
+          f"{D}:option_semantics, steps[].gold (uniform answers to the consumed questions, mean over scenarios)")
     for name in ("NumFamilies", "ScenariosPerFamily", "NumScenarios"):
         m.add(f"{name}Word", word(int(m.items[name].value)), f"\\{name} spelled out")
     # Figure 5: the released state at which the payment call's hold reaches its threshold.

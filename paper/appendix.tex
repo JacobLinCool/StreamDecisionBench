@@ -161,7 +161,7 @@ A valid response ends the retries even if its decision is wrong, and authenticat
 \paragraph{GPT requests.}
 The GPT models receive the fixed instruction below, followed by the request as JSON with the questions before the state so that the repeated policy text forms a cacheable prefix.
 No GPT pass reported cached input tokens (\LunaCachedTokTotal, \LunaNoneCachedTokTotal, \TerraCachedTokTotal, \TerraNoneCachedTokTotal{} and \AstraCachedTokTotal).
-Strict structured outputs restrict each answer to the question's option labels, sorted so that the schema reveals no display order, and responses are not stored.
+Strict structured outputs restrict each answer to the question's option labels, sorted so that the schema reveals no display order, and responses are not stored. Requests use the provider's default sampling; the settings differ only in reasoning effort.
 {\scriptsize
 \begin{verbatim}
 You are a real-time decision model. You receive
@@ -187,7 +187,7 @@ Table~\ref{tab:reliability} lists the \NumSettingsWord{} settings' reliability c
 All requests succeeded on their first attempt.
 Discarded responses were valid but arrived after the horizon or were superseded, arriving after a response to a newer time step had been accepted.
 All three complete passes are evaluated with equal weight.
-All recordings used the same runtime and provider adapters and the same execution/retry configuration. Source manifests also retain changes to dataset support and offline analysis between sessions; all responses are evaluated by the same scorer.
+All recordings of these six settings used the same runtime and provider adapters and the same execution/retry configuration. Source manifests also retain changes to dataset support and offline analysis between sessions; all responses are evaluated by the same scorer.
 A partial Luna pass on an earlier build of the data, stopped when the wording of some rules was clarified, is not evaluated.
 
 % ---------------------------------------------------------------------------
@@ -242,7 +242,7 @@ Figure~\ref{fig:map} places every setting at its median latency before and after
 \begin{figure}[tp]
   \centering
   \includegraphics[width=\linewidth]{figures/fig_map.pdf}
-  \caption{\textbf{Removing the fitted remainder can put Terra none above Jev at 2\,s.}
+  \caption{\textbf{Removing the fitted remainder raises the GPT settings far more than Jev, lifting Terra low above it at 2\,s.}
   Arrows subtract each remainder; dashed: the oracle of Equation~\eqref{eq:delay}, valid up to 2\,s.}
   \label{fig:map}
 \end{figure}
@@ -316,16 +316,18 @@ Jev's fastest response took \JevLatencyFloor\,s, close to its remainder, so for 
     Setting & 0.5--8\,s & 0.5--8\,s & 1--4\,s & 0.5--4\,s & 1--8\,s & 0.1--4\,s & 0.1--8\,s & 2\,s \\
     \midrule
     \TabAucSensitivityBody
+    \midrule
+    \TabLaterSensitivityBody
     \bottomrule
   \end{tabular}
-  \caption{\textbf{Bounds and weighting change the contribution of fast and slow update conditions.}
-  Family weights as in Equation~\eqref{eq:macro} (\%); Log 0.5--8\,s is primary.}
+  \caption{\textbf{Bounds and weighting reorder single settings, while the Jev and Perplexity hybrids stay ahead of every single setting.}
+  Family weights as in Equation~\eqref{eq:macro} (\%); Log 0.5--8\,s is primary. Last three rows: freshest-source hybrids on the common nominal clock; $^\dagger$recorded later (Appendix~\ref{app:later}).}
   \label{tab:auc-sensitivity}
 \end{table*}
 
 \paragraph{Sensitivity.}
 Table~\ref{tab:family} gives family scores with the remainder removed.
-Removing the non-token remainder moves segment-balanced scores in the same direction as time-weighted ones.
+\emph{Segment-balanced in-force accuracy} weights every reference segment equally, $A_{\mathrm{seg}}=K^{-1}\sum_{k}|I_k|^{-1}\int_{I_k}\ind[d(t)=\yref(t)]\,dt$, so a brief change counts as much as a long stable span. Removing the non-token remainder moves segment-balanced scores in the same direction as time-weighted ones.
 Segment-balanced in-force accuracy with the remainder removed is \LunaNetRemovedSeg\% (\LunaNetRemovedSegLow--\LunaNetRemovedSegHigh) for Luna, \TerraNetRemovedSeg\% (\TerraNetRemovedSegLow--\TerraNetRemovedSegHigh) for Terra, \AstraNetRemovedSeg\% (\AstraNetRemovedSegLow--\AstraNetRemovedSegHigh) for Astra and \JevNetRemovedSeg\% (\JevNetRemovedSegLow--\JevNetRemovedSegHigh) for Jev, against observed values of \LunaInForceSeg\%, \TerraInForceSeg\%, \AstraInForceSeg\% and \JevInForceSeg\%; without reasoning it is \LunaNoneNetRemovedSeg\% (\LunaNoneNetRemovedSegLow--\LunaNoneNetRemovedSegHigh) for Luna and \TerraNoneNetRemovedSeg\% (\TerraNoneNetRemovedSegLow--\TerraNoneNetRemovedSegHigh) for Terra, against \LunaNoneInForceSeg\% and \TerraNoneInForceSeg\%.
 Displayed ranges average the endpoints of three per-pass estimator uncertainty ranges; they are not confidence intervals for the mean and say nothing about other locations or times of day.
 
@@ -361,20 +363,20 @@ It does not assert a logarithmic human perceptual law or an empirical distributi
 Unit invariance alone would not justify this choice: normalized linear AUC is also unchanged by converting seconds to milliseconds.
 
 \paragraph{Domain and interpretation.}
-The interval $\Delta$ is spacing between evidence states; it is distinct from response latency, a user's delay budget, and a reference segment's dwell time, which can span several states.
-We summarize performance over update intervals of 0.5--8\,s, spanning a fourfold increase and decrease in update rate relative to the 2\,s recording cadence.
-Logarithmic weighting assigns equal weight to each doubling interval and balances faster and slower conditions around the recording cadence.
+The interval $\Delta$ is spacing between evidence states; it is distinct from response latency, a user's latency budget, and a reference segment's dwell time, which can span several states.
+We summarize performance over time-step intervals of 0.5--8\,s, spanning a fourfold increase and decrease in the rate of time steps relative to the 2\,s recording interval.
+Logarithmic weighting assigns equal weight to each doubling interval and balances faster and slower conditions around the recording interval.
 These bounds define a controlled evaluation domain; deployment-specific event rates can motivate other ranges.
-Related interaction studies motivate investigating this scale but do not calibrate its endpoints: developer feedback in \citet[Section~7.2]{murali2024ai} discusses 300--500\,ms suggestions and an upper expectation of 1\,s; \citet{chen2017empirical} derive 0.6--2.7\,s bounds for LEGO guidance, and \citet{olguin2021impact} test injected delays up to 3\,s.
-These concern response delays, not the event rates of our synthetic streams, and motivate the time scale without calibrating its endpoints.
-The same rule and bounds apply to all settings. The aggregation rule was adopted after inspecting the initial hosted passes; we therefore report their alternative weights and bounds in Table~\ref{tab:auc-sensitivity} and make no preregistration claim.
+Related interaction studies motivate investigating this scale but do not calibrate its endpoints: developer feedback in \citet[Section~7.2]{murali2024ai} discusses 300--500\,ms suggestions and an upper expectation of 1\,s; \citet{chen2017empirical} derive 0.6--2.7\,s bounds for LEGO guidance, and \citet{olguin2021impact} test injected latency up to 3\,s.
+These concern response latency, not the event rates of our synthetic streams, and motivate the time scale without calibrating its endpoints.
+The same rule and bounds apply to all settings, and Table~\ref{tab:auc-sensitivity} reports the alternative weights and bounds.
 The same table reports all six combinations of lower bounds 0.1, 0.5 and 1\,s with upper bounds 4 and 8\,s, linear weighting over the primary domain, and in-force accuracy at the 2\,s recording cadence.
 
 \paragraph{Replay and quadrature.}
 Each interval evaluation retains the recorded answers and latency in seconds while scaling releases, the horizon and tick-valued policies together.
 For example, support A's four-tick hold threshold represents 2\,s at an interval of 0.5\,s and 32\,s at 8\,s. These are controlled scenario variants, not new latency thresholds on an unchanged call.
 The inner integral over scenario time is exact. For the outer integral, we use nested trapezoidal grids in $\ln\Delta$ (or $\Delta$ for linear weighting), starting with 128 subintervals and doubling until every integrated scenario metric changes by at most $10^{-5}$, or 0.001 percentage point.
-Nonconvergence at 4096 subintervals is an error. The maximum final refinement change across the hosted settings and sensitivity conditions is \AucMaxRefinementChange{} points; this is numerical convergence, not statistical uncertainty. Appendix~\ref{app:openweight} additionally verifies self-hosted standalone results using exact crossing-based integration.
+Nonconvergence at 4096 subintervals is an error. The maximum final refinement change across the six hosted settings of Table~\ref{tab:main} and sensitivity conditions is \AucMaxRefinementChange{} points; this is numerical convergence, not statistical uncertainty. Appendix~\ref{app:openweight} additionally verifies self-hosted standalone results using exact crossing-based integration.
 Scenario fractions are normalized before integration, then averaged within each family, across families and across passes equally. With common bounds and weights, integrating the aggregate curve equals averaging the family integrals.
 
 
@@ -596,7 +598,7 @@ In that pass, Astra answered route \emph{\AstraMissRoute} with target \emph{\Ast
 At time step \AstraMissPrevStep{} the state differs only by the clock and one status heartbeat, which the rules say changes no decision, and there Astra returned the reference.
 The original audit had adjudicated this reading in one grouped finding of \AstraSituationStates{} states, time steps \AstraMissPrevStep{} and \AstraMissStep{} among them, and all \AuditLensesWord{} lenses upheld the reference; Astra returned the reference at the other \AstraSituationCorrect.
 
-Pass 2 agrees at all 480 states. Pass 3 makes one analogous error at assembly A, time step 50: after J1 rework, it again routes repair for the now-future inspection instead of advancing to it.
+Pass 2 agrees at all \NumStates{} states. Pass 3 makes one analogous error at assembly A, time step \AstraMissStepPassThree{}, which belongs to the same grouped finding: after J1 rework, it again routes repair for the now-future inspection instead of advancing to it.
 
 \paragraph{Scope.}
 The audit tests agreement between public text, evidence and reference code; LLM agents performed every check, and one adjudication lens traces the reference itself, so zero confirmed errors bounds the error count only from below.
@@ -647,7 +649,7 @@ The rule is implemented once and checked again whenever the figure is drawn.
     \JevRowLabel & \TrajJevNearError & \TrajJevFarError \\
     \bottomrule
   \end{tabular}
-  \caption{\textbf{Judgment errors concentrate near reference changes for some settings.}
+  \caption{\textbf{Untimed errors concentrate near reference changes for some settings.}
   Near: at most one tick from a change (\TrajLunaNearStates{} states); far: the remaining \TrajLunaFarStates{}.}
   \label{tab:transition-errors}
 \end{table}
@@ -749,6 +751,7 @@ Family weights and bounds match Equation~\eqref{eq:macro}.
 \label{app:openweight}
 
 \paragraph{Settings and measurement.}
+The self-hosted settings are popular public decision-model checkpoints on Hugging Face that come with a native decision readout and run on one GPU; Qwen3.5-4B, read through its option logits, adds a general-model baseline.
 We record \OwNumSettingsWord{} completed settings on the same frozen dataset, at the same 2\,s cadence with 32 workers and serial scenarios; each pass covers all \NumStates{} states once with zero failed model attempts.
 Every setting runs on one RTX PRO 6000 Blackwell Server Edition GPU (96\,GB).
 All use BF16 backbones and native decision readouts. The benchmark and model share a host, so latency includes tokenization, runtime queueing and complete-decision inference, with no internet round trip.
@@ -793,7 +796,7 @@ These are measurements of the configured deployments: differences with hosted AP
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\linewidth]{figures/fig_openweight_hybrids.pdf}
-  \caption{\textbf{A fast provisional component can lower accuracy across update intervals.}
+  \caption{\textbf{A fast provisional component can lower accuracy across time-step intervals.}
   Common-clock replay with freshest-source arbitration and Terra none corrections; areas appear in Table~\ref{tab:openweight-hybrids}.}
   \label{fig:openweight-hybrids}
 \end{figure*}
@@ -803,11 +806,10 @@ Laya uses its released calibration policy with maximum sequence length 8192 and 
 DJev uses DiffusionGemma 26B-A4B with a 128-token canvas, one denoising step, no thinking and upstream automatic noise sampling (up to four draws, threshold 0.1).
 Kev uses its native pointer head and fused CUDA runtime, with CUDA graphs, cross-request prefix caching and date-fact augmentation disabled; Kev-4B and Kev-9B are LoRA adapters merged into their Qwen3.5 bases, Kev-27B is a full-weight checkpoint, and each serves the temperature its checkpoint carries.
 Nimble uses the released merged adapter at temperature 1 and independently processes the full prompt for each of the six or seven fields, sequentially; its latency includes the entire request and runtime contention.
-SemIf reads uncalibrated option logits from the pinned Qwen3.5-4B checkpoint, with thinking and generation disabled; no decision-trained checkpoint is used. This row evaluates that direct-logit configuration.
+The Qwen3.5-4B direct-logit setting reads uncalibrated option logits from the pinned Qwen3.5-4B checkpoint, with thinking and generation disabled; no decision-trained checkpoint is used. This row evaluates that direct-logit configuration.
 Their native input audits check every request for context overflow. No setting uses CPU offload or a truncated-input path.
 All mappings preserve state fields, instructions, option descriptions, order and output identifiers.
 The released recordings retain model revisions, execution configuration, source and weight hashes, input audits and native diagnostics where available.
-Sol-2B has no executable public native runtime at the inspected revisions, so no inference is attempted and no score is assigned.
 
 \paragraph{Judgment and timing.}
 Tables~\ref{tab:openweight-families} and~\ref{tab:openweight-latency} separate untimed decision accuracy from the measured deployment path.
@@ -820,7 +822,7 @@ The accompanying analysis retains the six time classes by scenario and family fo
 \paragraph{Laya's component errors.}
 Laya English, typed-decisions and multilingual achieve route accuracies of \LayaEnglishRoute\%, \LayaTypedRoute\% and \LayaMultilingualRoute\%, respectively.
 Pooled accuracy over the reference-consumed fields, including the route, is \LayaEnglishGoldFields\%, \LayaTypedGoldFields\% and \LayaMultilingualGoldFields\%; each setting has \LayaEnglishStates{} state evaluations and \LayaEnglishFields{} consumed-field evaluations across three passes.
-Errors therefore occur before the exact-match composition step. The recorded native input audits check state and option coverage, and the warmups check response format; the measurements leave the cause of these errors open.
+Errors therefore occur before the exact-match composition step. The recorded native input audits check state and option coverage, and the warmups check response format; the measurements leave the cause of these errors open. For reference, answering every question uniformly at random would pick the reference route in \BaselineUniformRoute\% of states and the composed reference decision in \BaselineUniform\%; Laya's route accuracies and its untimed accuracies (\OwLayaMultilingualUntimed--\OwLayaTypedUntimed\%) lie near these levels. The three settings are retained without outcome-based exclusion.
 
 \paragraph{Repeated passes.}
 We record three passes of each setting with the same GPU, configuration, checkpoints and dependency sets (Table~\ref{tab:openweight-repeats}). Self-hosted results and curves are equal means of independently evaluated passes; latency summaries average the per-pass quantiles.
@@ -840,9 +842,71 @@ These interleaved exposure durations determine the composed score; neither faste
 Standalone measurements retain their original release clocks; joint applications use common nominal releases and preserve every recorded successful-attempt duration plus commit lag.
 The maximum standalone difference between these clocks is \OwNominalGap{} points at the fixed 2\,s interval, across all \OwTotalSettingsWord{} settings; replay on each original clock reproduces every correctness and six-part time partition.
 All areas use the same exact crossing-based integration as Appendix~\ref{app:composition}.
-The fixed-delay replay assumes latency is unchanged when the interval changes; components were recorded separately, and shared-resource contention, joint deployment performance remain unmeasured.
+The fixed-latency replay assumes latency is unchanged when the interval changes; components were recorded separately, and shared-resource contention and joint deployment performance remain unmeasured.
+
+\begin{table*}[t]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lrrrrrrrrr}
+    \toprule
+    & \multicolumn{5}{c}{Log-AUC over 0.5--8\,s (\%)} & & & \multicolumn{2}{c}{Error time (\%)} \\
+    \cmidrule(lr){2-6}\cmidrule(lr){9-10}
+    Setting & IDE & Assembly & Support & Presenter & Macro & Untimed & p50 (s) & Stale & Judgment \\
+    \midrule
+    \TabLaterStandalone
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Later hosted settings show the same two limits.}
+  Means of three passes; Macro with sample SD in points; p50: mean per-pass median latency; error time as a share of log-weighted time.}
+  \label{tab:later}
+\end{table*}
 
 \FloatBarrier
+\section{Hosted Settings Recorded Later}
+\label{app:later}
+
+\paragraph{Settings and measurement.}
+After the first passes of the six hosted settings of Table~\ref{tab:main}, we recorded \LaterNumSettingsWord{} further hosted settings between 2026-10-02 and 2026-10-08 (UTC), with three complete passes each under the same protocol: the frozen dataset, the 2\,s recording interval, 32 workers and the same client.
+Five are native decision interfaces that answer the typed questions directly: Perplexity Decider v1 27B \citep{perplexity2026decider}, GLiDE \citep{fastino2026glide}, GPT-6-Luna through OpenAI's Decisions API \citep{openai2026decisions,openai2026luna6}, and Cloudflare's Clef and Clef Flash \citep{cloudflare2026clef,cloudflare2026clefflash}.
+Claude Haiku 5.5 \citep{anthropic2026haiku} receives the instruction and structured-output schema of the GPT settings through the Messages API at low effort with the provider's default sampling, once with adaptive thinking and once with thinking disabled.
+Requests time out after 20\,s as in Appendix~\ref{app:protocol}, except 30\,s for Perplexity and 300\,s for GLiDE.
+Retries follow Appendix~\ref{app:protocol}; Perplexity's adapter also treats HTTP 5xx responses as connection errors, and within the same attempt budget the adapters may retry, after a shared Retry-After cooldown, HTTP 429 (Perplexity, GLiDE, Claude, Decisions), 425 and 503 (GLiDE) and 5xx (Claude, Decisions), which never occurred.
+Failed attempts were recovered by retry: \LaterPerplexityFailedAttempts{} in Perplexity's first pass (timeouts and HTTP 503), \LaterClefFlashFailedAttempts{} for Clef Flash and \LaterHaikuFailedAttempts{} for Claude Haiku 5.5 low (timeouts); every pass returned a valid response for all \NumStates{} states.
+The Decisions API refused one question at the same two presenter states in every pass; a refused question commits to no option and counts as wrong wherever the composed decision uses it, which never happened. An earlier pass, stopped at the first refusal before the adapter recorded refusals, is not evaluated.
+Original-release and common nominal clocks differ by at most \LaterNominalGap{} points at 2\,s for these settings.
+Wity-1 (one pass per reasoning mode, at 16 workers), three single-scenario smoke tests of Claude Haiku 5.5 at default and low effort run before its passes, and eight self-hosted settings recorded with three passes each on other GPU hosts are not included.
+
+\begin{table}[t]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{llrrr}
+    \toprule
+    Fast & Corrector & Freshest & Lag $\leq 1$ & Override \\
+    \midrule
+    \TabLaterSystems
+    \bottomrule
+  \end{tabular}
+  \caption{\textbf{Perplexity raises every corrector; the other fast components lower every corrector stronger than Luna none.}
+  Log-AUC over 0.5--8\,s (\%), matched passes, common nominal clock; GPT-6-Luna via the Decisions API.}
+  \label{tab:later-systems}
+\end{table}
+
+\paragraph{Results.}
+Table~\ref{tab:later} shows the two limits of \S\ref{sec:results}.
+With adaptive thinking, Claude Haiku 5.5 is \LaterHaikuUntimed\% correct untimed but stale for \LaterHaikuStale\% of log-weighted time; with thinking disabled it answers in \LaterHaikuOffMedian\,s at the median, but its untimed accuracy falls to \LaterHaikuOffUntimed\%.
+The fast decision interfaces lose mostly to judgment, whereas GLiDE, a decision interface with a median latency of \LaterGlideMedian\,s, is stale for \LaterGlideStale\% of log-weighted time: the partition, not the interface type, identifies the limit.
+Perplexity Decider has the highest single-setting log-AUC (\LaterPerplexityAuc\%) and leads Jev in every family except presenter control, yet its judgment errors still occupy \LaterPerplexityJudgment\% of log-weighted time.
+
+\paragraph{Composition.}
+Extending the hosted rule of Appendix~\ref{app:composition}, which pairs Jev with the five GPT settings, each decision interface whose mean per-pass median latency is below the 2\,s recording interval, \LaterNumFastWord{} in all, is paired with the five GPT settings under the three arbitration rules, with matching pass indices (Table~\ref{tab:later-systems}).
+With freshest-source arbitration, Perplexity improves on both components with every corrector except Luna none, and with Astra low reaches \LaterBestAuc\%, the highest evaluated mean.
+The other three interfaces stay below every corrector stronger than Luna none under every rule; for them, the one-tick-lag rule, which lets a slightly older correction replace a newer fast answer, gives a higher log-AUC than freshest-source arbitration in most pairs, whereas for Perplexity freshest-source arbitration is best with every corrector.
+As for the self-hosted fast components (Table~\ref{tab:openweight-hybrids}), the best rule depends on the fast component's judgment.
+
+\FloatBarrier
+
 \section{Reproducibility}
 \label{app:repro}
 
@@ -850,9 +914,9 @@ The fixed-delay replay assumes latency is unchanged when the interval changes; c
 The accompanying materials, provided as supplementary material, contain the frozen dataset (\texttt{data/lite/v1}, dataset hash beginning \texttt{\DatasetHashShort}), the task generators and executable references, the runner and scorer, all recorded passes with their complete event logs, the audit record, and the scripts that regenerate the numerical results and figures in this paper.
 Code and data are released under the MIT license and are intended for evaluating decision components; the synthetic scenarios and their rules are not a policy for any real deployment.
 The pass-1 event logs have SHA-256 digests beginning \texttt{\LunaEventsHash} and \texttt{\LunaNoneEventsHash} (Luna, low and none), \texttt{\TerraEventsHash} and \texttt{\TerraNoneEventsHash} (Terra), \texttt{\AstraEventsHash} (Astra) and \texttt{\JevEventsHash} (Jev).
-The three-pass analysis manifest lists all eighteen hosted and twenty-seven self-hosted recordings with their event hashes. The analysis scripts regenerate the measured results from these logs without any model call, verify agreement with the published analyses, and check that the executable reference reproduces all \NumStates{} stored answers. The independent audit remains limited to its original six-scenario scope.
-A new pass needs access to the evaluated models: an OpenAI API key for the GPT models and access to \JevProvider's service for Jev.
-At the list prices of Table~\ref{tab:tokens}, OpenAI bills reasoning tokens as output and \JevProvider{} bills input tokens only; the eighteen hosted passes cost \CostTotalUSD{} USD in total. Actual billed charges can differ. The twenty-seven self-hosted measurement windows total \OwMeasuredHours{} GPU-host hours, excluding setup, warmups, input audits and other experiments; a complete compute total was not retained.
+The three-pass analysis manifest lists all eighteen hosted and twenty-seven self-hosted recordings with their event hashes, and a second manifest lists the three passes of each setting in Appendix~\ref{app:later}. The analysis scripts regenerate the measured results from these logs without any model call, verify agreement with the published analyses, and check that the executable reference reproduces all \NumStates{} stored answers. The independent audit remains limited to its original six-scenario scope.
+A new pass needs access to the evaluated models: an OpenAI API key for the GPT models and access to \JevProvider's service for Jev; the settings of Appendix~\ref{app:later} also need access to OpenAI's Decisions API and to Perplexity, Fastino, Cloudflare and Anthropic.
+At the list prices of Table~\ref{tab:tokens}, OpenAI bills reasoning tokens as output and \JevProvider{} bills input tokens only; the eighteen hosted passes cost \CostTotalUSD{} USD in total; the passes of Appendix~\ref{app:later} are not costed. Actual billed charges can differ. The twenty-seven self-hosted measurement windows total \OwMeasuredHours{} GPU-host hours, excluding setup, warmups, input audits and other experiments; a complete compute total was not retained.
 The self-hosted evidence contains recorded predictions and timing, frozen scenarios and configurations, input audits and pinned native revisions; the release includes no model weights. Recomputing all standalone and composition results requires neither GPUs nor service credentials.
 Hosted models may change or be retired; the logs record the requested and served model identifiers.
 

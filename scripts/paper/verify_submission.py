@@ -20,6 +20,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[2]
 MANUSCRIPT = 'docs/research/manuscript-three-pass/analysis.json'
+LATER = 'docs/research/later-hosted/analysis.json'
 
 
 def sha(path: Path) -> str:
@@ -95,34 +96,40 @@ def verify_recordings():
     policy = data['openweight']['policy']
     specs = {row['name']: row for row in policy['settings']}
     records, requests, questions, native_checks = 0, 0, 0, 0
+
+    def verify_recording(name, source, label):
+        nonlocal requests, questions
+        run, evidence = verified_run(ROOT/source['run'])
+        if evidence != source['sha256']:
+            raise ValueError(f'{name}: recording receipts disagree')
+        report = load(source['published_report']['path'])
+        if report['config'] != run['frozen']['config']:
+            raise ValueError(f'{name}: redacted configuration differs between report and recording')
+        compare(run['scores'], report['scores'], f'{name}/{label}/scores')
+        compare(run['raw_wallclock_scores'], report['raw_wallclock_scores'], f'{name}/{label}/wallclock')
+        seen = set()
+        for episode in run['episodes']:
+            eid = episode['episode_id']
+            for response in run['responses'][eid]:
+                key = eid, response['t']
+                if key in seen:
+                    raise ValueError(f'{name}: duplicate response')
+                seen.add(key)
+                step = episode['steps'][response['t']]
+                if response['request_hash'] != digest(request_for(episode, step)):
+                    raise ValueError(f'{name}: changed public model input')
+                decoded = decode(episode, response['wire_answers'])
+                if decoded != response['pred'] or compose(episode['decision_spec'], decoded) != response['decision']:
+                    raise ValueError(f'{name}: changed committed answer')
+                requests += 1
+                questions += len(episode['questions'])
+        if len(seen) != 480:
+            raise ValueError(f'{name}: incomplete 480-state recording')
+        return run
+
     for row in data['passes']:
         for name, source in row['provenance'].items():
-            run, evidence = verified_run(ROOT/source['run'])
-            if evidence != source['sha256']:
-                raise ValueError(f'{name}: recording receipts disagree')
-            report = load(source['published_report']['path'])
-            if report['config'] != run['frozen']['config']:
-                raise ValueError(f'{name}: redacted configuration differs between report and recording')
-            compare(run['scores'], report['scores'], f'{name}/pass{row["pass"]}/scores')
-            compare(run['raw_wallclock_scores'], report['raw_wallclock_scores'], f'{name}/pass{row["pass"]}/wallclock')
-            seen = set()
-            for episode in run['episodes']:
-                eid = episode['episode_id']
-                for response in run['responses'][eid]:
-                    key = eid, response['t']
-                    if key in seen:
-                        raise ValueError(f'{name}: duplicate response')
-                    seen.add(key)
-                    step = episode['steps'][response['t']]
-                    if response['request_hash'] != digest(request_for(episode, step)):
-                        raise ValueError(f'{name}: changed public model input')
-                    decoded = decode(episode, response['wire_answers'])
-                    if decoded != response['pred'] or compose(episode['decision_spec'], decoded) != response['decision']:
-                        raise ValueError(f'{name}: changed committed answer')
-                    requests += 1
-                    questions += len(episode['questions'])
-            if len(seen) != 480:
-                raise ValueError(f'{name}: incomplete 480-state recording')
+            run = verify_recording(name, source, f'pass{row["pass"]}')
             if name in specs:
                 spec = deepcopy(specs[name])
                 spec['run'] = str(Path(source['run']).relative_to('runs'))
@@ -143,7 +150,13 @@ def verify_recordings():
                         raise ValueError(f'{name}: checkpoint metadata differs')
             records += 1
         print(f'Pass {row["pass"]}: all 15 recordings, requests, scores and native metadata verified', flush=True)
-    if (records, requests, questions) != (45, 21600, 140400):
+    later = load(LATER)
+    for name, row in later['standalone'].items():
+        for record in row['passes']:
+            verify_recording(name, record['provenance'], f'pass{record["pass"]}')
+            records += 1
+    print(f'Later hosted settings: all {sum(len(r["passes"]) for r in later["standalone"].values())} recordings verified', flush=True)
+    if (records, requests, questions) != (66, 31680, 205920):
         raise ValueError('Unexpected manuscript cohort or evaluation counts')
     return {'recordings': records, 'state_evaluations': requests, 'question_evaluations': questions,
             'native_input_audits': native_checks}
@@ -160,6 +173,8 @@ def regenerate():
                    for p in (ROOT/'paper/figures').glob('*.json')}
     from lite_repeated import main
     main()
+    from lite_later import main as later
+    later()
     after = {str(p.relative_to(ROOT)): visible_tex(p) for p in (ROOT/'paper/generated').glob('*.tex')}
     if before != after:
         changed = sorted(path for path in set(before) | set(after) if before.get(path) != after.get(path))

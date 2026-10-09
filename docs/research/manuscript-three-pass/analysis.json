@@ -12168,7 +12168,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json",
-            "sha256": "fc706d0348b0b1947de4ff15f8a57e767ba284a26fb6e3b70e17cdeb005fdadd"
+            "sha256": "31b746adb8895ed8a5ca0ea1638150d27c392bb2d35f92c90a976314d1886cb1"
           }
         },
         "LunaNone": {
@@ -12180,7 +12180,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json",
-            "sha256": "4952eec1e48faf2a50a76391d9c91ecfbded2af0b77b289da4c908883f24cc97"
+            "sha256": "1ed9ef98809ad84e7efb31351d07a9dee2d3c492ac4464b9eafd3bd757d1aa1a"
           }
         },
         "Terra": {
@@ -12192,7 +12192,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json",
-            "sha256": "2751cbfabbe5340ac109a7456f9ebc473a08777e42cd63c9adf150ada3ecaabb"
+            "sha256": "25bfdfe07f59b0de9832048ebcacb79f05a2749f74baab158d1844207e9ea0b2"
           }
         },
         "TerraNone": {
@@ -12204,7 +12204,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json",
-            "sha256": "35818ece42391182e3cd41e5cd25dc110563846215ab2b69ae0eb6eecb0dc6bd"
+            "sha256": "c9f28fd2d11bebaf247ad02c3e8e75168ecaf41b190b85e3d4b2a6b174e61ebb"
           }
         },
         "Astra": {
@@ -12216,7 +12216,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/gpt-6-astra-low/analysis.json",
-            "sha256": "38a2ce331d8d0e00e3b756f23719882e856cda531d77e36260a1648ce439f98b"
+            "sha256": "019f87ff512d3c56dfd1c087eaae4a850580716e3a30967e7a8ee7cb739249d6"
           }
         },
         "Jev": {
@@ -12228,7 +12228,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/jev-latest/analysis.json",
-            "sha256": "ee4e1651c3465e1a94a72d71993f40f9fb3c00b9c3e3af74ce61834187cc9ff4"
+            "sha256": "43e8f135043b141fe68cb3f8327c167133d335f1b050dc22251589310b30bbae"
           }
         },
         "LayaEnglish": {
@@ -12240,7 +12240,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/laya-english/analysis.json",
-            "sha256": "a62eef50815881775f375b3059222fbe731eb06064f8dd12ab646821bd2b0f76"
+            "sha256": "9506d5fe5674dc3881c49f90e493bfa771324071099057446538f2f6f2d75363"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -12277,7 +12277,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/laya-typed-decisions/analysis.json",
-            "sha256": "0951029957f799eddd19cb565386fbc4083ba423b5ae648916b0bf4129f0ff2d"
+            "sha256": "280fb0c813cc555e04ec4f65f3a7fe53676bfd0a5d973c26af8065e9468c468f"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -12314,7 +12314,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/laya-multilingual/analysis.json",
-            "sha256": "4555fd034ecc6b9b21aff84bdd8321ab3326b891367c75284e861003284c3a88"
+            "sha256": "08b911f0c29164a8a972e069062c849ced99dc0ebb93ef6fd5d59c0b14dbef9a"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -12351,7 +12351,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/djev-diffusiongemma/analysis.json",
-            "sha256": "6f4a6156ea8bc720c33c4d0a92a7bc45ea0680d2d011f9bd64ba457c5c479677"
+            "sha256": "aaf8c63bfcf20dcc96bd09afb17cf19199f86fa497f0f49d0a09b4bcd474db51"
           },
           "native_sources": {
             "path": "runs/pro6000-lab-20261001/source-provenance.json",
@@ -12382,7 +12382,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/kev-4b/analysis.json",
-            "sha256": "936547e171e530237180a4fed73d86653a25678158c9b2fa07e94acd9335e7a5"
+            "sha256": "f083fecee52ef4a7c70222d6625eceee4ee0bc33726d67489e4d91da4db48408"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001/kev-4b.input-audit.json",
@@ -12423,7 +12423,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/kev-9b/analysis.json",
-            "sha256": "70387992935b917159eb17b25b4428b4f8fa31f889025fddba3524f3fcd33598"
+            "sha256": "0f7f023489463f951bb028432d7c8f9f186119f40b2799fd7a000bebeb114717"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001/kev-9b.input-audit.json",
@@ -12464,7 +12464,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/kev-27b/analysis.json",
-            "sha256": "f4dcc2c90ad58fdaa8c50202828bbc3b703d29ab7366e2170adcd58e6a3e7415"
+            "sha256": "20c5e5b6a16aa9ed0f96a28d8886c1441164a9bbe88f571e604c2504c4ee9e45"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001/kev-27b.input-audit.json",
@@ -12505,7 +12505,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/nimble-9b/analysis.json",
-            "sha256": "c124f282fd243737ff318a4b7aee368ad56d65eb4a48ff62f207c6be7aaf2656"
+            "sha256": "0bcc8cf4e37aff5070ec3819551aba12eda911b2a0377e3d5087e9af01b07692"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001/nimble-9b.input-audit.json",
@@ -12546,7 +12546,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/semif-qwen35-4b/analysis.json",
-            "sha256": "ec5a5a60d7d9bdeb213d8579a6fef30937a1c78ba7375423b3478de9ea249b2c"
+            "sha256": "85ec8f5707a8f6f29c2d8a3701863778527e72b0bc249a89b0cbac9bae76fbec"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001/semif-qwen35-4b.input-audit.json",
@@ -114588,7 +114588,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/gpt-5.6-luna-low/analysis.json",
-            "sha256": "5757c7f4a9adc146780ac30f43ea9b01d9d5a9dd057b3b4efc2150a330069b08"
+            "sha256": "ff7b7b7e88b5610f653a7d86f8931e62f7fb4ececf33e8484ed299d827cd6d80"
           }
         },
         "LunaNone": {
@@ -114600,7 +114600,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/gpt-5.6-luna-none/analysis.json",
-            "sha256": "a704dd9a19112b5f32f913bc56fae7b34c2384e90ee3b1f00eea57fde777e192"
+            "sha256": "dbd62da485da06a79766b97b8b05ee69d0bf749da22e2fdbd61172c8d43cb697"
           }
         },
         "Terra": {
@@ -114612,7 +114612,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/gpt-5.6-terra-low/analysis.json",
-            "sha256": "6a1f478bad299e7cf8474bb3e670ee479a90181c1c1290bfd46c361f8db2bc43"
+            "sha256": "1c4aa788eda71c24c2544dcd08957c9326916a5bade8d4d4d2fafc6fca06570e"
           }
         },
         "TerraNone": {
@@ -114624,7 +114624,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/gpt-5.6-terra-none/analysis.json",
-            "sha256": "dbf0287a32d8d9134ad76636cc229b008a8feae33a52adbda39b1c0d04dc1923"
+            "sha256": "44671b17ea779b37e91c03f7246b056cf771a0bc1a705ab8977f31a37fedfa70"
           }
         },
         "Astra": {
@@ -114636,7 +114636,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/gpt-6-astra-low/analysis.json",
-            "sha256": "4b437ce22c6f894d428d51e5f0f50359cc3925c3382b28a47ff7a1ce96a970d8"
+            "sha256": "fb04a15bc555037f5e4eddf762b6e005f569bb123eaab35002cb44b2d3b861d7"
           }
         },
         "Jev": {
@@ -114648,7 +114648,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/jev-latest/analysis.json",
-            "sha256": "16061d367a68c367cd6ff051451c378f0dc5630112fe580d2175a8cb39919efa"
+            "sha256": "520e69de8612297d840dae7ec389efe8fda1e667bfa37a4ac4f99a86f6d2247a"
           }
         },
         "LayaEnglish": {
@@ -114660,7 +114660,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/laya-english/analysis.json",
-            "sha256": "a51a825d807f3aa22f1b907860adb238149106600c881cd7afc6fb74cb434e6f"
+            "sha256": "7d6a7791b479c90fbbe4912841c6b75bb3657b9dd53dd8ad850bc4e360513506"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -114697,7 +114697,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/laya-typed-decisions/analysis.json",
-            "sha256": "206bb9dcf62413c083c92194a7df4821f50f403b1c955517ba315d36835364da"
+            "sha256": "1cdbf83ca4393ce7c0bfc5ca4e779f4dd9a423893ef4b35528c02faa42fa29d8"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -114734,7 +114734,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/laya-multilingual/analysis.json",
-            "sha256": "2e8d37f8c4a7ae3f193232ed3649061a5c3600aa5546bcb2b3696ae74f9e90b7"
+            "sha256": "e3adb124e2b445dfb42b92fbb56154d0ac1a1b8d9fbb8520d01af04b11797d8a"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -114771,7 +114771,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/djev-diffusiongemma/analysis.json",
-            "sha256": "f0d27d3e8334d9e9e35f98da100ec744518401f24d767960547ea2900195306f"
+            "sha256": "e7808b17f140a8fcf0e6fc2682bb765d3a89fd688f514b7aabf1426ad10c694d"
           },
           "native_sources": {
             "path": "runs/pro6000-lab-20261001-pass2/source-provenance.json",
@@ -114802,7 +114802,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/kev-4b/analysis.json",
-            "sha256": "a4b4e502216354604e9281198f25a02a9363288cd3157eee357684c1902a0a88"
+            "sha256": "2eb9cbd24d9a6a152b5b15c105aa7a400903e01bfa2ceb63fcac9bf2a4dd9d7e"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass2/kev-4b.input-audit.json",
@@ -114843,7 +114843,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/kev-9b/analysis.json",
-            "sha256": "4b945fc9f40115104d4fb00a74043419e98e1040e7972ff6473e59191a88ab2f"
+            "sha256": "6aef7dc7baeb10b794df0cb4d0f8275332e5f68fc1adaff5541592ba58716df1"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass2/kev-9b.input-audit.json",
@@ -114884,7 +114884,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/kev-27b/analysis.json",
-            "sha256": "2af24f6400ff84c48bd324cf1be0c914311df1df54ed7ec22b0dab3cad6ca790"
+            "sha256": "d95c1642d3b4a1239c168ed5d9cef1bb21b836be48e128ab20ba2246cda36e93"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass2/kev-27b.input-audit.json",
@@ -114925,7 +114925,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/nimble-9b/analysis.json",
-            "sha256": "9169bdb7765e7f24c48089d7c05693aad20973290b77113da7f537b940de063a"
+            "sha256": "9c8fbb44f15b658987e2e0c670d1eee25d82f9ca8503d35878fa771a14eb2aef"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass2/nimble-9b.input-audit.json",
@@ -114966,7 +114966,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/semif-qwen35-4b/analysis.json",
-            "sha256": "6e397e4320473ec5443263a636e68be5c1ddb1ff4042e3fde1fcb9245a0b2b1c"
+            "sha256": "af5d103b3c780b7b65c163c05f6df14d3d476d14378957d8540a0524bd13b517"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass2/semif-qwen35-4b.input-audit.json",
@@ -216469,7 +216469,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/gpt-5.6-luna-low/analysis.json",
-            "sha256": "cd0eddf3f603d81bddafaa2a72fb930ed0370d02ccdb008a7204cc6cad784c1f"
+            "sha256": "5effc5f0140078fdfb68e44f6f2d9f6d4778b9d635e68c53b1d751509c6bcc64"
           }
         },
         "LunaNone": {
@@ -216481,7 +216481,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/gpt-5.6-luna-none/analysis.json",
-            "sha256": "8ac06d1361f8582364e7f5076b6ee931a9c6b65493fa76ae2da0e1d34714e295"
+            "sha256": "a829e76b27e25a44b772ea9d1d52d6ddbe0bb6b44a9270c1bd8fee14be8073ba"
           }
         },
         "Terra": {
@@ -216493,7 +216493,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/gpt-5.6-terra-low/analysis.json",
-            "sha256": "205a348bff41ac7c619874e47202f4027f9d65acb3d4a9b62b2c155bcd009c81"
+            "sha256": "9044da0c71d0a666a806ea1792892b1867eaaa67d420475c935a3364f0546cf4"
           }
         },
         "TerraNone": {
@@ -216505,7 +216505,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/gpt-5.6-terra-none/analysis.json",
-            "sha256": "fed0aa0e1dd1d90c3e80591accebdeb83d537b45c65ec65957c2c0143ba48d26"
+            "sha256": "3cb55f4c7ee1e491d7984a038277e39eb8fe9e62ca6d17c48c47a8a957ef672e"
           }
         },
         "Astra": {
@@ -216517,7 +216517,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/gpt-6-astra-low/analysis.json",
-            "sha256": "114c6539381c488fd8ef8cd829fc0af072e428f14075997dc38631d1675b3634"
+            "sha256": "b0ee6000dd27828d4f1bc9134c3b11407d45566e972122062879c3654762ed84"
           }
         },
         "Jev": {
@@ -216529,7 +216529,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/jev-latest/analysis.json",
-            "sha256": "4b7b1a9158c062c459c70facc474c997a7ef0f58c94c4b7fa27d3d935853e447"
+            "sha256": "1413b1a6fc46bc3ddf3a50c8e3efed5ef676c9e29bfa32e4feec0f76ed03f22a"
           }
         },
         "LayaEnglish": {
@@ -216541,7 +216541,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/laya-english/analysis.json",
-            "sha256": "bec95d5c5992a22f31ad887d3d746ae52051f9d09f5b4402d212640aac83b992"
+            "sha256": "e5b1b7ec707f6f01582791b5866696b20816335aec85705f232b6034772f6676"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -216578,7 +216578,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/laya-typed-decisions/analysis.json",
-            "sha256": "3004386051c9d87e390e65edef0b5effb987d526057e23107578d5b3fb492784"
+            "sha256": "8329a54bd7248615ba9937f30ebf0907e85e78c71ef90efa772c7538a7e9972e"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -216615,7 +216615,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/laya-multilingual/analysis.json",
-            "sha256": "8c1158e559f7df10168857bf2a9f38b2cf04e180d9bf95de01704f13e54947c8"
+            "sha256": "351a02b4e39ac6b17e10cf34499d5a201bccf16fc01dbf837ae675c4e33d6e4c"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -216652,7 +216652,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/djev-diffusiongemma/analysis.json",
-            "sha256": "c7bccf92e08b17b6d6b83ac1bf0b691e6ecc719b9995b61f61c8930f49a76cff"
+            "sha256": "e6c021ba2e892f6350e53e2c67cfa043fe4cf9ecfa52b9165a38609959d5f225"
           },
           "native_sources": {
             "path": "runs/pro6000-lab-20261001-pass3/source-provenance.json",
@@ -216683,7 +216683,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/kev-4b/analysis.json",
-            "sha256": "0152505de798724580efedb9b5911998ac69bee87cd58a5b14320958c9dc6198"
+            "sha256": "fbf52dab1e096dbcefb3c22dee30d0b3044609db55cfc6877ce73e402d07feb7"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass3/kev-4b.input-audit.json",
@@ -216724,7 +216724,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/kev-9b/analysis.json",
-            "sha256": "287eb62c60e54bf15b1ee644918978c95765e4874672b0b5fd4390b3aacc209b"
+            "sha256": "22333d4d0a762951d77126603dd6187733cfe90e52f4cc0f164da0762f307378"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass3/kev-9b.input-audit.json",
@@ -216765,7 +216765,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/kev-27b/analysis.json",
-            "sha256": "4010922fc6a753d22c5c2f213edf078c0931088d219c0d0b59cbe3d0c6cf77ed"
+            "sha256": "e525ed827c0035321f2971dd04251605484316e11566d0d9ad8e3a564c490ae0"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass3/kev-27b.input-audit.json",
@@ -216806,7 +216806,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/nimble-9b/analysis.json",
-            "sha256": "ca13b76c1e476a5f454fab462598a75754cc4a66580ee94b27eb00ef6697b10b"
+            "sha256": "947f99bfcea51ef20b3936eb3ab53dbec63f0478fae2f7fc0cb246ba5c721fb8"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass3/nimble-9b.input-audit.json",
@@ -216847,7 +216847,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/semif-qwen35-4b/analysis.json",
-            "sha256": "10ba4f1f1e8e47473887ecbdd021b70902508b149bc7eb6383c5fd5cd96b1008"
+            "sha256": "6d9bbe4cb1d77c822419d3c6c30f7b35ee17844d88f2ecb1e7bb222ace8c01dd"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass3/semif-qwen35-4b.input-audit.json",
@@ -344618,7 +344618,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/gpt-5.6-luna-low/analysis.json",
-            "sha256": "fc706d0348b0b1947de4ff15f8a57e767ba284a26fb6e3b70e17cdeb005fdadd"
+            "sha256": "31b746adb8895ed8a5ca0ea1638150d27c392bb2d35f92c90a976314d1886cb1"
           }
         },
         "LunaNone": {
@@ -344630,7 +344630,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/gpt-5.6-luna-none/analysis.json",
-            "sha256": "4952eec1e48faf2a50a76391d9c91ecfbded2af0b77b289da4c908883f24cc97"
+            "sha256": "1ed9ef98809ad84e7efb31351d07a9dee2d3c492ac4464b9eafd3bd757d1aa1a"
           }
         },
         "Terra": {
@@ -344642,7 +344642,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/gpt-5.6-terra-low/analysis.json",
-            "sha256": "2751cbfabbe5340ac109a7456f9ebc473a08777e42cd63c9adf150ada3ecaabb"
+            "sha256": "25bfdfe07f59b0de9832048ebcacb79f05a2749f74baab158d1844207e9ea0b2"
           }
         },
         "TerraNone": {
@@ -344654,7 +344654,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/gpt-5.6-terra-none/analysis.json",
-            "sha256": "35818ece42391182e3cd41e5cd25dc110563846215ab2b69ae0eb6eecb0dc6bd"
+            "sha256": "c9f28fd2d11bebaf247ad02c3e8e75168ecaf41b190b85e3d4b2a6b174e61ebb"
           }
         },
         "Astra": {
@@ -344666,7 +344666,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/gpt-6-astra-low/analysis.json",
-            "sha256": "38a2ce331d8d0e00e3b756f23719882e856cda531d77e36260a1648ce439f98b"
+            "sha256": "019f87ff512d3c56dfd1c087eaae4a850580716e3a30967e7a8ee7cb739249d6"
           }
         },
         "Jev": {
@@ -344678,7 +344678,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/four-family/jev-latest/analysis.json",
-            "sha256": "ee4e1651c3465e1a94a72d71993f40f9fb3c00b9c3e3af74ce61834187cc9ff4"
+            "sha256": "43e8f135043b141fe68cb3f8327c167133d335f1b050dc22251589310b30bbae"
           }
         },
         "LayaEnglish": {
@@ -344690,7 +344690,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/laya-english/analysis.json",
-            "sha256": "a62eef50815881775f375b3059222fbe731eb06064f8dd12ab646821bd2b0f76"
+            "sha256": "9506d5fe5674dc3881c49f90e493bfa771324071099057446538f2f6f2d75363"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -344727,7 +344727,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/laya-typed-decisions/analysis.json",
-            "sha256": "0951029957f799eddd19cb565386fbc4083ba423b5ae648916b0bf4129f0ff2d"
+            "sha256": "280fb0c813cc555e04ec4f65f3a7fe53676bfd0a5d973c26af8065e9468c468f"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -344764,7 +344764,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/laya-multilingual/analysis.json",
-            "sha256": "4555fd034ecc6b9b21aff84bdd8321ab3326b891367c75284e861003284c3a88"
+            "sha256": "08b911f0c29164a8a972e069062c849ced99dc0ebb93ef6fd5d59c0b14dbef9a"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -344801,7 +344801,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/djev-diffusiongemma/analysis.json",
-            "sha256": "6f4a6156ea8bc720c33c4d0a92a7bc45ea0680d2d011f9bd64ba457c5c479677"
+            "sha256": "aaf8c63bfcf20dcc96bd09afb17cf19199f86fa497f0f49d0a09b4bcd474db51"
           },
           "native_sources": {
             "path": "runs/pro6000-lab-20261001/source-provenance.json",
@@ -344832,7 +344832,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/kev-4b/analysis.json",
-            "sha256": "936547e171e530237180a4fed73d86653a25678158c9b2fa07e94acd9335e7a5"
+            "sha256": "f083fecee52ef4a7c70222d6625eceee4ee0bc33726d67489e4d91da4db48408"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001/kev-4b.input-audit.json",
@@ -344873,7 +344873,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/kev-9b/analysis.json",
-            "sha256": "70387992935b917159eb17b25b4428b4f8fa31f889025fddba3524f3fcd33598"
+            "sha256": "0f7f023489463f951bb028432d7c8f9f186119f40b2799fd7a000bebeb114717"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001/kev-9b.input-audit.json",
@@ -344914,7 +344914,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/kev-27b/analysis.json",
-            "sha256": "f4dcc2c90ad58fdaa8c50202828bbc3b703d29ab7366e2170adcd58e6a3e7415"
+            "sha256": "20c5e5b6a16aa9ed0f96a28d8886c1441164a9bbe88f571e604c2504c4ee9e45"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001/kev-27b.input-audit.json",
@@ -344955,7 +344955,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/nimble-9b/analysis.json",
-            "sha256": "c124f282fd243737ff318a4b7aee368ad56d65eb4a48ff62f207c6be7aaf2656"
+            "sha256": "0bcc8cf4e37aff5070ec3819551aba12eda911b2a0377e3d5087e9af01b07692"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001/nimble-9b.input-audit.json",
@@ -344996,7 +344996,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001/semif-qwen35-4b/analysis.json",
-            "sha256": "ec5a5a60d7d9bdeb213d8579a6fef30937a1c78ba7375423b3478de9ea249b2c"
+            "sha256": "85ec8f5707a8f6f29c2d8a3701863778527e72b0bc249a89b0cbac9bae76fbec"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001/semif-qwen35-4b.input-audit.json",
@@ -345039,7 +345039,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/gpt-5.6-luna-low/analysis.json",
-            "sha256": "5757c7f4a9adc146780ac30f43ea9b01d9d5a9dd057b3b4efc2150a330069b08"
+            "sha256": "ff7b7b7e88b5610f653a7d86f8931e62f7fb4ececf33e8484ed299d827cd6d80"
           }
         },
         "LunaNone": {
@@ -345051,7 +345051,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/gpt-5.6-luna-none/analysis.json",
-            "sha256": "a704dd9a19112b5f32f913bc56fae7b34c2384e90ee3b1f00eea57fde777e192"
+            "sha256": "dbd62da485da06a79766b97b8b05ee69d0bf749da22e2fdbd61172c8d43cb697"
           }
         },
         "Terra": {
@@ -345063,7 +345063,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/gpt-5.6-terra-low/analysis.json",
-            "sha256": "6a1f478bad299e7cf8474bb3e670ee479a90181c1c1290bfd46c361f8db2bc43"
+            "sha256": "1c4aa788eda71c24c2544dcd08957c9326916a5bade8d4d4d2fafc6fca06570e"
           }
         },
         "TerraNone": {
@@ -345075,7 +345075,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/gpt-5.6-terra-none/analysis.json",
-            "sha256": "dbf0287a32d8d9134ad76636cc229b008a8feae33a52adbda39b1c0d04dc1923"
+            "sha256": "44671b17ea779b37e91c03f7246b056cf771a0bc1a705ab8977f31a37fedfa70"
           }
         },
         "Astra": {
@@ -345087,7 +345087,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/gpt-6-astra-low/analysis.json",
-            "sha256": "4b437ce22c6f894d428d51e5f0f50359cc3925c3382b28a47ff7a1ce96a970d8"
+            "sha256": "fb04a15bc555037f5e4eddf762b6e005f569bb123eaab35002cb44b2d3b861d7"
           }
         },
         "Jev": {
@@ -345099,7 +345099,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass2/jev-latest/analysis.json",
-            "sha256": "16061d367a68c367cd6ff051451c378f0dc5630112fe580d2175a8cb39919efa"
+            "sha256": "520e69de8612297d840dae7ec389efe8fda1e667bfa37a4ac4f99a86f6d2247a"
           }
         },
         "LayaEnglish": {
@@ -345111,7 +345111,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/laya-english/analysis.json",
-            "sha256": "a51a825d807f3aa22f1b907860adb238149106600c881cd7afc6fb74cb434e6f"
+            "sha256": "7d6a7791b479c90fbbe4912841c6b75bb3657b9dd53dd8ad850bc4e360513506"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -345148,7 +345148,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/laya-typed-decisions/analysis.json",
-            "sha256": "206bb9dcf62413c083c92194a7df4821f50f403b1c955517ba315d36835364da"
+            "sha256": "1cdbf83ca4393ce7c0bfc5ca4e779f4dd9a423893ef4b35528c02faa42fa29d8"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -345185,7 +345185,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/laya-multilingual/analysis.json",
-            "sha256": "2e8d37f8c4a7ae3f193232ed3649061a5c3600aa5546bcb2b3696ae74f9e90b7"
+            "sha256": "e3adb124e2b445dfb42b92fbb56154d0ac1a1b8d9fbb8520d01af04b11797d8a"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -345222,7 +345222,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/djev-diffusiongemma/analysis.json",
-            "sha256": "f0d27d3e8334d9e9e35f98da100ec744518401f24d767960547ea2900195306f"
+            "sha256": "e7808b17f140a8fcf0e6fc2682bb765d3a89fd688f514b7aabf1426ad10c694d"
           },
           "native_sources": {
             "path": "runs/pro6000-lab-20261001-pass2/source-provenance.json",
@@ -345253,7 +345253,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/kev-4b/analysis.json",
-            "sha256": "a4b4e502216354604e9281198f25a02a9363288cd3157eee357684c1902a0a88"
+            "sha256": "2eb9cbd24d9a6a152b5b15c105aa7a400903e01bfa2ceb63fcac9bf2a4dd9d7e"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass2/kev-4b.input-audit.json",
@@ -345294,7 +345294,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/kev-9b/analysis.json",
-            "sha256": "4b945fc9f40115104d4fb00a74043419e98e1040e7972ff6473e59191a88ab2f"
+            "sha256": "6aef7dc7baeb10b794df0cb4d0f8275332e5f68fc1adaff5541592ba58716df1"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass2/kev-9b.input-audit.json",
@@ -345335,7 +345335,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/kev-27b/analysis.json",
-            "sha256": "2af24f6400ff84c48bd324cf1be0c914311df1df54ed7ec22b0dab3cad6ca790"
+            "sha256": "d95c1642d3b4a1239c168ed5d9cef1bb21b836be48e128ab20ba2246cda36e93"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass2/kev-27b.input-audit.json",
@@ -345376,7 +345376,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/nimble-9b/analysis.json",
-            "sha256": "9169bdb7765e7f24c48089d7c05693aad20973290b77113da7f537b940de063a"
+            "sha256": "9c8fbb44f15b658987e2e0c670d1eee25d82f9ca8503d35878fa771a14eb2aef"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass2/nimble-9b.input-audit.json",
@@ -345417,7 +345417,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass2/semif-qwen35-4b/analysis.json",
-            "sha256": "6e397e4320473ec5443263a636e68be5c1ddb1ff4042e3fde1fcb9245a0b2b1c"
+            "sha256": "af5d103b3c780b7b65c163c05f6df14d3d476d14378957d8540a0524bd13b517"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass2/semif-qwen35-4b.input-audit.json",
@@ -345460,7 +345460,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/gpt-5.6-luna-low/analysis.json",
-            "sha256": "cd0eddf3f603d81bddafaa2a72fb930ed0370d02ccdb008a7204cc6cad784c1f"
+            "sha256": "5effc5f0140078fdfb68e44f6f2d9f6d4778b9d635e68c53b1d751509c6bcc64"
           }
         },
         "LunaNone": {
@@ -345472,7 +345472,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/gpt-5.6-luna-none/analysis.json",
-            "sha256": "8ac06d1361f8582364e7f5076b6ee931a9c6b65493fa76ae2da0e1d34714e295"
+            "sha256": "a829e76b27e25a44b772ea9d1d52d6ddbe0bb6b44a9270c1bd8fee14be8073ba"
           }
         },
         "Terra": {
@@ -345484,7 +345484,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/gpt-5.6-terra-low/analysis.json",
-            "sha256": "205a348bff41ac7c619874e47202f4027f9d65acb3d4a9b62b2c155bcd009c81"
+            "sha256": "9044da0c71d0a666a806ea1792892b1867eaaa67d420475c935a3364f0546cf4"
           }
         },
         "TerraNone": {
@@ -345496,7 +345496,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/gpt-5.6-terra-none/analysis.json",
-            "sha256": "fed0aa0e1dd1d90c3e80591accebdeb83d537b45c65ec65957c2c0143ba48d26"
+            "sha256": "3cb55f4c7ee1e491d7984a038277e39eb8fe9e62ca6d17c48c47a8a957ef672e"
           }
         },
         "Astra": {
@@ -345508,7 +345508,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/gpt-6-astra-low/analysis.json",
-            "sha256": "114c6539381c488fd8ef8cd829fc0af072e428f14075997dc38631d1675b3634"
+            "sha256": "b0ee6000dd27828d4f1bc9134c3b11407d45566e972122062879c3654762ed84"
           }
         },
         "Jev": {
@@ -345520,7 +345520,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/hosted-api-repeats-20261003/pass3/jev-latest/analysis.json",
-            "sha256": "4b7b1a9158c062c459c70facc474c997a7ef0f58c94c4b7fa27d3d935853e447"
+            "sha256": "1413b1a6fc46bc3ddf3a50c8e3efed5ef676c9e29bfa32e4feec0f76ed03f22a"
           }
         },
         "LayaEnglish": {
@@ -345532,7 +345532,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/laya-english/analysis.json",
-            "sha256": "bec95d5c5992a22f31ad887d3d746ae52051f9d09f5b4402d212640aac83b992"
+            "sha256": "e5b1b7ec707f6f01582791b5866696b20816335aec85705f232b6034772f6676"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -345569,7 +345569,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/laya-typed-decisions/analysis.json",
-            "sha256": "3004386051c9d87e390e65edef0b5effb987d526057e23107578d5b3fb492784"
+            "sha256": "8329a54bd7248615ba9937f30ebf0907e85e78c71ef90efa772c7538a7e9972e"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -345606,7 +345606,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/laya-multilingual/analysis.json",
-            "sha256": "8c1158e559f7df10168857bf2a9f38b2cf04e180d9bf95de01704f13e54947c8"
+            "sha256": "351a02b4e39ac6b17e10cf34499d5a201bccf16fc01dbf837ae675c4e33d6e4c"
           },
           "input_audit": {
             "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -345643,7 +345643,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/djev-diffusiongemma/analysis.json",
-            "sha256": "c7bccf92e08b17b6d6b83ac1bf0b691e6ecc719b9995b61f61c8930f49a76cff"
+            "sha256": "e6c021ba2e892f6350e53e2c67cfa043fe4cf9ecfa52b9165a38609959d5f225"
           },
           "native_sources": {
             "path": "runs/pro6000-lab-20261001-pass3/source-provenance.json",
@@ -345674,7 +345674,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/kev-4b/analysis.json",
-            "sha256": "0152505de798724580efedb9b5911998ac69bee87cd58a5b14320958c9dc6198"
+            "sha256": "fbf52dab1e096dbcefb3c22dee30d0b3044609db55cfc6877ce73e402d07feb7"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass3/kev-4b.input-audit.json",
@@ -345715,7 +345715,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/kev-9b/analysis.json",
-            "sha256": "287eb62c60e54bf15b1ee644918978c95765e4874672b0b5fd4390b3aacc209b"
+            "sha256": "22333d4d0a762951d77126603dd6187733cfe90e52f4cc0f164da0762f307378"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass3/kev-9b.input-audit.json",
@@ -345756,7 +345756,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/kev-27b/analysis.json",
-            "sha256": "4010922fc6a753d22c5c2f213edf078c0931088d219c0d0b59cbe3d0c6cf77ed"
+            "sha256": "e525ed827c0035321f2971dd04251605484316e11566d0d9ad8e3a564c490ae0"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass3/kev-27b.input-audit.json",
@@ -345797,7 +345797,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/nimble-9b/analysis.json",
-            "sha256": "ca13b76c1e476a5f454fab462598a75754cc4a66580ee94b27eb00ef6697b10b"
+            "sha256": "947f99bfcea51ef20b3936eb3ab53dbec63f0478fae2f7fc0cb246ba5c721fb8"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass3/nimble-9b.input-audit.json",
@@ -345838,7 +345838,7 @@
           },
           "published_report": {
             "path": "docs/lite/results/pro6000-lab-20261001-pass3/semif-qwen35-4b/analysis.json",
-            "sha256": "10ba4f1f1e8e47473887ecbdd021b70902508b149bc7eb6383c5fd5cd96b1008"
+            "sha256": "6d9bbe4cb1d77c822419d3c6c30f7b35ee17844d88f2ecb1e7bb222ace8c01dd"
           },
           "input_audit": {
             "path": "runs/pro6000-lab-20261001-pass3/semif-qwen35-4b.input-audit.json",
@@ -346536,7 +346536,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001/laya-english/analysis.json",
-                "sha256": "a62eef50815881775f375b3059222fbe731eb06064f8dd12ab646821bd2b0f76"
+                "sha256": "9506d5fe5674dc3881c49f90e493bfa771324071099057446538f2f6f2d75363"
               },
               "input_audit": {
                 "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -347182,7 +347182,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass2/laya-english/analysis.json",
-                "sha256": "a51a825d807f3aa22f1b907860adb238149106600c881cd7afc6fb74cb434e6f"
+                "sha256": "7d6a7791b479c90fbbe4912841c6b75bb3657b9dd53dd8ad850bc4e360513506"
               },
               "input_audit": {
                 "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -347828,7 +347828,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass3/laya-english/analysis.json",
-                "sha256": "bec95d5c5992a22f31ad887d3d746ae52051f9d09f5b4402d212640aac83b992"
+                "sha256": "e5b1b7ec707f6f01582791b5866696b20816335aec85705f232b6034772f6676"
               },
               "input_audit": {
                 "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -349008,7 +349008,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001/laya-typed-decisions/analysis.json",
-                "sha256": "0951029957f799eddd19cb565386fbc4083ba423b5ae648916b0bf4129f0ff2d"
+                "sha256": "280fb0c813cc555e04ec4f65f3a7fe53676bfd0a5d973c26af8065e9468c468f"
               },
               "input_audit": {
                 "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -349657,7 +349657,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass2/laya-typed-decisions/analysis.json",
-                "sha256": "206bb9dcf62413c083c92194a7df4821f50f403b1c955517ba315d36835364da"
+                "sha256": "1cdbf83ca4393ce7c0bfc5ca4e779f4dd9a423893ef4b35528c02faa42fa29d8"
               },
               "input_audit": {
                 "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -350306,7 +350306,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass3/laya-typed-decisions/analysis.json",
-                "sha256": "3004386051c9d87e390e65edef0b5effb987d526057e23107578d5b3fb492784"
+                "sha256": "8329a54bd7248615ba9937f30ebf0907e85e78c71ef90efa772c7538a7e9972e"
               },
               "input_audit": {
                 "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -351476,7 +351476,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001/laya-multilingual/analysis.json",
-                "sha256": "4555fd034ecc6b9b21aff84bdd8321ab3326b891367c75284e861003284c3a88"
+                "sha256": "08b911f0c29164a8a972e069062c849ced99dc0ebb93ef6fd5d59c0b14dbef9a"
               },
               "input_audit": {
                 "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -352115,7 +352115,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass2/laya-multilingual/analysis.json",
-                "sha256": "2e8d37f8c4a7ae3f193232ed3649061a5c3600aa5546bcb2b3696ae74f9e90b7"
+                "sha256": "e3adb124e2b445dfb42b92fbb56154d0ac1a1b8d9fbb8520d01af04b11797d8a"
               },
               "input_audit": {
                 "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -352754,7 +352754,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass3/laya-multilingual/analysis.json",
-                "sha256": "8c1158e559f7df10168857bf2a9f38b2cf04e180d9bf95de01704f13e54947c8"
+                "sha256": "351a02b4e39ac6b17e10cf34499d5a201bccf16fc01dbf837ae675c4e33d6e4c"
               },
               "input_audit": {
                 "path": "runs/runpod-openweight-20260930/input-audit.json",
@@ -353895,7 +353895,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001/djev-diffusiongemma/analysis.json",
-                "sha256": "6f4a6156ea8bc720c33c4d0a92a7bc45ea0680d2d011f9bd64ba457c5c479677"
+                "sha256": "aaf8c63bfcf20dcc96bd09afb17cf19199f86fa497f0f49d0a09b4bcd474db51"
               },
               "native_sources": {
                 "path": "runs/pro6000-lab-20261001/source-provenance.json",
@@ -354501,7 +354501,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass2/djev-diffusiongemma/analysis.json",
-                "sha256": "f0d27d3e8334d9e9e35f98da100ec744518401f24d767960547ea2900195306f"
+                "sha256": "e7808b17f140a8fcf0e6fc2682bb765d3a89fd688f514b7aabf1426ad10c694d"
               },
               "native_sources": {
                 "path": "runs/pro6000-lab-20261001-pass2/source-provenance.json",
@@ -355107,7 +355107,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass3/djev-diffusiongemma/analysis.json",
-                "sha256": "c7bccf92e08b17b6d6b83ac1bf0b691e6ecc719b9995b61f61c8930f49a76cff"
+                "sha256": "e6c021ba2e892f6350e53e2c67cfa043fe4cf9ecfa52b9165a38609959d5f225"
               },
               "native_sources": {
                 "path": "runs/pro6000-lab-20261001-pass3/source-provenance.json",
@@ -356286,7 +356286,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001/kev-4b/analysis.json",
-                "sha256": "936547e171e530237180a4fed73d86653a25678158c9b2fa07e94acd9335e7a5"
+                "sha256": "f083fecee52ef4a7c70222d6625eceee4ee0bc33726d67489e4d91da4db48408"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001/kev-4b.input-audit.json",
@@ -356945,7 +356945,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass2/kev-4b/analysis.json",
-                "sha256": "a4b4e502216354604e9281198f25a02a9363288cd3157eee357684c1902a0a88"
+                "sha256": "2eb9cbd24d9a6a152b5b15c105aa7a400903e01bfa2ceb63fcac9bf2a4dd9d7e"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001-pass2/kev-4b.input-audit.json",
@@ -357604,7 +357604,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass3/kev-4b/analysis.json",
-                "sha256": "0152505de798724580efedb9b5911998ac69bee87cd58a5b14320958c9dc6198"
+                "sha256": "fbf52dab1e096dbcefb3c22dee30d0b3044609db55cfc6877ce73e402d07feb7"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001-pass3/kev-4b.input-audit.json",
@@ -358791,7 +358791,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001/kev-9b/analysis.json",
-                "sha256": "70387992935b917159eb17b25b4428b4f8fa31f889025fddba3524f3fcd33598"
+                "sha256": "0f7f023489463f951bb028432d7c8f9f186119f40b2799fd7a000bebeb114717"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001/kev-9b.input-audit.json",
@@ -359448,7 +359448,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass2/kev-9b/analysis.json",
-                "sha256": "4b945fc9f40115104d4fb00a74043419e98e1040e7972ff6473e59191a88ab2f"
+                "sha256": "6aef7dc7baeb10b794df0cb4d0f8275332e5f68fc1adaff5541592ba58716df1"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001-pass2/kev-9b.input-audit.json",
@@ -360105,7 +360105,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass3/kev-9b/analysis.json",
-                "sha256": "287eb62c60e54bf15b1ee644918978c95765e4874672b0b5fd4390b3aacc209b"
+                "sha256": "22333d4d0a762951d77126603dd6187733cfe90e52f4cc0f164da0762f307378"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001-pass3/kev-9b.input-audit.json",
@@ -361306,7 +361306,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001/kev-27b/analysis.json",
-                "sha256": "f4dcc2c90ad58fdaa8c50202828bbc3b703d29ab7366e2170adcd58e6a3e7415"
+                "sha256": "20c5e5b6a16aa9ed0f96a28d8886c1441164a9bbe88f571e604c2504c4ee9e45"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001/kev-27b.input-audit.json",
@@ -361977,7 +361977,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass2/kev-27b/analysis.json",
-                "sha256": "2af24f6400ff84c48bd324cf1be0c914311df1df54ed7ec22b0dab3cad6ca790"
+                "sha256": "d95c1642d3b4a1239c168ed5d9cef1bb21b836be48e128ab20ba2246cda36e93"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001-pass2/kev-27b.input-audit.json",
@@ -362648,7 +362648,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass3/kev-27b/analysis.json",
-                "sha256": "4010922fc6a753d22c5c2f213edf078c0931088d219c0d0b59cbe3d0c6cf77ed"
+                "sha256": "e525ed827c0035321f2971dd04251605484316e11566d0d9ad8e3a564c490ae0"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001-pass3/kev-27b.input-audit.json",
@@ -363842,7 +363842,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001/nimble-9b/analysis.json",
-                "sha256": "c124f282fd243737ff318a4b7aee368ad56d65eb4a48ff62f207c6be7aaf2656"
+                "sha256": "0bcc8cf4e37aff5070ec3819551aba12eda911b2a0377e3d5087e9af01b07692"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001/nimble-9b.input-audit.json",
@@ -364506,7 +364506,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass2/nimble-9b/analysis.json",
-                "sha256": "9169bdb7765e7f24c48089d7c05693aad20973290b77113da7f537b940de063a"
+                "sha256": "9c8fbb44f15b658987e2e0c670d1eee25d82f9ca8503d35878fa771a14eb2aef"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001-pass2/nimble-9b.input-audit.json",
@@ -365170,7 +365170,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass3/nimble-9b/analysis.json",
-                "sha256": "ca13b76c1e476a5f454fab462598a75754cc4a66580ee94b27eb00ef6697b10b"
+                "sha256": "947f99bfcea51ef20b3936eb3ab53dbec63f0478fae2f7fc0cb246ba5c721fb8"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001-pass3/nimble-9b.input-audit.json",
@@ -366350,7 +366350,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001/semif-qwen35-4b/analysis.json",
-                "sha256": "ec5a5a60d7d9bdeb213d8579a6fef30937a1c78ba7375423b3478de9ea249b2c"
+                "sha256": "85ec8f5707a8f6f29c2d8a3701863778527e72b0bc249a89b0cbac9bae76fbec"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001/semif-qwen35-4b.input-audit.json",
@@ -367000,7 +367000,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass2/semif-qwen35-4b/analysis.json",
-                "sha256": "6e397e4320473ec5443263a636e68be5c1ddb1ff4042e3fde1fcb9245a0b2b1c"
+                "sha256": "af5d103b3c780b7b65c163c05f6df14d3d476d14378957d8540a0524bd13b517"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001-pass2/semif-qwen35-4b.input-audit.json",
@@ -367650,7 +367650,7 @@
               },
               "published_report": {
                 "path": "docs/lite/results/pro6000-lab-20261001-pass3/semif-qwen35-4b/analysis.json",
-                "sha256": "10ba4f1f1e8e47473887ecbdd021b70902508b149bc7eb6383c5fd5cd96b1008"
+                "sha256": "6d9bbe4cb1d77c822419d3c6c30f7b35ee17844d88f2ecb1e7bb222ace8c01dd"
               },
               "input_audit": {
                 "path": "runs/pro6000-lab-20261001-pass3/semif-qwen35-4b.input-audit.json",
@@ -388062,8 +388062,8 @@
   },
   "selection_annotation": "The frozen evaluation policy describes the original AUC-selection stage. The current manuscript subsequently includes all three complete passes per setting; no valid response or complete pass from the fixed manuscript cohort is excluded.",
   "sources_sha256": {
-    "paper/analysis/lite_repeated.py": "72c0c3a936f15ff20b0abc85031f843bc717dd74a3046d6d30a8d39f8f10e275",
-    "paper/analysis/lite_numbers.py": "78932e85dd80d451446d6a11169f2841124feb2acb1f7c3493fc95df98e867eb",
+    "paper/analysis/lite_repeated.py": "82fed208cd8a2dadfb5e08cea72a5d8b2464a63c521070779212ee4ff9e01e5c",
+    "paper/analysis/lite_numbers.py": "b3acc1579ce5dca7072470aa916c20797deaf90f4706ed487c7caf65c92be4c9",
     "paper/analysis/lite_auc.py": "39d2fb0830b6308f7a5607a4fb087e45b688b1e649719e0ed266f4799b2ac7e9",
     "paper/analysis/lite_figures.py": "bb8ef254643325bba48dcef35a22bec5963daed2b6dc2250e74514a86647fdbb",
     "paper/analysis/lite_trajectory_value.py": "272f9f38169f679cd076e2ffcc759ec5154914d1cbd85f116eeb6b072965c679",

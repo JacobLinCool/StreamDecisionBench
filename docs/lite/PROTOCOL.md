@@ -12,7 +12,7 @@ tick every `tick_seconds` = 2 s, spanning 120 seconds, and the same recorded
 answers and latencies can be evaluated at any other tick duration. There are 480
 states in one pass; related states within a scenario are not independent samples.
 
-The current build is `data/lite/v1` (dataset hash `fdfdd55d…`). The public leaderboard includes fifteen hosted API settings and seventeen self-hosted open-weight settings, each covering all eight scenarios and 480 states; see the [results index](results/README.md). The manuscript retains six hosted settings: GPT-5.6-Luna and GPT-5.6-Terra at reasoning effort low and none, GPT-6-Astra at low (the model does not accept none), and Jev (`jev-latest`). Cloudflare Clef and Clef Flash, Perplexity Decider v1 27B, GLiDE (Fastino), GPT-6-Luna through the Decisions API, Claude Haiku 5.5 low and thinking off, and Wity auto/off are additional public leaderboard entries.
+The current build is `data/lite/v1` (dataset hash `fdfdd55d…`). The public leaderboard includes fifteen hosted API settings and seventeen self-hosted open-weight settings, each covering all eight scenarios and 480 states; see the [results index](results/README.md). The manuscript's main analyses use six hosted settings: GPT-5.6-Luna and GPT-5.6-Terra at reasoning effort low and none, GPT-6-Astra at low (the model does not accept none), and Jev (`jev-latest`). Its appendix on hosted settings recorded later reports Cloudflare Clef and Clef Flash, Perplexity Decider v1 27B, GLiDE (Fastino), GPT-6-Luna through the Decisions API, and Claude Haiku 5.5 low and thinking off, each with three passes. Wity auto/off (one pass per mode) are additional public leaderboard entries.
 
 For Luna, Terra and Jev, the first six scenarios were recorded on 2026-09-28 (UTC) using build `60f6a877…`. Their frozen episode hashes match the corresponding scenarios in the current build. The two presenter scenarios were recorded separately on 2026-09-29 (UTC) and merged after configuration and provenance checks. Astra low recorded all eight scenarios in one session on 2026-09-29; Clef and Clef Flash each recorded a complete eight-scenario pass on 2026-10-02. The current open-weight cohort was recorded on the same RTX PRO 6000 lab host on 2026-10-01. These are descriptive deployment measurements, not controlled hardware comparisons.
 
@@ -164,7 +164,7 @@ become a 32-second model response.
 
 Raw recording summaries use equal episode means. The paper integrates each scenario's in-force accuracy over 0.5–8 s with normalized log weighting, then averages scenarios within each family and families equally; this build has two scenarios per family. Each scenario's time fractions are normalized before integration; seconds from different horizons are never pooled. This first
 dataset has the same episode count and nominal duration in every family.
-The reported results contain one pass per setting and two independent scenarios
+The reported results contain three passes per setting (one per Wity mode) and two independent scenarios
 per family, with no confidence interval claim and no assertion that the sample
 represents all applications.
 The two-second recording interval is a controlled setting, not independently

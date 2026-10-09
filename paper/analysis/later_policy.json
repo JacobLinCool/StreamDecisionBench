@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "settings": [
+    "Perplexity",
+    "Glide",
+    "LunaDecisions",
+    "Clef",
+    "ClefFlash",
+    "HaikuLow",
+    "HaikuNoThink"
+  ],
+  "decision_interfaces": [
+    "Perplexity",
+    "Glide",
+    "LunaDecisions",
+    "Clef",
+    "ClefFlash"
+  ],
+  "inclusion": "Hosted settings first recorded after the six manuscript hosted settings, with three complete passes under the manuscript protocol: the frozen dataset, 2 s recording interval, 32 workers and the same client. Wity-1 has one pass per reasoning mode at 16 workers and is excluded; self-hosted cohorts on other hosts are outside this section.",
+  "fast_rule": "A native decision interface whose mean per-pass median latency is below the recording interval acts as the fast component.",
+  "composition": "Every fast component is paired with the correctors and arbitration rules of trajectory_policy.json, matching pass indices on common nominal releases.",
+  "selection": "Adopted after all seven settings were recorded; settings, roles, correctors and rules follow from the rules above, not from evaluated scores."
+}

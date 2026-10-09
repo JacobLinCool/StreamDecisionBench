@@ -22,6 +22,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[2]
 MANUSCRIPT = 'docs/research/manuscript-three-pass/analysis.json'
 PUBLIC_LOCAL = 'docs/research/openweight-hybrids/analysis.json'
+LATER = 'docs/research/later-hosted/analysis.json'
 ARCHIVE_ROOT = 'streamdecisionbench'
 LIMIT_BYTES = 200_000_000
 HEX_SHA = re.compile(r'(?<![0-9a-f])[0-9a-f]{64}(?![0-9a-f])')
@@ -43,8 +44,10 @@ This artifact accompanies the anonymous manuscript. Extract **software.zip** and
 root. The software archive contains the source, manuscript and generated exhibits.
 The data archive contains the frozen eight-scenario dataset, exactly 45 complete
 manuscript recordings (6 hosted + 9 self-hosted settings, three passes each),
-their reports, native input audits and checkpoint/source receipts. No model
-weights or credentials are included.
+21 complete recordings of the 7 hosted settings recorded later (appendix
+"Hosted Settings Recorded Later", three passes each), their reports, native
+input audits and checkpoint/source receipts. No model weights or credentials
+are included.
 
 ## Reproduce without model calls
 
@@ -60,20 +63,48 @@ cd paper
 latexmk submission.tex
 ```
 
-The first command verifies every packaged file hash, all 45 recording receipts,
+The first command verifies every packaged file hash, all 66 recording receipts,
 request/answer mappings, native audits and recording-cadence score partitions.
 The second additionally regenerates the full manuscript analysis, all numbers,
 tables and figures from the recordings, then compares the generated TeX content
 with the supplied manuscript values. It makes no API request and requires no
 GPU; a Python audit hook rejects network connection attempts. The full analysis
 includes exact crossing-based hybrid integrations and deterministic bootstrap
-refits and can take several minutes. Running regeneration updates derived files;
-extract a fresh copy to rerun the initial package-integrity check.
+refits; the full reproduction took about 21 minutes on one laptop. Running
+regeneration updates derived files; extract a fresh copy to rerun the initial
+package-integrity check.
+
+## Evaluate a new model
+
+Recording a pass sends one request per state (480 requests, one every 2 s, up to
+32 in flight) and needs the provider's credentials in the environment, for
+example `OPENAI_API_KEY`. Every pass needs a new output folder:
+
+```sh
+# OpenAI Responses API models (strict structured outputs); omit --effort if unsupported
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-model --model <model-id> --effort low
+# Native decision APIs use --provider, for example typesafe, perplexity, fastino,
+# cloudflare, openai-decisions or anthropic (see streamdecisionbench/lite/__main__.py)
+uv run python -m streamdecisionbench.lite score --run runs/my-model
+uv run python paper/analysis/lite_reports.py --run runs/my-model \
+  --out runs/my-model-report --label "My model"
+```
+
+`OPENAI_BASE_URL` points the OpenAI adapter at any server that implements the
+Responses API with strict JSON-schema outputs. Another API needs an adapter in
+`src/streamdecisionbench/adapters/` that receives exactly `{"state", "questions"}`
+and returns one answer per question; reuse the system prompt, serialization and
+answer schema of `adapters/llm.py` to keep prompts comparable. The score includes
+the service's response time measured from the client, so report where and how a
+pass was recorded.
 
 `ARTIFACT_MANIFEST.json` is the complete file inventory with SHA-256 digests.
 `docs/research/manuscript-three-pass/analysis.json` maps every setting and pass to
-its recording and report. `paper/analysis/lite_repeated.py` is the regeneration
-entry point. `data/lite/v1/manifest.json` identifies the frozen dataset.
+its recording and report, and `docs/research/later-hosted/analysis.json` does the
+same for the later hosted settings. `paper/analysis/lite_repeated.py` and
+`paper/analysis/lite_later.py` are the regeneration entry points.
+`data/lite/v1/manifest.json` identifies the frozen dataset.
 
 ## Measurement and anonymization
 
@@ -84,9 +115,9 @@ usernames, institutional host identifiers and local checkpoint-cache paths are
 withheld for anonymous review. Model identifiers, checkpoint revisions, native
 source versions, hardware, configurations, timestamps and measured outputs remain.
 
-Frozen `episodes.json` files, the public dataset and 42 of 45 event logs are
-byte-identical to the originals. The three SemIf event logs contain local cache
-paths in `usage.native_fields.<question>.model.source`; only those diagnostic
+Frozen `episodes.json` files, the public dataset and 63 of 66 event logs are
+byte-identical to the originals. The three Qwen3.5-4B direct-logit event logs
+(`semif-qwen35-4b`) contain local cache paths in `usage.native_fields.<question>.model.source`; only those diagnostic
 metadata strings are redacted. Every other event value, including measured
 timestamps, request hashes, answers and token counts, is checked unchanged.
 Other redactions affect identifying metadata and manuscript author fields.
@@ -113,10 +144,11 @@ can be checked independently. No human reference adjudication is claimed.
 
 Scores are descriptive means of three passes on fixed synthetic timelines.
 Retimed and combined systems reuse observed latencies; joint contention was not
-measured. The paper's fixed cohort differs from a continuously expanded public
-leaderboard. The bundle's reproduction command addresses the manuscript cohort.
+measured. The paper reports every hosted setting recorded on this dataset under
+its protocol; one hosted setting with a single pass at a different concurrency and
+self-hosted settings on other hosts are outside the paper and this archive.
 `docs/lite/results/README.md` is retained as a historical recording-contract input;
-its links and commands for additional public cohorts refer outside this archive.
+its links and commands for public cohorts outside the paper refer outside this archive.
 Use the verifier and manuscript regeneration command above for this review copy.
 
 The code and synthetic data use the included MIT license. Third-party ACL style
@@ -142,7 +174,11 @@ def native_cohorts(manifest):
             for v in row['provenance'].values() if 'native_sources' in v}
 
 
-def inventory(root: Path, manifest: dict) -> tuple[set[str], set[str]]:
+def later_sources(later: dict):
+    return [p['provenance'] for row in later['standalone'].values() for p in row['passes']]
+
+
+def inventory(root: Path, manifest: dict, later: dict) -> tuple[set[str], set[str]]:
     """Explicit artifact boundary; never traverse caches, Git or model stores."""
     software = {'LICENSE', 'pyproject.toml', 'uv.lock',
                 'paper/main.tex', 'paper/appendix.tex', 'paper/submission.tex',
@@ -162,7 +198,7 @@ def inventory(root: Path, manifest: dict) -> tuple[set[str], set[str]]:
     software.update({'scripts/runpod/winnow_report.py', 'scripts/runpod/decision20_report.py',
                      'scripts/runpod/record.py', 'scripts/runpod/decision_record.py',
                      'scripts/runpod/input_audit.py', 'scripts/runpod/cohort.py'})
-    data = {MANUSCRIPT, PUBLIC_LOCAL, 'docs/research/trajectory-value/analysis.json'}
+    data = {MANUSCRIPT, PUBLIC_LOCAL, LATER, 'docs/research/trajectory-value/analysis.json'}
     data.update(str(p.relative_to(root)) for p in (root/'data/lite/v1').glob('*.json'))
     for row in manifest['passes']:
         if len(row['provenance']) != 15:
@@ -175,10 +211,15 @@ def inventory(root: Path, manifest: dict) -> tuple[set[str], set[str]]:
                     data.add(source[key]['path'])
     if len({v['run'] for row in manifest['passes'] for v in row['provenance'].values()}) != 45:
         raise ValueError('The bundle requires exactly 45 distinct manuscript recordings')
+    for source in later_sources(later):
+        data.update(str(Path(source['run'])/name) for name in ('run.json', 'episodes.json', 'events.jsonl'))
+        data.add(source['published_report']['path'])
+    if len({source['run'] for source in later_sources(later)}) != 21:
+        raise ValueError('The bundle requires exactly 21 distinct later hosted recordings')
     for cohort in native_cohorts(manifest) | {Path('runs/hosted-api-repeats-20261003')}:
         data.update(str(p.relative_to(root)) for p in (root/cohort).glob('*-requirements.txt'))
     # Any future manuscript source input must be included explicitly or fail here.
-    for path in manifest['sources_sha256']:
+    for path in [*manifest['sources_sha256'], *later['sources_sha256']]:
         if path not in software | data:
             raise ValueError(f'Manifest input missing from package inventory: {path}')
     if software & data:
@@ -379,8 +420,9 @@ def write_zip(path: Path, files: dict[str, bytes], names: set[str]):
 
 def build(root: Path, output: Path):
     manifest = read_json(root/MANUSCRIPT)
-    software, data = inventory(root, manifest)
-    for path, expected in manifest['sources_sha256'].items():
+    later = read_json(root/LATER)
+    software, data = inventory(root, manifest, later)
+    for path, expected in [*manifest['sources_sha256'].items(), *later['sources_sha256'].items()]:
         if sha((root/path).read_bytes()) != expected:
             raise ValueError(f'Unfrozen manuscript analysis: {path}; regenerate first')
     base, originals, changed = transformed_inputs(root, software | data, manifest)
@@ -392,6 +434,7 @@ def build(root: Path, output: Path):
         'schema_version': 1, 'scope': 'anonymous manuscript review copy',
         'dataset_hash': manifest['passes'][0]['hosted_reports']['Luna']['dataset_hash'],
         'settings_per_pass': 15, 'passes_per_setting': 3, 'complete_recordings': 45,
+        'later_hosted_settings': 7, 'later_hosted_recordings': 21,
         'redaction': 'Identifying metadata only; event values unchanged except native model.source cache paths. Frozen episodes and public dataset remain byte-identical. Dependent SHA-256 receipts are recomputed.',
         'measurement_files_unchanged': sorted(p for p in originals if
             (Path(p).name in ('events.jsonl', 'episodes.json') or p.startswith('data/lite/v1/'))
@@ -406,7 +449,7 @@ def build(root: Path, output: Path):
     output.mkdir(parents=True, exist_ok=True)
     for name, entries in [('software.zip', software), ('data.zip', data)]:
         write_zip(output/name, files, entries)
-    result = {'recordings': 45, 'settings': 15, 'files': len(files),
+    result = {'recordings': 45, 'later_recordings': 21, 'settings': 15, 'later_settings': 7, 'files': len(files),
               'metadata_files_transformed': len(changed),
               'archives': {name: {'bytes': (output/name).stat().st_size, 'sha256': sha((output/name).read_bytes())}
                            for name in ('software.zip', 'data.zip')}}

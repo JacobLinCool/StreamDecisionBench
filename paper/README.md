@@ -2,9 +2,13 @@
 
 ACL long paper on StreamDecisionBench (SDB). The benchmark's internal name `lite` appears only in paths and module names (`data/lite/v1`, `analysis/lite_*.py`); the manuscript calls it SDB. `main.tex` holds the paper and `appendix.tex` the appendices. The bibliography is `references.bib`, merged from `bib/part_a.bib` and `bib/part_b.bib` plus entries added during revision; `bib/*_notes.md` record where each entry was verified.
 
-The manuscript covers six hosted settings and nine same-host open-weight settings. The public leaderboard
-includes additional completed settings; those additions do not change the
-manuscript's frozen model subset. See the [documentation index](../docs/README.md) for current and historical cohorts.
+The manuscript's main analyses cover six hosted settings and nine same-host open-weight settings.
+Its appendix "Hosted Settings Recorded Later" adds the seven hosted settings first recorded afterwards
+with three complete passes under the same protocol (Perplexity Decider v1 27B, GLiDE, GPT-6-Luna
+through the Decisions API, Clef, Clef Flash, Claude Haiku 5.5 low and thinking off), with
+standalone results and compositions under the hosted rule. Wity-1 (one pass at 16 workers) and
+self-hosted cohorts on other hosts appear only on the public leaderboard. See the
+[documentation index](../docs/README.md) for current and historical cohorts.
 
 ## Build
 
@@ -35,6 +39,9 @@ uv run --group paper python paper/analysis/lite_repeated.py
 # Regenerate only number/table macros from the verified three-pass manifest.
 uv run python paper/analysis/lite_numbers.py
 uv run python paper/analysis/lite_numbers.py --list
+
+# Later hosted settings: docs/research/later-hosted/analysis.json and generated/later_*.tex.
+uv run python paper/analysis/lite_later.py
 ```
 
 The manifest is `docs/research/manuscript-three-pass/analysis.json`. Individual runs and
@@ -61,6 +68,7 @@ If any check fails, the script lists every failure and does not publish new numb
 | --- | --- |
 | `main.tex`, `appendix.tex`, `model-provenance.tex` | Paper, appendices and the pinned self-hosted model provenance table |
 | `submission.tex`, `preprint.tex`, `.latexmkrc` | Entry files and latexmk configuration |
+| `analysis/lite_later.py`, `analysis/later_policy.json` | Later hosted settings: standalone three-pass means checked against independent integrations, compositions of fast decision interfaces with the five GPT correctors under the hosted rule, and weighting sensitivity of the headline systems; writes `generated/later_numbers.tex` and `generated/later_tables.tex` |
 | `analysis/lite_repeated.py` | Three-pass manuscript manifest, matching-index compositions, all six pass-matchings for the headline pairs, field agreement analysis, and regeneration entry point; writes `generated/summary_tables.tex` |
 | `analysis/lite_numbers.py` | Writes `generated/numbers.tex` (one macro per stated number, each with its source) and `generated/tables.tex` (table bodies) |
 | `analysis/lite_figures.py`, `analysis/figstyle.py` | Figures in `figures/`, drawn at ACL print width (column 7.7 cm, text block 16 cm) with no text below 7 pt |
@@ -93,7 +101,7 @@ If any check fails, the script lists every failure and does not publish new numb
 
 `analysis/evaluation_policy.json` declares the primary normalized log-AUC over 0.5–8 s, plus linear 0.5–8 s and the five other log ranges formed by lower bounds 0.1, 0.5 and 1 s and upper bounds 4 and 8 s. Equal multiplicative ranges have equal weight; each family averages scenarios equally, and the macro score averages families equally. `src/streamdecisionbench/lite/interval_scoring.py` integrates scenario fractions on nested grids, refining until all metrics change by at most 0.001 percentage point. This is numerical convergence, not statistical uncertainty.
 
-The aggregation rule was adopted after inspecting the recorded passes, not preregistered. All six manuscript hosted and nine self-hosted settings were recorded at 2 s. In pass 1 of Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and a disjoint two-scenario presenter pass were recorded in separate sessions and merged; merged artifacts retain both sessions. Each repeat covers all eight scenarios in one session. Astra low pass 1 was recorded in one session covering all eight scenarios (2026-09-29 16:51–17:07 UTC). The two additional public Cloudflare settings also use complete eight-scenario passes at 2 s. All three complete passes are evaluated without excluding valid responses.
+The aggregation rule was adopted after inspecting the recorded passes, not preregistered. All six manuscript hosted and nine self-hosted settings were recorded at 2 s. In pass 1 of Luna low, Luna none, Terra low, Terra none and Jev, the original six scenarios and a disjoint two-scenario presenter pass were recorded in separate sessions and merged; merged artifacts retain both sessions. Each repeat covers all eight scenarios in one session. Astra low pass 1 was recorded in one session covering all eight scenarios (2026-09-29 16:51–17:07 UTC). All seven later hosted settings (appendix "Hosted Settings Recorded Later", including Clef and Clef Flash) also use complete eight-scenario passes at 2 s. All three complete passes are evaluated without excluding valid responses.
 
 Each per-setting `analysis.json` has `auc.primary` and `auc.sensitivity`; `scores` and `network_adjustment` describe fixed 2 s diagnostics. The fitted-remainder analysis, its uncertainty ranges and adjusted figures are confined to the appendix. `fig_pace` plots the aggregate curve and the four family curves on log interval axes in one main-text figure; `fig_errortime` integrates the partition with the primary score's weights. `fig_trajectory` illustrates presenter voice control (presenter A) on the 2 s recording-cadence replay: every public ASR change in the window on the shared time axis, quoted where the composed reference decision changes, the reference fields that change, and the decisions in force of Luna low, Terra low and Jev in the error-time classes, with each setting's correct share of the window and two brackets measured at the slide change.
 
@@ -118,7 +126,7 @@ After regenerating the manuscript, build the manuscript-scoped review copies wit
 
 ```sh
 uv run --group paper python scripts/paper/build_submission.py \
-  --out output/submission-2026-10-04 --reproduce --latex
+  --out output/submission-2026-10-10 --reproduce --latex
 ```
 
 The builder preserves the original research evidence, checks the manuscript input

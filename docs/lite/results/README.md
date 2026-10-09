@@ -14,7 +14,7 @@ The combined public leaderboard contains **32 settings: fifteen hosted APIs and 
 - [Perplexity three-pass results](hosted-api-repeats-20261003/README.md): native Decisions API scores, retries and provenance.
 - [Combined leaderboard and interval figures](../../figures/README.md).
 
-The manuscript retains six hosted settings plus the nine lab settings; Cloudflare, Perplexity, GLiDE, the Luna Decisions API, Claude Haiku 5.5, Wity, Winnow and Decision 2.0 extend the public leaderboard. Luna, Terra and Jev combine the unchanged original 360 responses with separate 120-response presenter passes. Astra, Clef and Clef Flash each recorded all 480 states in one session.
+The manuscript's main analyses use six hosted settings plus the nine lab settings; its appendix on hosted settings recorded later reports Cloudflare Clef and Clef Flash, Perplexity, GLiDE, the Luna Decisions API and Claude Haiku 5.5. Wity, Winnow and Decision 2.0 extend the public leaderboard only. Luna, Terra and Jev combine the unchanged original 360 responses with separate 120-response presenter passes. Astra, Clef and Clef Flash each recorded all 480 states in one session.
 
 Per-setting reports are English. Their opening summaries use log-AUC; recording-cadence diagnostics, raw-clock results and secondary network estimates retain separate labels. See the [protocol](../PROTOCOL.md) for clock and interpretation rules. Reproduce current reports with `uv run python paper/analysis/lite_reports.py`, without model calls.
 

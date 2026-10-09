@@ -59,6 +59,8 @@
 \input{generated/openweight_numbers.tex}
 \input{generated/openweight_tables.tex}
 \input{generated/summary_tables.tex}
+\input{generated/later_numbers.tex}
+\input{generated/later_tables.tex}
 
 \newcommand{\sdb}{SDB}
 \newcommand{\ind}{\mathbf{1}}
@@ -121,18 +123,19 @@ We introduce StreamDecisionBench (\sdb), a benchmark built on this evaluation, w
 Responses are composed into the \emph{branch-composed decision} the application consumes, and an executable reference applies the rules written into every state, so the reference decision changes at known moments for known reasons.
 Every erroneous instant is attributed exactly to judgment, to latency or to both. We report the accuracy curves and summarize their normalized area over 0.5--8\,s on a logarithmic time axis, first within each family and then across families equally.
 
-We evaluate \NumSettingsWord{} hosted settings: Luna and Terra at low and no reasoning effort, Astra at low, and Jev, a commercial decision model; supplementary measurements cover \OwNumSettingsWord{} self-hosted decision settings.
+We evaluate \NumSettingsWord{} hosted settings: Luna and Terra at low and no reasoning effort, Astra at low, and Jev, a commercial decision model; supplementary measurements cover \OwNumSettingsWord{} self-hosted decision settings and \LaterNumSettingsWord{} hosted settings from five providers first recorded later (Appendix~\ref{app:later}).
 Across this range they fall short for different reasons.
-At low reasoning effort, Luna, Terra and Astra lose \LunaAucGap, \TerraAucGap{} and \AstraAucGap{} points from untimed accuracy to the integrated score, mostly through stale decisions, so Astra, \AstraUntimed\% correct untimed, reaches \AstraAuc\%, compared with Luna low's \LunaAuc\%.
+At low reasoning effort, Luna, Terra and Astra lose \LunaAucGap, \TerraAucGap{} and \AstraAucGap{} points from untimed accuracy to the integrated score, mostly through stale decisions, even Astra at \AstraUntimed\% untimed accuracy.
 Jev responds in \JevLatencyMedian\,s, but its judgment errors account for \JevAucJudgment\% of log-weighted time.
 Dropping reasoning pays off where judgment survives: Terra reaches \TerraNoneAuc\%, close to Jev's \JevAuc\%, while Luna falls to \LunaNoneAuc\%.
-The family curves expose differences hidden by the aggregate: Terra low leads the hosted settings in IDE debugging, whereas Jev leads them in the other three families over the integrated range.
+Composition helps where the fast component judges well: with Terra none correcting it, the self-hosted Kev-27B rises from \OwKevTwentySevenAuc\% to \OwKevTwentySevenFreshestAuc\%, and the best evaluated system, Perplexity Decider corrected by Astra low, reaches \LaterBestAuc\%.
+The family curves expose differences hidden by the aggregate: Jev leads the other five hosted settings in assembly, support and presenter control but trails every GPT setting except Luna none in IDE debugging.
 
 Our contributions are:\footnote{Code, data, recordings and reproducible analysis accompany the submission (Appendix~\ref{app:repro}).}
 \begin{itemize}[leftmargin=*,itemsep=1pt,topsep=2pt]
-\item \textbf{Evaluation and decomposition.} In-force accuracy of the branch-composed decision, an exact partition of error time, and a factorization into oracle timing and current-source judgment, with an integrated score that weights equal multiplicative time-scale ranges equally (\S\ref{sec:method}).
-\item \textbf{Benchmark.} \NumScenarios{} controlled timelines in \NumFamilies{} families (\NumStates{} states, \AnswersPerPass{} state--question pairs, \TransitionsTotal{} reference transitions), with executable public rules and a blind LLM-agent audit of the original six scenarios (\S\ref{sec:lite}).
-\item \textbf{Measurement.} Measurements of \OwTotalSettingsWord{} hosted and self-hosted settings: the decomposition identifies latency and judgment limits, while curves and composition replays expose changes in system comparisons across time scales (\S\ref{sec:results}).
+\item \textbf{Evaluation and decomposition.} In-force accuracy of the branch-composed decision, an exact partition of error time, and the exact identity $A=O\,U_{\mathrm{cur}}+\lambda$ separating oracle timing from current-source judgment, with an integrated score that weights equal multiplicative time-scale ranges equally (\S\ref{sec:method}).
+\item \textbf{Benchmark.} A set of \NumScenariosWord{} controlled scenarios in \NumFamiliesWord{} families (\NumStates{} states, \AnswersPerPass{} state--question pairs, \TransitionsTotal{} reference transitions), with executable public rules and a blind LLM-agent audit of the six IDE, assembly and support scenarios (\S\ref{sec:lite}).
+\item \textbf{Results.} Evaluation of \OwTotalSettingsWord{} hosted and self-hosted settings, extended by later hosted settings: the decomposition separates latency-limited from judgment-limited components, and composition replays show that a slower correction improves on both components when the fast component judges competitively, by an amount the arbitration rule sets (\S\ref{sec:results}).
 \end{itemize}
 
 % ---------------------------------------------------------------------------
@@ -145,7 +148,7 @@ Online monitoring of a partial trace \citep{deshmukh2015robust} and revocable ea
 In-force accuracy adopts this held-output view for an application's decision (\S\ref{sec:inforce}).
 
 \paragraph{Time as part of correctness.}
-When an answer takes effect changes what it is worth: real-time reinforcement learning lets the state change while the agent acts \citep{ramstedt2019real}, agent benchmarks judge actions by when they land \citep{froger2026gaia2,kang2025win,li2026beyond,li2026never}, and benchmarks for language and multimodal models bring in time through when a question is asked, how old information is or how long answering takes \citep{lin2024streamingbench,cheng2026your,liu2026streammembench,ding2026proactor}.
+When an answer takes effect changes what it is worth: real-time reinforcement learning lets the state change while the agent acts \citep{ramstedt2019real}, agent benchmarks judge actions by when they land and find that faster models can beat stronger reasoning ones \citep{froger2026gaia2,kang2025win,li2026beyond,ma2026timely}, real-time agents keep a fast reply while slower reasoning continues \citep{li2026never,wen2026realtime}, and benchmarks for language and multimodal models bring in time through when a question is asked, how old information is or how long answering takes \citep{lin2024streamingbench,cheng2026your,liu2026streammembench,ding2026proactor}.
 Incremental processing and simultaneous translation time an output against the input it needs \citep{baumann2011evaluation,ma2019stacl,ma2020simuleval}; following computation-aware latency \citep{ma2020simulmt}, \sdb{} counts the model's own processing as latency (\S\ref{sec:execution}), and its evaluation at other time-step intervals changes only the timing of recorded answers.
 
 \paragraph{Policies, changing evidence and verifiable references.}
@@ -194,7 +197,6 @@ A wrong decision in force exposes the user at every instant it is applied, and t
 \end{equation}
 computed exactly by partitioning time at time steps and acceptance times.
 The error penalty of status-update systems weights erroneous time the same way \citep{maatouk2020age,maatouk2023age}; where harm grows with an error's duration, the age of incorrect information \citep{maatouk2020age} can be computed from the same trajectories.
-\emph{Segment-balanced in-force accuracy} weights every reference segment equally, $A_{\mathrm{seg}}=K^{-1}\sum_{k}|I_k|^{-1}\int_{I_k}\ind[d(t)=\yref(t)]\,dt$, so a brief change counts as much as a long stable span.
 \emph{Untimed decision accuracy} (untimed accuracy for short) applies the same composition to every state's response and ignores latency, $U=n^{-1}\sum_i\ind[\kappa(\hat a_i)=\kappa(y_i)]$.
 
 \paragraph{Integrating across time scales.}
@@ -206,9 +208,9 @@ The primary summary across $F$ families is \emph{normalized log-AUC}, the area u
  \label{eq:macro}
 \end{equation}
 The score lies in $[0,1]$ and is reported as a percentage.
-Our objective is to give equal weight to equal multiplicative ranges of environment speed: changing an interval by a factor changes every response's relative delay $L/\Delta$ by the inverse factor.
+Our objective is to give equal weight to equal multiplicative ranges of environment speed: changing an interval by a factor changes every response's relative latency $L/\Delta$ by the inverse factor.
 If the weight of $[a,ra]$ depends only on $r$ and weights add over adjacent intervals, continuity gives a weight proportional to $\ln r$, hence $d\Delta/\Delta$ (Appendix~\ref{app:intervals}).
-We summarize performance over update intervals of 0.5--8\,s, spanning a fourfold increase and decrease in update rate relative to the 2\,s recording cadence. Logarithmic weighting balances faster and slower conditions around that cadence (Appendix~\ref{app:intervals}).
+We summarize performance over time-step intervals of 0.5--8\,s, spanning a fourfold increase and decrease in the rate of time steps relative to the 2\,s recording interval. Logarithmic weighting balances faster and slower conditions around that interval (Appendix~\ref{app:intervals}).
 We apply the same scenario, family and log-interval weights to error fractions and oracle scores; each scenario's time fractions are normalized before averaging.
 
 \paragraph{Judgment and latency.}
@@ -249,7 +251,7 @@ A supplementary analysis evaluates sensitivity to removing a fitted non-token la
 \label{sec:families}
 \sdb{} has \NumFamiliesWord{} application families with \ScenariosPerFamilyWord{} authored English-language scenarios each (Table~\ref{tab:benchmark}, Appendix~\ref{app:tasks}).
 Together, the scenarios provide \NumStates{} state-level decision evaluations and \AnswersPerPass{} evaluated state--question pairs per model pass.
-Each scenario publishes \ReleasesPerScenario{} states, spanning 120\,s at the recording cadence and 30--480\,s over the evaluation range. Each state asks \QuestionsMin--\QuestionsMax{} questions with \OptionsMin--\OptionsMax{} options; the application composes \ConsumedAnswersMin--\ConsumedAnswersMax{} answers, depending on the active branch, into one decision. The primary metric measures this composed decision in force.
+Each scenario publishes \ReleasesPerScenario{} states, spanning 120\,s at the recording interval and 30--480\,s over the evaluation range. Each state asks \QuestionsMin--\QuestionsMax{} questions with \OptionsMin--\OptionsMax{} options; the application composes \ConsumedAnswersMin--\ConsumedAnswersMax{} answers, depending on the active branch, into one decision. The primary metric measures this composed decision in force.
 In \emph{IDE debugging} the component maintains two status badges and an action card (wait, rerun, inspect, control a run, delegate or ready) from runner results, editor buffers, saves, debugger events, terminal output, ownership rules and teammate messages.
 At the \emph{assembly station} it shows the procedure stage and one of \AssemblyRouteOptions{} routes (wait, advance, repair, escalate, hand off, hold, release) from scans, camera observations, measurements, quality tickets and badges.
 In the \emph{support call} it sets the workflow route, its branch guidance and one command used in every branch, such as the call recorder, from telephony status, a transcript with speaker roles and partial or final utterances, and tool fields.
@@ -286,13 +288,12 @@ Unit tests of each reference cover exact thresholds, conflicting precedence, spe
 \subsection{Validity Audit}
 \label{sec:audit}
 An executable reference shows that the stored answers follow the reference code; whether the code follows the public text needs a separate check, as the human screening behind SWE-bench Verified and a later audit of it found for test-based references \citep{chowdhury2024introducing,openai2026why}.
-For the original \AuditScenarios{} IDE, assembly and support scenarios, \AuditRederivationsPerScenarioWord{} LLM agents (\AuditRederivations{} in total) re-derived the reference answers blind from the public states and questions, without the generator or reference code: one reimplemented the rules as a program, the other derived the answers state by state.
+For the six IDE, assembly and support scenarios, \AuditRederivationsPerScenarioWord{} LLM agents (\AuditRederivations{} in total) re-derived the reference answers blind from the public states and questions, without the generator or reference code: one reimplemented the rules as a program, the other derived the answers state by state.
 Under its default reading of the rules, each re-derivation agreed with the reference at all \ReleasesPerScenario{} consumed decisions of its scenario.
 Further agents compared the reference code with the rule text and judged each of the \AuditFindingGroups{} grouped findings from \AuditLensesWord{} angles (Appendix~\ref{app:audit}).
 No reference answer was confirmed wrong, although LLM auditors can share blind spots with the reference; \AuditAmbiguitiesWord{} rule ambiguities affecting \AuditAffectedStates{} states were fixed by one sentence per family, in agreement with the reference.
 Astra low (\S\ref{sec:setup}), recorded after the benchmark was frozen and never used to author or tune it, adds evidence that the references follow from the public rules: ignoring latency, it returns the reference decision in \AstraUntimedStates{} of \AstraStates{} evaluations across three passes, including the presenter scenarios the audit did not cover.
-In pass 1, its miss (\AstraMissScenarioLabel, time step \AstraMissStep) is a model error: rework has moved the stage back to fasten, so inspection is a future stage and the reference advances to it, since ``incomplete future stages are not defects''; Astra instead routed a repair to complete the inspection, a reading the audit had raised and rejected.
-Astra returned the reference at the \AstraSituationCorrect{} other states the audit grouped with this one, including the preceding time step with the same decision-relevant evidence (Appendix~\ref{app:audit}).
+Both misses (\AstraMissScenarioLabel, time steps \AstraMissStep{} and \AstraMissStepPassThree{} in passes 1 and 3) are model errors in one situation where the audit upheld the reference: rework has made inspection a future stage, which the rules advance to (``incomplete future stages are not defects''), whereas Astra routed a repair (Appendix~\ref{app:audit}).
 
 \subsection{Trivial Baselines}
 \label{sec:baselines}
@@ -303,14 +304,14 @@ Trivial baselines indicate that the composed decisions require reading the rules
 \label{sec:setup}
 
 \paragraph{Models.}
-The hosted settings are \LunaLabel{} and \TerraLabel{} (Luna and Terra) at low and no reasoning effort, \AstraLabel{} \citep{openai2026astra} (Astra) at low, the lowest it accepts, and Jev through \JevProvider's \JevInterface{} interface (requested as \texttt{\JevRequestedModel}, served as \texttt{\JevServedModel}).
+The hosted settings are \LunaLabel{} and \TerraLabel{} \citep{openai2026pricing} (Luna and Terra) at low and no reasoning effort, \AstraLabel{} \citep{openai2026astra} (Astra) at low, the lowest it accepts, and Jev \citep{typesafe2026models} through \JevProvider's \JevInterface{} interface (requested as \texttt{\JevRequestedModel}, served as \texttt{\JevServedModel}).
 GPT models receive JSON through the Responses API with strict structured outputs; Jev receives the same content through its native typed-question interface (Appendix~\ref{app:protocol}).
 Supplementary measurements cover \OwNumSettingsWord{} self-hosted native settings on one RTX PRO 6000 GPU: three Laya checkpoints, DJev/DiffusionGemma, Kev-4B, Kev-9B and Kev-27B, Nimble-9B and Qwen3.5-4B direct logits. Their same-host latency includes runtime queueing and inference; Appendix~\ref{app:openweight} gives execution details.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{figures/fig_errortime.pdf}
-  \caption{\textbf{Hosted settings chiefly lose stale time; Jev and Luna none chiefly lose judgment time.}
+  \caption{\textbf{GPT settings other than Luna none chiefly lose stale time; Jev and Luna none chiefly lose judgment time.}
   Log-weighted time shares over 0.5--8\,s as in Table~\ref{tab:main}; lucky time (at most \AucLuckyMax\%) counts as correct.}
   \label{fig:errortime}
 \end{figure}
@@ -325,7 +326,7 @@ Supplementary measurements cover \OwNumSettingsWord{} self-hosted native setting
 \end{figure*}
 
 \paragraph{Protocol.}
-Hosted passes were recorded on \RecordingDatesUTC{} (UTC) from one client; self-hosted passes use the same dataset and 2\,s cadence. Every pass completes \NumStates{} state-level decision evaluations and \AnswersPerPass{} question-answer evaluations on the first attempt.
+Hosted passes were recorded on \RecordingDatesUTC{} (UTC) from one client; self-hosted passes use the same dataset and 2\,s cadence. Each of these passes completes \NumStates{} state-level decision evaluations and \AnswersPerPass{} state--question pairs on the first attempt.
 Appendix~\ref{app:protocol} records session and reliability details. For hosted passes, step-anchored and physical-clock accuracy differ by at most \MaxReplayPhysicalDiff{} points at 2\,s.
 
 \paragraph{Research questions.}
@@ -334,7 +335,7 @@ Appendix~\ref{app:protocol} records session and reliability details. For hosted 
 \textbf{RQ3}: How do the comparisons change across time scales and task families?
 
 \paragraph{Reporting.}
-We report equal means over three independently evaluated passes per setting, sample standard deviations (SD) for hosted primary scores, and means of per-pass latency quantiles; adjacent states are dependent, so comparisons are descriptive. The primary score uses Equation~\eqref{eq:macro}, retaining recorded answers and latencies; Appendix~\ref{app:intervals} varies bounds and weighting. Fixed-interval analyses are labelled explicitly.
+We report equal means over three independently evaluated passes per setting, sample standard deviations (SD) for primary scores (ranges in Appendix~\ref{app:openweight}), and means of per-pass latency quantiles; adjacent states are dependent, so comparisons are descriptive. The primary score uses Equation~\eqref{eq:macro}, retaining recorded answers and latencies; Appendix~\ref{app:intervals} varies bounds and weighting. Fixed-interval analyses are labelled explicitly.
 
 
 % ---------------------------------------------------------------------------
@@ -346,15 +347,13 @@ We report equal means over three independently evaluated passes per setting, sam
 Luna low loses \LunaAucGap{} points (from \LunaUntimed\% untimed to \LunaAuc\% log-AUC) and Terra low \TerraAucGap{} (from \TerraUntimed\% to \TerraAuc\%), while Jev loses \JevAucGap{} (Table~\ref{tab:main}).
 Stale decisions account for \LunaAucStale\% and \TerraAucStale\% of log-weighted time for Luna low and Terra low (Figure~\ref{fig:errortime}); their median response times are \LunaLatencyMedian\ and \TerraLatencyMedian\,s.
 Astra low has the highest untimed accuracy (\AstraUntimed\%) and a mean per-pass median latency of \AstraLatencyMedian\,s, but its log-AUC (\AstraAuc\%) remains far below its untimed accuracy, with \AstraAucStale\% of log-weighted time stale.
-Its fitted latency components are detailed in Appendix~\ref{app:network}.
-Jev responds in \JevLatencyMedian\,s at the median and spends \JevAucStale\% of log-weighted time stale.
+Jev responds in \JevLatencyMedian\,s at the median and spends \JevAucStale\% of log-weighted time stale. In every scenario, Luna low and Terra low lose at least \GPTMinScenarioGap{} points from untimed to in-force accuracy at 2\,s, and Jev at most \JevMaxScenarioGap{} (Table~\ref{tab:scenario}).
 
-The oracle's log-AUC is \LunaAucOracle\% (Luna low), \TerraAucOracle\% (Terra low), \AstraAucOracle\% (Astra low), \LunaNoneAucOracle\% (Luna none), \TerraNoneAucOracle\% (Terra none) and \JevAucOracle\% (Jev); Luna low's is the lowest; Astra low's nearly matches its observed score, with negligible current-source judgment error.
-For the hosted scenarios, multiplying untimed accuracy by the oracle's log-AUC, then averaging with the same family weights, approximates the primary score: the observed score exceeds this product by \AucProductGapMin--\AucProductGapMax{} points per setting, with an absolute deviation of at most \AucProductMaxDeviation{} points per scenario.
+The oracle's log-AUC is \LunaAucOracle\% (Luna low), \TerraAucOracle\% (Terra low), \AstraAucOracle\% (Astra low), \LunaNoneAucOracle\% (Luna none), \TerraNoneAucOracle\% (Terra none) and \JevAucOracle\% (Jev); Astra low's nearly matches its observed score, with negligible current-source judgment error.
+For these six settings, multiplying untimed accuracy by the oracle's log-AUC, then averaging with the same family weights, approximates the primary score: the observed score exceeds this product by \AucProductGapMin--\AucProductGapMax{} points per setting, with an absolute deviation of at most \AucProductMaxDeviation{} points per scenario.
 The exact partition in Equation~\eqref{eq:factor} explains the residual through current-source judgment and lucky time (Appendix~\ref{app:auc-decomposition}).
 
-The reference trajectory also localizes judgment errors. Within one tick of a reference transition, Luna low errs at \TrajLunaNearError\% of \TrajLunaNearStates{} state evaluations, versus \TrajLunaFarError\% of \TrajLunaFarStates{} farther away; Terra low gives \TrajTerraNearError\% versus \TrajTerraFarError\%.
-Luna none shows little difference (\TrajLunaNoneNearError\% versus \TrajLunaNoneFarError\%); concentration is setting-dependent (Appendix~\ref{app:composition}).
+Untimed errors also concentrate near reference transitions for some settings: within one time step of a transition, Luna low errs at \TrajLunaNearError\% of \TrajLunaNearStates{} state evaluations and at \TrajLunaFarError\% of the \TrajLunaFarStates{} farther away, Terra low at \TrajTerraNearError\% and \TrajTerraFarError\%; Luna none shows little difference (Appendix~\ref{app:composition}).
 
 \subsection{RQ2: Speed Helps When Judgment Survives}
 \label{sec:rq2}
@@ -366,9 +365,11 @@ Luna none shows little difference (\TrajLunaNoneNearError\% versus \TrajLunaNone
     Setting & Mean & SD \\
     \midrule
     \TabHeadlineBody
+    Perplexity Decider$^\dagger$ & \LaterPerplexityAuc & \LaterPerplexityAucSD \\
+    Perplexity Decider$^\dagger$ + Astra low & \LaterBestAuc & \LaterBestSD \\
     \bottomrule
   \end{tabular}
-  \caption{\textbf{The best evaluated hybrid improves on both components.} Log-AUC (\%) over three passes; sample SD in points. Hybrid: freshest-source arbitration.}
+  \caption{\textbf{The best evaluated hybrids improve on both components.} Log-AUC (\%), three passes; SD in points; freshest-source hybrids; $^\dagger$recorded later (Appendix~\ref{app:later}).}
   \label{tab:headline}
 \end{table}
 The oracle's log-AUC is close to the observed score for Luna, Terra and Astra at low effort, but far above it for Jev: latency limits the former and judgment limits the latter.
@@ -379,44 +380,42 @@ Dropping reasoning makes responses \LunaNoneLatencySavingSec\,s (Luna) and \Terr
 Terra retains \TerraNoneUntimed\% untimed accuracy, and its log-AUC rises to \TerraNoneAuc\%, \JevMinusTerraNoneAuc{} points below Jev on average.
 Luna loses \LunaMinusLunaNoneUntimed{} points untimed; judgment errors occupy \LunaNoneAucJudgment\% of log-weighted time, and its log-AUC falls to \LunaNoneAuc\%.
 A shorter response helps only if the decision remains accurate enough.
+The later hosted settings repeat both limits (Appendix~\ref{app:later}): Claude Haiku 5.5 with thinking is stale for \LaterHaikuStale\% of log-weighted time, and the fast decision interfaces lose mostly to judgment.
 
 \paragraph{Fast provisional answers and slow corrections.}
 We replay every Jev/GPT pair with matching pass indices, dispatching both at each state and allowing the slower answer to correct the faster answer for that state.
-At 2\,s, Jev plus Terra low averages \TrajTerraFreshestTwo\% when slow answers cannot regress the active source and \TrajTerraArrivalTwo\% when they may overwrite newer fast answers, both above Jev alone (\TrajJevTwo\%). In pass 1, however, allowing overwrites reverses the improvement into a loss with identical component answers and latencies (Appendix~\ref{app:composition}).
-Jev plus Terra none with the freshness rule attains \OwJevTerraNoneAuc\% log-AUC, against \OwTerraNoneAuc\% for Terra none alone and \TrajJevAuc\% for Jev alone.
-With the same correction model and rule, DJev and Kev-4B give \OwDJevFreshestAuc\% and \OwKevFreshestAuc\%, despite mean per-pass median latencies of \OwDJevMedian\,s and \OwKevMedian\,s: their untimed decision accuracies are \OwDJevUntimed\% and \OwKevUntimed\%.
-Kev-27B is untimed-correct at \OwKevTwentySevenUntimed\% of states; alone it reaches \OwKevTwentySevenAuc\% log-AUC, above Jev, and with Terra none corrections \OwKevTwentySevenFreshestAuc\%, the highest evaluated mean (Table~\ref{tab:headline}).
+At 2\,s, Jev plus Terra low averages \TrajTerraFreshestTwo\% when slow answers cannot regress the active source and \TrajTerraArrivalTwo\% when they may overwrite newer fast answers, both above Jev alone (\TrajJevTwo\%). At 1\,s, allowing overwrites lowers the pair to \TrajTerraArrivalOne\%, below Jev alone (\TrajJevOne\%) in every pass, whereas the freshness rule keeps \TrajTerraFreshestOne\%; component answers and latencies are identical (Appendix~\ref{app:composition}).
+Jev plus Terra none with the freshness rule attains \OwJevTerraNoneAuc\% log-AUC, against \OwTerraNoneAuc\% for Terra none alone and \HeadlineJevAuc\% for Jev alone.
+With the same correction model and rule, DJev and Kev-4B (\OwDJevUntimed\% and \OwKevUntimed\% untimed) give \OwDJevFreshestAuc\% and \OwKevFreshestAuc\%, below Terra none alone, as do the later decision interfaces of OpenAI and Cloudflare under every rule.
+Kev-27B (\OwKevTwentySevenUntimed\% untimed) reaches \OwKevTwentySevenAuc\% alone and \OwKevTwentySevenFreshestAuc\% with Terra none corrections; the later Perplexity Decider reaches \LaterPerplexityAuc\% alone and \LaterBestAuc\% with Astra low corrections, the highest evaluated mean (Table~\ref{tab:headline}).
 A wrong provisional answer for a newer state can displace a still-correct earlier decision; speed helps composition only where judgment survives.
-Marginal accuracy and latency summaries omit which component remains in force and for how long; the exact factorization still holds with the composed path's $U_{\mathrm{cur}}$.
-These are counterfactual combinations of separate recordings on common nominal releases; Appendices~\ref{app:composition} and~\ref{app:openweight} report all evaluated pairs and rules. Joint contention is unmeasured.
+These are counterfactual combinations of separate recordings on common nominal releases; Appendices~\ref{app:composition}, \ref{app:openweight} and~\ref{app:later} report all evaluated pairs and rules. Joint contention is unmeasured.
 
 \subsection{RQ3: The Curves Reveal Where the Tradeoff Changes}
 \label{sec:rq3}
 The aggregate curve in Figure~\ref{fig:pace}a shows the conditions summarized by the primary score.
-At 2\,s Jev and Terra without reasoning obtain \JevCommonTwo\% and \TerraNoneCommonTwo\% in-force accuracy; at 8\,s they obtain \JevCommonEight\% and \TerraNoneCommonEight\%.
+At 2\,s Jev and Terra none obtain \JevCommonTwo\% and \TerraNoneCommonTwo\% in-force accuracy; at 8\,s they obtain \JevCommonEight\% and \TerraNoneCommonEight\%.
 A larger interval gives slow answers more time to remain current, although arbitrary wrong answers need not yield a monotone curve; at 8\,s Astra low has the highest in-force accuracy (\AstraCommonEight\%).
 The area summarizes a declared range; it does not identify a setting that dominates at every interval.
 
 Panels b--e show how the four families contribute to this aggregate.
-Terra low has the highest log-AUC in IDE debugging (\TerraDebugAuc\%), while Jev leads in assembly, support and presenter control (Table~\ref{tab:main}).
-IDE debugging remains Jev's weakest family (\JevDebugAuc\% log-AUC, \JevDebugUntimed\% untimed).
-The family curves retain the different authored patterns of evidence and reference changes even though their integration bounds and weights are identical.
+In IDE debugging, Jev's weakest family (\JevDebugAuc\% log-AUC, \JevDebugUntimed\% untimed), the GPT settings other than Luna none reach \LunaDebugAuc--\TerraDebugAuc\%; Jev leads the other settings of Table~\ref{tab:main} in the remaining three families.
 
-Weighting and bounds also matter. Linear averaging over 0.5--8\,s gives Terra without reasoning \TerraNoneAucLinear\% and Jev \JevAucLinear\%, reversing their integrated ordering.
-Appendix~\ref{app:intervals} reports this comparison and all six combinations of lower bounds 0.1, 0.5 and 1\,s with upper bounds 4 and 8\,s; a separate projection varies reference-change schedules at the 2\,s recording interval (Table~\ref{tab:regime}).
+Weighting and bounds matter for single settings: linear weighting, or log weighting over 1--8\,s, places Terra at both efforts and Astra low above Jev, whose lead comes from the shortest intervals.
+Composition is more robust: Jev plus Terra none and Perplexity plus Astra low exceed every single setting under all \LaterSensConditionsWord{} conditions of Table~\ref{tab:auc-sensitivity}, and Kev-27B plus Terra none under the \LaterSensKevTerraNoneAboveWord{} with lower bounds of at least 0.5\,s; Table~\ref{tab:regime} projects other reference-change schedules.
 
 % ---------------------------------------------------------------------------
 \section{Discussion}
 \label{sec:discussion}
 
-In-force accuracy expresses the joint cost of judgment and latency in the units the application experiences. Its partition and factorization identify what limits a component: faster serving helps Luna, Terra and Astra at low effort, while Jev needs better judgment. Shorter outputs help only where judgment survives.
-Comparisons should report the integration bounds and weights, aggregate and family curves, untimed and oracle accuracy, error partitions, and recording conditions. Fast/slow composition additionally requires an explicit arbitration rule: a more accurate correction can still reduce in-force accuracy by replacing a fresher decision.
+In-force accuracy expresses the joint cost of judgment and latency in the units the application experiences. Its partition and factorization identify what limits a component: faster serving helps Luna, Terra and Astra at low effort, while Jev needs better judgment.
+Comparisons should report bounds and weights, family curves, untimed and oracle accuracy, error partitions and recording conditions. Fast/slow composition additionally requires an explicit arbitration rule: a more accurate correction can still reduce in-force accuracy by replacing a fresher decision.
 
 % ---------------------------------------------------------------------------
 \section{Conclusion}
 \label{sec:conclusion}
 \sdb{} evaluates an embedded decision component by the decision its application keeps in force, against reference decisions fixed by public rules, and attributes every erroneous instant to judgment, to latency or to both.
-Latency can outweigh gains in untimed judgment; dropping reasoning helps Terra but harms Luna, with different strengths across families and update intervals.
+Latency can outweigh gains in untimed judgment, and dropping reasoning helps only where judgment survives.
 Counterfactual compositions of hosted and self-hosted components further show that provisional judgment and arbitration jointly determine whether corrections improve accuracy.
 
 % ---------------------------------------------------------------------------
