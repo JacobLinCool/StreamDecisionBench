@@ -65,3 +65,10 @@ HOSTED_PASSES.update({
         for index in range(1, 4))
     for variant, folder in (("HaikuLow", "low"), ("HaikuNoThink", "nothink"))
 })
+
+# Gemini Decision 1 through Google's Decisions API: one native score per question, no generation settings.
+HOSTED_LABELS["GeminiDecision"] = "Gemini Decision 1 (Decisions API)"
+HOSTED_PASSES["GeminiDecision"] = tuple(
+    ("gemini-decision-1-20261112" + (f"/pass{index}" if index > 1 else ""),
+     f"lite-v1-gemini-decision-1-20261112-pass{index}-retry-v1")
+    for index in range(1, 4))

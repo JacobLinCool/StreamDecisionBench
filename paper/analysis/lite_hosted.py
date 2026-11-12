@@ -26,6 +26,15 @@ def aggregate_passes(name: str, model: str, records: list[dict]) -> dict:
         "latency_s": {q: statistics.mean(r["latency_s"][q] for r in records) for q in records[0]["latency_s"]}}
 
 
+# The attempt budget decides only whether a pass completes: failed attempts and retry waits
+# never enter model timing or scores, so passes may differ in it and nothing else.
+RETRY_BUDGET_KEYS = frozenset({"max_attempts"})
+
+
+def timing_config(run: dict) -> dict:
+    return {k: v for k, v in run["frozen"]["config"].items() if k not in RETRY_BUDGET_KEYS}
+
+
 def analyze() -> dict:
     from lite_openweight import compare_published, sha, verified_run, verify_standalone
     from lite_trajectory_value import integrate
@@ -54,7 +63,7 @@ def analyze() -> dict:
             own, _ = verify_standalone(prepare({name: run}), name, run)
             independent = integrate(own, name, None, "freshest", POLICY["primary"])
             compare_published(independent, report, f"{name}/pass{index}", POLICY["integration"]["tolerance"])
-            if index > 1 and run["frozen"]["config"] != runs["1"]["frozen"]["config"]:
+            if index > 1 and timing_config(run) != timing_config(runs["1"]):
                 raise ValueError(f"{name}: execution settings differ across passes")
             records.append({"pass": index, "primary": auc,
                 "untimed": raw["scores"]["overall"]["untimed_decision_accuracy"],
@@ -109,7 +118,7 @@ def publish(data: dict) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "analysis.json").write_text(json.dumps(data, indent=2, allow_nan=False) + "\n")
     lines = ["# Hosted API repeated measurements", "",
-        "Wity auto and off each have one complete pass; all other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Astra low has a further third pass; its transport attempts are preserved in the individual report. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts. Perplexity's first pass recovered 12 timeouts and three HTTP 503 failures; its second and third passes had no failed attempts. GLiDE completed all 1,440 logical requests across three passes without failed attempts or retries. GPT-6-Luna through the Decisions API also completed 1,440 of 1,440 without failed attempts; its six refused questions never entered a composed decision. Claude Haiku 5.5 low recovered one timeout across its three passes; Claude Haiku 5.5 with thinking off had no failed attempts, and neither setting returned a safeguard refusal.", "",
+        "Wity auto and off each have one complete pass; all other hosted settings have three. Wity uses 16 workers and the recorded Retry-After policy; other hosted settings use 32 workers. Each pass covers the same 480 states in eight scenarios and four families. The original repeat cohort's 7,200 additional requests succeeded without retries. Astra low has a further third pass; its transport attempts are preserved in the individual report. Wity auto recovered 26 HTTP 429 rejections and one timeout; Wity off had no failed attempts. Perplexity's first pass recovered 12 timeouts and three HTTP 503 failures; its second and third passes had no failed attempts. GLiDE completed all 1,440 logical requests across three passes without failed attempts or retries. GPT-6-Luna through the Decisions API also completed 1,440 of 1,440 without failed attempts; its six refused questions never entered a composed decision. Claude Haiku 5.5 low recovered one timeout across its three passes; Claude Haiku 5.5 with thinking off had no failed attempts, and neither setting returned a safeguard refusal. Gemini Decision 1 through Google's Decisions API recovered 886 HTTP 429 rejections from the key's rate limit across its three passes, all retried after Retry-After; its second pass allowed ten attempts per request after two five-attempt sessions stopped on exhausted 429 retries. No request was safety-blocked.", "",
         "Scores are equal means of independently integrated log-AUC over 0.5–8 s. SD is sample standard deviation across passes, in percentage points; it is unavailable for a single pass. Latency values average within-pass quantiles.", "",
         "| Setting | Passes | Mean log-AUC ± SD (%) | Mean untimed (%) | Mean p50 / p95 (s) | Individual log-AUC (%) |",
         "|---|---:|---:|---:|---:|---|"]

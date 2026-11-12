@@ -8,6 +8,7 @@ The domain spans update rates four times faster and slower than the recording ca
 
 | Setting | Passes | IDE | Assembly | Support | Presenter | Mean log-AUC ± SD | Mean untimed | Report |
 |---|---:|---:|---:|---:|---:|---:|---:|---|
+| Gemini Decision 1 (Decisions API) | 3 | 47.87% | 64.91% | 77.05% | 65.11% | 63.73% ± 0.46 | 72.71% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Perplexity Decider v1 27B | 3 | 47.22% | 66.75% | 79.94% | 59.58% | 63.37% ± 0.27 | 70.00% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Jev | 3 | 38.80% | 61.16% | 67.84% | 66.21% | 58.50% ± 1.10 | 62.36% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
 | Terra none | 3 | 50.02% | 50.36% | 59.50% | 61.98% | 55.46% ± 1.29 | 81.88% | [repeat reports](../hosted-api-repeats-20261003/README.md) |
@@ -46,7 +47,7 @@ The domain spans update rates four times faster and slower than the recording ca
 | Decision 2.0 Lux-9B | 7.24% | 23.98% | 41.10% | 25.24% | 24.39% | 29.58% | [report](../decision20-pro6000-20261003/lux-9b-pass1/REPORT.md) |
 | Decision 2.0 Vega-27B | 5.57% | 10.06% | 7.48% | 6.78% | 7.47% | 68.54% | [report](../decision20-pro6000-20261003/vega-27b-pass1/REPORT.md) |
 
-Wity auto/off each have one pass with 16 workers and Retry-After recovery; all other hosted scores average three passes, each over all 480 states with 32 workers. SD is sample standard deviation across passes, in percentage points; unavailable for one pass. The original Luna, Terra and Jev passes combine disjoint six-scenario and presenter sessions. GLiDE and GPT-6-Luna through the Decisions API completed three passes without failed attempts; Claude Haiku 5.5 thinking off completed its three passes without failed attempts, and Claude Haiku 5.5 low recovered one timeout; Clef Flash's original pass retains its two recovered timeout attempts. The self-hosted table shows the referenced individual recordings; the public leaderboard averages their three passes. No model query is made by this analysis.
+Wity auto/off each have one pass with 16 workers and Retry-After recovery; all other hosted scores average three passes, each over all 480 states with 32 workers. SD is sample standard deviation across passes, in percentage points; unavailable for one pass. The original Luna, Terra and Jev passes combine disjoint six-scenario and presenter sessions. GLiDE and GPT-6-Luna through the Decisions API completed three passes without failed attempts; Claude Haiku 5.5 thinking off completed its three passes without failed attempts, and Claude Haiku 5.5 low recovered one timeout; Gemini Decision 1 recovered every HTTP 429 rate-limit rejection, with ten attempts per request in its second pass; Clef Flash's original pass retains its two recovered timeout attempts. The self-hosted table shows the referenced individual recordings; the public leaderboard averages their three passes. No model query is made by this analysis.
 
 Each analysis contains `auc.primary`, six `auc.sensitivity` conditions, and fixed 2 s diagnostics in `scores`. The physical wall-clock trace and secondary network-removal estimate are separate. The integration rule was adopted after inspecting the recorded passes; comparisons are descriptive and do not establish stable rankings.
 

@@ -39,6 +39,7 @@ Latency includes the remote service and internet round trip from the benchmark c
 
 | Setting | Model | Passes | Mean log-AUC ± SD (%) | Mean untimed (%) | Mean median latency (s) |
 |---|---|---:|---:|---:|---:|
+| Gemini Decision 1 (Decisions API) | `gemini-decision-1` | 3 | 63.73 ± 0.46 | 72.71 | 0.533 |
 | Perplexity Decider v1 27B | `pplx-decider-v1-27b` | 3 | 63.37 ± 0.27 | 70.00 | 0.379 |
 | Jev | `jev-latest` | 3 | 58.50 ± 1.10 | 62.36 | 0.232 |
 | Terra none | `gpt-5.6-terra` | 3 | 55.46 ± 1.29 | 81.88 | 1.360 |
@@ -222,6 +223,10 @@ uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
 uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
   --out runs/my-luna-decisions --provider openai-decisions --model gpt-6-luna
 
+# Gemini Decisions API
+uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
+  --out runs/my-gemini-decision --provider gemini-decisions --model gemini-decision-1
+
 # Claude models (Anthropic Messages API with strict structured outputs)
 uv run python -m streamdecisionbench.lite run --data data/lite/v1 \
   --out runs/my-claude --provider anthropic --model claude-haiku-5-5 --effort low
@@ -239,6 +244,19 @@ workers, with HTTP client retries disabled; HTTP 429 and 5xx are retried within 
 budget, honoring `Retry-After` through the shared episode cooldown. As documented on October 7,
 2026, the endpoint charges $0.10 per million input tokens and nothing for output or caching;
 one 480-request pass used about 1.55M input tokens.
+
+The Gemini Decisions provider uses `GEMINI_API_KEY` and the optional `GEMINI_BASE_URL`
+(default `https://generativelanguage.googleapis.com/v1beta`). The adapter calls Google's
+[Decisions API](https://aistudio.google.com/docs/decisions-api) with `gemini-decision-1`, the
+only supported model. Its keyed `noul`, `choice` and `score` questions match System One; the
+adapter sends the state as JSON text in `input` and question text, option descriptions and score
+levels as text, and keeps the returned probabilities and confidence. A safety block rejects the
+whole request with HTTP 400; every question of that state then commits to no option and counts
+as wrong wherever the composed decision uses it. Timeout, workers and retries follow the OpenAI
+Decisions provider. The API echoes no model name, so the recorded served model is the requested one.
+As announced on November 11, 2026, the endpoint charges $0.10 per million input tokens and nothing
+for output; one 480-request pass used about 1.46M input tokens. A free-tier key's rate limit
+rejects part of a pass with HTTP 429; the retries are excluded from model timing.
 
 The Anthropic provider uses `ANTHROPIC_API_KEY` and the optional `ANTHROPIC_BASE_URL`. It sends
 the same system prompt as the OpenAI Responses adapter, with the questions and the state as two

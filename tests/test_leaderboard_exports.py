@@ -294,7 +294,7 @@ def test_glide_exports_match_all_three_native_passes(tmp_path):
     assert row["log_auc_pct"] == pytest.approx(39.42690905472751)
     assert row["untimed_pct"] == pytest.approx(80.48611111111111)
     assert row["visual"]["light"] == "#059669"
-    assert sorted(site["settings"], key=lambda row: -row["log_auc_pct"])[8]["id"] == "Glide"
+    assert sorted(site["settings"], key=lambda row: -row["log_auc_pct"])[9]["id"] == "Glide"
     assert sorted(site["settings"], key=lambda row: -row["untimed_pct"])[5]["id"] == "Glide"
 
 
@@ -321,12 +321,12 @@ def test_luna_decisions_exports_match_all_three_native_passes(tmp_path):
     assert row["log_auc_pct"] == pytest.approx(32.391318225827305)
     assert row["untimed_pct"] == pytest.approx(36.041666666666664)
     assert row["visual"]["light"] == "#c026d3"
-    assert sorted(site["settings"], key=lambda row: -row["log_auc_pct"])[10]["id"] == "LunaDecisions"
+    assert sorted(site["settings"], key=lambda row: -row["log_auc_pct"])[11]["id"] == "LunaDecisions"
 
 
 @pytest.mark.parametrize("name,folder,thinking,failed,log_auc,untimed,rank", [
-    ("HaikuLow", "low", "adaptive", 1, 36.562856360372784, 95.34722222222221, 9),
-    ("HaikuNoThink", "nothink", "disabled", 0, 19.380184408911482, 25.555555555555554, 18),
+    ("HaikuLow", "low", "adaptive", 1, 36.562856360372784, 95.34722222222221, 10),
+    ("HaikuNoThink", "nothink", "disabled", 0, 19.380184408911482, 25.555555555555554, 19),
 ])
 def test_claude_haiku_exports_match_all_three_passes(name, folder, thinking, failed, log_auc, untimed, rank, tmp_path):
     result = load_hosted_summary()["hosted"][name]
@@ -351,3 +351,34 @@ def test_claude_haiku_exports_match_all_three_passes(name, folder, thinking, fai
     assert row["log_auc_pct"] == pytest.approx(log_auc)
     assert row["untimed_pct"] == pytest.approx(untimed)
     assert sorted(site["settings"], key=lambda row: -row["log_auc_pct"])[rank]["id"] == name
+
+
+def test_gemini_decision_exports_match_all_three_native_passes(tmp_path):
+    result = load_hosted_summary()["hosted"]["GeminiDecision"]
+    assert len(result["passes"]) == len(HOSTED_PASSES["GeminiDecision"]) == 3
+    assert result["model"] == "gemini-decision-1"
+    repeat = json.loads((ROOT / "docs/lite/results/gemini-decision-1-20261112/repeats.json").read_text())
+    assert 100 * result["accuracy"] == pytest.approx(repeat["primary"]["mean_log_auc_pct"])
+    assert 100 * result["auc_sample_sd"] == pytest.approx(repeat["primary"]["sample_sd_log_auc_points"])
+    assert 100 * result["untimed"] == pytest.approx(repeat["untimed"]["mean_accuracy_pct"])
+    assert repeat["refusals"]["responses_with_refusals"] == 0
+    budgets = []
+    for record in result["passes"]:
+        frozen = json.loads((ROOT / record["provenance"]["run"] / "run.json").read_text())
+        assert frozen["status"] == "complete"
+        assert frozen["config"]["provider"] == "gemini-decisions"
+        assert frozen["config"]["rate_limit_policy"] == "http429_5xx_retry_after_shared_cooldown_v1"
+        assert record["served_models"] == ["gemini-decision-1"]
+        assert record["retry_reliability"]["successful_logical_requests"] == 480
+        assert set(record["retry_reliability"]["attempt_errors_by_type"]) <= {"RetryableHTTPError"}
+        budgets.append(frozen["config"]["max_attempts"])
+    # Only the attempt budget differs: pass 2 needed ten attempts under the key's rate limit.
+    assert budgets == [5, 10, 5]
+    assert sum(r["retry_reliability"]["failed_attempts"] for r in result["passes"]) == 886
+    site = site_build.build(tmp_path)
+    row = next(row for row in site["settings"] if row["id"] == "GeminiDecision")
+    assert row["passes"] == 3
+    assert row["log_auc_pct"] == pytest.approx(63.7348217036371)
+    assert row["untimed_pct"] == pytest.approx(72.70833333333331)
+    assert row["visual"]["light"] == "#1e3a8a"
+    assert sorted(site["settings"], key=lambda row: -row["log_auc_pct"])[0]["id"] == "GeminiDecision"

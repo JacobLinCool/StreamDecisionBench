@@ -396,3 +396,10 @@ _site/
 !/runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass[123]-retry-v1/run.json
 !/runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass[123]-retry-v1/episodes.json
 !/runs/lite-v1-claude-haiku-5-5-nothink-20261009-pass[123]-retry-v1/events.jsonl
+
+# Gemini Decision 1 Decisions API: publish only the three immutable recording inputs.
+!/runs/lite-v1-gemini-decision-1-20261112-pass[123]-retry-v1/
+/runs/lite-v1-gemini-decision-1-20261112-pass[123]-retry-v1/*
+!/runs/lite-v1-gemini-decision-1-20261112-pass[123]-retry-v1/run.json
+!/runs/lite-v1-gemini-decision-1-20261112-pass[123]-retry-v1/episodes.json
+!/runs/lite-v1-gemini-decision-1-20261112-pass[123]-retry-v1/events.jsonl
