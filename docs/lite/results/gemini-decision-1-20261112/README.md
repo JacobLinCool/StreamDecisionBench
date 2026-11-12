@@ -5,7 +5,7 @@ Mean untimed decision accuracy: **72.71%** (identical in every pass).
 
 The model is `gemini-decision-1` through Google's [Decisions API](https://aistudio.google.com/docs/decisions-api) (`POST /v1beta/decisions`), not the `generateContent` API. Each state is sent as JSON text in `input`. Questions keep their keys and types (`noul`, `choice`, `score`); question text, option descriptions and score levels go in as text, and the opaque option labels stay the choice keys. The API returns a probability distribution and a confidence per question; the benchmark keeps both. It has no generation settings, reports no output tokens and echoes no model name.
 
-Each pass uses the same frozen dataset and recording source versions: four families, eight scenarios, 480 requests, one release every 2 s, 32 workers and a 20 s request timeout. HTTP client retries are disabled; HTTP 429 and 5xx responses are retried within the attempt budget, honoring Retry-After through a shared episode cooldown. Passes 1 and 3 ran back to back on 2026-11-11 (UTC) and pass 2 on 2026-11-12, with a free-tier API key.
+Each pass uses the same frozen dataset and recording source versions: four families, eight scenarios, 480 requests, one release every 2 s, 32 workers and a 20 s request timeout. HTTP client retries are disabled; HTTP 429 and 5xx responses are retried within the attempt budget, honoring Retry-After through a shared episode cooldown. Passes 1 and 3 ran back to back on 2026-11-11 (UTC) and pass 2 on 2026-11-12.
 
 | Pass | Log-AUC (%) | Untimed (%) | p50 latency (s) | p95 latency (s) | Max attempts | Failed attempts | Retried requests | Report |
 |---|---:|---:|---:|---:|---:|---:|---:|---|

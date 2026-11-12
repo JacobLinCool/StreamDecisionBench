@@ -255,8 +255,8 @@ whole request with HTTP 400; every question of that state then commits to no opt
 as wrong wherever the composed decision uses it. Timeout, workers and retries follow the OpenAI
 Decisions provider. The API echoes no model name, so the recorded served model is the requested one.
 As announced on November 11, 2026, the endpoint charges $0.10 per million input tokens and nothing
-for output; one 480-request pass used about 1.46M input tokens. A free-tier key's rate limit
-rejects part of a pass with HTTP 429; the retries are excluded from model timing.
+for output; one 480-request pass used about 1.46M input tokens. The API key's rate limit can
+reject part of a pass with HTTP 429; the retries are excluded from model timing.
 
 The Anthropic provider uses `ANTHROPIC_API_KEY` and the optional `ANTHROPIC_BASE_URL`. It sends
 the same system prompt as the OpenAI Responses adapter, with the questions and the state as two
